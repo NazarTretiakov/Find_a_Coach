@@ -15,6 +15,7 @@ import ConfirmEmail from '../pages/ConfirmEmail.vue'
 import EmailConfirmed from '../pages/EmailConfirmed.vue'
 import SearchPage from '../pages/SearchPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
+import EditPersonalInformation from '../pages/EditPersonalInformation.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -30,7 +31,8 @@ const router = createRouter({
     { path: '/register/confirm-email', component: ConfirmEmail, meta: { requiresAuth: false }, beforeEnter: useValidationOfConfirmEmailParams },
     { path: '/register/email-confirmed', component: EmailConfirmed, meta: { requiresAuth: false }, beforeEnter: useValidationOfEmailConfirmedParams },
     { path: '/search', component: SearchPage, meta: { requiresAuth: true } },
-    { path: '/profile', component: ProfilePage, meta: { requiresAuth: false } },
+    { path: '/profile', component: ProfilePage, meta: { requiresAuth: true } },
+    { path: '/profile/edit-personal-information', component: EditPersonalInformation, meta: { requiresAuth: true} },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ]

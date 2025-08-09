@@ -1,14 +1,13 @@
 <template>
-  <button class="add-profile-section-button">Add profile section</button>
+  <button class="button">Save</button>
 </template>
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;
 
-.add-profile-section-button {
-  border: 2px solid $mainColor;
-  color: $mainColor;
-  background-color: $mainBackgroundColor;
+.button {
+  color: $mainBackgroundColor;
+  background-color: $mainColor;
   width: 160px;
   height: 40px;
   border-radius: 12px;
@@ -16,7 +15,7 @@
   font-size: 14px;
 
   &:hover {
-    background-color: $mainBackgroundColorHoverColor;
+    background-color: $mainColorHoverColor;
   }
 
   @media (max-width: $breakpoint) {

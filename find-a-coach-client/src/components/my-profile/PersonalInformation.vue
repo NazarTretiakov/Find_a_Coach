@@ -13,7 +13,7 @@
       </li>
       <li class="personal-information-items_right-side">
         <ul class="personal-information-items_right-side-items">
-          <li class="personal-information-items_right-side-items_edit"><router-link to="/link-to-edit-personal-information" class="personal-information-items_right-side-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="personal-information-items_right-side-items_edit-icon"></router-link></li>
+          <li class="personal-information-items_right-side-items_edit"><router-link to="/profile/edit-personal-information" class="personal-information-items_right-side-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="personal-information-items_right-side-items_edit-icon"></router-link></li>
           <li class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="..//../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">Logistics and Marketing</span></li>
         </ul>
       </li>

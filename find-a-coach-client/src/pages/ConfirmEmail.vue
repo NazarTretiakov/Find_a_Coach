@@ -145,10 +145,10 @@ export default defineComponent({
     }
   }
   &-error {
-    color: red;
+    color: $errorColor;
   }
   &-success {
-    color: green;
+    color: $successColor;
   }
   &-footer {
     margin-top: 100px;

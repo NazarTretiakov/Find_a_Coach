@@ -207,7 +207,7 @@ export default defineComponent({
     }
 
     &_error-message {
-      color: red;
+      color: $errorColor;
       font-size: 14px;
       margin: 20px 0 0 20px;
       width: 300px;
@@ -218,7 +218,7 @@ export default defineComponent({
     }
 
     &_information-message-element {
-      color: green;
+      color: $successColor;
     }
 
     &_button {

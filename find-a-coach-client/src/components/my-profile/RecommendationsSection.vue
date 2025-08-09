@@ -6,8 +6,8 @@
       </li>
       <li class="recommendations-section-items_type-of-recommendations">
         <ul class="recommendations-section-items_type-of-recommendations-items">
-          <li class="recommendations-section-items_type-of-recommendations-items_received"><span @click="toggleRecommendationType('received')" class="recommendations-section-items_type-of-recommendations-items_received-element" :class="isReceivedRecommendationsVisible ? 'recommendations-section-items_type-of-recommendations-items_received-element-active': 'recommendations-section-items_type-of-recommendations-items_received-element-unactive'">Received</span></li>
-          <li class="recommendations-section-items_type-of-recommendations-items_given"><span @click="toggleRecommendationType('given')" class="recommendations-section-items_type-of-recommendations-items_given-element" :class="isGivenRecommendationsVisible ? 'recommendations-section-items_type-of-recommendations-items_received-element-active': 'recommendations-section-items_type-of-recommendations-items_received-element-unactive'">Given</span></li>
+          <li class="recommendations-section-items_type-of-recommendations-items_received"><span @click="toggleRecommendationType('received')" class="recommendations-section-items_type-of-recommendations-items_received-element" :class="isReceivedRecommendationsVisible ? 'recommendations-section-items_type-of-recommendations-items_received-element-active' : 'recommendations-section-items_type-of-recommendations-items_received-element-unactive'">Received</span></li>
+          <li class="recommendations-section-items_type-of-recommendations-items_given"><span @click="toggleRecommendationType('given')" class="recommendations-section-items_type-of-recommendations-items_given-element" :class="isGivenRecommendationsVisible ? 'recommendations-section-items_type-of-recommendations-items_received-element-active' : 'recommendations-section-items_type-of-recommendations-items_received-element-unactive'">Given</span></li>
         </ul>
       </li>
       <li class="recommendations-section-items_recommendation">

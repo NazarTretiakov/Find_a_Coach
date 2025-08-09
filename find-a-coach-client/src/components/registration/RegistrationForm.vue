@@ -160,7 +160,7 @@ export default defineComponent({
     }
 
     &_error-message {
-      color: red;
+      color: $errorColor;
       font-size: 14px;
       margin: 20px 0 0 20px;
       width: 300px;
