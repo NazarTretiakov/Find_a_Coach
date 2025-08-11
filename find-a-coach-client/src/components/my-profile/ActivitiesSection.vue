@@ -84,7 +84,11 @@ export default defineComponent({
         }
 
         &_buttons {
-          width: 80px;
+          width: 100px;
+
+          @media (max-width: $breakpoint) {
+            width: 80px;
+          }
 
           &-items {
             list-style: none;

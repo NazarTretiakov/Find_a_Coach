@@ -1,7 +1,7 @@
 <template> 
   <profile-sticky-header></profile-sticky-header>
 
-  <edit-personal-information-form></edit-personal-information-form>
+  <add-profile-section-panels></add-profile-section-panels>
 
   <the-footer></the-footer>
 </template>
@@ -9,14 +9,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileStickyHeader from '../components/ProfileStickyHeader.vue';
-import EditPersonalInformationForm from '../components/edit-personal-information/EditPersonalInfromationForm.vue';
+import ProfileStickyHeader from '../components/ProfileStickyHeader.vue'
+import AddProfileSectionPanels from '../components/add-profile-section/AddProfileSectionPanels.vue'
 import TheFooter from '../components/TheFooter.vue'
 
 export default defineComponent({
   components: {
     ProfileStickyHeader,
-    EditPersonalInformationForm,
+    AddProfileSectionPanels,
     TheFooter
   },
 })

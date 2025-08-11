@@ -43,12 +43,22 @@ export default defineComponent({
     font-size: 14px;
     display: block;
     margin: 0 0 2px 2px;
+
+    @media (max-width: $breakpoint) {
+      font-size: 12px;
+    }
   }
 
   &-wrapper {
     position: relative;
     display: inline-block;
     width: 600px;
+
+    @media (max-width: $breakpoint) {
+      font-size: 12px;
+      width: 100%;
+      height: 30px;
+    }
 
     &::after {
       content: '';
@@ -62,6 +72,10 @@ export default defineComponent({
       border-right: 6px solid transparent;
       border-top: 6px solid #000000;
       pointer-events: none;
+
+      @media (max-width: $breakpoint) {
+        margin-top: 2px;
+      }
     }
   }
 
@@ -78,6 +92,10 @@ export default defineComponent({
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+
+    @media (max-width: $breakpoint) {
+      font-size: 12px;
+    }
 
     &:hover {
       border: 2px #000000 solid;

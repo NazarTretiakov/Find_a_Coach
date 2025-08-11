@@ -51,6 +51,10 @@ export default defineComponent({
     width: 130px;
     height: 36px;
     font-size: 12px;
+
+    &:hover {
+      background-color: $mainBackgroundColor;
+    }
   }
 }
 </style>

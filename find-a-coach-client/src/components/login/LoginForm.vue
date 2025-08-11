@@ -50,7 +50,7 @@ export default defineComponent({
   setup() {
     const email = ref<string>('')
     const password = ref<string>('')
-    const errorMessage = ref<string>('')
+    const errorMessage = ref<string | null>('')
     const isForgotPasswordMessageShown = ref<boolean>(false)
     const isInformationMessageShown = ref<boolean>(false)
     const isLoading = ref<boolean>(false)

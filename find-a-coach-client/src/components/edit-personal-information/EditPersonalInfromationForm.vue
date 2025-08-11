@@ -64,7 +64,7 @@
           </li>
         </ul>
       </li>
-      <li class="edit-personal-information-items_add-button"><add-button @click="addWebsite" added-object-name="website"></add-button></li>
+      <li v-if="isAddButtonVisible" class="edit-personal-information-items_add-button"><add-button @click="addWebsite" added-object-name="website"></add-button></li>
       <li class="edit-personal-information-items_save-button"><save-button></save-button></li>
     </ul>
   </div>
@@ -79,11 +79,7 @@ import DropdownMenu from '../input-fields/DropdownMenu.vue';
 import RemoveButton from '../input-fields/RemoveButton.vue';
 import AddButton from '../input-fields/AddButton.vue';
 import SaveButton from '../input-fields/SaveButton.vue';
-
-interface Website {
-  url: string;
-  type: string;
-}
+import type { Website } from '../../types/edit-personal-information/Website'
 
 export default defineComponent({
   components: {
@@ -98,6 +94,7 @@ export default defineComponent({
     const profileImage = ref(new URL('../../assets/images/icons/user-icon.jpg', import.meta.url).href)
     const fileInput = ref<HTMLInputElement | null>(null)
     const websites = ref<Website[]>([])
+    const isAddButtonVisible = ref<boolean>(true)
 
     const triggerFileInput = () => {
       fileInput.value?.click()
@@ -117,16 +114,21 @@ export default defineComponent({
     }
 
     const addWebsite = () => {
-      //TODO: create validation of number of websites (it should be no higher than 5, if it is higher - than show the error message)
+      if (websites.value.length >= 4) {
+        isAddButtonVisible.value = false
+      }
 
       websites.value.push({ url: '', type: 'other' })
     }
 
     const removeWebsite = (index: number) => {
+      if (websites.value.length == 5) {
+        isAddButtonVisible.value = true
+      }
       websites.value.splice(index, 1)
     }
 
-    return { profileImage, fileInput, triggerFileInput, onFileChange, websites, addWebsite, removeWebsite }
+    return { profileImage, fileInput, triggerFileInput, onFileChange, websites, addWebsite, removeWebsite, isAddButtonVisible }
   }
 })
 </script>
@@ -136,7 +138,10 @@ export default defineComponent({
 
 .edit-personal-information {
   margin: 50px 0 0 150px;
-  border-radius: 20px;
+
+  @media (max-width: $breakpoint) {
+    margin: 30px 10px 0 10px;
+  }
 
   &-items {
     list-style: none;
@@ -144,19 +149,35 @@ export default defineComponent({
     flex-direction: column;
     width: 600px;
 
+    @media (max-width: $breakpoint) {
+      width: auto;
+    }
+
     &_header {
 
       &-element {
         font-size: 28px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 20px;
+        }
       }
     }
 
     &_user-profile-image {
       margin-top: 20px;
 
+      @media (max-width: $breakpoint) {
+        margin-top: 14px;
+      }
+
       &-small {
         width: 50px;
         margin-right: 40px;
+
+        @media (max-width: $breakpoint) {
+          width: 30px;
+        }
 
         &:hover {
           cursor: pointer;
@@ -164,6 +185,10 @@ export default defineComponent({
       }
       &-big {
         width: 150px;
+
+        @media (max-width: $breakpoint) {
+          width: 120px;
+        }
         
         &:hover {
           cursor: pointer;
@@ -195,13 +220,25 @@ export default defineComponent({
       margin-top: -8px;
       padding-bottom: 70px;
       border-bottom: 1px solid $grayBorderColor;
+
+      @media (max-width: $breakpoint) {
+        padding-bottom: 50px;
+      }
     }
 
     &_edit-contact-information-header {
       margin-top: 70px;
 
+      @media (max-width: $breakpoint) {
+        margin-top: 50px;
+      }
+
       &-element {
         font-size: 28px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 20px;
+        }
       } 
     }
 
@@ -218,6 +255,10 @@ export default defineComponent({
 
       &-element {
         font-size: 24px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 20px;
+        }
       }
     }
 
@@ -229,10 +270,14 @@ export default defineComponent({
         flex-direction: column;
         width: 600px;
 
+        @media (max-width: $breakpoint) {
+          width: 100%;
+        }
+
         &_website {
 
           &-url-input {
-          margin-top: 14px;
+            margin-top: 14px;
           }
 
           &-type-of-website-input {
@@ -240,7 +285,7 @@ export default defineComponent({
           }
 
           &-remove-button {
-            margin: 24px 0 24px 0;
+            margin: 24px 0 10px 0;
           }
         }
       }

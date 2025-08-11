@@ -2,7 +2,7 @@
   <div class="about-me">
     <ul class="about-me-header">
       <li class="about-me-header-title"><h1 class="about-me-header-title-element">About me</h1></li>
-      <li class="about-me-header-edit"><router-link to="/link-to-edit-about-me" class="about-me-header-edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="about-me-header-edit-icon"></router-link></li>
+      <li class="about-me-header-edit"><router-link to="/profile/edit-about-me" class="about-me-header-edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="about-me-header-edit-icon"></router-link></li>
     </ul>
     <p class="about-me-paragraph">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js. Interesuję się również tworzeniem aplikacji mobilnych oraz desktopowych przy użyciu technologii .NET MAUI oraz WPF.</p>
   </div>
