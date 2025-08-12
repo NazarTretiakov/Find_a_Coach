@@ -113,6 +113,11 @@
             &_add {
               &-element {
                 width: 30px;
+                transition: transform 0.3s ease;
+
+                &:hover {
+                  transform: scale(1.15);
+                }
 
                 @media (max-width: $breakpoint) {
                   width: 24px;
@@ -123,6 +128,11 @@
             &_edit {
               &-element {
                 width: 30px;
+                transition: transform 0.3s ease;
+
+                &:hover {
+                  transform: scale(1.15);
+                }
 
                 @media (max-width: $breakpoint) {
                   width: 24px;

@@ -17,6 +17,11 @@
   transition: background-color 0.3s ease;
   font-size: 14px;
 
+  @media (max-width: $breakpoint) {
+    height: 34px;
+    font-size: 12px;
+  }
+
   &:hover {
     cursor: pointer;
     background-color: $mainBackgroundColorHoverColor;

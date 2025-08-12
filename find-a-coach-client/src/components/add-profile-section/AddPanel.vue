@@ -99,18 +99,22 @@ export default defineComponent({
 
         @media (max-width: $breakpoint) {
           font-size: 12px;
-          width: 200px;
         }
       }
     }
 
     &_icon {
-      margin-top: 4px;
+      margin: 4px 0 0 10px;
       
       &-add {
         width: 30px;
         height: 30px;
         color: $grayBorderColor;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.20);
+        }
 
         @media (max-width: $breakpoint) {
           width: 24px;
@@ -120,6 +124,11 @@ export default defineComponent({
 
       &-tick {
         width: 30px;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.20);
+        }
         
         @media (max-width: $breakpoint) {
           width: 24px;

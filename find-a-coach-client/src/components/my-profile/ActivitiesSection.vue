@@ -7,7 +7,7 @@
           <li class="activities-section-items_header-items_buttons">
             <ul class="activities-section-items_header-items_buttons-items">
               <li class="activities-section-items_header-items_buttons-items_add"><router-link to="/link-to-add-activity" class="activities-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="activities-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="activities-section-items_header-items_buttons-items_edit"><router-link to="/link-to-edit-activity" class="activities-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="activities-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="activities-section-items_header-items_buttons-items_edit"><router-link to="/forum" class="activities-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="activities-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -100,6 +100,11 @@ export default defineComponent({
 
               &-element {
                 width: 30px;
+                transition: transform 0.3s ease;
+
+                &:hover {
+                  transform: scale(1.15);
+                }
 
                 @media (max-width: $breakpoint) {
                   width: 24px;
@@ -111,6 +116,11 @@ export default defineComponent({
 
               &-element {
                 width: 30px;
+                transition: transform 0.3s ease;
+
+                &:hover {
+                  transform: scale(1.15);
+                }
 
                 @media (max-width: $breakpoint) {
                   width: 24px;

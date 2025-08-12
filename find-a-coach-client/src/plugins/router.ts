@@ -18,6 +18,7 @@ import ProfilePage from '../pages/ProfilePage.vue'
 import AddProfileSection from '../pages/AddProfileSection.vue'
 import EditPersonalInformation from '../pages/EditPersonalInformation.vue'
 import EditAboutMe from '../pages/EditAboutMe.vue'
+import ForumPage from '../pages/ForumPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -37,6 +38,7 @@ const router = createRouter({
     { path: '/profile/add-profile-section', component: AddProfileSection, meta: { requiresAuth: true } },
     { path: '/profile/edit-personal-information', component: EditPersonalInformation, meta: { requiresAuth: true} },
     { path: '/profile/edit-about-me', component: EditAboutMe, meta: { requiresAuth: true} },
+    { path: '/forum', component: ForumPage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ]
