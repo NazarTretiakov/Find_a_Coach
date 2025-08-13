@@ -14,11 +14,12 @@ import RegistrationPage from '../pages/RegistrationPage.vue'
 import ConfirmEmail from '../pages/ConfirmEmail.vue'
 import EmailConfirmed from '../pages/EmailConfirmed.vue'
 import SearchPage from '../pages/SearchPage.vue'
-import ProfilePage from '../pages/ProfilePage.vue'
+import MyProfilePage from '../pages/MyProfilePage.vue'
 import AddProfileSection from '../pages/AddProfileSection.vue'
 import EditPersonalInformation from '../pages/EditPersonalInformation.vue'
 import EditAboutMe from '../pages/EditAboutMe.vue'
-import ForumPage from '../pages/ForumPage.vue'
+import UserActivities from '../pages/UserActivities.vue'
+import EventPage from '../pages/EventPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -34,14 +35,22 @@ const router = createRouter({
     { path: '/register/confirm-email', component: ConfirmEmail, meta: { requiresAuth: false }, beforeEnter: useValidationOfConfirmEmailParams },
     { path: '/register/email-confirmed', component: EmailConfirmed, meta: { requiresAuth: false }, beforeEnter: useValidationOfEmailConfirmedParams },
     { path: '/search', component: SearchPage, meta: { requiresAuth: true } },
-    { path: '/profile', component: ProfilePage, meta: { requiresAuth: true } },
+    { path: '/my-profile', component: MyProfilePage, meta: { requiresAuth: true } },
     { path: '/profile/add-profile-section', component: AddProfileSection, meta: { requiresAuth: true } },
     { path: '/profile/edit-personal-information', component: EditPersonalInformation, meta: { requiresAuth: true} },
     { path: '/profile/edit-about-me', component: EditAboutMe, meta: { requiresAuth: true} },
-    { path: '/forum', component: ForumPage, meta: { requiresAuth: true } },
+    { path: '/profile/activities', component: UserActivities, meta: { requiresAuth: true } },
+    { path: '/forum/event', component: EventPage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  }
 })
 
 router.beforeEach(useUserAccessVerification)

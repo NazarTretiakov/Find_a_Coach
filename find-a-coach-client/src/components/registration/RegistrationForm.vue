@@ -45,7 +45,7 @@ export default defineComponent({
   setup() {
     const email = ref<string>('')
     const password = ref<string>('')
-    const errorMessage = ref<string>('')
+    const errorMessage = ref<string | null>('')
     const isLoading = ref<boolean>(false)
     let loadingTimeout: ReturnType<typeof setTimeout> | null = null
 

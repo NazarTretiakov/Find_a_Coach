@@ -23,7 +23,7 @@
         </router-link>
       </li>
       <li v-if="isAuthenticated" class="header-buttons_profile">
-        <router-link to="/profile" class="header-buttons_profile-link">
+        <router-link to="/my-profile" class="header-buttons_profile-link">
           <div class="header-buttons_profile-container">
             <img class="header-buttons_profile-container-icon" src="../assets/images/icons/profile-icon.svg" alt="Profile icon">
             <span class="header-buttons_profile-container-incription">Profile</span>
