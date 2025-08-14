@@ -33,7 +33,7 @@
       <li class="edit-personal-information-items_phone-input">
         <input-field label="Phone number" name="phone-number" type="text"></input-field>
       </li>
-            <li class="edit-personal-information-items_websites-header">
+      <li class="edit-personal-information-items_websites-header">
         <h1 class="edit-personal-information-items_websites-header-element">Websites</h1>
       </li>
       <li class="edit-personal-information-items_websites">

@@ -1,7 +1,13 @@
 <template> 
   <div class="text-area">
     <label class="text-area-label" :for="name">{{ label }}</label>
-    <textarea v-model="textFromTextArea" class="text-area-element" :name="name" :id="name"></textarea>
+    <textarea 
+      v-model="internalValue" 
+      class="text-area-element" 
+      :name="name" 
+      :id="name"
+      @input="$emit('update:modelValue', $event.target.value)"
+    ></textarea>
     <span class="text-area-number-of-signs">
       <span :class="isLimitExceeded ? 'text-area-number-of-signs-entered-exceeded' : 'text-area-number-of-signs-entered'">{{ numberOfSignsEntered }}</span>/<span class="text-area-number-of-signs-max">{{ maxNumberOfSigns }}</span>
     </span>
@@ -9,32 +15,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 
 export default defineComponent({
   props: {
-    label: {
-      type: String,
+    label: { 
+      type: String, 
       required: true
     },
-    name: {
-      type: String,
+    name: { 
+      type: String, 
+      required: true 
+    },
+    maxNumberOfSigns: { 
+      type: Number, 
       required: true
     },
-    maxNumberOfSigns: {
-      type: Number,
-      required: true
+    modelValue: { 
+      type: String, 
+      required: false, 
+      default: '' 
     }
   },
   setup(props) {
-    const textFromTextArea = ref<string>('')
-    const numberOfSignsEntered = computed<number>(() => textFromTextArea.value.length)
-    const isLimitExceeded = computed<boolean>(() => numberOfSignsEntered.value > props.maxNumberOfSigns)
+    const internalValue = ref<string>(props.modelValue)
 
-    return { isLimitExceeded, textFromTextArea, numberOfSignsEntered };
+    watch(() => props.modelValue, (newValue) => {
+      internalValue.value = newValue
+    })
+
+    const numberOfSignsEntered = computed(() => internalValue.value.length)
+    const isLimitExceeded = computed(() => numberOfSignsEntered.value > props.maxNumberOfSigns)
+
+    return { internalValue, numberOfSignsEntered, isLimitExceeded }
   }
 })
 </script>
+
 
 
 <style lang="scss" scoped>

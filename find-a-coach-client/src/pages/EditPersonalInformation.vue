@@ -10,7 +10,7 @@
 import { defineComponent } from 'vue'
 
 import ProfileStickyHeader from '../components/ProfileStickyHeader.vue';
-import EditPersonalInformationForm from '../components/edit-personal-information/EditPersonalInfromationForm.vue';
+import EditPersonalInformationForm from '../components/edit-personal-information/EditPersonalInformationForm.vue';
 import TheFooter from '../components/TheFooter.vue'
 
 export default defineComponent({

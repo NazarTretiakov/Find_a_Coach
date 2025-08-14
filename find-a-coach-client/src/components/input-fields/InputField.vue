@@ -17,10 +17,22 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
-    label: { type: String, required: true },
-    name: { type: String, required: true },
-    type: { type: String, required: true },
-    modelValue: { type: String, default: '' }
+    label: { 
+      type: String, 
+      required: true 
+    },
+    name: { 
+      type: String, 
+      required: true 
+    },
+    type: { 
+      type: String, 
+      required: true 
+    },
+    modelValue: { 
+      type: String, 
+      default: '' 
+    }
   },
 })
 </script>

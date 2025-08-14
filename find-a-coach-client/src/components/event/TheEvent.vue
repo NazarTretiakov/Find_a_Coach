@@ -15,37 +15,38 @@
     <span class="event-subjects">Logistics, Business, Marketing</span>
     <img class="event-image" src="../../assets/images/activities-image.jpeg" alt="Image of the event">
     <h3 class="event-searching-for">Searching for two people:</h3>
-    <div :class="isPositionPanelOpened[0] ? 'event-position' : 'event-position-opened'">
-      <ul :class="isPositionPanelOpened[0] ? 'event-position-header' : 'event-position-opened-header'">
-        <li :class="isPositionPanelOpened[0] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="isPositionPanelOpened[0] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../assets/images/icons/position-icon.svg" alt="Position icon">
-          <span :class="isPositionPanelOpened[0] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
+    <div :class="!isPositionPanelOpened[0] ? 'event-position' : 'event-position-opened'">
+      <ul :class="!isPositionPanelOpened[0] ? 'event-position-header' : 'event-position-opened-header'">
+        <li :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
+          <img :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../assets/images/icons/position-icon.svg" alt="Position icon">
+          <span :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
         </li>
-        <li :class="isPositionPanelOpened[0] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(0)" :class="isPositionPanelOpened[0] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
+        <li :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
+          <img @click="triggerPositionPanelOpening(0)" :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
         </li>
       </ul>
-      <the-skills :class="isPositionPanelOpened[0] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
-      <span :class="isPositionPanelOpened[0] ? 'event-position-payment' : 'event-position-opened-payment'">Payment: Unpaid</span>
-      <p :class="isPositionPanelOpened[0] ? 'event-position-description' : 'event-position-opened-description'">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
-      <apply-on-event-button :class="isPositionPanelOpened[0] ? 'event-position-button' : 'event-position-opened-button'"></apply-on-event-button>
+      <the-skills :class="!isPositionPanelOpened[0] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
+      <span :class="!isPositionPanelOpened[0] ? 'event-position-payment' : 'event-position-opened-payment'">Payment: Unpaid</span>
+      <p :class="!isPositionPanelOpened[0] ? 'event-position-description' : 'event-position-opened-description'">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
+      <apply-on-event-button :class="!isPositionPanelOpened[0] ? 'event-position-button' : 'event-position-opened-button'"></apply-on-event-button>
     </div>
 
-    <div :class="isPositionPanelOpened[1] ? 'event-position' : 'event-position-opened'">
-      <ul :class="isPositionPanelOpened[1] ? 'event-position-header' : 'event-position-opened-header'">
-        <li :class="isPositionPanelOpened[1] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="isPositionPanelOpened[1] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../assets/images/icons/position-icon.svg" alt="Position icon">
-          <span :class="isPositionPanelOpened[1] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
+    <div :class="!isPositionPanelOpened[1] ? 'event-position' : 'event-position-opened'">
+      <ul :class="!isPositionPanelOpened[1] ? 'event-position-header' : 'event-position-opened-header'">
+        <li :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
+          <img :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../assets/images/icons/position-icon.svg" alt="Position icon">
+          <span :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
         </li>
-        <li :class="isPositionPanelOpened[1] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(1)" :class="isPositionPanelOpened[1] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
+        <li :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
+          <img @click="triggerPositionPanelOpening(1)" :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
         </li>
       </ul>
-      <the-skills :class="isPositionPanelOpened[1] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
-      <span :class="isPositionPanelOpened[1] ? 'event-position-payment' : 'event-position-opened-payment'">Payment: Unpaid</span>
-      <p :class="isPositionPanelOpened[1] ? 'event-position-description' : 'event-position-opened-description'">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
-      <apply-on-event-button :class="isPositionPanelOpened[1] ? 'event-position-button' : 'event-position-opened-button'"></apply-on-event-button>
+      <the-skills :class="!isPositionPanelOpened[1] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
+      <span :class="!isPositionPanelOpened[1] ? 'event-position-payment' : 'event-position-opened-payment'">Payment: Unpaid</span>
+      <p :class="!isPositionPanelOpened[1] ? 'event-position-description' : 'event-position-opened-description'">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
+      <apply-on-event-button :class="!isPositionPanelOpened[1] ? 'event-position-button' : 'event-position-opened-button'"></apply-on-event-button>
     </div>
+    <span class="event-date-of-beginning">Date of beginning: 14 august 2022</span>
     <p class="event-description">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
     <h2 class="event-comments-header">Comments</h2>
     <ul class="event-create-comment-bar">
@@ -420,9 +421,19 @@ export default defineComponent({
     }
   }
 
+  &-date-of-beginning {
+    font-size: 14px;
+    display: block;
+    margin-top: 30px;
+
+    @media (max-width: $breakpoint) {
+      font-size: 12px;
+    }
+  }
+
   &-description {
     font-size: 14px;
-    margin-top: 30px;
+    margin-top: 20px;
 
     @media (max-width: $breakpoint) {
       font-size: 12px;
@@ -451,7 +462,7 @@ export default defineComponent({
         border-radius: 12px;
         height: 34px;
         width: 46vw;
-        padding: 10px 46px 10px 10px;
+        padding: 10px 46px 10px 18px;
         font-size: 14px;
 
         &:active {
@@ -461,6 +472,7 @@ export default defineComponent({
         @media (max-width: $breakpoint) {
           font-size: 12px;
           width: 54vw;
+          padding: 10px 46px 10px 14px;
         }
       }
 

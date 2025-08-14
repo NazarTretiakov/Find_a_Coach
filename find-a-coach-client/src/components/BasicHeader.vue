@@ -47,7 +47,7 @@
             <span class="header-mobile-menu_network-container-incription">Network</span>
           </div>
         </router-link>
-        <router-link to="/profile" v-if="isAuthenticated" class="header-mobile-menu_profile-link">
+        <router-link to="/my-profile" v-if="isAuthenticated" class="header-mobile-menu_profile-link">
           <div class="header-mobile-menu_profile-container">
             <img class="header-mobile-menu_profile-container-icon" src="../assets/images/icons/profile-icon.svg" alt="Profile icon">
             <span class="header-mobile-menu_profile-container-incription">Profile</span>
