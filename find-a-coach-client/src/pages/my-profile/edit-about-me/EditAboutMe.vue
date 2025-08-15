@@ -11,9 +11,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileStickyHeader from '../components/ProfileStickyHeader.vue';
-import EditAboutMeForm from '../components/edit-about-me/EditAboutMeForm.vue';
-import TheFooter from '../components/TheFooter.vue'
+import ProfileStickyHeader from '../../../components/my-profile/ProfileStickyHeader.vue'
+import EditAboutMeForm from '../../../components/my-profile/edit-about-me/EditAboutMeForm.vue'
+import TheFooter from '../../../components/TheFooter.vue'
 
 export default defineComponent({
   components: {

@@ -5,7 +5,7 @@
 </template>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../../assets/styles/config' as *;
 
 .button {
   color: $mainBackgroundColor;

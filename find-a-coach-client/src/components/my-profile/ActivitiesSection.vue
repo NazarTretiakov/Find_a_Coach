@@ -6,8 +6,8 @@
           <li class="activities-section-items_header-items_incription"><h1 class="activities-section-items_header-items_incription-element">Activities</h1></li>
           <li class="activities-section-items_header-items_buttons">
             <ul class="activities-section-items_header-items_buttons-items">
-              <li class="activities-section-items_header-items_buttons-items_add"><router-link to="/profile/add-activity" class="activities-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="activities-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="activities-section-items_header-items_buttons-items_edit"><router-link to="/profile/activities" class="activities-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="activities-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="activities-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-activity" class="activities-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="activities-section-items_header-items_buttons-items_add-element"></router-link></li>
+              <li class="activities-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/activities" class="activities-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="activities-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -18,7 +18,7 @@
         <event-card></event-card>
       </li>
     </ul>
-    <router-link class="activities-section-items_show-all-activities-link" to="/path-to-list-of-activities-of-user">
+    <router-link class="activities-section-items_show-all-activities-link" to="/my-profile/activities">
       <div class="activities-section-items_show-all-activities">
         <span class="activities-section-items_show-all-activities-element">Show all activities</span>
         <img class="activities-section-items_show-all-activities-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">

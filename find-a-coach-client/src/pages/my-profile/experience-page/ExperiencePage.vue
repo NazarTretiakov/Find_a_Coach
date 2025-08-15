@@ -1,14 +1,14 @@
 <template> 
   <div class="header">
-    <basic-header></basic-header>
+    <profile-sticky-header></profile-sticky-header>
     <search-panel></search-panel>
   </div>
 
-  <ul class="activities-sections">
-    <li class="activities-sections_left-side">
-      <activities-cards></activities-cards>
+  <ul class="experience-sections">
+    <li class="experience-sections_left-side">
+      <experience-cards></experience-cards>
     </li>
-    <li class="activities-sections_right-side">
+    <li class="experience-sections_right-side">
       <recommended-people></recommended-people>
     </li>
   </ul>
@@ -19,19 +19,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import BasicHeader from '../components/BasicHeader.vue'
-import SearchPanel from '../components/SearchPanel.vue'
-import ActivitiesCards from '../components/user-activities/ActivitiesCards.vue'
+import ProfileStickyHeader from '../../../components/my-profile/ProfileStickyHeader.vue'
+import SearchPanel from '../../../components/SearchPanel.vue'
+import ExperienceCards from '../../../components/my-profile/experience-page/ExperienceCards.vue'
 
-import RecommendedPeople from '../components/my-profile/RecommendedPeople.vue'
-import TheFooter from '../components/TheFooter.vue'
+import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
+import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
   components: {
-    BasicHeader,
+    ProfileStickyHeader,
     SearchPanel,
-    ActivitiesCards,
+    ExperienceCards,
     RecommendedPeople,
     TheFooter
   }
@@ -39,7 +39,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .header {
   z-index: 2;
@@ -47,7 +47,7 @@ export default defineComponent({
   top: 0;
 }
 
-.activities-sections {
+.experience-sections {
   display: flex;
   list-style: none;
   padding: 0;

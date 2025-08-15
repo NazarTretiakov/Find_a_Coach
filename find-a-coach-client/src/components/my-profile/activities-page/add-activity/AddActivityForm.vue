@@ -15,7 +15,6 @@
       </li>
       <li class="create-activity-items_type-input">
         <dropdown-menu
-          class="create-activity-items_activity-dropdown"
           label="Activity type"
           name="activity-type"
           v-model="selectedActivityType"
@@ -100,14 +99,14 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
-import InputField from "../input-fields/InputField.vue";
-import TextInputArea from '../input-fields/TextInputArea.vue';
-import DropdownMenu from '../input-fields/DropdownMenu.vue';
-import FileInputField from '../input-fields/FileInputField.vue';
-import RemoveButton from '../input-fields/RemoveButton.vue';
-import AddButton from '../input-fields/AddButton.vue';
-import SaveButton from '../input-fields/SaveButton.vue';
-import type { Panel } from '../../types/add-activity/Panel'
+import InputField from "../../../input-fields/InputField.vue";
+import TextInputArea from '../../../input-fields/TextInputArea.vue';
+import DropdownMenu from '../../../input-fields/DropdownMenu.vue';
+import FileInputField from '../../../input-fields/FileInputField.vue';
+import RemoveButton from '../../../input-fields/RemoveButton.vue';
+import AddButton from '../../../input-fields/AddButton.vue';
+import SaveButton from '../../../input-fields/SaveButton.vue';
+import type { Panel } from '../../../../types/add-activity/Panel'
 
 export default defineComponent({
   components: {
@@ -160,7 +159,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../../assets/styles/config' as *;
 
 .create-activity {
   margin: 50px 0 0 150px;
@@ -258,7 +257,8 @@ export default defineComponent({
     }
 
     &_panels {
-      .create-activity-items_panels-items {
+
+      &-items {
         list-style: none;
         display: flex;
         flex-direction: column;

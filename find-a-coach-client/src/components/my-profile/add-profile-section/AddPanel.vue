@@ -12,7 +12,7 @@
           </svg>
         </router-link>
         <router-link :to="linkToChangeProfileSection" v-else>
-          <img src="../../assets/images/icons/tick-icon.svg" class="add-panel-items_icon-tick" alt="Tick icon">
+          <img src="../../../assets/images/icons/tick-icon.svg" class="add-panel-items_icon-tick" alt="Tick icon">
         </router-link>
       </li>
     </ul>
@@ -50,7 +50,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .add-panel {
   width: 100%;

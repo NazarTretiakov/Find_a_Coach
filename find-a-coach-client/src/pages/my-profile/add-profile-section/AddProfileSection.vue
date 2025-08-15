@@ -9,9 +9,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileStickyHeader from '../components/ProfileStickyHeader.vue'
-import AddProfileSectionPanels from '../components/add-profile-section/AddProfileSectionPanels.vue'
-import TheFooter from '../components/TheFooter.vue'
+import ProfileStickyHeader from '../../../components/my-profile/ProfileStickyHeader.vue'
+import AddProfileSectionPanels from '../../../components/my-profile/add-profile-section/AddProfileSectionPanels.vue'
+import TheFooter from '../../../components/TheFooter.vue'
 
 export default defineComponent({
   components: {

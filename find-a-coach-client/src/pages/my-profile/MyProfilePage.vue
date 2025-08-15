@@ -25,19 +25,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileStickyHeader from '../components/ProfileStickyHeader.vue'
-import PersonalInformation from '../components/my-profile/PersonalInformation.vue'
-import AboutMe from '../components/my-profile/AboutMe.vue'
-import ActivitiesSection from '../components/my-profile/ActivitiesSection.vue'
-import ExperienceSection from '../components/my-profile/ExperienceSection.vue'
-import EducationSection from '../components/my-profile/EducationSection.vue';
-import ProjectsSection from '../components/my-profile/ProjectsSection.vue';
-import CertificationsSection from '../components/my-profile/CertificationsSection.vue'
-import SkillsSection from '../components/my-profile/SkillsSection.vue'
-import LanguagesSection from '../components/my-profile/LanguagesSection.vue';
-import RecommendationsSection from '../components/my-profile/RecommendationsSection.vue';
-import RecommendedPeople from '../components/my-profile/RecommendedPeople.vue'
-import TheFooter from '../components/TheFooter.vue'
+import ProfileStickyHeader from '../../components/my-profile/ProfileStickyHeader.vue'
+import PersonalInformation from '../../components/my-profile/PersonalInformation.vue'
+import AboutMe from '../../components/my-profile/AboutMe.vue'
+import ActivitiesSection from '../../components/my-profile/ActivitiesSection.vue'
+import ExperienceSection from '../../components/my-profile/ExperienceSection.vue'
+import EducationSection from '../../components/my-profile/EducationSection.vue';
+import ProjectsSection from '../../components/my-profile/ProjectsSection.vue';
+import CertificationsSection from '../../components/my-profile/CertificationsSection.vue'
+import SkillsSection from '../../components/my-profile/SkillsSection.vue'
+import LanguagesSection from '../../components/my-profile/LanguagesSection.vue';
+import RecommendationsSection from '../../components/my-profile/RecommendationsSection.vue';
+import RecommendedPeople from '../../components/my-profile/RecommendedPeople.vue'
+import TheFooter from '../../components/TheFooter.vue'
 
 export default defineComponent({
   components: {
@@ -59,7 +59,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/styles/config' as *;
+@use '../../assets/styles/config' as *;
 
 .header {
   z-index: 2;

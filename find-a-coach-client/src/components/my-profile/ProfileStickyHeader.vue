@@ -16,7 +16,7 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
-@use '../assets/styles/config' as *;
+@use '../../assets/styles/config' as *;
 
 .sticky-header {
   position: sticky;

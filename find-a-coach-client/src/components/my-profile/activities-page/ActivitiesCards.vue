@@ -5,7 +5,7 @@
         <h1 class="activities-header_inscription-element">Activities</h1>
       </li>
       <li class="activities-header_add-button">
-        <router-link to="/profile/add-activity" class="activities-header_add-button-link">
+        <router-link to="/my-profile/add-activity" class="activities-header_add-button-link">
           <button class="activities-header_add-button-element">
             <svg class="activities-header_add-button-element-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -20,7 +20,7 @@
         <li class="activities-items_activity">
           <ul class="activities-items_activity-header">
             <li class="activities-items_activity-header_user-info">
-              <img class="activities-items_activity-header_user-info-profile-image" src="../../assets/images/icons/user-icon.jpg" alt="User profile image">
+              <img class="activities-items_activity-header_user-info-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
               <span class="activities-items_activity-header_user-info-user-name">Janusz Kowalski</span>
             </li>
             <li class="activities-items_activity-header_publication-time">
@@ -30,7 +30,7 @@
           <h1 class="activities-items_activity-title">Starting an store checking project</h1>
           <span class="activities-items_activity-subjects">Logistics, Business, Marketing</span>
           <span class="activities-items_activity-special-phrase">Searching for 2 people in that event</span>
-          <img class="activities-items_activity-image" src="../../assets/images/activities-image.jpeg" alt="Image of the activity">
+          <img class="activities-items_activity-image" src="../../../assets/images/activities-image.jpeg" alt="Image of the activity">
         </li>
       </router-link>
     </ul>
@@ -41,7 +41,7 @@
 </template>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .activities {
   margin: 50px 0 100px 100px;

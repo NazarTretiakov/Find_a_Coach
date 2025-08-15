@@ -1,13 +1,14 @@
 <template> 
   <div class="header">
     <basic-header></basic-header>
+    <search-panel></search-panel>
   </div>
 
-  <ul class="page-sections">
-    <li class="page-sections_left-side">
-      <the-event></the-event>
+  <ul class="activities-sections">
+    <li class="activities-sections_left-side">
+      <activities-cards></activities-cards>
     </li>
-    <li class="page-sections_right-side">
+    <li class="activities-sections_right-side">
       <recommended-people></recommended-people>
     </li>
   </ul>
@@ -18,19 +19,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import BasicHeader from '../components/BasicHeader.vue'
-import SearchPanel from '../components/SearchPanel.vue'
-import TheEvent from '../components/event/TheEvent.vue'
+import BasicHeader from '../../../components/BasicHeader.vue'
+import SearchPanel from '../../../components/SearchPanel.vue'
+import ActivitiesCards from '../../../components/my-profile/activities-page/ActivitiesCards.vue'
 
-import RecommendedPeople from '../components/my-profile/RecommendedPeople.vue'
-import TheFooter from '../components/TheFooter.vue'
+import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
+import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
   components: {
     BasicHeader,
     SearchPanel,
-    TheEvent,
+    ActivitiesCards,
     RecommendedPeople,
     TheFooter
   }
@@ -38,7 +39,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .header {
   z-index: 2;
@@ -46,7 +47,7 @@ export default defineComponent({
   top: 0;
 }
 
-.page-sections {
+.activities-sections {
   display: flex;
   list-style: none;
   padding: 0;

@@ -7,6 +7,7 @@
       :id="name"
       :type="type"
       :value="modelValue"
+      :disabled="disabled"
       @input="$emit('update:modelValue', $event.target.value)"
     >
   </div>
@@ -32,6 +33,10 @@ export default defineComponent({
     modelValue: { 
       type: String, 
       default: '' 
+    },
+    disabled: { 
+      type: Boolean, 
+      default: false 
     }
   },
 })
@@ -41,7 +46,6 @@ export default defineComponent({
 @use '../../assets/styles/config' as *;
 
 .input-field {
-
   &-label {
     color: $grayBorderColor;
     font-size: 14px;
@@ -52,6 +56,7 @@ export default defineComponent({
       font-size: 12px;
     }
   }
+
   &-element {
     border: 1px #000000 solid;
     width: 600px;
@@ -69,6 +74,17 @@ export default defineComponent({
 
     &:hover {
       border: 2px #000000 solid;
+    }
+
+    &:disabled {
+      background-color: $disabledInputBackgroundcolor;
+      color: $disabledInputTextColor;
+      cursor: not-allowed;
+      border: none;
+
+      &:hover {
+        border: none;
+      }
     }
   }
 }

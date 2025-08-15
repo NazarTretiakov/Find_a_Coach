@@ -3,7 +3,7 @@
     <ul class="event-header">
       <li class="event-header_user-info">
         <router-link to="user-profile" class="event-header_user-info-link">
-          <img class="event-header_user-info-profile-image" src="../../assets/images/icons/user-icon.jpg" alt="User profile image">
+          <img class="event-header_user-info-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile image">
           <span class="event-header_user-info-user-name">Janusz Kowalski</span>
         </router-link>  
       </li>
@@ -13,16 +13,16 @@
     </ul>
     <h1 class="event-title">Starting an store checking project</h1>
     <span class="event-subjects">Logistics, Business, Marketing</span>
-    <img class="event-image" src="../../assets/images/activities-image.jpeg" alt="Image of the event">
+    <img class="event-image" src="../../../../assets/images/activities-image.jpeg" alt="Image of the event">
     <h3 class="event-searching-for">Searching for two people:</h3>
     <div :class="!isPositionPanelOpened[0] ? 'event-position' : 'event-position-opened'">
       <ul :class="!isPositionPanelOpened[0] ? 'event-position-header' : 'event-position-opened-header'">
         <li :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../assets/images/icons/position-icon.svg" alt="Position icon">
+          <img :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../../assets/images/icons/position-icon.svg" alt="Position icon">
           <span :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
         </li>
         <li :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(0)" :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
+          <img @click="triggerPositionPanelOpening(0)" :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
         </li>
       </ul>
       <the-skills :class="!isPositionPanelOpened[0] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
@@ -34,11 +34,11 @@
     <div :class="!isPositionPanelOpened[1] ? 'event-position' : 'event-position-opened'">
       <ul :class="!isPositionPanelOpened[1] ? 'event-position-header' : 'event-position-opened-header'">
         <li :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../assets/images/icons/position-icon.svg" alt="Position icon">
+          <img :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../../assets/images/icons/position-icon.svg" alt="Position icon">
           <span :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
         </li>
         <li :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(1)" :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
+          <img @click="triggerPositionPanelOpening(1)" :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
         </li>
       </ul>
       <the-skills :class="!isPositionPanelOpened[1] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
@@ -54,7 +54,7 @@
         <input class="event-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment...">
         <svg class="event-create-comment-bar_left-side-icon"
           xmlns="http://www.w3.org/2000/svg"
-          height="24px"
+          height="30px"
           viewBox="0 -960 960 960"
           width="30px">
           <path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Z" fill="#B1B1B1" />          
@@ -62,7 +62,7 @@
       </li>
       <li class="event-create-comment-bar_right-side">
         <div class="event-create-comment-bar_right-side-like">
-          <img @click="triggerLike" v-if="!isLiked" class="event-create-comment-bar_right-side-like-icon" src="../../assets/images/icons/like-icon.svg" alt="Like icon">
+          <img @click="triggerLike" v-if="!isLiked" class="event-create-comment-bar_right-side-like-icon" src="../../../../assets/images/icons/like-icon.svg" alt="Like icon">
           <svg @click="triggerLike" v-if="isLiked"  class="event-create-comment-bar_right-side-like-icon"
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
@@ -72,7 +72,7 @@
           </svg>
           <span class="event-create-comment-bar_right-side-like-amount">123</span>
         </div>
-        <img @click="triggerSave" v-if="!isSaved" class="event-create-comment-bar_right-side-save-icon" src="../../assets/images/icons/save-icon.svg" alt="Save icon">
+        <img @click="triggerSave" v-if="!isSaved" class="event-create-comment-bar_right-side-save-icon" src="../../../../assets/images/icons/save-icon.svg" alt="Save icon">
         <svg @click="triggerSave" v-else class="event-create-comment-bar_right-side-save-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
@@ -87,7 +87,7 @@
         <ul class="event-comments_comment-header">
           <li class="event-comments_comment-header_left-side">
             <router-link to="/user-profile" class="event-comments_comment-header_left-side-user-name-link">
-              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../assets/images/icons/user-icon.jpg" alt="User profile photo">
+              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
               <span class="event-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
             </router-link>
           </li>
@@ -102,7 +102,7 @@
         <ul class="event-comments_comment-header">
           <li class="event-comments_comment-header_left-side">
             <router-link to="/user-profile" class="event-comments_comment-header_left-side-user-name-link">
-              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../assets/images/icons/user-icon.jpg" alt="User profile photo">
+              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
               <span class="event-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
             </router-link>
           </li>
@@ -122,7 +122,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
-import TheSkills from "../my-profile/TheSkills.vue";
+import TheSkills from "../../../my-profile/TheSkills.vue";
 import ApplyOnEventButton from "./ApplyOnEventButton.vue";
 
 export default defineComponent({
@@ -153,7 +153,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use "../../assets/styles/config" as *;
+@use "../../../../assets/styles/config" as *;
 
 .event {
   margin: 50px 0 100px 100px;
@@ -477,7 +477,8 @@ export default defineComponent({
       }
 
       &-icon {
-        margin: 0 0 -6px -40px;
+        margin: 0 0 -11px -30px;
+        padding: 0 10px 4px 0;
 
         &:hover {
           cursor: pointer;

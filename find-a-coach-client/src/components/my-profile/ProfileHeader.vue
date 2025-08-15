@@ -3,18 +3,18 @@
     <full-logo class="header-logo"></full-logo>
 
     <ul class="header-buttons">
-      <li class="header-buttons_menu" :class="{ 'header-buttons_menu-active': isMenuButtonActive, 'header-buttons_menu-unactive': !isMenuButtonActive }" @click="toggleMobileMenu"><img class="header-buttons_menu-icon" src="../assets/images/icons/menu-icon.svg" alt="Menu icon"></li>
+      <li class="header-buttons_menu" :class="{ 'header-buttons_menu-active': isMenuButtonActive, 'header-buttons_menu-unactive': !isMenuButtonActive }" @click="toggleMobileMenu"><img class="header-buttons_menu-icon" src="../../assets/images/icons/menu-icon.svg" alt="Menu icon"></li>
       <li class="header-buttons_settings">
         <router-link to="/profile/settings" class="header-buttons_settings-link">
           <div class="header-buttons_settings-container">
-            <img class="header-buttons_settings-container-icon" src="../assets/images/icons/settings-icon.svg" alt="Settings icon">
+            <img class="header-buttons_settings-container-icon" src="../../assets/images/icons/settings-icon.svg" alt="Settings icon">
             <span class="header-buttons_settings-container-incription">Settings</span>
           </div>
         </router-link>
       </li>
       <li class="header-buttons_logout">
         <div @click="logout" class="header-buttons_logout-container">
-          <img class="header-buttons_logout-container-icon" src="../assets/images/icons/logout-icon.svg" alt="Logout icon">
+          <img class="header-buttons_logout-container-icon" src="../../assets/images/icons/logout-icon.svg" alt="Logout icon">
           <span class="header-buttons_logout-container-incription">Logout</span>
         </div>
       </li>
@@ -23,12 +23,12 @@
       <div v-if="showMobileMenu" class="header-mobile-menu">
         <router-link to="/profile/settings" class="header-mobile-menu_settings-link">
           <div class="header-mobile-menu_settings-container">
-            <img class="header-mobile-menu_settings-container-icon" src="../assets/images/icons/settings-icon.svg" alt="Settings icon">
+            <img class="header-mobile-menu_settings-container-icon" src="../../assets/images/icons/settings-icon.svg" alt="Settings icon">
             <span class="header-mobile-menu_settings-container-incription">Settings</span>
           </div>
         </router-link>
         <div @click="logout" class="header-mobile-menu_logout-container">
-          <img class="header-mobile-menu_logout-container-icon" src="../assets/images/icons/logout-icon.svg" alt="Logout icon">
+          <img class="header-mobile-menu_logout-container-icon" src="../../assets/images/icons/logout-icon.svg" alt="Logout icon">
           <span class="header-mobile-menu_logout-container-incription">Logout</span>
         </div>
       </div>
@@ -38,10 +38,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
-import { useAuthenticationStore } from '../stores/authentication'
+import { useAuthenticationStore } from '../../stores/authentication'
 import { useRouter } from 'vue-router'
 
-import FullLogo from './FullLogo.vue'
+import FullLogo from '../FullLogo.vue'
 
 export default defineComponent({
   components: { 
@@ -97,7 +97,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/styles/config' as *;
+@use '../../assets/styles/config' as *;
 
 .header {
   padding: 10px 100px;

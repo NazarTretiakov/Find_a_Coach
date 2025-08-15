@@ -6,8 +6,8 @@
           <li class="experience-section-items_header-items_incription"><h1 class="experience-section-items_header-items_incription-element">Experience</h1></li>
           <li class="experience-section-items_header-items_buttons">
             <ul class="experience-section-items_header-items_buttons-items">
-              <li class="experience-section-items_header-items_buttons-items_add"><router-link to="/link-to-add-activity" class="experience-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="experience-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="experience-section-items_header-items_buttons-items_edit"><router-link to="/link-to-edit-activity" class="experience-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="experience-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="experience-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-position" class="experience-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="experience-section-items_header-items_buttons-items_add-element"></router-link></li>
+              <li class="experience-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/experience" class="experience-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="experience-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -44,7 +44,7 @@
         </ul>
       </li>
     </ul>
-    <router-link class="experience-section-items_show-all-positions-link" to="/path-to-list-of-positions-of-user">
+    <router-link class="experience-section-items_show-all-positions-link" to="/my-profile/experience">
       <div class="experience-section-items_show-all-positions">
         <span class="experience-section-items_show-all-positions-element">Show all positions</span>
         <img class="experience-section-items_show-all-positions-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">

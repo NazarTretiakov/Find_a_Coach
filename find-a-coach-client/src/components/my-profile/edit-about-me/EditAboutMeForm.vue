@@ -15,8 +15,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
-import TextInputArea from '../input-fields/TextInputArea.vue';
-import SaveButton from '../input-fields/SaveButton.vue';
+import TextInputArea from '../../input-fields/TextInputArea.vue';
+import SaveButton from '../../input-fields/SaveButton.vue';
 
 export default defineComponent({
   components: {
@@ -27,7 +27,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .edit-about-me {
   margin: 50px 0 0 150px;

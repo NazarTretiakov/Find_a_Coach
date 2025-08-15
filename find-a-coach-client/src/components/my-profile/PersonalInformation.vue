@@ -8,12 +8,12 @@
           <li class="personal-information-items_left-side-items_incription"><span class="personal-information-items_left-side-items_incription-element">Pracownik działu technicznego firmy The Best Storage w Gdańsku</span></li>
           <li class="personal-information-items_left-side-items_location"><span class="personal-information-items_left-side-items_location-element">Gdańsk, Woj. Pomorskie, Polska</span><span class="personal-information-items_left-side-items_location-divider">-</span><router-link to="/profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link></li>
           <li class="personal-information-items_left-side-items_connections"><router-link to="/link-to-connections-of-user" class="personal-information-items_left-side-items_connections-link">45 connections</router-link></li>
-          <li class="personal-information-items_left-side-items_button"><router-link to="/profile/add-profile-section"><add-profile-section class="personal-information-items_left-side-items_button">Add profile section</add-profile-section></router-link></li>
+          <li class="personal-information-items_left-side-items_button"><router-link to="/my-profile/add-profile-section"><add-profile-section-button class="personal-information-items_left-side-items_button">Add profile section</add-profile-section-button></router-link></li>
         </ul>
       </li>
       <li class="personal-information-items_right-side">
         <ul class="personal-information-items_right-side-items">
-          <li class="personal-information-items_right-side-items_edit"><router-link to="/profile/edit-personal-information" class="personal-information-items_right-side-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="personal-information-items_right-side-items_edit-icon"></router-link></li>
+          <li class="personal-information-items_right-side-items_edit"><router-link to="/my-profile/edit-personal-information" class="personal-information-items_right-side-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="personal-information-items_right-side-items_edit-icon"></router-link></li>
           <li class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="..//../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">Logistics and Marketing</span></li>
         </ul>
       </li>
@@ -23,11 +23,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import AddProfileSection from './AddProfileSection.vue'
+import AddProfileSectionButton from './AddProfileSectionButton.vue'
 
 export default defineComponent({
   components: {
-    AddProfileSection
+    AddProfileSectionButton
   }
 })
 </script>

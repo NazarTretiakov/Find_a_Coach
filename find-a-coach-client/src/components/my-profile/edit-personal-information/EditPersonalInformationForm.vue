@@ -73,13 +73,13 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
-import InputField from "../input-fields/InputField.vue";
-import TextInputArea from '../input-fields/TextInputArea.vue';
-import DropdownMenu from '../input-fields/DropdownMenu.vue';
-import RemoveButton from '../input-fields/RemoveButton.vue';
-import AddButton from '../input-fields/AddButton.vue';
-import SaveButton from '../input-fields/SaveButton.vue';
-import type { Website } from '../../types/edit-personal-information/Website'
+import InputField from "../../input-fields/InputField.vue";
+import TextInputArea from '../../input-fields/TextInputArea.vue';
+import DropdownMenu from '../../input-fields/DropdownMenu.vue';
+import RemoveButton from '../../input-fields/RemoveButton.vue';
+import AddButton from '../../input-fields/AddButton.vue';
+import SaveButton from '../../input-fields/SaveButton.vue';
+import type { Website } from '../../../types/edit-personal-information/Website'
 
 export default defineComponent({
   components: {
@@ -91,7 +91,7 @@ export default defineComponent({
     SaveButton
   },
   setup() {
-    const profileImage = ref(new URL('../../assets/images/icons/user-icon.jpg', import.meta.url).href)
+    const profileImage = ref(new URL('../../../assets/images/icons/user-icon.jpg', import.meta.url).href)
     const fileInput = ref<HTMLInputElement | null>(null)
     const websites = ref<Website[]>([])
     const isAddButtonVisible = ref<boolean>(true)
@@ -134,7 +134,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .edit-personal-information {
   margin: 50px 0 0 150px;

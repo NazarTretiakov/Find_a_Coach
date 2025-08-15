@@ -9,9 +9,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileStickyHeader from '../components/ProfileStickyHeader.vue';
-import AddActivityForm from '../components/add-activity/AddActivityForm.vue';
-import TheFooter from '../components/TheFooter.vue'
+import ProfileStickyHeader from '../../../../components/my-profile/ProfileStickyHeader.vue'
+import AddActivityForm from '../../../../components/my-profile/activities-page/add-activity/AddActivityForm.vue';
+import TheFooter from '../../../../components/TheFooter.vue'
 
 export default defineComponent({
   components: {

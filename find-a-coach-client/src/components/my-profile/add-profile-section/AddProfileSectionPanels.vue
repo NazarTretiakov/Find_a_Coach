@@ -43,7 +43,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .add-profile-section {
   margin: 50px 0 0 150px;
