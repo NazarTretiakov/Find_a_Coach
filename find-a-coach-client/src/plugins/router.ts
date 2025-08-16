@@ -23,6 +23,9 @@ import AddActivity from '../pages/my-profile/activities-page/add-activity/AddAct
 import ExperiencePage from '../pages/my-profile/experience-page/ExperiencePage.vue'
 import AddPosition from '../pages/my-profile/experience-page/add-position/AddPosition.vue'
 import EditPosition from '../pages/my-profile/experience-page/edit-position/EditPosition.vue'
+import EducationPage from '../pages/my-profile/education-page/EducationPage.vue'
+import AddEducation from '../pages/my-profile/education-page/add-education/AddEducation.vue'
+import EditEducation from '../pages/my-profile/education-page/edit-education/EditEducation.vue'
 import EventPage from '../pages/my-profile/activities-page/event-page/EventPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
@@ -48,6 +51,9 @@ const router = createRouter({
     { path: '/my-profile/experience', component: ExperiencePage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-position', component: AddPosition, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-position', component: EditPosition, meta: { requiresAuth: true } },
+    { path: '/my-profile/education', component: EducationPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/add-education', component: AddEducation, meta: { requireAuth: true } },
+    { path: '/my-profile/edit-education', component: EditEducation, meta: { requiresAuth: true } },
     { path: '/forum/event', component: EventPage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }

@@ -6,8 +6,8 @@
           <li class="education-section-items_header-items_incription"><h1 class="education-section-items_header-items_incription-element">Education</h1></li>
           <li class="education-section-items_header-items_buttons">
             <ul class="education-section-items_header-items_buttons-items">
-              <li class="education-section-items_header-items_buttons-items_add"><router-link to="/link-to-add-activity" class="education-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="education-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="education-section-items_header-items_buttons-items_edit"><router-link to="/link-to-edit-activity" class="education-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="education-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="education-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-education" class="education-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="education-section-items_header-items_buttons-items_add-element"></router-link></li>
+              <li class="education-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/education" class="education-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="education-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -44,7 +44,7 @@
         </ul>
       </li> 
     </ul>
-    <router-link class="education-section-items_show-all-education-link" to="/path-to-list-of-educations-of-user">
+    <router-link class="education-section-items_show-all-education-link" to="/my-profile/education">
       <div class="education-section-items_show-all-education">
         <span class="education-section-items_show-all-education-element">Show all education</span>
         <img class="education-section-items_show-all-education-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
@@ -235,6 +235,11 @@ export default defineComponent({
         }
 
         &_time {
+          display: none;
+
+          @media (max-width: $breakpoint) {
+            display: block;
+          }
 
           &-element {
             font-size: 12px;
