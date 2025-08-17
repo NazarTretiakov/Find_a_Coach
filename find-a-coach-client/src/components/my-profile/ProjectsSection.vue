@@ -6,8 +6,8 @@
           <li class="projects-section-items_header-items_incription"><h1 class="projects-section-items_header-items_incription-element">Projects</h1></li>
           <li class="projects-section-items_header-items_buttons">
             <ul class="projects-section-items_header-items_buttons-items">
-              <li class="projects-section-items_header-items_buttons-items_add"><router-link to="/link-to-add-project" class="projects-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="projects-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="projects-section-items_header-items_buttons-items_edit"><router-link to="/link-to-edit-projects" class="projects-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="projects-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="projects-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-project" class="projects-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="projects-section-items_header-items_buttons-items_add-element"></router-link></li>
+              <li class="projects-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/projects" class="projects-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="projects-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -21,12 +21,7 @@
             </ul>
           </li>
           <li class="projects-section-items_project-items_participated-with">
-            <span class="projects-section-items_project-items_participated-with-element">
-              Participated with:
-              <router-link to="/link-to-user-profile" class="projects-section-items_project-items_participated-with-element-person-link">Ulia Malska</router-link>, 
-              <router-link to="/link-to-user-profile" class="projects-section-items_project-items_participated-with-element-person-link">Ariana Popa</router-link>, 
-              <router-link to="/link-to-user-profile" class="projects-section-items_project-items_participated-with-element-person-link">Grzegorz Brzędrzyszczykiewicz</router-link>
-            </span>
+            <span class="projects-section-items_project-items_participated-with-element">Participated with: Ulia Malska, Ariana Popa, Grzegorz Brzędrzyszczykiewicz</span>
           </li>
           <li class="projects-section-items_project-items_type"><span class="projects-section-items_project-items_type-element">Job-related project</span></li>
           <li class="projects-section-items_project-items_location"><span class="projects-section-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
@@ -45,12 +40,7 @@
             </ul>
           </li>
           <li class="projects-section-items_project-items_participated-with">
-            <span class="projects-section-items_project-items_participated-with-element">
-              Participated with:
-              <router-link to="/link-to-user-profile" class="projects-section-items_project-items_participated-with-element-person-link">Ulia Malska</router-link>, 
-              <router-link to="/link-to-user-profile" class="projects-section-items_project-items_participated-with-element-person-link">Ariana Popa</router-link>, 
-              <router-link to="/link-to-user-profile" class="projects-section-items_project-items_participated-with-element-person-link">Grzegorz Brzędrzyszczykiewicz</router-link>
-            </span>
+            <span class="projects-section-items_project-items_participated-with-element">Participated with: Ulia Malska, Ariana Popa, Grzegorz Brzędrzyszczykiewicz</span>
           </li>
           <li class="projects-section-items_project-items_type"><span class="projects-section-items_project-items_type-element">Job-related project</span></li>
           <li class="projects-section-items_project-items_location"><span class="projects-section-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
@@ -60,7 +50,7 @@
         </ul>
       </li>
     </ul>
-    <router-link class="projects-section-items_show-all-projects-link" to="/path-to-list-of-projects-of-user">
+    <router-link class="projects-section-items_show-all-projects-link" to="/my-profile/projects">
       <div class="projects-section-items_show-all-projects">
         <span class="projects-section-items_show-all-projects-element">Show all projects</span>
         <img class="projects-section-items_show-all-projects-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">

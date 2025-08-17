@@ -19,6 +19,7 @@ import AddProfileSection from '../pages/my-profile/add-profile-section/AddProfil
 import EditPersonalInformation from '../pages/my-profile/edit-personal-information/EditPersonalInformation.vue'
 import EditAboutMe from '../pages/my-profile/edit-about-me/EditAboutMe.vue'
 import ActivitiesPage from '../pages/my-profile/activities-page/ActivitiesPage.vue'
+import EventPage from '../pages/my-profile/activities-page/event-page/EventPage.vue'
 import AddActivity from '../pages/my-profile/activities-page/add-activity/AddActivity.vue'
 import ExperiencePage from '../pages/my-profile/experience-page/ExperiencePage.vue'
 import AddPosition from '../pages/my-profile/experience-page/add-position/AddPosition.vue'
@@ -26,7 +27,9 @@ import EditPosition from '../pages/my-profile/experience-page/edit-position/Edit
 import EducationPage from '../pages/my-profile/education-page/EducationPage.vue'
 import AddEducation from '../pages/my-profile/education-page/add-education/AddEducation.vue'
 import EditEducation from '../pages/my-profile/education-page/edit-education/EditEducation.vue'
-import EventPage from '../pages/my-profile/activities-page/event-page/EventPage.vue'
+import ProjectsPage from '../pages/my-profile/projects-page/ProjectsPage.vue'
+import AddProject from '../pages/my-profile/projects-page/add-project/AddProject.vue'
+import EditProject from '../pages/my-profile/projects-page/edit-project/EditProject.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -48,13 +51,16 @@ const router = createRouter({
     { path: '/my-profile/edit-about-me', component: EditAboutMe, meta: { requiresAuth: true} },
     { path: '/my-profile/activities', component: ActivitiesPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-activity', component: AddActivity, meta: { requiresAuth: true } },
+    { path: '/my-profile/event', component: EventPage, meta: { requiresAuth: true } },
     { path: '/my-profile/experience', component: ExperiencePage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-position', component: AddPosition, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-position', component: EditPosition, meta: { requiresAuth: true } },
     { path: '/my-profile/education', component: EducationPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-education', component: AddEducation, meta: { requireAuth: true } },
     { path: '/my-profile/edit-education', component: EditEducation, meta: { requiresAuth: true } },
-    { path: '/forum/event', component: EventPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/projects', component: ProjectsPage, meta: { requiresAuth: true} },
+    { path: '/my-profile/add-project', component: AddProject, meta: { requiresAuth: true } },
+    { path: '/my-profile/edit-project', component: EditProject, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],
