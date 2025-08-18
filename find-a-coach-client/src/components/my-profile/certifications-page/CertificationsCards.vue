@@ -2,7 +2,7 @@
   <div class="certifications">
     <ul class="certifications-header">
       <li class="certifications-header_inscription">
-        <h1 class="certifications-header_inscription-element">certifications</h1>
+        <h1 class="certifications-header_inscription-element">Certifications</h1>
       </li>
       <li class="certifications-header_add-button">
         <router-link to="/my-profile/add-certification" class="certifications-header_add-button-link">
@@ -20,7 +20,7 @@
         <ul class="certifications-items_certification-items">
           <li class="certifications-items_certification-items_title">
             <ul class="certifications-items_certification-items_title-items">
-              <li class="certifications-items_certification-items_title-items_name"><router-link to="/path-to-all-certifications-of-user-with-scrollable-thing" class="certifications-items_certification-items_title-items_name-link"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></router-link></li>
+              <li class="certifications-items_certification-items_title-items_name"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></li>
               <li class="certifications-items_certification-items_title-items_issued"><router-link to="/my-profile/edit-certification"><img class="certifications-items_certification-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
             </ul>
           </li>
@@ -30,7 +30,7 @@
             <img class="certifications-items_certification-items_source-image" src="../../../assets/images/certification-example.jpg" alt="Certification example">
             <span class="certifications-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
           </li>
-          <li class="certifications-items_certification-items_skills"><router-link to="/path-to-all-certificationss-of-user-with-scrollable-thing" class="certifications-items_certification-items_skills-link"><the-skills></the-skills></router-link></li>
+          <li class="certifications-items_certification-items_skills"><the-skills></the-skills></li>
         </ul>
         <div class="certifications-items_certification-delete">
           <span class="certifications-items_certification-delete-inscription">Delete certification</span>
@@ -40,7 +40,7 @@
         <ul class="certifications-items_certification-items">
           <li class="certifications-items_certification-items_title">
             <ul class="certifications-items_certification-items_title-items">
-              <li class="certifications-items_certification-items_title-items_name"><router-link to="/path-to-all-certifications-of-user-with-scrollable-thing" class="certifications-items_certification-items_title-items_name-link"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></router-link></li>
+              <li class="certifications-items_certification-items_title-items_name"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></li>
               <li class="certifications-items_certification-items_title-items_issued"><router-link to="/my-profile/edit-certification"><img class="certifications-items_certification-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
             </ul>
           </li>
@@ -50,7 +50,7 @@
             <img class="certifications-items_certification-items_source-image" src="../../../assets/images/certification-example.jpg" alt="Certification example">
             <span class="certifications-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
           </li>
-          <li class="certifications-items_certification-items_skills"><router-link to="/path-to-all-certificationss-of-user-with-scrollable-thing" class="certifications-items_certification-items_skills-link"><the-skills></the-skills></router-link></li>
+          <li class="certifications-items_certification-items_skills"><the-skills></the-skills></li>
         </ul>
         <div class="certifications-items_certification-delete">
           <span class="certifications-items_certification-delete-inscription">Delete certification</span>
@@ -180,10 +180,6 @@ export default defineComponent({
             align-items: center;
 
             &_name {
-              &-link {
-                color: #000000;
-                text-decoration: none;
-              }
 
               &-element {
                 font-size: 20px;
@@ -269,11 +265,6 @@ export default defineComponent({
 
         &_skills {
           margin-top: 20px;
-
-          &-link {
-            color: #000000;
-            text-decoration: none;
-          }
         }
       }
 

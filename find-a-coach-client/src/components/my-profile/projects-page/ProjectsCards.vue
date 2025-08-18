@@ -20,7 +20,7 @@
         <ul class="projects-items_project-items">
           <li class="projects-items_project-items_title">
             <ul class="projects-items_project-items_title-items">
-              <li class="projects-items_project-items_title-items_name"><router-link to="/path-to-all-projects-of-user-with-scrollable-thing" class="projects-items_project-items_title-items_name-link"><h2 class="projects-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></router-link></li>
+              <li class="projects-items_project-items_title-items_name"><h2 class="projects-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></li>
               <li class="projects-items_project-items_title-items_edit"><router-link to="/my-profile/edit-project"><img class="projects-items_project-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
             </ul>
           </li>
@@ -31,7 +31,7 @@
           <li class="projects-items_project-items_location"><span class="projects-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
           <li class="projects-items_project-items_time"><span class="projects-items_project-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
           <li class="projects-items_project-items_description"><p class="projects-items_project-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="projects-items_project-items_skills"><router-link to="/path-to-all-projectss-of-user-with-scrollable-thing" class="projects-items_project-items_skills-link"><the-skills></the-skills></router-link></li>
+          <li class="projects-items_project-items_skills"><the-skills></the-skills></li>
         </ul>
         <div class="projects-items_project-delete">
           <span class="projects-items_project-delete-inscription">Delete project</span>
@@ -41,7 +41,7 @@
         <ul class="projects-items_project-items">
           <li class="projects-items_project-items_title">
             <ul class="projects-items_project-items_title-items">
-              <li class="projects-items_project-items_title-items_name"><router-link to="/path-to-all-projects-of-user-with-scrollable-thing" class="projects-items_project-items_title-items_name-link"><h2 class="projects-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></router-link></li>
+              <li class="projects-items_project-items_title-items_name"><h2 class="projects-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></li>
               <li class="projects-items_project-items_title-items_edit"><router-link to="/my-profile/edit-project"><img class="projects-items_project-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
             </ul>
           </li>
@@ -52,7 +52,7 @@
           <li class="projects-items_project-items_location"><span class="projects-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
           <li class="projects-items_project-items_time"><span class="projects-items_project-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
           <li class="projects-items_project-items_description"><p class="projects-items_project-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="projects-items_project-items_skills"><router-link to="/path-to-all-projectss-of-user-with-scrollable-thing" class="projects-items_project-items_skills-link"><the-skills></the-skills></router-link></li>
+          <li class="projects-items_project-items_skills"><the-skills></the-skills></li>
         </ul>
         <div class="projects-items_project-delete">
           <span class="projects-items_project-delete-inscription">Delete project</span>
@@ -187,10 +187,6 @@ export default defineComponent({
 
             &_name {
 
-              &-link {
-                color: #000000;
-                text-decoration: none;
-              } 
               &-element {
                 font-size: 20px;
 
@@ -225,15 +221,6 @@ export default defineComponent({
 
             @media (max-width: $breakpoint) {
               font-size: 12px;
-            }
-
-            &-person-link {
-              color: $linkColor;
-              text-decoration: none;
-
-              &:hover {
-                text-decoration: underline;
-              }
             }
           }
         }
@@ -295,11 +282,6 @@ export default defineComponent({
           @media (max-width: $breakpoint) {
             margin-top: 10px;
           }
-
-           &-link {
-            color: #000000;
-            text-decoration: none;
-          } 
         }
       }
 

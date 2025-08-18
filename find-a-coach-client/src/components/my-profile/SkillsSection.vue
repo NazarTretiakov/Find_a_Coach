@@ -6,8 +6,7 @@
           <li class="skills-section-items_header-items_inscription"><h1 class="skills-section-items_header-items_inscription-element">Skills</h1></li>
           <li class="skills-section-items_header-items_buttons">
             <ul class="skills-section-items_header-items_buttons-items">
-              <li class="skills-section-items_header-items_buttons-items_add"><router-link to="/link-to-add-skill" class="skills-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="skills-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="skills-section-items_header-items_buttons-items_edit"><router-link to="/link-to-edit-skills" class="skills-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="skills-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="skills-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/skills" class="skills-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="skills-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -44,7 +43,7 @@
         </ul>
       </li>
     </ul>
-    <router-link class="skills-section-items_show-all-skills-link" to="/path-to-list-of-skills-of-user">
+    <router-link class="skills-section-items_show-all-skills-link" to="/my-profile/skills">
       <div class="skills-section-items_show-all-skills">
         <span class="skills-section-items_show-all-skills-element">Show all skills</span>
         <img class="skills-section-items_show-all-skills-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
@@ -98,32 +97,12 @@
         }
 
         &_buttons {
-          width: 100px;
-
-          @media (max-width: $breakpoint) {
-            width: 80px;
-          }
 
           &-items {
             list-style: none;
             display: flex;
             justify-content: space-between;
             align-content: center;
-
-            &_add {
-              &-element {
-                width: 30px;
-                transition: transform 0.3s ease;
-
-                &:hover {
-                  transform: scale(1.15);
-                }
-
-                @media (max-width: $breakpoint) {
-                  width: 24px;
-                }
-              }
-            }
 
             &_edit {
               &-element {
@@ -191,7 +170,7 @@
         }
       }
 
-            &-divider {
+      &-divider {
         border-bottom: 1px solid $grayBorderColor;
         width: 100%;
         height: 30px;

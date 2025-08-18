@@ -33,6 +33,7 @@ import EditProject from '../pages/my-profile/projects-page/edit-project/EditProj
 import CertificationsPage from '../pages/my-profile/certifications-page/CertificationsPage.vue'
 import AddCertification from '../pages/my-profile/certifications-page/add-certification/AddCertification.vue'
 import EditCertification from '../pages/my-profile/certifications-page/edit-certification/EditCertification.vue'
+import SkillsPage from '../pages/my-profile/skills-page/SkillsPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -67,6 +68,7 @@ const router = createRouter({
     { path: '/my-profile/certifications', component: CertificationsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-certification', component: AddCertification, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-certification', component: EditCertification, meta: { requiresAuth: true } },
+    { path: '/my-profile/skills', component: SkillsPage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],
