@@ -30,6 +30,9 @@ import EditEducation from '../pages/my-profile/education-page/edit-education/Edi
 import ProjectsPage from '../pages/my-profile/projects-page/ProjectsPage.vue'
 import AddProject from '../pages/my-profile/projects-page/add-project/AddProject.vue'
 import EditProject from '../pages/my-profile/projects-page/edit-project/EditProject.vue'
+import CertificationsPage from '../pages/my-profile/certifications-page/CertificationsPage.vue'
+import AddCertification from '../pages/my-profile/certifications-page/add-certification/AddCertification.vue'
+import EditCertification from '../pages/my-profile/certifications-page/edit-certification/EditCertification.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -42,7 +45,7 @@ const router = createRouter({
     { path: '/login', component: LoginPage, meta: { requiresAuth: false }, beforeEnter: useUnauthenticatedUserAccessVerification },
     { path: '/reset-password', component: ResetPassword, meta: { requiresAuth: false }, beforeEnter: useValidationOfResetPasswordParams },
     { path: '/register', component: RegistrationPage, meta: { requiresAuth: false }, beforeEnter: useUnauthenticatedUserAccessVerification },
-    { path: '/register/confirm-email', component: ConfirmEmail, meta: { requiresAuth: false }, beforeEnter: useValidationOfConfirmEmailParams },
+    { path: '/register/confirm-email', component: ConfirmEmail, meta: { requiresAuthT: false }, beforeEnter: useValidationOfConfirmEmailParams },
     { path: '/register/email-confirmed', component: EmailConfirmed, meta: { requiresAuth: false }, beforeEnter: useValidationOfEmailConfirmedParams },
     { path: '/search', component: SearchPage, meta: { requiresAuth: true } },
     { path: '/my-profile', component: MyProfilePage, meta: { requiresAuth: true } },
@@ -61,6 +64,9 @@ const router = createRouter({
     { path: '/my-profile/projects', component: ProjectsPage, meta: { requiresAuth: true} },
     { path: '/my-profile/add-project', component: AddProject, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-project', component: EditProject, meta: { requiresAuth: true } },
+    { path: '/my-profile/certifications', component: CertificationsPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/add-certification', component: AddCertification, meta: { requiresAuth: true } },
+    { path: '/my-profile/edit-certification', component: EditCertification, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],

@@ -6,8 +6,8 @@
           <li class="certifications-section-items_header-items_incription"><h1 class="certifications-section-items_header-items_incription-element">Certifications</h1></li>
           <li class="certifications-section-items_header-items_buttons">
             <ul class="certifications-section-items_header-items_buttons-items">
-              <li class="certifications-section-items_header-items_buttons-items_add"><router-link to="/link-to-add-certification" class="certifications-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="certifications-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="certifications-section-items_header-items_buttons-items_edit"><router-link to="/link-to-edit-certifications" class="certifications-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="certifications-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="certifications-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-certification" class="certifications-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="certifications-section-items_header-items_buttons-items_add-element"></router-link></li>
+              <li class="certifications-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/certifications" class="certifications-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="certifications-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -48,7 +48,7 @@
         </ul>
       </li>
     </ul>
-    <router-link class="certifications-section-items_show-all-certifications-link" to="/path-to-list-of-certifications-of-user">
+    <router-link class="certifications-section-items_show-all-certifications-link" to="/my-profile/certifications">
       <div class="certifications-section-items_show-all-certifications">
         <span class="certifications-section-items_show-all-certifications-element">Show all certifications</span>
         <img class="certifications-section-items_show-all-certifications-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">

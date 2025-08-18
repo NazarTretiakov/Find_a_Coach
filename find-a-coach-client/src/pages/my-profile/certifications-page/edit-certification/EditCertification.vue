@@ -1,7 +1,7 @@
 <template> 
   <profile-sticky-header class="header"></profile-sticky-header>
 
-  <add-education-form class="add-education-form"></add-education-form>
+  <edit-certification-form class="edit-certification-form"></edit-certification-form>
 
   <the-footer></the-footer>
 </template>
@@ -9,14 +9,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileStickyHeader from '../../../../components/my-profile/ProfileStickyHeader.vue'
-import AddEducationForm from '../../../../components/my-profile/education-page/add-education/AddEducationForm.vue'
+import ProfileStickyHeader from '../../../../components/my-profile/ProfileStickyHeader.vue';
+import EditCertificationForm from '../../../../components/my-profile/certifications-page/edit-certification/EditCertificationForm.vue';
 import TheFooter from '../../../../components/TheFooter.vue'
 
 export default defineComponent({
   components: {
     ProfileStickyHeader,
-    AddEducationForm,
+    EditCertificationForm,
     TheFooter
   },
 })
@@ -27,7 +27,7 @@ export default defineComponent({
     z-index: 1;
   }
 
-  .add-education-form {
+  .edit-certification-form {
     z-index: 2;
   }
 </style>
