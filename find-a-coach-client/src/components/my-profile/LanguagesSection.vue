@@ -6,8 +6,8 @@
           <li class="languages-section-items_header-items_incription"><h1 class="languages-section-items_header-items_incription-element">Languages</h1></li>
           <li class="languages-section-items_header-items_buttons">
             <ul class="languages-section-items_header-items_buttons-items">
-              <li class="languages-section-items_header-items_buttons-items_add"><router-link to="/link-to-add-language" class="languages-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="languages-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="languages-section-items_header-items_buttons-items_edit"><router-link to="/link-to-edit-languages" class="languages-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="languages-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="languages-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-language" class="languages-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="languages-section-items_header-items_buttons-items_add-element"></router-link></li>
+              <li class="languages-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/languages" class="languages-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="languages-section-items_header-items_buttons-items_edit-element"></router-link></li>
             </ul>
           </li>
         </ul>
@@ -30,7 +30,7 @@
         </ul>
       </li>
     </ul>
-    <router-link class="languages-section-items_show-all-languages-link" to="/path-to-list-of-languages-of-user">
+    <router-link class="languages-section-items_show-all-languages-link" to="/my-profile/languages">
       <div class="languages-section-items_show-all-languages">
         <span class="languages-section-items_show-all-languages-element">Show all languages</span>
         <img class="languages-section-items_show-all-languages-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">

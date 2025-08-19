@@ -34,6 +34,10 @@ import CertificationsPage from '../pages/my-profile/certifications-page/Certific
 import AddCertification from '../pages/my-profile/certifications-page/add-certification/AddCertification.vue'
 import EditCertification from '../pages/my-profile/certifications-page/edit-certification/EditCertification.vue'
 import SkillsPage from '../pages/my-profile/skills-page/SkillsPage.vue'
+import LanguagesPage from '../pages/my-profile/languages-page/LanguagesPage.vue'
+import AddLanguage from '../pages/my-profile/languages-page/add-language/AddLanguage.vue'
+import RecommendationsPage from '../pages/my-profile/recommendations-page/RecommendationsPage.vue'
+import EditLanguage from '../pages/my-profile/languages-page/edit-language/EditLanguage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -60,7 +64,7 @@ const router = createRouter({
     { path: '/my-profile/add-position', component: AddPosition, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-position', component: EditPosition, meta: { requiresAuth: true } },
     { path: '/my-profile/education', component: EducationPage, meta: { requiresAuth: true } },
-    { path: '/my-profile/add-education', component: AddEducation, meta: { requireAuth: true } },
+    { path: '/my-profile/add-education', component: AddEducation, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-education', component: EditEducation, meta: { requiresAuth: true } },
     { path: '/my-profile/projects', component: ProjectsPage, meta: { requiresAuth: true} },
     { path: '/my-profile/add-project', component: AddProject, meta: { requiresAuth: true } },
@@ -69,6 +73,10 @@ const router = createRouter({
     { path: '/my-profile/add-certification', component: AddCertification, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-certification', component: EditCertification, meta: { requiresAuth: true } },
     { path: '/my-profile/skills', component: SkillsPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/languages', component: LanguagesPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/add-language', component: AddLanguage, meta: { requiresAuth: true } },
+    { path: '/my-profile/edit-language', component: EditLanguage, meta: { requiresAuth: true } },
+    { path: '/my-profile/recommendations', component: RecommendationsPage, meta: { requiresAuth: true } }, 
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],

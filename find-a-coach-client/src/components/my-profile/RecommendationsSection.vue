@@ -50,7 +50,7 @@
         </ul>
       </li>
     </ul>
-    <router-link class="recommendations-section-items_show-all-recommendations-link" to="/path-to-list-of-recommendations-of-user">
+    <router-link class="recommendations-section-items_show-all-recommendations-link" to="/my-profile/recommendations">
       <div class="recommendations-section-items_show-all-recommendations">
         <span class="recommendations-section-items_show-all-recommendations-element">Show all recommendations</span>
         <img class="recommendations-section-items_show-all-recommendations-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    return { isReceivedRecommendationsVisible, isGivenRecommendationsVisible, toggleRecommendationType };
+    return { isReceivedRecommendationsVisible, isGivenRecommendationsVisible, toggleRecommendationType }
   }
 })
 </script>
