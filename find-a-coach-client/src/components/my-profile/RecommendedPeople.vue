@@ -55,7 +55,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
   padding: 0;
 
   &_header-wrapper {

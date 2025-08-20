@@ -7,6 +7,7 @@
         :name="name"
         :id="name"
         :checked="modelValue"
+        :disabled="disabled"
         @change="$emit('update:modelValue', $event.target.checked)"
       >
       <span class="checkbox-field-text">{{ label }}</span>
@@ -30,6 +31,10 @@ export default defineComponent({
     modelValue: { 
       type: Boolean, 
       default: false 
+    },
+    disabled: { 
+      type: Boolean, 
+      default: false 
     }
   },
 })
@@ -45,7 +50,6 @@ export default defineComponent({
   &-label {
     display: flex;
     align-items: center;
-    cursor: pointer;
     font-size: 14px;
 
     @media (max-width: $breakpoint) {
@@ -64,6 +68,13 @@ export default defineComponent({
 
     &:hover {
       border: 2px solid $grayBorderColor;
+    }
+
+    &:disabled {
+      background-color: $disabledInputBackgroundcolor;
+      color: $disabledInputTextColor;
+      border-color: $grayBorderColor;
+      cursor: not-allowed;
     }
   }
 

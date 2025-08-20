@@ -5,7 +5,7 @@
     <ul class="header-buttons">
       <li class="header-buttons_menu" :class="{ 'header-buttons_menu-active': isMenuButtonActive, 'header-buttons_menu-unactive': !isMenuButtonActive }" @click="toggleMobileMenu"><img class="header-buttons_menu-icon" src="../../assets/images/icons/menu-icon.svg" alt="Menu icon"></li>
       <li class="header-buttons_settings">
-        <router-link to="/profile/settings" class="header-buttons_settings-link">
+        <router-link to="/my-profile/settings" class="header-buttons_settings-link">
           <div class="header-buttons_settings-container">
             <img class="header-buttons_settings-container-icon" src="../../assets/images/icons/settings-icon.svg" alt="Settings icon">
             <span class="header-buttons_settings-container-incription">Settings</span>

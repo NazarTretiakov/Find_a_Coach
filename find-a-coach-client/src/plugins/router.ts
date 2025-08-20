@@ -38,6 +38,7 @@ import LanguagesPage from '../pages/my-profile/languages-page/LanguagesPage.vue'
 import AddLanguage from '../pages/my-profile/languages-page/add-language/AddLanguage.vue'
 import RecommendationsPage from '../pages/my-profile/recommendations-page/RecommendationsPage.vue'
 import EditLanguage from '../pages/my-profile/languages-page/edit-language/EditLanguage.vue'
+import NotificationsSettingsPage from '../pages/my-profile/settings-page/notifications-page/NotificationsSettingsPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -77,6 +78,8 @@ const router = createRouter({
     { path: '/my-profile/add-language', component: AddLanguage, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-language', component: EditLanguage, meta: { requiresAuth: true } },
     { path: '/my-profile/recommendations', component: RecommendationsPage, meta: { requiresAuth: true } }, 
+    { path: '/my-profile/settings', redirect: "/my-profile/settings/notifications", meta: { requiresAuth: true } },
+    { path: '/my-profile/settings/notifications', component: NotificationsSettingsPage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],
