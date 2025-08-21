@@ -39,6 +39,8 @@ import AddLanguage from '../pages/my-profile/languages-page/add-language/AddLang
 import RecommendationsPage from '../pages/my-profile/recommendations-page/RecommendationsPage.vue'
 import EditLanguage from '../pages/my-profile/languages-page/edit-language/EditLanguage.vue'
 import NotificationsSettingsPage from '../pages/my-profile/settings-page/notifications-page/NotificationsSettingsPage.vue'
+import PrivacySettingsPage from '../pages/my-profile/settings-page/privacy-page/PrivacySettingsPage.vue'
+import SecuritySettingsPage from '../pages/my-profile/settings-page/security-page/SecuritySettingsPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -80,6 +82,8 @@ const router = createRouter({
     { path: '/my-profile/recommendations', component: RecommendationsPage, meta: { requiresAuth: true } }, 
     { path: '/my-profile/settings', redirect: "/my-profile/settings/notifications", meta: { requiresAuth: true } },
     { path: '/my-profile/settings/notifications', component: NotificationsSettingsPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/settings/privacy', component: PrivacySettingsPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/settings/security', component: SecuritySettingsPage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],

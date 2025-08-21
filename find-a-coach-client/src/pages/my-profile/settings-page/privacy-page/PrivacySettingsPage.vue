@@ -4,10 +4,10 @@
 
     <ul class="settings">
       <li class="settings_left-side">
-        <settings-menu activePage="notifications"></settings-menu>
+        <settings-menu activePage="privacy"></settings-menu>
       </li>
       <li class="settings_right-side">
-        <notifications-settings></notifications-settings>
+        <privacy-settings></privacy-settings>
       </li>
     </ul>
 
@@ -20,14 +20,14 @@ import { defineComponent } from 'vue'
 
 import ProfileStickyHeader from '../../../../components/my-profile/ProfileStickyHeader.vue'
 import SettingsMenu from '../../../../components/my-profile/settings-page/SettingsMenu.vue'
-import NotificationsSettings from '../../../../components/my-profile/settings-page/notifications-page/NotificationsSettings.vue'
+import PrivacySettings from '../../../../components/my-profile/settings-page/privacy-page/PrivacySettings.vue'
 import TheFooter from '../../../../components/TheFooter.vue'
 
 export default defineComponent({
   components: {
     ProfileStickyHeader,
     SettingsMenu,
-    NotificationsSettings,
+    PrivacySettings,
     TheFooter
   }
 })

@@ -21,7 +21,7 @@
     </ul>
     <transition name="mobile-menu">
       <div v-if="showMobileMenu" class="header-mobile-menu">
-        <router-link to="/profile/settings" class="header-mobile-menu_settings-link">
+        <router-link to="/my-profile/settings" class="header-mobile-menu_settings-link">
           <div class="header-mobile-menu_settings-container">
             <img class="header-mobile-menu_settings-container-icon" src="../../assets/images/icons/settings-icon.svg" alt="Settings icon">
             <span class="header-mobile-menu_settings-container-incription">Settings</span>
