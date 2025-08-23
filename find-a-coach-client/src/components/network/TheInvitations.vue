@@ -30,7 +30,7 @@
 @use '../../assets/styles/config' as *;
 
 .invitations {
-  margin: 50px 100px 0 30px;
+  margin: 30px 100px 0 30px;
   border: $grayBorderColor 2px solid;
   border-radius: 20px;
   height: 600px;

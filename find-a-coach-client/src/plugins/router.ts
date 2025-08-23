@@ -42,6 +42,9 @@ import NotificationsSettingsPage from '../pages/my-profile/settings-page/notific
 import PrivacySettingsPage from '../pages/my-profile/settings-page/privacy-page/PrivacySettingsPage.vue'
 import SecuritySettingsPage from '../pages/my-profile/settings-page/security-page/SecuritySettingsPage.vue'
 import NetworkPage from '../pages/network/NetworkPage.vue'
+import ConnectionsPage from '../pages/network/connections-page/ConnectionsPage.vue'
+import InvitationsPage from '../pages/network/invitations-page/InvitationsPage.vue'
+import InvitationPage from '../pages/network/invitations-page/invitation-page/InvitationPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -86,6 +89,9 @@ const router = createRouter({
     { path: '/my-profile/settings/privacy', component: PrivacySettingsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/settings/security', component: SecuritySettingsPage, meta: { requiresAuth: true } },
     { path: '/network', component: NetworkPage, meta: { requiresAuth: true } },
+    { path: '/network/connections', component: ConnectionsPage, meta: { requiresAuth: true } },
+    { path: '/network/invitations', component: InvitationsPage, meta: { requiresAuth: true } },
+    { path: '/network/invitations/invitation', component: InvitationPage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],

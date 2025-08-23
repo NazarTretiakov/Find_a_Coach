@@ -1,11 +1,11 @@
 <template>
   <div class="network">
     <div class="network-people-cards">
-      <h1 class="network-people-cards-header">People you may know based on your activity</h1>
+      <h1 class="network-people-cards-header">20 connections</h1>
       <ul class="network-people-cards-items">
         <router-link v-for="n in 20" :key="n" to="/network/user" class="network-people-cards-items_person-link">
           <li class="network-people-cards-items_person">
-            <img class="network-people-cards-items_person-image" src="../../assets/images/icons/user-icon.jpg" alt="User profile image">
+            <img class="network-people-cards-items_person-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
             <div class="network-people-cards-items_person-info">
               <h3 class="network-people-cards-items_person-info-name">Grzegorz Kwiatkowski</h3>
               <p class="network-people-cards-items_person-info-paragraph">Pracownik działu technicznego firmy The Best Storage w Gdańsku</p>
@@ -21,7 +21,7 @@
 </template>
 
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '../../../assets/styles/config' as *;
 
 .network-people-cards {
   margin: 50px 0 30px 100px;
