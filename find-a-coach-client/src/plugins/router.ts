@@ -20,6 +20,7 @@ import EditPersonalInformation from '../pages/my-profile/edit-personal-informati
 import EditAboutMe from '../pages/my-profile/edit-about-me/EditAboutMe.vue'
 import ActivitiesPage from '../pages/my-profile/activities-page/ActivitiesPage.vue'
 import EventPage from '../pages/my-profile/activities-page/event-page/EventPage.vue'
+import QuestionAnswerPage from '../pages/my-profile/activities-page/qa-page/QAPage.vue'
 import AddActivity from '../pages/my-profile/activities-page/add-activity/AddActivity.vue'
 import ExperiencePage from '../pages/my-profile/experience-page/ExperiencePage.vue'
 import AddPosition from '../pages/my-profile/experience-page/add-position/AddPosition.vue'
@@ -45,6 +46,9 @@ import NetworkPage from '../pages/network/NetworkPage.vue'
 import ConnectionsPage from '../pages/network/connections-page/ConnectionsPage.vue'
 import InvitationsPage from '../pages/network/invitations-page/InvitationsPage.vue'
 import InvitationPage from '../pages/network/invitations-page/invitation-page/InvitationPage.vue'
+import ForumPage from '../pages/forum/ForumPage.vue'
+import ForumEventPage from '../pages/forum/event-page/EventPage.vue'
+import QuestionAnswer from '../pages/forum/qa-page/QAPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -66,7 +70,8 @@ const router = createRouter({
     { path: '/my-profile/edit-about-me', component: EditAboutMe, meta: { requiresAuth: true} },
     { path: '/my-profile/activities', component: ActivitiesPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-activity', component: AddActivity, meta: { requiresAuth: true } },
-    { path: '/my-profile/event', component: EventPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/activities/event', component: EventPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/activities/qa', component: QuestionAnswerPage, meta: { requiresAuth: true } },
     { path: '/my-profile/experience', component: ExperiencePage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-position', component: AddPosition, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-position', component: EditPosition, meta: { requiresAuth: true } },
@@ -92,6 +97,9 @@ const router = createRouter({
     { path: '/network/connections', component: ConnectionsPage, meta: { requiresAuth: true } },
     { path: '/network/invitations', component: InvitationsPage, meta: { requiresAuth: true } },
     { path: '/network/invitations/invitation', component: InvitationPage, meta: { requiresAuth: true } },
+    { path: '/forum', component: ForumPage, meta: { requiresAuth: true } },
+    { path: '/forum/event', component: ForumEventPage, meta: { requiresAuth: true } },
+    { path: '/forum/qa', component: QuestionAnswer, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],

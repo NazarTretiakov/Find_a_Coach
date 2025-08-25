@@ -3,7 +3,7 @@
     <ul class="event-header">
       <li class="event-header_user-info">
         <router-link to="user-profile" class="event-header_user-info-link">
-          <img class="event-header_user-info-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile image">
+          <img class="event-header_user-info-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
           <span class="event-header_user-info-user-name">Janusz Kowalski</span>
         </router-link>  
       </li>
@@ -13,16 +13,16 @@
     </ul>
     <h1 class="event-title">Starting an store checking project</h1>
     <span class="event-subjects">Logistics, Business, Marketing</span>
-    <img class="event-image" src="../../../../assets/images/activities-image.jpeg" alt="Image of the event">
+    <img class="event-image" src="../../../assets/images/activities-image.jpeg" alt="Image of the event">
     <h3 class="event-searching-for">Searching for two people:</h3>
     <div :class="!isPositionPanelOpened[0] ? 'event-position' : 'event-position-opened'">
       <ul :class="!isPositionPanelOpened[0] ? 'event-position-header' : 'event-position-opened-header'">
         <li :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../../assets/images/icons/position-icon.svg" alt="Position icon">
+          <img :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../assets/images/icons/position-icon.svg" alt="Position icon">
           <span :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
         </li>
         <li :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(0)" :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
+          <img @click="triggerPositionPanelOpening(0)" :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
         </li>
       </ul>
       <the-skills :class="!isPositionPanelOpened[0] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
@@ -34,11 +34,11 @@
     <div :class="!isPositionPanelOpened[1] ? 'event-position' : 'event-position-opened'">
       <ul :class="!isPositionPanelOpened[1] ? 'event-position-header' : 'event-position-opened-header'">
         <li :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../../assets/images/icons/position-icon.svg" alt="Position icon">
+          <img :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../assets/images/icons/position-icon.svg" alt="Position icon">
           <span :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
         </li>
         <li :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(1)" :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
+          <img @click="triggerPositionPanelOpening(1)" :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
         </li>
       </ul>
       <the-skills :class="!isPositionPanelOpened[1] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
@@ -62,7 +62,7 @@
       </li>
       <li class="event-create-comment-bar_right-side">
         <div class="event-create-comment-bar_right-side-like">
-          <img @click="triggerLike" v-if="!isLiked" class="event-create-comment-bar_right-side-like-icon" src="../../../../assets/images/icons/like-icon.svg" alt="Like icon">
+          <img @click="triggerLike" v-if="!isLiked" class="event-create-comment-bar_right-side-like-icon" src="../../../assets/images/icons/like-icon.svg" alt="Like icon">
           <svg @click="triggerLike" v-if="isLiked"  class="event-create-comment-bar_right-side-like-icon"
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
@@ -72,7 +72,7 @@
           </svg>
           <span class="event-create-comment-bar_right-side-like-amount">123</span>
         </div>
-        <img @click="triggerSave" v-if="!isSaved" class="event-create-comment-bar_right-side-save-icon" src="../../../../assets/images/icons/save-icon.svg" alt="Save icon">
+        <img @click="triggerSave" v-if="!isSaved" class="event-create-comment-bar_right-side-save-icon" src="../../../assets/images/icons/save-icon.svg" alt="Save icon">
         <svg @click="triggerSave" v-else class="event-create-comment-bar_right-side-save-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
@@ -87,7 +87,7 @@
         <ul class="event-comments_comment-header">
           <li class="event-comments_comment-header_left-side">
             <router-link to="/user-profile" class="event-comments_comment-header_left-side-user-name-link">
-              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
+              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
               <span class="event-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
             </router-link>
           </li>
@@ -102,7 +102,7 @@
         <ul class="event-comments_comment-header">
           <li class="event-comments_comment-header_left-side">
             <router-link to="/user-profile" class="event-comments_comment-header_left-side-user-name-link">
-              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
+              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
               <span class="event-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
             </router-link>
           </li>
@@ -113,17 +113,14 @@
         <p class="event-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
       </li>
     </ul>
-    <div class="event-delete">
-      <span class="event-delete-inscription">Delete event</span>
-    </div>
   </div> 
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
-import TheSkills from "../../../my-profile/TheSkills.vue";
-import ApplyOnEventButton from "./ApplyOnEventButton.vue";
+import TheSkills from "../../my-profile/TheSkills.vue";
+import ApplyOnEventButton from "../../my-profile/activities-page/event/TheEvent.vue";
 
 export default defineComponent({
   components: {
@@ -153,17 +150,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use "../../../../assets/styles/config" as *;
+@use "../../../assets/styles/config" as *;
 
 .event {
   margin: 50px 0 100px 100px;
-  padding: 0 50px;
+  padding: 0 50px 50px 50px;
   border: 2px $grayBorderColor solid;
   border-radius: 20px;
 
   @media (max-width: $breakpoint) {
     margin: 50px 10px 100px 10px;
-    padding: 0 30px;
+    padding: 0 30px 30px 30px;
   }
 
   &-header {

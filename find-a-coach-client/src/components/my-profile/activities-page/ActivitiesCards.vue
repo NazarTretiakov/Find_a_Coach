@@ -16,7 +16,7 @@
       </li>
     </ul>
     <ul class="activities-items">
-      <router-link class="activities-items_activity-link" to="/my-profile/event">
+      <router-link class="activities-items_activity-link" to="/my-profile/activities/event">
         <li class="activities-items_activity">
           <ul class="activities-items_activity-header">
             <li class="activities-items_activity-header_user-info">
