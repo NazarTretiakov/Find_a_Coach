@@ -21,14 +21,15 @@
           :options="[
             { value: 'event', label: 'Event' },
             { value: 'survey', label: 'Survey' },
-            { value: 'questionAndAnswer', label: 'Question&Answer' }
+            { value: 'questionAndAnswer', label: 'Question&Answer' },
+            { value: 'post', label: 'Post'}
           ]"
         />
       </li>
       <li class="create-activity-items_image-input">
         <file-input-field label="Image" name="image"></file-input-field>
       </li>
-      <li class="create-activity-items_description-input">
+      <li :class="selectedActivityType !== 'event' && selectedActivityType !== 'survey' ? 'create-activity-items_description-input-without-border-bottom' : 'create-activity-items_description-input'">
         <text-input-area label="Description" name="description" max-number-of-signs="200"></text-input-area>
       </li>
 
@@ -233,6 +234,12 @@ export default defineComponent({
       margin-top: 20px;
       padding-bottom: 54px;
       border-bottom: 1px solid $grayBorderColor;
+
+      &-without-border-bottom {
+        border: none;
+        padding-bottom: none;
+        margin-top: 20px;
+      }
 
       @media (max-width: $breakpoint) {
         margin-top: 14px;

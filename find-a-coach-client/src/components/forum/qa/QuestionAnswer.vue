@@ -104,16 +104,11 @@ export default defineComponent({
   setup() {
     const valueOfTextArea = ref<string>('')
     const maxNumberOfSigns = 400
-    const isPositionPanelOpened = ref<boolean[]>([false, false])
     const isLiked = ref<boolean>(false)
     const isSaved = ref<boolean>(false)
 
     const numberOfSignsEntered = computed(() => valueOfTextArea.value.length)
     const isLimitExceeded = computed(() => numberOfSignsEntered.value > maxNumberOfSigns)
-
-    const triggerPositionPanelOpening = (positionId: number) => {
-      isPositionPanelOpened.value[positionId] = !isPositionPanelOpened.value[positionId]
-    }
 
     const triggerLike = () => {
       isLiked.value = !isLiked.value
@@ -123,7 +118,7 @@ export default defineComponent({
       isSaved.value = !isSaved.value
     }
 
-    return { valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, isPositionPanelOpened, isLiked, isSaved, triggerPositionPanelOpening, triggerLike, triggerSave }
+    return { valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, isLiked, isSaved, triggerLike, triggerSave }
   }
 });
 </script>

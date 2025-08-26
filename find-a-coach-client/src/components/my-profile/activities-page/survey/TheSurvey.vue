@@ -1,39 +1,49 @@
 <template> 
-  <div class="qa">
-    <ul class="qa-header">
-      <li class="qa-header_user-info">
-        <router-link to="user-profile" class="qa-header_user-info-link">
-          <img class="qa-header_user-info-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile image">
-          <span class="qa-header_user-info-user-name">Janusz Kowalski</span>
+  <div class="survey">
+    <ul class="survey-header">
+      <li class="survey-header_user-info">
+        <router-link to="user-profile" class="survey-header_user-info-link">
+          <img class="survey-header_user-info-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile image">
+          <span class="survey-header_user-info-user-name">Janusz Kowalski</span>
         </router-link>  
       </li>
-      <li class="qa-header_publication-time">
-        <span class="qa-header_publication-time-element">2 days ago</span>
+      <li class="survey-header_publication-time">
+        <span class="survey-header_publication-time-element">2 days ago</span>
       </li>
     </ul>
-    <h1 class="qa-title">Starting an store checking project</h1>
-    <span class="qa-subjects">Logistics, Business, Marketing</span>
-    <img class="qa-image" src="../../../../assets/images/activities-image.jpeg" alt="Image of the qa">
-    <p class="qa-description">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
+    <h1 class="survey-title">Starting an store checking project</h1>
+    <span class="survey-subjects">Logistics, Business, Marketing</span>
+    <img class="survey-image" src="../../../../assets/images/activities-image.jpeg" alt="Image of the survey">
+    <p class="survey-description">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
     
-    <div class="qa-answer-text-area">
-      <label class="qa-answer-text-area-label" for="answer">Leave your answer</label>
-      <textarea 
-        v-model="valueOfTextArea"
-        class="qa-answer-text-area-element" 
-        name="answer" 
-        id="answer"
-      ></textarea>
-      <span class="qa-answer-text-area-number-of-signs">
-        <span :class="isLimitExceeded ? 'qa-answer-text-area-number-of-signs-entered-exceeded' : 'qa-answer-text-area-number-of-signs-entered'">{{ numberOfSignsEntered }}</span>/<span class="qa-answer-text-area-number-of-signs-max">{{ maxNumberOfSigns }}</span>
-      </span>
+    <div class="survey-options">
+      <h2 class="survey-options-header">Select an option to view the survey results</h2>
+
+      <div v-for="(answer, index) in answers" :key="index" class="survey-options-survey-option">
+        <div class="survey-options-survey-option-incription">
+          <span class="survey-options-survey-option-incription-name">{{ answer.text }}</span>
+          <span v-if="selectedAnswer !== null" class="survey-options-survey-option-incription-percent-of-votes">
+            {{ getPercentage(answer.votes).toFixed(1) }}%
+          </span>
+        </div>
+
+        <v-progress-linear
+          :model-value="selectedAnswer !== null ? getPercentage(answer.votes) : 0"
+          :color="selectedAnswer !== null ? '#234CA2' : 'grey'"
+          bg-color="grey"
+          height="16"
+          rounded
+          @click="vote(index)"
+          :class="selectedAnswer !== null ? 'survey-options-survey-option-progress-bar-selected' : 'survey-options-survey-option-progress-bar'"
+        ></v-progress-linear>
+      </div>
     </div>
     
-    <h2 class="qa-comments-header">Comments</h2>
-    <ul class="qa-create-comment-bar">
-      <li class="qa-create-comment-bar_left-side">
-        <input class="qa-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment...">
-        <svg class="qa-create-comment-bar_left-side-icon"
+    <h2 class="survey-comments-header">Comments</h2>
+    <ul class="survey-create-comment-bar">
+      <li class="survey-create-comment-bar_left-side">
+        <input class="survey-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment...">
+        <svg class="survey-create-comment-bar_left-side-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -41,20 +51,20 @@
           <path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Z" fill="#B1B1B1" />          
         </svg>
       </li>
-      <li class="qa-create-comment-bar_right-side">
-        <div class="qa-create-comment-bar_right-side-like">
-          <img @click="triggerLike" v-if="!isLiked" class="qa-create-comment-bar_right-side-like-icon" src="../../../../assets/images/icons/like-icon.svg" alt="Like icon">
-          <svg @click="triggerLike" v-if="isLiked"  class="qa-create-comment-bar_right-side-like-icon"
+      <li class="survey-create-comment-bar_right-side">
+        <div class="survey-create-comment-bar_right-side-like">
+          <img @click="triggerLike" v-if="!isLiked" class="survey-create-comment-bar_right-side-like-icon" src="../../../../assets/images/icons/like-icon.svg" alt="Like icon">
+          <svg @click="triggerLike" v-if="isLiked"  class="survey-create-comment-bar_right-side-like-icon"
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
             width="30px"
             viewBox="0 -960 960 960">
             <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52" fill="red" />
           </svg>
-          <span class="qa-create-comment-bar_right-side-like-amount">123</span>
+          <span class="survey-create-comment-bar_right-side-like-amount">123</span>
         </div>
-        <img @click="triggerSave" v-if="!isSaved" class="qa-create-comment-bar_right-side-save-icon" src="../../../../assets/images/icons/save-icon.svg" alt="Save icon">
-        <svg @click="triggerSave" v-else class="qa-create-comment-bar_right-side-save-icon"
+        <img @click="triggerSave" v-if="!isSaved" class="survey-create-comment-bar_right-side-save-icon" src="../../../../assets/images/icons/save-icon.svg" alt="Save icon">
+        <svg @click="triggerSave" v-else class="survey-create-comment-bar_right-side-save-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -63,39 +73,39 @@
         </svg>
       </li>
     </ul>
-    <ul class="qa-comments">
-      <li class="qa-comments_comment">
-        <ul class="qa-comments_comment-header">
-          <li class="qa-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="qa-comments_comment-header_left-side-user-name-link">
-              <img class="qa-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="qa-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
+    <ul class="survey-comments">
+      <li class="survey-comments_comment">
+        <ul class="survey-comments_comment-header">
+          <li class="survey-comments_comment-header_left-side">
+            <router-link to="/user-profile" class="survey-comments_comment-header_left-side-user-name-link">
+              <img class="survey-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
+              <span class="survey-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
             </router-link>
           </li>
-          <li class="qa-comments_comment-header_right-side">
-            <span class="qa-comments_comment-header_right-side-time-of-publication">1 day ago</span>
+          <li class="survey-comments_comment-header_right-side">
+            <span class="survey-comments_comment-header_right-side-time-of-publication">1 day ago</span>
           </li>
         </ul>
-        <p class="qa-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
-        <div class="qa-comments_comment-divider"></div>
+        <p class="survey-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
+        <div class="survey-comments_comment-divider"></div>
       </li>
-      <li class="qa-comments_comment">
-        <ul class="qa-comments_comment-header">
-          <li class="qa-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="qa-comments_comment-header_left-side-user-name-link">
-              <img class="qa-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="qa-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
+      <li class="survey-comments_comment">
+        <ul class="survey-comments_comment-header">
+          <li class="survey-comments_comment-header_left-side">
+            <router-link to="/user-profile" class="survey-comments_comment-header_left-side-user-name-link">
+              <img class="survey-comments_comment-header_left-side-user-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
+              <span class="survey-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
             </router-link>
           </li>
-          <li class="qa-comments_comment-header_right-side">
-            <span class="qa-comments_comment-header_right-side-time-of-publication">1 day ago</span>
+          <li class="survey-comments_comment-header_right-side">
+            <span class="survey-comments_comment-header_right-side-time-of-publication">1 day ago</span>
           </li>
         </ul>
-        <p class="qa-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
+        <p class="survey-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
       </li>
     </ul>
-    <div class="qa-delete">
-      <span class="qa-delete-inscription">Delete activity</span>
+    <div class="survey-delete">
+      <span class="survey-delete-inscription">Delete activity</span>
     </div>
   </div> 
 </template>
@@ -103,20 +113,34 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 
+import type { Answer } from '../../../../types/survey/Answer'
+
 export default defineComponent({
   setup() {
-    const valueOfTextArea = ref<string>('')
-    const maxNumberOfSigns = 400
-    const isPositionPanelOpened = ref<boolean[]>([false, false])
     const isLiked = ref<boolean>(false)
     const isSaved = ref<boolean>(false)
+    const selectedAnswer = ref<number | null>(null);
+    const answers = ref<Answer[]>([
+      { text: "Answer 1", votes: 43 },
+      { text: "Some great second answer", votes: 15 },
+      { text: "Third answer that also exists", votes: 20 },
+    ]);
 
-    const numberOfSignsEntered = computed(() => valueOfTextArea.value.length)
-    const isLimitExceeded = computed(() => numberOfSignsEntered.value > maxNumberOfSigns)
 
-    const triggerPositionPanelOpening = (positionId: number) => {
-      isPositionPanelOpened.value[positionId] = !isPositionPanelOpened.value[positionId]
-    }
+    const vote = (index: number) => {
+      if (selectedAnswer.value === null) {
+        selectedAnswer.value = index;
+        answers.value[index].votes++;
+      }
+    };
+
+    const totalVotes = computed(() =>
+      answers.value.reduce((sum, ans) => sum + ans.votes, 0)
+    );
+
+    const getPercentage = (votes: number) => {
+      return totalVotes.value > 0 ? (votes / totalVotes.value) * 100 : 0;
+    };
 
     const triggerLike = () => {
       isLiked.value = !isLiked.value
@@ -126,7 +150,7 @@ export default defineComponent({
       isSaved.value = !isSaved.value
     }
 
-    return { valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, isPositionPanelOpened, isLiked, isSaved, triggerPositionPanelOpening, triggerLike, triggerSave }
+    return { answers, vote, selectedAnswer, getPercentage, isLiked, isSaved, triggerLike, triggerSave }
   }
 });
 </script>
@@ -134,7 +158,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @use "../../../../assets/styles/config" as *;
 
-.qa {
+.survey {
   margin: 50px 0 100px 100px;
   padding: 0 50px;
   border: 2px $grayBorderColor solid;
@@ -240,58 +264,45 @@ export default defineComponent({
     }
   }
 
-  &-answer-text-area {
-    width: 100%;
-    margin-top: 40px;
+  &-options {
+    margin: 40px 0;
 
-    @media (max-width: $breakpoint) {
-      width: 100%;
-    }
-
-    &-label {
-      color: $grayBorderColor;
-      font-size: 14px;
-      display: block;
-      margin: 0 0 2px 2px;
+    &-header {
+      margin-bottom: 24px;
+      font-size: 20px;
 
       @media (max-width: $breakpoint) {
-        font-size: 12px;
+        font-size: 16px;
       }
     }
-    &-element {
-      border: 1px #000000 solid;
-      width: 100%;
-      height: 100px;
-      border-radius: 10px;
-      transition: border 0.2s ease;
-      padding: 0 8px;
-      font-size: 14px;
 
-      @media (max-width: $breakpoint) {
-        font-size: 12px;
-        width: 100%;
-        height: 60px;
+    &-survey-option {
+      margin: 14px 0;
+
+      &-incription {
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 6px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 12px;
+        }
+
+        &-percent-of-votes {
+          color: $grayBorderColor;
+        }
       }
 
-      &:hover {
-        border: 2px #000000 solid;
-      }
-    }
-    &-number-of-signs {
-      color: $grayBorderColor;
-      font-size: 14px;
-      display: block;
-      justify-self: flex-end;
-      margin: -6px 2px 0 0;
-
-      &-entered {
-
-        &-exceeded {
-          color: $errorColor;
+      &-progress-bar {
+        cursor: pointer;
+        &-selected {
+          cursor: auto;
         }
       }
     }
   }
+
 
   &-comments-header {
     font-size: 20px;
