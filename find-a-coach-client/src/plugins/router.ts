@@ -53,6 +53,7 @@ import Event from '../pages/forum/event-page/EventPage.vue'
 import QuestionAnswer from '../pages/forum/qa-page/QAPage.vue'
 import Survey from '../pages/forum/survey-page/SurveyPage.vue'
 import Post from '../pages/forum/post-page/PostPage.vue'
+import UserProfilePage from '../pages/user-profile/UserProfilePage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -108,6 +109,7 @@ const router = createRouter({
     { path: '/forum/qa', component: QuestionAnswer, meta: { requiresAuth: true } },
     { path: '/forum/survey', component: Survey, meta: { requiresAuth: true } },
     { path: '/forum/post', component: Post, meta: { requiresAuth: true } },
+    { path: '/user-profile', component: UserProfilePage, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],
