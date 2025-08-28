@@ -1,14 +1,11 @@
 <template> 
-  <div class="header">
-    <profile-header></profile-header>
-    <search-panel></search-panel>
-  </div>
+  <basic-sticky-header class="header"></basic-sticky-header>
 
-  <ul class="activities-sections">
-    <li class="activities-sections_left-side">
-      <activities-cards></activities-cards>
+  <ul class="skills-sections">
+    <li class="skills-sections_left-side">
+      <skills-cards></skills-cards>
     </li>
-    <li class="activities-sections_right-side">
+    <li class="skills-sections_right-side">
       <recommended-people></recommended-people>
     </li>
   </ul>
@@ -19,19 +16,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileHeader from '../../../components/my-profile/ProfileHeader.vue'
+import BasicStickyHeader from '../../../components/BasicStickyHeader.vue'
 import SearchPanel from '../../../components/SearchPanel.vue'
-import ActivitiesCards from '../../../components/my-profile/activities-page/ActivitiesCards.vue'
+import SkillsCards from '../../../components/user-profile/skills-page/SkillsCards.vue'
 
-import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
+import RecommendedPeople from '../../../components/user-profile/RecommendedPeople.vue'
 import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
   components: {
-    ProfileHeader,
+    BasicStickyHeader,
     SearchPanel,
-    ActivitiesCards,
+    SkillsCards,
     RecommendedPeople,
     TheFooter
   }
@@ -47,7 +44,7 @@ export default defineComponent({
   top: 0;
 }
 
-.activities-sections {
+.skills-sections {
   display: flex;
   list-style: none;
   padding: 0;
@@ -67,7 +64,7 @@ export default defineComponent({
 
     > * {
       position: sticky;
-      top: 126px;
+      top: 100px;
       z-index: 1;
       margin-bottom: 100px;
     }

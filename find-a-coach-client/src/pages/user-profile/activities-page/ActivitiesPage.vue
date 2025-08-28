@@ -1,6 +1,6 @@
 <template> 
   <div class="header">
-    <profile-header></profile-header>
+    <basic-header></basic-header>
     <search-panel></search-panel>
   </div>
 
@@ -19,17 +19,17 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileHeader from '../../../components/my-profile/ProfileHeader.vue'
+import BasicHeader from '../../../components/BasicHeader.vue'
 import SearchPanel from '../../../components/SearchPanel.vue'
-import ActivitiesCards from '../../../components/my-profile/activities-page/ActivitiesCards.vue'
+import ActivitiesCards from '../../../components/user-profile/activities-page/ActivitiesCards.vue'
 
-import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
+import RecommendedPeople from '../../../components/user-profile/RecommendedPeople.vue'
 import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
   components: {
-    ProfileHeader,
+    BasicHeader,
     SearchPanel,
     ActivitiesCards,
     RecommendedPeople,

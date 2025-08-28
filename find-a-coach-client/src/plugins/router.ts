@@ -54,6 +54,14 @@ import QuestionAnswer from '../pages/forum/qa-page/QAPage.vue'
 import Survey from '../pages/forum/survey-page/SurveyPage.vue'
 import Post from '../pages/forum/post-page/PostPage.vue'
 import UserProfilePage from '../pages/user-profile/UserProfilePage.vue'
+import UserProfileActivities from '../pages/user-profile/activities-page/ActivitiesPage.vue'
+import UserProfileExperience from '../pages/user-profile/experience-page/ExperiencePage.vue'
+import UserProfileEducation from '../pages/user-profile/education-page/EducationPage.vue'
+import UserProfileProjects from '../pages/user-profile/projects-page/ProjectsPage.vue'
+import UserProfileCertifications from '../pages/user-profile/certifications-page/CertificationsPage.vue'
+import UserProfileSkills from '../pages/user-profile/skills-page/SkillsPage.vue'
+import UserProfileLanguages from '../pages/user-profile/languages-page/LanguagesPage.vue'
+import UserProfileRecommendations from '../pages/user-profile/recommendations-page/RecommendationsPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
@@ -110,6 +118,14 @@ const router = createRouter({
     { path: '/forum/survey', component: Survey, meta: { requiresAuth: true } },
     { path: '/forum/post', component: Post, meta: { requiresAuth: true } },
     { path: '/user-profile', component: UserProfilePage, meta: { requiresAuth: true } },
+    { path: '/user-profile/activities', component: UserProfileActivities, meta: { requiresAuth: true } },
+    { path: '/user-profile/experience', component: UserProfileExperience, meta: { requiresAuth: true } },
+    { path: '/user-profile/education', component: UserProfileEducation, meta: { requiresAuth: true } },
+    { path: '/user-profile/projects', component: UserProfileProjects, meta: { requiresAuth: true } },
+    { path: '/user-profile/certifications', component: UserProfileCertifications, meta: { requiresAuth: true } },
+    { path: '/user-profile/skills', component: UserProfileSkills, meta: { requiresAuth: true } },
+    { path: '/user-profile/languages', component: UserProfileLanguages, meta: { requiresAuth: true } },
+    { path: '/user-profile/recommendations', component: UserProfileRecommendations, meta: { requiresAuth: true } },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],
