@@ -15,9 +15,11 @@
               </svg>
               <span class="personal-information-items_left-side-items_buttons-connect-inscription">Connect</span>
             </button>
-            <button class="personal-information-items_left-side-items_buttons-leave-review">
-              <span class="personal-information-items_left-side-items_buttons-leave-review-inscription">Leave review</span>
-            </button>
+            <router-link to="/user-profile/leave-review" class="personal-information-items_left-side-items_buttons-leave-review-link">
+              <button class="personal-information-items_left-side-items_buttons-leave-review">
+                <span class="personal-information-items_left-side-items_buttons-leave-review-inscription">Leave review</span>
+              </button>
+            </router-link>
           </li>
         </ul>
       </li>
@@ -198,6 +200,9 @@
             &:hover {
               cursor: pointer;
               background-color: $mainBackgroundColorHoverColor;
+            }
+            &-link {
+              text-decoration: none;
             }
           }
         }

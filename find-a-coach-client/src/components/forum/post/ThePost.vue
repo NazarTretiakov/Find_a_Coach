@@ -2,7 +2,7 @@
   <div class="post">
     <ul class="post-header">
       <li class="post-header_user-info">
-        <router-link to="user-profile" class="post-header_user-info-link">
+        <router-link to="/user-profile" class="post-header_user-info-link">
           <img class="post-header_user-info-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
           <span class="post-header_user-info-user-name">Janusz Kowalski</span>
         </router-link>  

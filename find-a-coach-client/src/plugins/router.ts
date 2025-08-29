@@ -54,6 +54,7 @@ import QuestionAnswer from '../pages/forum/qa-page/QAPage.vue'
 import Survey from '../pages/forum/survey-page/SurveyPage.vue'
 import Post from '../pages/forum/post-page/PostPage.vue'
 import UserProfilePage from '../pages/user-profile/UserProfilePage.vue'
+import UserLeaveReviewPage from '../pages/user-profile/leave-review-page/LeaveReviewPage.vue'
 import UserProfileActivities from '../pages/user-profile/activities-page/ActivitiesPage.vue'
 import UserProfileExperience from '../pages/user-profile/experience-page/ExperiencePage.vue'
 import UserProfileEducation from '../pages/user-profile/education-page/EducationPage.vue'
@@ -118,6 +119,7 @@ const router = createRouter({
     { path: '/forum/survey', component: Survey, meta: { requiresAuth: true } },
     { path: '/forum/post', component: Post, meta: { requiresAuth: true } },
     { path: '/user-profile', component: UserProfilePage, meta: { requiresAuth: true } },
+    { path: '/user-profile/leave-review', component: UserLeaveReviewPage, meta: { requiresAuth: true } },
     { path: '/user-profile/activities', component: UserProfileActivities, meta: { requiresAuth: true } },
     { path: '/user-profile/experience', component: UserProfileExperience, meta: { requiresAuth: true } },
     { path: '/user-profile/education', component: UserProfileEducation, meta: { requiresAuth: true } },

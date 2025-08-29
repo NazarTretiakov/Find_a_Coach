@@ -2,7 +2,7 @@
   <div class="survey">
     <ul class="survey-header">
       <li class="survey-header_user-info">
-        <router-link to="user-profile" class="survey-header_user-info-link">
+        <router-link to="/user-profile" class="survey-header_user-info-link">
           <img class="survey-header_user-info-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile image">
           <span class="survey-header_user-info-user-name">Janusz Kowalski</span>
         </router-link>  

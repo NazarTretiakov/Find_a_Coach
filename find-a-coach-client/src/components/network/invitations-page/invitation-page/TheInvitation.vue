@@ -2,7 +2,7 @@
   <div class="invitation">
     <ul class="invitation-header">
       <li class="invitation-header_user-info">
-        <router-link to="user-profile" class="invitation-header_user-info-link">
+        <router-link to="/user-profile" class="invitation-header_user-info-link">
           <img class="invitation-header_user-info-profile-image" src="../../../../assets/images/icons/user-icon.jpg" alt="User profile image">
           <span class="invitation-header_user-info-user-name">Janusz Kowalski</span>
         </router-link>  

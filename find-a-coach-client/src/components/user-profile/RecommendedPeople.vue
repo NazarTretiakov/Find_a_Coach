@@ -8,10 +8,14 @@
       <li class="people-section_people-person" v-for="n in 10" :key="n">
         <ul class="people-section_people-person-items">
           <li class="people-section_people-person-items_image">
-            <img class="people-section_people-person-items_image-element" src="../../assets/images/icons/user-icon.jpg" alt="User profile image" />
+            <router-link to="/user-profile" class="people-section_people-person-link">
+              <img class="people-section_people-person-items_image-element" src="../../assets/images/icons/user-icon.jpg" alt="User profile image" />
+            </router-link>
           </li>
           <li class="people-section_people-person-items_info">
-            <h2 class="people-section_people-person-items_info-name">Grzegorz Kwiatkowski</h2>
+            <router-link to="/user-profile" class="people-section_people-person-link">
+              <h2 class="people-section_people-person-items_info-name">Grzegorz Kwiatkowski</h2>
+            </router-link>
             <p class="people-section_people-person-items_info-incription">Menedżer do spraw sprzedaży w firmie...</p>
             <connect-button class="people-section_people-person-items_info-connect-button" />
           </li>
@@ -117,6 +121,11 @@ export default defineComponent({
         width: 100%;
         height: 30px;
       }
+    }
+
+    &-link {
+      text-decoration: none;
+      color: #000000;
     }
   }
 

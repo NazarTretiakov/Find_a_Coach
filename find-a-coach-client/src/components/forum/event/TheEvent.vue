@@ -2,7 +2,7 @@
   <div class="event">
     <ul class="event-header">
       <li class="event-header_user-info">
-        <router-link to="user-profile" class="event-header_user-info-link">
+        <router-link to="/user-profile" class="event-header_user-info-link">
           <img class="event-header_user-info-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
           <span class="event-header_user-info-user-name">Janusz Kowalski</span>
         </router-link>  
