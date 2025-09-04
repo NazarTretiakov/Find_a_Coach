@@ -12,7 +12,11 @@ namespace FindACoach.Core.Domain.IdentityEntities
         public string? LastName { get; set; }
 
         public string? RefreshToken { get; set; }
+
         public DateTime RefreshTokenExpirationDateTime { get; set; }
 
+        public bool IsCompleteProfileWindowVisible { get; set; }
+
+        public string CompleteProfileWindowTitle { get; set; }
     }
 }

@@ -40,7 +40,7 @@ import LoginButton from './LoginButton.vue'
 import LoadingSquare from '../LoadingSquare.vue'
 import useLogin from '../../composables/authentication/useLogin'
 import { useAuthenticationStore } from '../../stores/authentication'
-
+import useGetCompleteProfileWindowState from '../../composables/complete-profile-window/useGetCompleteProfileWindowState'
 
 export default defineComponent({
   components: {
@@ -68,6 +68,7 @@ export default defineComponent({
       }, 1000)
 
       const result = await useLogin(email.value, password.value)
+      const completeProfileWindowState = await useGetCompleteProfileWindowState()
 
       clearTimeout(loadingTimeout)
       loadingTimeout = null
@@ -84,7 +85,13 @@ export default defineComponent({
           }
         }
       } else {
-        router.push('/home')
+        router.push({ 
+        path: '/home', 
+        query: { 
+          isCompleteProfileWindowVisible: String(completeProfileWindowState.isVisible),
+          completeProfileWindowTitle: completeProfileWindowState.title
+        }
+      })
       }
     }
 

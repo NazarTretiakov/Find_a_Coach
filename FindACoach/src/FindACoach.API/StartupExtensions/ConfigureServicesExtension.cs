@@ -1,8 +1,12 @@
 ﻿using FindACoach.Core.Configuration;
 using FindACoach.Core.Domain.IdentityEntities;
+using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.ServiceContracts;
+using FindACoach.Core.ServiceContracts.CompleteProfileWindow;
 using FindACoach.Core.Services;
+using FindACoach.Core.Services.CompleteProfileWindow;
 using FindACoach.Infrastructure.DbContext;
+using FindACoach.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -35,6 +39,10 @@ namespace FindACoach.API.StartupExtensions
             //import services here
             services.AddScoped<IJWTService, JWTService>();
             services.AddScoped<IEmailSenderService, EmailSenderService>();
+            services.AddScoped<IGetStateService, GetStateService>();
+            services.AddScoped<IChangeStateService, ChangeStateService>();
+
+            services.AddScoped<IUsersRepository, UsersRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

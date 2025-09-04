@@ -41,7 +41,13 @@ export default defineComponent({
     authenticationStore.saveAuthenticationStateInLocalStore()
 
     setTimeout(() => {
-      router.push('/home')
+      router.push( { 
+        path: '/home', 
+        query: { 
+          isCompleteProfileWindowVisible: 'true',
+          completeProfileWindowTitle: "You have successfully created the account"
+        }
+      })
     }, 4000)
   }
 })

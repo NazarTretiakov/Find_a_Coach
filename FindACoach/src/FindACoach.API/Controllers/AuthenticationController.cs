@@ -50,7 +50,9 @@ namespace FindACoach.API.Controllers
             {
                 Email = registerDTO.Email,
                 UserName = registerDTO.Email,
-                EmailConfirmed = false
+                EmailConfirmed = false,
+                IsCompleteProfileWindowVisible = true,
+                CompleteProfileWindowTitle = "You have successfully created the account"
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);
@@ -139,7 +141,9 @@ namespace FindACoach.API.Controllers
                     $"&token={Uri.EscapeDataString(authenticationResponse.Token)}" +
                     $"&expiration={Uri.EscapeDataString(authenticationResponse.Expiration.ToString("o"))}" +
                     $"&refreshToken={Uri.EscapeDataString(authenticationResponse.RefreshToken)}" +
-                    $"&refreshTokenExpiration={Uri.EscapeDataString(authenticationResponse.RefreshTokenExpirationDateTime.ToString("o"))}";
+                    $"&refreshTokenExpiration={Uri.EscapeDataString(authenticationResponse.RefreshTokenExpirationDateTime.ToString("o"))}" +
+                    $"&isCompleteProfileWindowVisible={Uri.EscapeDataString(user.IsCompleteProfileWindowVisible.ToString())}" + 
+                    $"&completeProfileWindowTitle={Uri.EscapeDataString(user.CompleteProfileWindowTitle)}";
 
                 return Redirect(redirectUrl);
             }

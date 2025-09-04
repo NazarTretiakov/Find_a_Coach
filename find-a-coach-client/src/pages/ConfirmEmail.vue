@@ -34,7 +34,7 @@ export default defineComponent({
     LoadingSquare
   },
   setup() {
-    const message = ref<string>('')
+    const message = ref<string | null>('')
     const isError = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     let loadingTimeout: ReturnType<typeof setTimeout> | null = null

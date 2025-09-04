@@ -16,25 +16,25 @@ export default {
           email: payload.email,
           password: payload.password,
         }),
-      });
+      })
 
       if (!response.ok) {
         const responseData = await response.json();
         return {
           isSuccessful: false,
           errorMessage: responseData.detail || 'Unexpected error occured while registration.',
-        };
+        }
       }
 
       return {
         isSuccessful: true,
         errorMessage: null,
-      };
+      }
     } catch (error) {
       return {
         isSuccessful: false,
         errorMessage: (error as Error).message,
-      };
+      }
     }
   },
 
@@ -60,7 +60,7 @@ export default {
         return {
           isSuccessful: false,
           errorMessage: responseData.detail || 'Unexpected error occured while logging in.',
-        };
+        }
       }
 
       authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.tokenExpiration), responseData.refreshToken, new Date(responseData.refreshTokenExpiration))
@@ -112,7 +112,6 @@ export default {
         errorMessage: null
       }
     } catch (error) {
-
       
       authenticationStore.clearAllFieldsInStore()
       authenticationStore.clearAuthenticationStateFromLocalStore()

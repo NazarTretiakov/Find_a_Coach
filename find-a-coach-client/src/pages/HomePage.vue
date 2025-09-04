@@ -11,6 +11,8 @@
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
+import useChangeCompleteProfileWindowTitle from '../composables/complete-profile-window/useChangeCompleteProfileWindowTitle'
+import useChangeCompleteProfileWindowVisibility from '../composables/complete-profile-window/useChangeCompleteProfileWindowVisibility'
 
 import CompleteProfileWindow from '../components/homepage/CompleteProfileWindow.vue'
 import ReceiveReminderWindow from '../components/homepage/ReceiveReminderWindow.vue'
@@ -36,24 +38,27 @@ export default defineComponent({
     const isCompleteProfileWindowVisible = ref<boolean>(route.query.isCompleteProfileWindowVisible === 'true' && completeProfileWindowTitle.value != null)
     const isReceiveReminderWindowVisible = ref<boolean>(false)
     
-    const onCompleteProfile = () => {
-      //TODO: write field on server "showCompleteProfileWindowTitle" = "Welcome back"
+    const onCompleteProfile = async () => {
+      await useChangeCompleteProfileWindowTitle()
+
       router.push('/my-profile/add-profile-section')
     }
 
-    const onMaybeLater = () => {
-      //TODO: write field on server "showCompleteProfileWindowTitle" = "Welcome back"
+    const onMaybeLater = async () => {
       isCompleteProfileWindowVisible.value = false
       isReceiveReminderWindowVisible.value = true
     }
 
-    const onWantToReceiveReminder = () => {
-      //TODO: write field on server: "showCompleteProfileWindow" = true
+    const onWantToReceiveReminder = async () => {
+      await useChangeCompleteProfileWindowTitle()
+      
       isReceiveReminderWindowVisible.value = false
     }
 
-    const onDoNotWantToReceiveReminder = () => {
-      //TODO: write field on server: "showCompleteProfileWindow" = false
+    const onDoNotWantToReceiveReminder = async () => {
+      await useChangeCompleteProfileWindowTitle()
+      await useChangeCompleteProfileWindowVisibility()
+
       isReceiveReminderWindowVisible.value = false
     }
 
