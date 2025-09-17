@@ -1,41 +1,55 @@
-<template> 
+<template>
   <div class="edit-personal-information">
     <ul class="edit-personal-information-items">
       <li class="edit-personal-information-items_header">
         <h1 class="edit-personal-information-items_header-element">Edit personal information</h1>
       </li>
+
       <li class="edit-personal-information-items_user-profile-image">
-        <img @click="triggerFileInput" class="edit-personal-information-items_user-profile-image-small" :src="profileImage" alt="Profile image small sized">
-        <img @click="triggerFileInput" class="edit-personal-information-items_user-profile-image-big" :src="profileImage" alt="Profile image big sized">
+        <img @click="triggerFileInput" class="edit-personal-information-items_user-profile-image-small" :src="profileImagePreview" alt="Profile image small sized" />
+        <img @click="triggerFileInput" class="edit-personal-information-items_user-profile-image-big" :src="profileImagePreview" alt="Profile image big sized" />
         <input type="file" ref="fileInput" accept="image/*" class="edit-personal-information-items_hidden-input-for-user-profile-image" @change="onFileChange" />
       </li>
+
       <li class="edit-personal-information-items_first-name-input">
-        <input-field label="First name" name="first-name" type="text"></input-field>
+        <input-field label="First name" name="first-name" type="text" v-model="formData.firstName" />
+        <span v-if="getError('firstName')" class="error-message">{{ getError('firstName') }}</span>
       </li>
+
       <li class="edit-personal-information-items_last-name-input">
-        <input-field label="Last name" name="last-name" type="text"></input-field>
+        <input-field label="Last name" name="last-name" type="text" v-model="formData.lastName" />
+        <span v-if="getError('lastName')" class="error-message">{{ getError('lastName') }}</span>
       </li>
+
       <li class="edit-personal-information-items_primary-occupation-input">
-        <input-field label="Primary occupation" name="primary-occupation" type="text"></input-field>
+        <input-field label="Primary occupation" name="primary-occupation" type="text" v-model="formData.primaryOccupation" />
+        <span v-if="getError('primaryOccupation')" class="error-message">{{ getError('primaryOccupation') }}</span>
       </li>
+
       <li class="edit-personal-information-items_headline-input">
-        <text-input-area label="Headline" name="headline" max-number-of-signs="100"></text-input-area>
+        <text-input-area label="Headline" name="headline" :max-number-of-signs="100" v-model="formData.headline" />
+        <span v-if="getError('headline')" class="error-message">{{ getError('headline') }}</span>
       </li>
+
       <li class="edit-personal-information-items_location-input">
-        <input-field label="Location" name="location" type="text"></input-field>
+        <input-field label="Location" name="location" type="text" v-model="formData.location" />
+        <span v-if="getError('location')" class="error-message">{{ getError('location') }}</span>
       </li>
+
+      
       <li class="edit-personal-information-items_edit-contact-information-header">
         <h1 class="edit-personal-information-items_edit-contact-information-header-element">Edit contact information</h1>
       </li>
-      <li class="edit-personal-information-items_email-input">
-        <input-field label="Email" name="email" type="text"></input-field>
-      </li>
+
       <li class="edit-personal-information-items_phone-input">
-        <input-field label="Phone number" name="phone-number" type="text"></input-field>
+        <input-field label="Phone number" name="phone-number" type="text" v-model="formData.phone" />
+        <span v-if="getError('phone')" class="error-message">{{ getError('phone') }}</span>
       </li>
+
       <li class="edit-personal-information-items_websites-header">
         <h1 class="edit-personal-information-items_websites-header-element">Websites</h1>
       </li>
+
       <li class="edit-personal-information-items_websites">
         <ul class="edit-personal-information-items_websites-items">
           <li v-for="(website, index) in websites" :key="index" class="edit-personal-information-items_websites-items_website">
@@ -60,18 +74,28 @@
               ]"
             />
 
+            <span v-if="getError(`websites[${index}]`)" class="error-message">
+              {{ getError(`websites[${index}]`) }}
+            </span>
+
             <remove-button @click="removeWebsite(index)" class="edit-personal-information-items_websites-items_website-remove-button"></remove-button>
           </li>
         </ul>
       </li>
-      <li v-if="isAddButtonVisible" class="edit-personal-information-items_add-button"><add-button @click="addWebsite" added-object-name="website"></add-button></li>
-      <li class="edit-personal-information-items_save-button"><save-button></save-button></li>
+
+      <li v-if="isAddButtonVisible" class="edit-personal-information-items_add-button">
+        <add-button @click="addWebsite" added-object-name="website"></add-button>
+      </li>
+
+      <li class="edit-personal-information-items_save-button">
+        <save-button @click="onSave"></save-button>
+      </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
 import InputField from "../../input-fields/InputField.vue";
 import TextInputArea from '../../input-fields/TextInputArea.vue';
@@ -79,7 +103,11 @@ import DropdownMenu from '../../input-fields/DropdownMenu.vue';
 import RemoveButton from '../../input-fields/RemoveButton.vue';
 import AddButton from '../../input-fields/AddButton.vue';
 import SaveButton from '../../input-fields/SaveButton.vue';
+import type { Form } from '../../../types/edit-personal-information/Form'
 import type { Website } from '../../../types/edit-personal-information/Website'
+import type { ValidationError } from '../../../types/edit-personal-information/ValidationError'
+import useValidationOfForm from '../../../composables/my-profile/edit-personal-information/useValidationOfForm'
+import useEditPersonalInformation from '../../../composables/my-profile/edit-personal-information/useEditPersonalInformation'
 
 export default defineComponent({
   components: {
@@ -91,10 +119,32 @@ export default defineComponent({
     SaveButton
   },
   setup() {
-    const profileImage = ref(new URL('../../../assets/images/icons/user-icon.jpg', import.meta.url).href)
+    const profileImage = ref<File | null>(null)
+    const profileImagePreview = ref<string>('')
     const fileInput = ref<HTMLInputElement | null>(null)
     const websites = ref<Website[]>([])
     const isAddButtonVisible = ref<boolean>(true)
+    const formData = ref<Form>({
+      profileImage: profileImage.value,
+      firstName: '',
+      lastName: '',
+      primaryOccupation: '',
+      headline: '',
+      location: '',
+      phone: '',
+      websites: websites.value
+    })
+    const formErrors = ref<ValidationError[]>([])
+
+    onMounted(async () => {
+      const defaultUrl = new URL('../../../assets/images/icons/user-icon.jpg', import.meta.url).href
+      const response = await fetch(defaultUrl)
+      const blob = await response.blob()
+      const file = new File([blob], 'user-icon.jpg', { type: blob.type })
+      profileImage.value = file
+      formData.value.profileImage = file
+      profileImagePreview.value = URL.createObjectURL(file)
+    })
 
     const triggerFileInput = () => {
       fileInput.value?.click()
@@ -104,12 +154,9 @@ export default defineComponent({
       const target = event.target as HTMLInputElement
       const file = target.files?.[0]
       if (file) {
-        console.log('Choosed file:', file)
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          profileImage.value = e.target?.result as string
-        }
-        reader.readAsDataURL(file)
+        profileImage.value = file
+        formData.value.profileImage = file
+        profileImagePreview.value = URL.createObjectURL(file)
       }
     }
 
@@ -117,7 +164,6 @@ export default defineComponent({
       if (websites.value.length >= 4) {
         isAddButtonVisible.value = false
       }
-
       websites.value.push({ url: '', type: 'other' })
     }
 
@@ -128,7 +174,23 @@ export default defineComponent({
       websites.value.splice(index, 1)
     }
 
-    return { profileImage, fileInput, triggerFileInput, onFileChange, websites, addWebsite, removeWebsite, isAddButtonVisible }
+    const onSave = () => {
+      console.log('Form data:', formData.value)
+      formData.value.phone = formData.value.phone.replace(/\s+/g, '')
+      formErrors.value = useValidationOfForm(formData.value)
+
+      if (formErrors.value.length === 0) {
+        let response = useEditPersonalInformation(formData.value)
+
+        console.log(response)
+      }
+    }
+
+    const getError = (fieldName: string) => {
+      return formErrors.value.find(error => error.fieldName === fieldName)?.errorMessage || ''
+    }
+
+    return { formData, profileImage, profileImagePreview, fileInput, triggerFileInput, onFileChange, websites, addWebsite, removeWebsite, isAddButtonVisible, onSave, formErrors, getError }
   }
 })
 </script>
@@ -154,10 +216,8 @@ export default defineComponent({
     }
 
     &_header {
-
       &-element {
         font-size: 28px;
-
         @media (max-width: $breakpoint) {
           font-size: 20px;
         }
@@ -173,43 +233,54 @@ export default defineComponent({
 
       &-small {
         width: 50px;
+        height: 50px;
         margin-right: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        object-fit: cover;
 
         @media (max-width: $breakpoint) {
           width: 30px;
+          height: 30px;
         }
 
-        &:hover {
-          cursor: pointer;
+        &:hover { 
+          cursor: pointer; 
         }
       }
       &-big {
         width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        object-fit: cover;
 
         @media (max-width: $breakpoint) {
           width: 120px;
+          height: 120px;
         }
-        
-        &:hover {
-          cursor: pointer;
+
+        &:hover { 
+          cursor: pointer; 
         }
       }
     }
 
     &_hidden-input-for-user-profile-image {
-      display: none;
+      display: none; 
     }
 
     &_first-name-input {
-      margin-top: 20px;
+      margin-top: 20px; 
+    }
+    
+    &_last-name-input { 
+      margin-top: 14px; 
+    
     }
 
-    &_last-name-input {
-      margin-top: 14px;
-    }
-
-    &_primary-occupation-input {
-      margin-top: 14px;
+    &_primary-occupation-input { 
+      margin-top: 14px; 
     }
 
     &_headline-input {
@@ -217,36 +288,34 @@ export default defineComponent({
     }
 
     &_location-input {
-      margin-top: -8px;
+      margin-top: 14px;
       padding-bottom: 70px;
       border-bottom: 1px solid $grayBorderColor;
 
-      @media (max-width: $breakpoint) {
-        padding-bottom: 50px;
+      @media (max-width: $breakpoint) { 
+        padding-bottom: 50px; 
       }
     }
 
-    &_edit-contact-information-header {
-      margin-top: 70px;
+    &_edit-contact-information-header { 
+      margin: 56px 0 14px 0;
 
-      @media (max-width: $breakpoint) {
-        margin-top: 50px;
+      @media (max-width: $breakpoint) { 
+        margin: 14px 0 0 0; 
+        font-size: 20px;
       }
 
       &-element {
-        font-size: 28px;
+        font-size: 24px;
 
-        @media (max-width: $breakpoint) {
+        @media (max-width: $breakpoint) { 
+          margin: 30px 0 14px 0; 
           font-size: 20px;
         }
-      } 
+      }
     }
 
-    &_email-input {
-      margin-top: 20px;
-    }
-
-    &_phone-input {
+    &_phone-input { 
       margin-top: 14px;
     }
 
@@ -261,7 +330,6 @@ export default defineComponent({
         }
       }
     }
-
     &_websites {
 
       &-items {
@@ -275,29 +343,35 @@ export default defineComponent({
         }
 
         &_website {
-
-          &-url-input {
-            margin-top: 14px;
+          &-url-input { 
+            margin-top: 14px; 
           }
-
-          &-type-of-website-input {
-            margin-top: 14px;
+          &-type-of-website-input { 
+            margin-top: 14px; 
           }
-
-          &-remove-button {
-            margin: 24px 0 10px 0;
+          &-remove-button { 
+            margin: 24px 0 10px 0; 
           }
         }
       }
     }
-
-    &_add-button {
-      margin-top: 30px;
+    &_add-button { 
+      margin-top: 30px; 
     }
-
-    &_save-button {
-      margin: 70px 0 100px 0;
+    &_save-button { 
+      margin: 70px 0 100px 0; 
     }
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+
+  @media (max-width: $breakpoint) {
+    font-size: 12px;
   }
 }
 </style>

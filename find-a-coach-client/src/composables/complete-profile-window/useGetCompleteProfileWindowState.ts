@@ -8,6 +8,18 @@ export default async function useGetCompleteProfileWindowState(): Promise<Comple
   const authenticationStore = useAuthenticationStore()
 
   try {
+    const now = new Date()
+
+    if (authenticationStore.tokenExpiration && now > authenticationStore.tokenExpiration) {
+      if (authenticationStore.refreshTokenExpiration && now < authenticationStore.refreshTokenExpiration) {
+        await authenticationStore.refreshJWTToken()
+      } else {
+        authenticationStore.clearAllFieldsInStore()
+        authenticationStore.clearAuthenticationStateFromLocalStore()
+        window.location.href = '/login'
+      }
+    }
+    
     const response = await fetch(`${API_URL}`, {
       method: 'POST',
       headers: {

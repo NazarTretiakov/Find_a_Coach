@@ -7,6 +7,10 @@
 // }
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "target": "esnext",
     "useDefineForClassFields": true,
     "module": "es2020",
@@ -14,6 +18,7 @@
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
+    "types": ["vite/client"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,

@@ -3,8 +3,10 @@ using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.ServiceContracts;
 using FindACoach.Core.ServiceContracts.CompleteProfileWindow;
+using FindACoach.Core.ServiceContracts.MyProfile;
 using FindACoach.Core.Services;
 using FindACoach.Core.Services.CompleteProfileWindow;
+using FindACoach.Core.Services.MyProfile;
 using FindACoach.Infrastructure.DbContext;
 using FindACoach.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,7 +16,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -41,6 +42,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IEmailSenderService, EmailSenderService>();
             services.AddScoped<IGetStateService, GetStateService>();
             services.AddScoped<IChangeStateService, ChangeStateService>();
+            services.AddScoped<IEditPersonalInformationService, EditPersonalInformationService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
 

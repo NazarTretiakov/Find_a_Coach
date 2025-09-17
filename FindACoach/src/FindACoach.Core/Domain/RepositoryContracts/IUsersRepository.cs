@@ -22,5 +22,13 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="userId">User Id</param>
         /// <returns>"Complete profile" window DTO object.</returns>
         Task<CompleteProfileWindowStateDTO> GetCompleteProfileWindowState(string userId);
+
+        /// <summary>
+        /// Edits personal information of user (firstname, lastname, primary occupation, headline, location, phone number, websites)
+        /// </summary>
+        /// <param name="userId">Id of user which personal information will be edited.</param>
+        /// <param name="dto">DTO object with data to change personal information.</param>
+        /// <returns></returns>
+        Task EditPersonalInformation(string userId, EditPersonalInformationDTO dto);
     }
 }

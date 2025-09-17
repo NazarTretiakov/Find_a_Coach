@@ -1,7 +1,8 @@
 import { useAuthenticationStore } from './index';
 import type { AuthenticationDTO } from '../../types/authentication/AuthenticationDTO'
+import { config } from '@/config'
 
-const API_URL = 'https://localhost:5058/api/authentication';
+const API_URL = config.apiBaseUrl + '/Authentication'
 
 export default {
   async register(payload: AuthenticationDTO): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
@@ -22,7 +23,7 @@ export default {
         const responseData = await response.json();
         return {
           isSuccessful: false,
-          errorMessage: responseData.detail || 'Unexpected error occured while registration.',
+          errorMessage: responseData.errorMessage || 'Unexpected error occured while registration.',
         }
       }
 
@@ -59,7 +60,7 @@ export default {
       if (!response.ok) {
         return {
           isSuccessful: false,
-          errorMessage: responseData.detail || 'Unexpected error occured while logging in.',
+          errorMessage: responseData.errorMessage || 'Unexpected error occured while logging in.',
         }
       }
 
@@ -167,7 +168,7 @@ export default {
         const responseData = await response.json()
         return {
           isSuccessful: false,
-          errorMessage: responseData.detail || 'Error occurred while sending password reset request.',
+          errorMessage: responseData.errorMessage || 'Error occurred while sending password reset request.',
         }
       }
 
@@ -261,7 +262,7 @@ export default {
       if (!response.ok) {
         return {
           isSuccessful: false,
-          errorMessage: responseData.detail || 'Failed to refresh token.',
+          errorMessage: responseData.errorMessage || 'Failed to refresh token.',
         }
       }
 

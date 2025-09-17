@@ -1,5 +1,5 @@
 <template> 
-  <profile-sticky-header></profile-sticky-header>
+  <profile-sticky-header class="header"></profile-sticky-header>
 
   <edit-personal-information-form></edit-personal-information-form>
 
@@ -21,3 +21,9 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.header {
+  z-index: 1;
+}
+</style>

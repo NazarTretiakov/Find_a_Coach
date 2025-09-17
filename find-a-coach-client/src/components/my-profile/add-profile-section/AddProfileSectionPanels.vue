@@ -3,28 +3,25 @@
     <ul class="add-profile-section-items">
       <li class="add-profile-section-items_header"><h1 class="add-profile-section-items_header-element">Add profile section</h1></li>
       <li class="add-profile-section-items_section-panel">
-        <add-panel nameOfSection="Core information" description="Enter basic details and how people can contact you" :isProfileSectionAdded="true" linkToAddProfileSection="/profile/edit-personal-information" linkToChangeProfileSection="/profile/edit-personal-information"></add-panel>
+        <add-panel nameOfSection="Core information" description="Enter basic details and how people can contact you" :isProfileSectionAdded="true" linkToAddProfileSection="/my-profile/edit-personal-information" linkToChangeProfileSection="/my-profile/edit-personal-information"></add-panel>
       </li>
       <li class="add-profile-section-items_section-panel">
-        <add-panel nameOfSection="Description" description="Write something about yourself" :isProfileSectionAdded="false" linkToAddProfileSection="/profile/edit-about-me" linkToChangeProfileSection="/profile/edit-about-me"></add-panel>
+        <add-panel nameOfSection="Description" description="Write something about yourself" :isProfileSectionAdded="false" linkToAddProfileSection="/my-profile/edit-about-me" linkToChangeProfileSection="/my-profile/edit-about-me"></add-panel>
       </li>
       <li class="add-profile-section-items_section-panel">
-        <add-panel nameOfSection="Experience" description="Tell where you've worked before" :isProfileSectionAdded="false" linkToAddProfileSection="/profile/add-experience" linkToChangeProfileSection="/profile/edit-experience"></add-panel>
+        <add-panel nameOfSection="Experience" description="Tell where you've worked before" :isProfileSectionAdded="false" linkToAddProfileSection="/my-profile/add-position" linkToChangeProfileSection="/my-profile/edit-experience"></add-panel>
       </li>
       <li class="add-profile-section-items_section-panel">
-        <add-panel nameOfSection="Education" description="Add schools or degrees" :isProfileSectionAdded="false" linkToAddProfileSection="/profile/add-education" linkToChangeProfileSection="/profile/edit-education"></add-panel>
+        <add-panel nameOfSection="Education" description="Add schools or degrees" :isProfileSectionAdded="false" linkToAddProfileSection="/my-profile/add-education" linkToChangeProfileSection="/my-profile/edit-education"></add-panel>
       </li>
       <li class="add-profile-section-items_section-panel">
-        <add-panel nameOfSection="Projects" description="Showcase your projects" :isProfileSectionAdded="false" linkToAddProfileSection="/profile/add-project" linkToChangeProfileSection="/profile/edit-projects"></add-panel>
+        <add-panel nameOfSection="Projects" description="Showcase your projects" :isProfileSectionAdded="false" linkToAddProfileSection="/my-profile/add-project" linkToChangeProfileSection="/my-profile/edit-projects"></add-panel>
       </li>
       <li class="add-profile-section-items_section-panel">
-        <add-panel nameOfSection="Certifications" description="Include relevant certificates or qualifications" :isProfileSectionAdded="false" linkToAddProfileSection="/profile/add-certification" linkToChangeProfileSection="/profile/edit-certifications"></add-panel>
-      </li>
-      <li class="add-profile-section-items_section-panel">
-        <add-panel nameOfSection="Skills" description="List your skills here" :isProfileSectionAdded="false" linkToAddProfileSection="/profile/add-skill" linkToChangeProfileSection="/profile/edit-skills"></add-panel>
+        <add-panel nameOfSection="Certifications" description="Include relevant certificates or qualifications" :isProfileSectionAdded="false" linkToAddProfileSection="/my-profile/add-certification" linkToChangeProfileSection="/my-profile/edit-certifications"></add-panel>
       </li>
       <li class="add-profile-section-items_section-panel-last">
-        <add-panel nameOfSection="Languages" description="Add languages you know" :isProfileSectionAdded="false" linkToAddProfileSection="/profile/add-language" linkToChangeProfileSection="/profile/edit-languages"></add-panel>
+        <add-panel nameOfSection="Languages" description="Add languages you know" :isProfileSectionAdded="false" linkToAddProfileSection="/my-profile/add-language" linkToChangeProfileSection="/my-profile/edit-languages"></add-panel>
       </li>
     </ul>
   </div>
