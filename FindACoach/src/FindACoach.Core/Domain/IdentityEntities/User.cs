@@ -41,5 +41,7 @@ namespace FindACoach.Core.Domain.IdentityEntities
         public string Phone { get; set; } = string.Empty;
 
         public ICollection<Website> Websites { get; set; } = new List<Website>();
+
+        public ICollection<Connection> Connections { get; set; } = new List<Connection>();
     }
 }

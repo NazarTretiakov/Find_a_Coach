@@ -1,4 +1,5 @@
 ﻿using FindACoach.Core.DTO;
+using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.ServiceContracts.MyProfile;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -8,10 +9,12 @@ namespace FindACoach.API.Controllers
     public class MyProfileController : CustomControllerBase
     {
         private readonly IEditPersonalInformationService _editPersonalInformationService;
+        private readonly IGetPersonalInformationService _getPersonalInformationService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService)
         {
             _editPersonalInformationService = editPersonalInformationService;
+            _getPersonalInformationService = getPersonalInformationService;
         }
 
         [HttpPost("edit-personal-information")]
@@ -29,6 +32,16 @@ namespace FindACoach.API.Controllers
             await _editPersonalInformationService.EditPersonalInformation(userId, dto);
 
             return Ok();
+        }
+
+        [HttpGet("get-personal-information")]
+        public async Task<ActionResult<PersonalInformationToResponse>> GetPersonalInformation()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            PersonalInformationToResponse personalInformation = await _getPersonalInformationService.GetPersonalInformation(userId);
+
+            return Ok(personalInformation);
         }
     }
 }

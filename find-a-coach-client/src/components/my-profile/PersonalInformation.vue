@@ -1,20 +1,36 @@
 <template>
-  <div class="personal-information">
+  <div class="personal-information" v-if="personalInformation">
     <ul class="personal-information-items">
       <li class="personal-information-items_left-side">
         <ul class="personal-information-items_left-side-items">
-          <li class="personal-information-items_left-side-items_image"><img class="personal-information-items_left-side-items_image-element" src="../../assets/images/icons/user-icon.jpg" alt="User profile image"></li>
-          <li class="personal-information-items_left-side-items_name"><h1 class="personal-information-items_left-side-items_name-element">Janusz Kowalski</h1></li>
-          <li class="personal-information-items_left-side-items_incription"><span class="personal-information-items_left-side-items_incription-element">Pracownik działu technicznego firmy The Best Storage w Gdańsku</span></li>
-          <li class="personal-information-items_left-side-items_location"><span class="personal-information-items_left-side-items_location-element">Gdańsk, Woj. Pomorskie, Polska</span><span class="personal-information-items_left-side-items_location-divider">-</span><router-link to="/my-profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link></li>
-          <li class="personal-information-items_left-side-items_connections"><router-link to="/network/connections" class="personal-information-items_left-side-items_connections-link">45 connections</router-link></li>
-          <li class="personal-information-items_left-side-items_button"><router-link to="/my-profile/add-profile-section"><add-profile-section-button class="personal-information-items_left-side-items_button">Add profile section</add-profile-section-button></router-link></li>
+          <li class="personal-information-items_left-side-items_image">
+            <img class="personal-information-items_left-side-items_image-element" :src="personalInformation.profileImageUrl" alt="User profile image" />
+          </li>
+          <li class="personal-information-items_left-side-items_name">
+            <h1 class="personal-information-items_left-side-items_name-element"> {{ personalInformation.firstName }} {{ personalInformation.lastName }}</h1>
+          </li>
+          <li class="personal-information-items_left-side-items_incription">
+            <span class="personal-information-items_left-side-items_incription-element"> {{ personalInformation.headline }}</span>
+          </li>
+          <li class="personal-information-items_left-side-items_location">
+            <span class="personal-information-items_left-side-items_location-element">{{ personalInformation.location }}</span>
+            <span class="personal-information-items_left-side-items_location-divider">-</span>
+            <router-link to="/my-profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link>
+          </li>
+          <li class="personal-information-items_left-side-items_connections">
+            <router-link to="/network/connections" class="personal-information-items_left-side-items_connections-link">{{ personalInformation.connectionsAmount }} connections</router-link>
+          </li>
+          <li class="personal-information-items_left-side-items_button">
+            <router-link to="/my-profile/add-profile-section">
+              <add-profile-section-button class="personal-information-items_left-side-items_button">Add profile section</add-profile-section-button>
+            </router-link>
+          </li>
         </ul>
       </li>
       <li class="personal-information-items_right-side">
         <ul class="personal-information-items_right-side-items">
           <li class="personal-information-items_right-side-items_edit"><router-link to="/my-profile/edit-personal-information" class="personal-information-items_right-side-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="personal-information-items_right-side-items_edit-icon"></router-link></li>
-          <li class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="..//../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">Logistics and Marketing</span></li>
+          <li class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="../../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">{{ personalInformation.primaryOccupation }}</span></li>
         </ul>
       </li>
     </ul>
@@ -22,13 +38,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import AddProfileSectionButton from './AddProfileSectionButton.vue'
+import { defineComponent, ref, onMounted } from "vue"
+import AddProfileSectionButton from "./AddProfileSectionButton.vue"
+import type { PersonalInformation } from "../../types/my-profile/PersonalInformation"
+import useGetPersonalInformation from "../../composables/my-profile/personal-information/useGetPersonalInformation"
+import { useRouter } from "vue-router"
 
 export default defineComponent({
   components: {
-    AddProfileSectionButton
-  }
+    AddProfileSectionButton,
+  },
+  setup() {
+    const personalInformation = ref<PersonalInformation | null>(null)
+    const router = useRouter()
+
+    onMounted(async () => {
+      const result = await useGetPersonalInformation()
+
+      if ("isSuccessful" in result) {
+        if (!result.isSuccessful) {
+          router.push("/error-page")
+        }
+      } else {
+        personalInformation.value = result
+      }
+    })
+
+    return { personalInformation }
+  },
 })
 </script>
 
@@ -62,10 +99,16 @@ export default defineComponent({
 
         &_image {
           &-element {
-            width: 140px;
+            max-width: 140px;
+            max-height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            border: 1px solid #000000;
 
             @media (max-width: $breakpoint) {
               width: 120px;
+              height: 120px;
             }
           }
         }

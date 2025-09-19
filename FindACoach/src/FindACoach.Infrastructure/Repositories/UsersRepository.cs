@@ -2,10 +2,15 @@
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO;
+using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace FindACoach.Infrastructure.Repositories
 {
@@ -13,11 +18,13 @@ namespace FindACoach.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
 
-        public UsersRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        public UsersRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
         }
 
         public async Task ChangeCompleteProfileWindowState(string userId, bool isVisible, string title)
@@ -89,9 +96,19 @@ namespace FindACoach.Infrastructure.Repositories
             string uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
             string imagePathToCreateFile = Path.Combine(profileImagesFolder, uniqueFileName);
 
-            using (var fileStream = new FileStream(imagePathToCreateFile, FileMode.Create))
+            using (var imageStream = image.OpenReadStream())
+            using (var imageResult = Image.Load(imageStream))
             {
-                await image.CopyToAsync(fileStream);
+                imageResult.Mutate(x => x.Resize(new ResizeOptions
+                {
+                    Size = new Size(400, 400),
+                    Mode = ResizeMode.Crop
+                }));
+
+                await imageResult.SaveAsync(imagePathToCreateFile, new JpegEncoder
+                {
+                    Quality = 90
+                });
             }
 
             return uniqueFileName;
@@ -113,6 +130,26 @@ namespace FindACoach.Infrastructure.Repositories
             };
 
             return completeProfileWindowStateDTO;
+        }
+
+        public async Task<PersonalInformationToResponse> GetPersonalInformation(string userId)
+        {
+            User activeUser = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            PersonalInformationToResponse personalInformation = new PersonalInformationToResponse()
+            {
+                ProfileImageUrl = $"{serverUrl}/Images/ProfileImages/{activeUser.ImagePath}",
+                FirstName = activeUser.FirstName,
+                LastName = activeUser.LastName,
+                PrimaryOccupation = activeUser.PrimaryOccupation,
+                Headline = activeUser.Headline,
+                Location = activeUser.Location,
+                ConnectionsAmount = activeUser.Connections.Count()
+            };
+
+            return personalInformation;
         }
     }
 }

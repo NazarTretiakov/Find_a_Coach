@@ -238,6 +238,7 @@ export default defineComponent({
         border-radius: 50%;
         overflow: hidden;
         object-fit: cover;
+        border: 1px solid #000000;
 
         @media (max-width: $breakpoint) {
           width: 30px;
@@ -254,6 +255,7 @@ export default defineComponent({
         border-radius: 50%;
         overflow: hidden;
         object-fit: cover;
+        border: 1px solid #000000;
 
         @media (max-width: $breakpoint) {
           width: 120px;

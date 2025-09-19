@@ -1,4 +1,5 @@
 ﻿using FindACoach.Core.DTO;
+using FindACoach.Core.DTO.MyProfile;
 
 namespace FindACoach.Core.Domain.RepositoryContracts
 {
@@ -30,5 +31,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="dto">DTO object with data to change personal information.</param>
         /// <returns></returns>
         Task EditPersonalInformation(string userId, EditPersonalInformationDTO dto);
+
+        /// <summary>
+        /// Retrieves personal information of user.
+        /// </summary>
+        /// <param name="userId">Id of user which information will be retrieved.</param>
+        /// <returns>PersonalInformationToResponse object with personal information.</returns>
+        Task<PersonalInformationToResponse> GetPersonalInformation(string userId);
     }
 }
