@@ -44,6 +44,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IChangeStateService, ChangeStateService>();
             services.AddScoped<IEditPersonalInformationService, EditPersonalInformationService>();
             services.AddScoped<IGetPersonalInformationService, GetPersonalInformationService>();
+            services.AddScoped<IGetPersonalAndContactInformationService, GetPersonalAndContactInformationService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
 

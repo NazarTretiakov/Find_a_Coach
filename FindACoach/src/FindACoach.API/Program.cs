@@ -13,8 +13,6 @@ internal class Program
 
         app.UseHsts();
         app.UseHttpsRedirection();
-
-        app.UseStaticFiles();
         
         if (app.Environment.IsDevelopment())
         {
@@ -24,6 +22,8 @@ internal class Program
 
         app.UseRouting();
         app.UseCors();
+
+        app.UseStaticFiles();
 
         app.UseAuthentication();
         app.UseAuthorization();

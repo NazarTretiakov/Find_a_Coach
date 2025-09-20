@@ -13,7 +13,7 @@ namespace FindACoach.Core.Domain.Entities
         public User User { get; set; }
 
         [Required]
-        [StringLength(200)]
+        [StringLength(2048)]
         public string Url { get; set; } = string.Empty;
 
         [Required]

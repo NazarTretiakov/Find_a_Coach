@@ -108,6 +108,8 @@ import type { Website } from '../../../types/edit-personal-information/Website'
 import type { ValidationError } from '../../../types/edit-personal-information/ValidationError'
 import useValidationOfForm from '../../../composables/my-profile/edit-personal-information/useValidationOfForm'
 import useEditPersonalInformation from '../../../composables/my-profile/edit-personal-information/useEditPersonalInformation'
+import useGetPersonalAndContactInformation from "../../../composables/my-profile/personal-information/useGetPersonalAndContactInformation"
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -119,6 +121,8 @@ export default defineComponent({
     SaveButton
   },
   setup() {
+    const router = useRouter()
+
     const profileImage = ref<File | null>(null)
     const profileImagePreview = ref<string>('')
     const fileInput = ref<HTMLInputElement | null>(null)
@@ -144,6 +148,35 @@ export default defineComponent({
       profileImage.value = file
       formData.value.profileImage = file
       profileImagePreview.value = URL.createObjectURL(file)
+
+
+      const result = await useGetPersonalAndContactInformation()
+
+      if ("isSuccessful" in result) {
+        if (!result.isSuccessful) {
+          const router = useRouter()
+          router.push("/error-page")  // TODO: redirect there to "unauthorized" page
+        }
+      } else {
+        formData.value.firstName = result.firstName || ''
+        formData.value.lastName = result.lastName || ''
+        formData.value.primaryOccupation = result.primaryOccupation || ''
+        formData.value.headline = result.headline || ''
+        formData.value.location = result.location || ''
+        formData.value.phone = result.phone || ''
+
+        const imageResponse = await fetch(result.profileImageUrl)
+        const imageBlob = await imageResponse.blob()
+        const imageFile = new File([imageBlob], 'profile.jpg', { type: imageBlob.type })
+        profileImage.value = imageFile
+        formData.value.profileImage = imageFile
+        profileImagePreview.value = URL.createObjectURL(imageFile)
+
+        websites.value = result.websites && Array.isArray(result.websites)
+          ? result.websites
+          : []
+        formData.value.websites = websites.value
+      }
     })
 
     const triggerFileInput = () => {
@@ -174,15 +207,20 @@ export default defineComponent({
       websites.value.splice(index, 1)
     }
 
-    const onSave = () => {
-      console.log('Form data:', formData.value)
+    const onSave = async () => {
       formData.value.phone = formData.value.phone.replace(/\s+/g, '')
       formErrors.value = useValidationOfForm(formData.value)
 
       if (formErrors.value.length === 0) {
-        let response = useEditPersonalInformation(formData.value)
+        let response = await useEditPersonalInformation(formData.value)
 
-        console.log(response)
+        if (response.isSuccessful) {
+          router.push('/my-profile')
+        } else {
+          console.error(response.errorMessage)
+        }
+
+        router.push('/my-profile')
       }
     }
 

@@ -57,7 +57,7 @@ export default defineComponent({
 
       if ("isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push("/error-page")
+          router.push("/error-page")  // TODO: redirect there to "unauthorized" page
         }
       } else {
         personalInformation.value = result

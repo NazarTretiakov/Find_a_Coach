@@ -7,16 +7,24 @@
       "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\myprofile\\getpersonalinformationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\myprofile\\getpersonalinformationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\startupextensions\\configureservicesextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\startupextensions\\configureservicesextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\dbcontext\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\dbcontext\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\myprofile\\getpersonalandcontactinformationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\myprofile\\getpersonalandcontactinformationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,17 +34,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "MyProfileController.cs",
               "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfileController.cs",
               "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\MyProfileController.cs",
               "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfileController.cs",
               "RelativeToolTip": "src\\FindACoach.API\\Controllers\\MyProfileController.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAA1wCYAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwDEAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-15T06:46:44.874Z",
               "IsPinned": true,
@@ -53,14 +61,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "GetPersonalInformationService.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalInformationService.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalInformationService.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalInformationService.cs",
-              "RelativeToolTip": "src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalInformationService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Program.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.API\\Program.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Program.cs",
+              "RelativeToolTip": "src\\FindACoach.API\\Program.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAzwBgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-18T10:29:44.312Z",
+              "WhenOpened": "2025-09-20T07:55:21.669Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ConfigureServicesExtension.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\StartupExtensions\\ConfigureServicesExtension.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.API\\StartupExtensions\\ConfigureServicesExtension.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\StartupExtensions\\ConfigureServicesExtension.cs",
+              "RelativeToolTip": "src\\FindACoach.API\\StartupExtensions\\ConfigureServicesExtension.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAYwGYAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-20T07:54:09.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GetPersonalAndContactInformationService.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalAndContactInformationService.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalAndContactInformationService.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalAndContactInformationService.cs",
+              "RelativeToolTip": "src\\FindACoach.Core\\Services\\MyProfile\\GetPersonalAndContactInformationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-20T06:45:13.289Z",
               "EditorCaption": ""
             },
             {
@@ -69,9 +103,9 @@
               "Title": "UsersRepository.cs",
               "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
               "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs*",
-              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs*",
-              "ViewState": "AgIAAG0AAAAAAAAAAAAkwGIAAAA8AAAAAAAAAA==",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
+              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAADwv0QAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-14T08:34:44.182Z",
               "EditorCaption": ""
@@ -84,7 +118,7 @@
               "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\DbContext\\ApplicationDbContext.cs",
               "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\DbContext\\ApplicationDbContext.cs",
               "RelativeToolTip": "src\\FindACoach.Infrastructure\\DbContext\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAA8wBsAAAAyAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAmwBsAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-15T15:22:55.993Z",
               "EditorCaption": ""

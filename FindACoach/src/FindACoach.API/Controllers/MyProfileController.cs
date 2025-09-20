@@ -10,11 +10,13 @@ namespace FindACoach.API.Controllers
     {
         private readonly IEditPersonalInformationService _editPersonalInformationService;
         private readonly IGetPersonalInformationService _getPersonalInformationService;
+        private readonly IGetPersonalAndContactInformationService _getPersonalAndContactInformationService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService)
         {
             _editPersonalInformationService = editPersonalInformationService;
             _getPersonalInformationService = getPersonalInformationService;
+            _getPersonalAndContactInformationService = getPersonalAndContactInformationService;
         }
 
         [HttpPost("edit-personal-information")]
@@ -40,6 +42,16 @@ namespace FindACoach.API.Controllers
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             PersonalInformationToResponse personalInformation = await _getPersonalInformationService.GetPersonalInformation(userId);
+
+            return Ok(personalInformation);
+        }
+
+        [HttpGet("get-personal-and-contact-information")]
+        public async Task<ActionResult<PersonalAndContactInformationToResponse>> GetPersonalAndContactInformation()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            PersonalAndContactInformationToResponse personalInformation = await _getPersonalAndContactInformationService.GetPersonalAndContactInformation(userId);
 
             return Ok(personalInformation);
         }

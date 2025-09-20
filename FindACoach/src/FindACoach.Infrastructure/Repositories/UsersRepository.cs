@@ -151,5 +151,49 @@ namespace FindACoach.Infrastructure.Repositories
 
             return personalInformation;
         }
+
+        public async Task<PersonalAndContactInformationToResponse> GetPersonalAndContactInformation(string userId)
+        {
+            var activeUser = await _db.Users.Where(u => u.Id == Guid.Parse(userId))
+                                            .Select(u => new User
+                                            {
+                                                Id = u.Id,
+                                                FirstName = u.FirstName,
+                                                LastName = u.LastName,
+                                                PrimaryOccupation = u.PrimaryOccupation,
+                                                Headline = u.Headline,
+                                                Location = u.Location,
+                                                Phone = u.Phone,
+                                                ImagePath = u.ImagePath,
+                                                Websites = u.Websites.Select(w => new Website
+                                                                     {
+                                                                        Url = w.Url,
+                                                                        Type = w.Type
+                                                                     })
+                                                                     .ToList()
+                                            })
+                                            .AsNoTracking()
+                                            .SingleOrDefaultAsync();
+
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            PersonalAndContactInformationToResponse personalInformation = new PersonalAndContactInformationToResponse()
+            {
+                ProfileImageUrl = $"{serverUrl}/Images/ProfileImages/{activeUser.ImagePath}",
+                FirstName = activeUser.FirstName,
+                LastName = activeUser.LastName,
+                PrimaryOccupation = activeUser.PrimaryOccupation,
+                Headline = activeUser.Headline,
+                Location = activeUser.Location,
+                Phone = activeUser.Phone,
+                Websites = activeUser.Websites.Select(w => new WebsiteDTO()
+                {
+                    Url = w.Url,
+                    Type = w.Type
+                }).ToList()
+            };
+
+            return personalInformation;
+        }
     }
 }
