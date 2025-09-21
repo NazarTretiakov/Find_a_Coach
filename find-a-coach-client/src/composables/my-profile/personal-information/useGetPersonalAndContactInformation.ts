@@ -1,29 +1,17 @@
 import { PersonalAndContactInformation } from "@/types/my-profile/PersonalAndContactInformation"
-import { useAuthenticationStore } from "../../../stores/authentication"
+import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
 export default async function useGetPersonalAndContactInformation(): Promise<PersonalAndContactInformation | { isSuccessful: boolean, errorMessage: string | null }> {
-  const authenticationStore = useAuthenticationStore()
-
   try {
-    const now = new Date()
-
-    if (authenticationStore.tokenExpiration && now > authenticationStore.tokenExpiration) {
-      if (authenticationStore.refreshTokenExpiration && now < authenticationStore.refreshTokenExpiration) {
-        await authenticationStore.refreshJWTToken()
-      } else {
-        authenticationStore.clearAllFieldsInStore()
-        authenticationStore.clearAuthenticationStateFromLocalStore()
-        window.location.href = '/login'
-      }
-    }
+    const token = await useEnsureValidToken()
 
     const response = await fetch(`${API_URL}/get-personal-and-contact-information`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${authenticationStore.token}`
+        'Authorization': `Bearer ${token}`
       }
     })
 

@@ -52,7 +52,8 @@ namespace FindACoach.API.Controllers
                 UserName = registerDTO.Email,
                 EmailConfirmed = false,
                 IsCompleteProfileWindowVisible = true,
-                CompleteProfileWindowTitle = "You have successfully created the account"
+                CompleteProfileWindowTitle = "You have successfully created the account",
+                ImagePath = "default-profile-image.png"
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);

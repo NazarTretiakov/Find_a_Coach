@@ -1,27 +1,11 @@
-import { useAuthenticationStore } from "../../../stores/authentication";
 import { Form } from "../../../types/edit-personal-information/Form"
+import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
 export default async function useEditPersonalInformation(formData: Form): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
-  const authenticationStore = useAuthenticationStore()
-
   try {
-    const now = new Date()
-
-    if (authenticationStore.tokenExpiration && now > authenticationStore.tokenExpiration) {
-      if (authenticationStore.refreshTokenExpiration && now < authenticationStore.refreshTokenExpiration) {
-        await authenticationStore.refreshJWTToken()
-      } else {
-        authenticationStore.clearAllFieldsInStore()
-        authenticationStore.clearAuthenticationStateFromLocalStore()
-        window.location.href = '/login'
-      }
-    }
-
-    console.log(authenticationStore.token)
-
     const formDataToSend = new FormData();
 
     if (formData.profileImage) {
@@ -40,10 +24,12 @@ export default async function useEditPersonalInformation(formData: Form): Promis
       formDataToSend.append(`websites[${index}].type`, website.type);
     });
 
+    const token = await useEnsureValidToken()
+
     const response = await fetch(`${API_URL}/edit-personal-information`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${authenticationStore.token}`
+        'Authorization': `Bearer ${token}`
       },
       body: formDataToSend,
     })

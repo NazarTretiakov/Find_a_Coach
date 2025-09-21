@@ -1,30 +1,19 @@
-import { useAuthenticationStore } from "../../stores/authentication";
+import useEnsureValidToken from '../authentication/useEnsureValidToken'
 
 
 const API_URL = 'https://localhost:5058/api/completeProfileWindow/change-state';
 
 export default async function changeCompleteProfileWindowVisibility(): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
-  const authenticationStore = useAuthenticationStore()
 
   try {
-    const now = new Date()
-
-    if (authenticationStore.tokenExpiration && now > authenticationStore.tokenExpiration) {
-      if (authenticationStore.refreshTokenExpiration && now < authenticationStore.refreshTokenExpiration) {
-        await authenticationStore.refreshJWTToken()
-      } else {
-        authenticationStore.clearAllFieldsInStore()
-        authenticationStore.clearAuthenticationStateFromLocalStore()
-        window.location.href = '/login'
-      }
-    }
+    const token = await useEnsureValidToken()
 
     const response = await fetch(`${API_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': `Bearer ${authenticationStore.token}`
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
         isVisible: false,

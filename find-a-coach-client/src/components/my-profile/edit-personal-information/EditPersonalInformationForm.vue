@@ -1,5 +1,7 @@
 <template>
-  <div class="edit-personal-information">
+  <loading-square v-if="isLoading"></loading-square>
+
+  <div v-else class="edit-personal-information">
     <ul class="edit-personal-information-items">
       <li class="edit-personal-information-items_header">
         <h1 class="edit-personal-information-items_header-element">Edit personal information</h1>
@@ -36,7 +38,6 @@
         <span v-if="getError('location')" class="error-message">{{ getError('location') }}</span>
       </li>
 
-      
       <li class="edit-personal-information-items_edit-contact-information-header">
         <h1 class="edit-personal-information-items_edit-contact-information-header-element">Edit contact information</h1>
       </li>
@@ -103,6 +104,8 @@ import DropdownMenu from '../../input-fields/DropdownMenu.vue';
 import RemoveButton from '../../input-fields/RemoveButton.vue';
 import AddButton from '../../input-fields/AddButton.vue';
 import SaveButton from '../../input-fields/SaveButton.vue';
+import LoadingSquare from '../../LoadingSquare.vue'
+
 import type { Form } from '../../../types/edit-personal-information/Form'
 import type { Website } from '../../../types/edit-personal-information/Website'
 import type { ValidationError } from '../../../types/edit-personal-information/ValidationError'
@@ -118,10 +121,12 @@ export default defineComponent({
     DropdownMenu,
     RemoveButton,
     AddButton,
-    SaveButton
+    SaveButton,
+    LoadingSquare
   },
   setup() {
     const router = useRouter()
+    const isLoading = ref(true)
 
     const profileImage = ref<File | null>(null)
     const profileImagePreview = ref<string>('')
@@ -141,21 +146,13 @@ export default defineComponent({
     const formErrors = ref<ValidationError[]>([])
 
     onMounted(async () => {
-      const defaultUrl = new URL('../../../assets/images/icons/user-icon.jpg', import.meta.url).href
-      const response = await fetch(defaultUrl)
-      const blob = await response.blob()
-      const file = new File([blob], 'user-icon.jpg', { type: blob.type })
-      profileImage.value = file
-      formData.value.profileImage = file
-      profileImagePreview.value = URL.createObjectURL(file)
-
+      const startTime = performance.now()
 
       const result = await useGetPersonalAndContactInformation()
 
       if ("isSuccessful" in result) {
         if (!result.isSuccessful) {
-          const router = useRouter()
-          router.push("/error-page")  // TODO: redirect there to "unauthorized" page
+          router.push('/error-page')
         }
       } else {
         formData.value.firstName = result.firstName || ''
@@ -176,6 +173,17 @@ export default defineComponent({
           ? result.websites
           : []
         formData.value.websites = websites.value
+      }
+
+      const elapsed = performance.now() - startTime
+      const remaining = 500 - elapsed
+
+      if (remaining > 0) {
+        setTimeout(() => {
+          isLoading.value = false
+        }, remaining)
+      } else {
+        isLoading.value = false
       }
     })
 
@@ -219,8 +227,6 @@ export default defineComponent({
         } else {
           console.error(response.errorMessage)
         }
-
-        router.push('/my-profile')
       }
     }
 
@@ -228,7 +234,22 @@ export default defineComponent({
       return formErrors.value.find(error => error.fieldName === fieldName)?.errorMessage || ''
     }
 
-    return { formData, profileImage, profileImagePreview, fileInput, triggerFileInput, onFileChange, websites, addWebsite, removeWebsite, isAddButtonVisible, onSave, formErrors, getError }
+    return {
+      formData,
+      profileImage,
+      profileImagePreview,
+      fileInput,
+      triggerFileInput,
+      onFileChange,
+      websites,
+      addWebsite,
+      removeWebsite,
+      isAddButtonVisible,
+      onSave,
+      formErrors,
+      getError,
+      isLoading
+    }
   }
 })
 </script>

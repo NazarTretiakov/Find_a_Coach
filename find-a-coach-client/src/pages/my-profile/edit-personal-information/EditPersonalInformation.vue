@@ -1,9 +1,13 @@
-<template> 
-  <profile-sticky-header class="header"></profile-sticky-header>
+<template>
+  <div class="layout">
+    <profile-sticky-header class="header" />
 
-  <edit-personal-information-form></edit-personal-information-form>
+    <main class="content">
+      <edit-personal-information-form />
+    </main>
 
-  <the-footer></the-footer>
+    <the-footer class="footer" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,12 +22,26 @@ export default defineComponent({
     ProfileStickyHeader,
     EditPersonalInformationForm,
     TheFooter
-  },
+  }
 })
 </script>
 
 <style lang="scss" scoped>
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .header {
   z-index: 1;
+}
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  margin-top: auto;
 }
 </style>
