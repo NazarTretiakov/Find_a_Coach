@@ -3,9 +3,10 @@ import { useAuthenticationStore } from '../../stores/authentication'
 
 import type { AuthenticationStore } from '../../types/authentication/AuthenticationStore'
 import type { AuthenticationDTO } from '../../types/authentication/AuthenticationDTO'
+import { Result } from '@/types/Result'
 
 
-export default async function useRegistration(email: string, password: string): Promise<{ isSuccessful: boolean, errorMessage: string | null}> {
+export default async function useRegistration(email: string, password: string): Promise<Result> {
   const store: AuthenticationStore = useAuthenticationStore()
   
   const validationResult = useValidationOfAuthenticationData(email, password)

@@ -1,10 +1,9 @@
-﻿using FindACoach.Core.DTO;
-using FindACoach.Core.DTO.MyProfile;
+﻿using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.ServiceContracts.MyProfile;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace FindACoach.API.Controllers
+namespace FindACoach.API.Controllers.MyProfile
 {
     public class MyProfileController : CustomControllerBase
     {

@@ -1,10 +1,11 @@
-import { Form } from "../../../types/edit-personal-information/Form"
+import { Result } from "@/types/Result";
+import { Form } from "@/types/my-profile/personal-information/edit-personal-information/Form"
 import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useEditPersonalInformation(formData: Form): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+export default async function useEditPersonalInformation(formData: Form): Promise<Result> {
   try {
     const formDataToSend = new FormData();
 

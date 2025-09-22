@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace FindACoach.Core.DTO
+namespace FindACoach.Core.DTO.MyProfile
 {
     public class EditPersonalInformationDTO
     {

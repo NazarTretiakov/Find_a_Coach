@@ -1,4 +1,4 @@
-import type { Website } from '../edit-personal-information/Website'
+import type { Website } from '../../personal-information/edit-personal-information/Website'
 
 interface PersonalAndContactInformation {
   profileImageUrl: string;

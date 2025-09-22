@@ -1,7 +1,8 @@
 ﻿using FindACoach.Core.Domain.IdentityEntities;
-using FindACoach.Core.DTO;
+using FindACoach.Core.DTO.Authentication;
 using FindACoach.Core.Enums;
 using FindACoach.Core.ServiceContracts;
+using FindACoach.Core.ServiceContracts.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -110,13 +111,13 @@ namespace FindACoach.API.Controllers
         {
             if (userId == null || token == null)
             {
-                return BadRequest("Invalid parameters for email confirmation.");
+                return BadRequest(new { errorMessage = "Invalid parameters for email confirmation." });
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return BadRequest($"User with ID \"{userId}\" not found.");
+                return BadRequest(new { errorMessage = $"User with ID \"{userId}\" not found." });
             }
 
             byte[] decodedToken = WebEncoders.Base64UrlDecode(token);
@@ -150,7 +151,7 @@ namespace FindACoach.API.Controllers
             }
             else
             {
-                return BadRequest("Error confirming your email. The link is invalid or expired.");
+                return BadRequest(new { errorMessage = "Error confirming your email. The link is invalid or expired." });
             }
         }
 
@@ -160,13 +161,13 @@ namespace FindACoach.API.Controllers
             if (ModelState.IsValid == false)
             {
                 string errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-                return BadRequest(errorMessage);
+                return BadRequest(new { errorMessage = errorMessage });
             }
 
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
             if (user == null)
             {
-                return BadRequest("Invalid email or password.");
+                return BadRequest(new { errorMessage = "Invalid email or password."});
             }
 
             if (!user.EmailConfirmed)
@@ -182,7 +183,7 @@ namespace FindACoach.API.Controllers
 
                 await SendConfirmationEmail(user, confirmEmailUrl);
 
-                return BadRequest("You need to confirm your email before logging in.");
+                return BadRequest(new { errorMessage = "You need to confirm your email before logging in." });
             }
 
             var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
@@ -199,7 +200,7 @@ namespace FindACoach.API.Controllers
             }
             else
             {
-                return BadRequest("Invalid email or password");
+                return BadRequest(new { errorMessage = "Invalid email or password" });
             }
         }
 
@@ -229,7 +230,7 @@ namespace FindACoach.API.Controllers
             var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
             if (user == null)
             {
-                return BadRequest("User not found.");
+                return BadRequest(new { errorMessage = "User not found." });
             }
 
             var decodedToken = WebEncoders.Base64UrlDecode(resetPasswordDTO.Token);
@@ -251,7 +252,7 @@ namespace FindACoach.API.Controllers
             }
             else
             {
-                return BadRequest(result.Errors);
+                return BadRequest(new { errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)) });
             }
         }
 
@@ -278,14 +279,14 @@ namespace FindACoach.API.Controllers
         {
             if (tokenModel == null)
             {
-                return BadRequest("Invalid parameters for refreshing of JWT Token.");
+                return BadRequest(new { errorMessage = "Invalid parameters for refreshing of JWT Token." });
             }
 
             ClaimsPrincipal? principal = _jwtService.GetPrincipalFromJwtToken(tokenModel.JwtToken);
 
             if (principal == null)
             {
-                return BadRequest("Invalid jwt access token");
+                return BadRequest(new { errorMessage = "Invalid jwt access token" });
             }
 
             string? email = principal.FindFirstValue(ClaimTypes.Email);
@@ -299,7 +300,7 @@ namespace FindACoach.API.Controllers
 
             if (user.RefreshTokenExpirationDateTime <= DateTime.Now)
             {
-                return BadRequest("Session has expired. Please log in again.");
+                return BadRequest(new { errorMessage = "Session has expired. Please log in again." });
             }
 
             AuthenticationResponse authenticationResponse = await _jwtService.CreateJwtToken(user);

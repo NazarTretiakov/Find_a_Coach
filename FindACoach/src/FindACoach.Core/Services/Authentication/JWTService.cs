@@ -1,7 +1,7 @@
 ﻿using FindACoach.Core.Domain.IdentityEntities;
-using FindACoach.Core.DTO;
+using FindACoach.Core.DTO.Authentication;
 using FindACoach.Core.Enums;
-using FindACoach.Core.ServiceContracts;
+using FindACoach.Core.ServiceContracts.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace FindACoach.Core.Services
+namespace FindACoach.Core.Services.Authentication
 {
     public class JWTService: IJWTService
     {
@@ -47,7 +47,7 @@ namespace FindACoach.Core.Services
             };
 
 
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
 
             SigningCredentials signingCreadentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -80,7 +80,7 @@ namespace FindACoach.Core.Services
 
         private string GenerateRefreshToken()
         {
-            Byte[] bytes = new byte[64];
+            byte[] bytes = new byte[64];
 
             var randomNumber = RandomNumberGenerator.Create();
 

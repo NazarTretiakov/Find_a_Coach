@@ -2,9 +2,11 @@
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.ServiceContracts;
+using FindACoach.Core.ServiceContracts.Authentication;
 using FindACoach.Core.ServiceContracts.CompleteProfileWindow;
 using FindACoach.Core.ServiceContracts.MyProfile;
 using FindACoach.Core.Services;
+using FindACoach.Core.Services.Authentication;
 using FindACoach.Core.Services.CompleteProfileWindow;
 using FindACoach.Core.Services.MyProfile;
 using FindACoach.Infrastructure.DbContext;

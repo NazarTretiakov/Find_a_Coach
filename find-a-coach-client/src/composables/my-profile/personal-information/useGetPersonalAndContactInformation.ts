@@ -1,10 +1,11 @@
-import { PersonalAndContactInformation } from "@/types/my-profile/PersonalAndContactInformation"
+import { PersonalAndContactInformation } from "@/types/my-profile/personal-information/PersonalAndContactInformation"
 import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 import { config } from '@/config'
+import { Result } from "@/types/Result"
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetPersonalAndContactInformation(): Promise<PersonalAndContactInformation | { isSuccessful: boolean, errorMessage: string | null }> {
+export default async function useGetPersonalAndContactInformation(): Promise<PersonalAndContactInformation | Result> {
   try {
     const token = await useEnsureValidToken()
 
@@ -19,7 +20,7 @@ export default async function useGetPersonalAndContactInformation(): Promise<Per
       const responseData = await response.json();
       return {
         isSuccessful: false,
-        errorMessage: responseData.errorMessage || 'Unexpected error occured while getting personal information.',
+        errorMessage: responseData.title || 'Unexpected error occured while getting personal information.',
       }
     }
 

@@ -1,4 +1,4 @@
-﻿namespace FindACoach.Core.DTO
+﻿namespace FindACoach.Core.DTO.MyProfile
 {
     public class CompleteProfileWindowStateDTO
     {

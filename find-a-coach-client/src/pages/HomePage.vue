@@ -11,8 +11,8 @@
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
-import useChangeCompleteProfileWindowTitle from '../composables/complete-profile-window/useChangeCompleteProfileWindowTitle'
-import useChangeCompleteProfileWindowVisibility from '../composables/complete-profile-window/useChangeCompleteProfileWindowVisibility'
+import useChangeCompleteProfileWindowTitle from '../composables/my-profile/complete-profile-window/useChangeCompleteProfileWindowTitle'
+import useChangeCompleteProfileWindowVisibility from '../composables/my-profile/complete-profile-window/useChangeCompleteProfileWindowVisibility'
 
 import CompleteProfileWindow from '../components/homepage/CompleteProfileWindow.vue'
 import ReceiveReminderWindow from '../components/homepage/ReceiveReminderWindow.vue'

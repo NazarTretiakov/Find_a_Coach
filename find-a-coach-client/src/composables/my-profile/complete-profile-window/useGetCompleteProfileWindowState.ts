@@ -1,5 +1,5 @@
-import type { CompleteProfileWindowState } from "../../types/complete-profile-window-state/CompleteProfileWindowState"
-import useEnsureValidToken from '../authentication/useEnsureValidToken'
+import type { CompleteProfileWindowState } from "@/types/my-profile/complete-profile-window-state/CompleteProfileWindowState"
+import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 
 
 const API_URL = 'https://localhost:5058/api/completeProfileWindow/get-state'
@@ -21,7 +21,7 @@ export default async function useGetCompleteProfileWindowState(): Promise<Comple
       const responseData = await response.json()
       return {
         isSuccessful: false,
-        errorMessage: responseData.detail || 'Unexpected error occurred while getting "Complete profile" window state.'
+        errorMessage: responseData.title || 'Unexpected error occurred while getting "Complete profile" window state.'
       }
     }
 

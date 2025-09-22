@@ -1,9 +1,11 @@
-import useEnsureValidToken from '../authentication/useEnsureValidToken'
+import { Result } from '@/types/Result';
+import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 
 
 const API_URL = 'https://localhost:5058/api/completeProfileWindow/change-state';
 
-export default async function changeCompleteProfileWindowTitle(): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+export default async function changeCompleteProfileWindowVisibility(): Promise<Result> {
+
   try {
     const token = await useEnsureValidToken()
 
@@ -15,7 +17,7 @@ export default async function changeCompleteProfileWindowTitle(): Promise<{ isSu
         'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
-        isVisible: true,
+        isVisible: false,
         title: 'Welcome back'
       })
     })
@@ -24,7 +26,7 @@ export default async function changeCompleteProfileWindowTitle(): Promise<{ isSu
       const responseData = await response.json();
       return {
         isSuccessful: false,
-        errorMessage: responseData.detail || 'Unexpected error occured while changing "Complete profile" window title.',
+        errorMessage: responseData.errorMessage || 'Unexpected error occured while changing "Complete profile" window title.',
       }
     }
 

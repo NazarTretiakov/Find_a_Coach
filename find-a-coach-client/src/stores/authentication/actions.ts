@@ -1,11 +1,12 @@
 import { useAuthenticationStore } from './index';
 import type { AuthenticationDTO } from '../../types/authentication/AuthenticationDTO'
+import { Result } from '@/types/Result';
 import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/Authentication'
 
 export default {
-  async register(payload: AuthenticationDTO): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+  async register(payload: AuthenticationDTO): Promise<Result> {
     try {
       const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
@@ -39,7 +40,7 @@ export default {
     }
   },
 
-  async login(payload: AuthenticationDTO): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+  async login(payload: AuthenticationDTO): Promise<Result> {
     try {
       const authenticationStore = useAuthenticationStore()
 
@@ -79,7 +80,7 @@ export default {
     }
   },
 
-  async logout(): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+  async logout(): Promise<Result> {
     const authenticationStore = useAuthenticationStore()
 
     try {
@@ -124,7 +125,7 @@ export default {
     }
   },
 
-  async resendConfirmationEmail(email: string): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+  async resendConfirmationEmail(email: string): Promise<Result> {
     try {
       const response = await fetch(`${API_URL}/resend-confirmation-email?email=${encodeURIComponent(email)}`, {
         method: 'POST',
@@ -153,7 +154,7 @@ export default {
     }
   },
 
-  async sendForgotPasswordEmail(email: string): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+  async sendForgotPasswordEmail(email: string): Promise<Result> {
     try {
       const response = await fetch(`${API_URL}/forgot-password`, {
         method: 'POST',
@@ -168,7 +169,7 @@ export default {
         const responseData = await response.json()
         return {
           isSuccessful: false,
-          errorMessage: responseData.errorMessage || 'Error occurred while sending password reset request.',
+          errorMessage: responseData.message || 'Error occurred while sending password reset request.',
         }
       }
 
@@ -184,7 +185,7 @@ export default {
     }
   },
 
-  async resetPassword(email: string, token: string, newPassword: string): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+  async resetPassword(email: string, token: string, newPassword: string): Promise<Result> {
     const authenticationStore = useAuthenticationStore()
     
     try {
@@ -215,7 +216,7 @@ export default {
       if (!response.ok) {
         return {
           isSuccessful: false,
-          errorMessage: responseData.message || 'Failed to reset password.',
+          errorMessage: responseData.errorMessage || 'Failed to reset password.',
         }
       }
 
@@ -234,7 +235,7 @@ export default {
     }
   },
 
-  async refreshJWTToken(): Promise<{ isSuccessful: boolean, errorMessage: string | null }> {
+  async refreshJWTToken(): Promise<Result> {
     const authenticationStore = useAuthenticationStore()
 
     if (!authenticationStore.token || !authenticationStore.refreshToken) {

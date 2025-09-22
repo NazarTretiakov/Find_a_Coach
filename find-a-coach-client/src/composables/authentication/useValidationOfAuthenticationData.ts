@@ -1,4 +1,7 @@
-export default function useValidationOfAuthenticationData(email: string, password: string): { isSuccessful: boolean, errorMessage: string | null} {
+import { Result } from "@/types/Result"
+
+
+export default function useValidationOfAuthenticationData(email: string, password: string): Result {
   if (!isValidEmail(email)) {
     return { isSuccessful: false, errorMessage: 'Email is not in the correct format.' } 
   }

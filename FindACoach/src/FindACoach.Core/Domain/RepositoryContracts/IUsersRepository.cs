@@ -1,5 +1,4 @@
-﻿using FindACoach.Core.DTO;
-using FindACoach.Core.DTO.MyProfile;
+﻿using FindACoach.Core.DTO.MyProfile;
 
 namespace FindACoach.Core.Domain.RepositoryContracts
 {

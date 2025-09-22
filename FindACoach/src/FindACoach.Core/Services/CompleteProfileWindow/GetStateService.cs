@@ -1,5 +1,5 @@
 ﻿using FindACoach.Core.Domain.RepositoryContracts;
-using FindACoach.Core.DTO;
+using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.ServiceContracts.CompleteProfileWindow;
 namespace FindACoach.Core.Services.CompleteProfileWindow
 {

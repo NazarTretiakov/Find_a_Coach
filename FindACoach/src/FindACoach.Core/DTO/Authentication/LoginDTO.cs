@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FindACoach.Core.DTO
+namespace FindACoach.Core.DTO.Authentication
 {
-    public class RegisterDTO
+    public class LoginDTO
     {
         [Required(ErrorMessage = "Email can't be blank")]
         [EmailAddress(ErrorMessage = "Email is not in the proper email address format")]

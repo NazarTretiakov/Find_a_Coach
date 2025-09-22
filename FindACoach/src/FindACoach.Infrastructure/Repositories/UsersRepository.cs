@@ -1,7 +1,6 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
-using FindACoach.Core.DTO;
 using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;

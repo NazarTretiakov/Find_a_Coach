@@ -1,8 +1,8 @@
 ﻿using FindACoach.Core.Domain.IdentityEntities;
-using FindACoach.Core.DTO;
+using FindACoach.Core.DTO.Authentication;
 using System.Security.Claims;
 
-namespace FindACoach.Core.ServiceContracts
+namespace FindACoach.Core.ServiceContracts.Authentication
 {
     /// <summary>
     /// Represents the service for manipulating the JWT token.

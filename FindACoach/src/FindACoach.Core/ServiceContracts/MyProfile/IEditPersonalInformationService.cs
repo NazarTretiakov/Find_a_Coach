@@ -1,4 +1,4 @@
-﻿using FindACoach.Core.DTO;
+﻿using FindACoach.Core.DTO.MyProfile;
 
 namespace FindACoach.Core.ServiceContracts.MyProfile
 {
