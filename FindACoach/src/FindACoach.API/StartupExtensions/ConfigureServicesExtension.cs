@@ -39,7 +39,6 @@ namespace FindACoach.API.StartupExtensions
               .AddXmlSerializerFormatters();
 
 
-            //import services here
             services.AddScoped<IJWTService, JWTService>();
             services.AddScoped<IEmailSenderService, EmailSenderService>();
             services.AddScoped<IGetStateService, GetStateService>();
@@ -47,6 +46,8 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IEditPersonalInformationService, EditPersonalInformationService>();
             services.AddScoped<IGetPersonalInformationService, GetPersonalInformationService>();
             services.AddScoped<IGetPersonalAndContactInformationService, GetPersonalAndContactInformationService>();
+            services.AddScoped<IEditAboutMeService, EditAboutMeService>();
+            services.AddScoped<IGetAboutMeService, GetAboutMeService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
 

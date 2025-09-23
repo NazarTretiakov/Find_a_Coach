@@ -44,5 +44,20 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="userId">User id which personal information will be retrieved.</param>
         /// <returns>PersonalAndContactInformationToResponse object with personal and contact information of user.</returns>
         Task<PersonalAndContactInformationToResponse> GetPersonalAndContactInformation(string userId);
+
+        /// <summary>
+        /// Edits "About me" information of user.
+        /// </summary>
+        /// <param name="userId">Id of user which information will be changed.</param>
+        /// <param name="dto">DTO object with data to change information.</param>
+        /// <returns></returns>
+        Task EditAboutMe(string userId, AboutMeDTO dto);
+
+        /// <summary>
+        /// Retrieves "About me" information of user.
+        /// </summary>
+        /// <param name="userId">User id which information will be retrieved.</param>
+        /// <returns>AboutMeDTO object with information.</returns>
+        Task<AboutMeDTO> GetAboutMe(string userId);
     }
 }

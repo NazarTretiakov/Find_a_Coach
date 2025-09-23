@@ -1,6 +1,6 @@
-import { Form } from "../../../types/my-profile/personal-information/edit-personal-information/Form"
-import { Website } from "../../../types/my-profile/personal-information/edit-personal-information/Website"
-import { ValidationError } from "../../../types/my-profile/personal-information/edit-personal-information/ValidationError"
+import { Form } from "../../../../types/my-profile/personal-information/edit-personal-information/Form"
+import { Website } from "../../../../types/my-profile/personal-information/edit-personal-information/Website"
+import { ValidationError } from "../../../../types/my-profile/personal-information/edit-personal-information/ValidationError"
 
 
 export default function useValidationOfForm(formData: Form): ValidationError[] {

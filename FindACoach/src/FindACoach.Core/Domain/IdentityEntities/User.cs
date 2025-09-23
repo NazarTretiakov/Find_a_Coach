@@ -1,4 +1,5 @@
 ﻿using FindACoach.Core.Domain.Entities;
+using FindACoach.Core.DTO.MyProfile;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -39,6 +40,8 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         [StringLength(9, MinimumLength = 9)]
         public string Phone { get; set; } = string.Empty;
+
+        public string AboutMe { get; set; } = string.Empty;
 
         public ICollection<Website> Websites { get; set; } = new List<Website>();
 

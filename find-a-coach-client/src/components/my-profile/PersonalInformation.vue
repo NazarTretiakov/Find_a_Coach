@@ -40,7 +40,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue"
 import AddProfileSectionButton from "./AddProfileSectionButton.vue"
-import type { PersonalInformation } from "../../types/my-profile/PersonalInformation"
+import type { PersonalInformation } from "@/types/my-profile/personal-information/PersonalInformation"
 import useGetPersonalInformation from "../../composables/my-profile/personal-information/useGetPersonalInformation"
 import { useRouter } from "vue-router"
 

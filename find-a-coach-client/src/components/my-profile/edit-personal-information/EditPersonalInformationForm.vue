@@ -98,19 +98,19 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 
-import InputField from "../../input-fields/InputField.vue";
-import TextInputArea from '../../input-fields/TextInputArea.vue';
-import DropdownMenu from '../../input-fields/DropdownMenu.vue';
-import RemoveButton from '../../input-fields/RemoveButton.vue';
-import AddButton from '../../input-fields/AddButton.vue';
-import SaveButton from '../../input-fields/SaveButton.vue';
+import InputField from "../../input-fields/InputField.vue"
+import TextInputArea from '../../input-fields/TextInputArea.vue'
+import DropdownMenu from '../../input-fields/DropdownMenu.vue'
+import RemoveButton from '../../input-fields/RemoveButton.vue'
+import AddButton from '../../input-fields/AddButton.vue'
+import SaveButton from '../../input-fields/SaveButton.vue'
 import LoadingSquare from '../../LoadingSquare.vue'
 
-import type { Form } from '../../../types/edit-personal-information/Form'
-import type { Website } from '../../../types/edit-personal-information/Website'
-import type { ValidationError } from '../../../types/edit-personal-information/ValidationError'
-import useValidationOfForm from '../../../composables/my-profile/edit-personal-information/useValidationOfForm'
-import useEditPersonalInformation from '../../../composables/my-profile/edit-personal-information/useEditPersonalInformation'
+import type { Form } from '@/types/my-profile/personal-information/edit-personal-information/Form'
+import type { Website } from '@/types/my-profile/personal-information/edit-personal-information/Website'
+import type { ValidationError } from '@/types/my-profile/personal-information/edit-personal-information/ValidationError'
+import useValidationOfForm from '../../../composables/my-profile/personal-information/edit-personal-information/useValidationOfForm'
+import useEditPersonalInformation from '../../../composables/my-profile/personal-information/edit-personal-information/useEditPersonalInformation'
 import useGetPersonalAndContactInformation from "../../../composables/my-profile/personal-information/useGetPersonalAndContactInformation"
 import { useRouter } from 'vue-router'
 
@@ -126,7 +126,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
-    const isLoading = ref(true)
+    const isLoading = ref<boolean>(true)
 
     const profileImage = ref<File | null>(null)
     const profileImagePreview = ref<string>('')
@@ -162,12 +162,8 @@ export default defineComponent({
         formData.value.location = result.location || ''
         formData.value.phone = result.phone || ''
 
-        const imageResponse = await fetch(result.profileImageUrl)
-        const imageBlob = await imageResponse.blob()
-        const imageFile = new File([imageBlob], 'profile.jpg', { type: imageBlob.type })
-        profileImage.value = imageFile
-        formData.value.profileImage = imageFile
-        profileImagePreview.value = URL.createObjectURL(imageFile)
+
+        profileImagePreview.value = result.profileImageUrl
 
         websites.value = result.websites && Array.isArray(result.websites)
           ? result.websites
@@ -224,8 +220,6 @@ export default defineComponent({
 
         if (response.isSuccessful) {
           router.push('/my-profile')
-        } else {
-          console.error(response.errorMessage)
         }
       }
     }

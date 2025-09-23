@@ -1,6 +1,6 @@
 import { Result } from "@/types/Result";
 import { Form } from "@/types/my-profile/personal-information/edit-personal-information/Form"
-import useEnsureValidToken from '../../authentication/useEnsureValidToken'
+import useEnsureValidToken from '../../../authentication/useEnsureValidToken'
 import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'

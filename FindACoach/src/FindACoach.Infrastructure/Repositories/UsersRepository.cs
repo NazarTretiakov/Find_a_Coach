@@ -67,14 +67,7 @@ namespace FindACoach.Infrastructure.Repositories
                 });
             }
 
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            await _db.SaveChangesAsync();
         }
 
         private async Task<string> ChangeProfileImage(User activeUser, IFormFile image)
@@ -194,5 +187,20 @@ namespace FindACoach.Infrastructure.Repositories
 
             return personalInformation;
         }
-    }
+
+        public async Task<AboutMeDTO> GetAboutMe(string userId)
+        {
+            User user =  await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            return new AboutMeDTO() { AboutMe = user.AboutMe };
+        }
+
+        public async Task EditAboutMe(string userId, AboutMeDTO dto)
+        {
+            User user = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+            user.AboutMe = dto.AboutMe;
+
+            await _db.SaveChangesAsync();
+        }
+    }   
 }

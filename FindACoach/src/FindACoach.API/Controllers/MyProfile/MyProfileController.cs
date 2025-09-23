@@ -10,12 +10,16 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IEditPersonalInformationService _editPersonalInformationService;
         private readonly IGetPersonalInformationService _getPersonalInformationService;
         private readonly IGetPersonalAndContactInformationService _getPersonalAndContactInformationService;
+        private readonly IEditAboutMeService _editAboutMeService;
+        private readonly IGetAboutMeService _getAboutMeService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService)
         {
             _editPersonalInformationService = editPersonalInformationService;
             _getPersonalInformationService = getPersonalInformationService;
             _getPersonalAndContactInformationService = getPersonalAndContactInformationService;
+            _getAboutMeService = getAboutMeService;
+            _editAboutMeService = editAboutMeService;
         }
 
         [HttpPost("edit-personal-information")]
@@ -53,6 +57,33 @@ namespace FindACoach.API.Controllers.MyProfile
             PersonalAndContactInformationToResponse personalInformation = await _getPersonalAndContactInformationService.GetPersonalAndContactInformation(userId);
 
             return Ok(personalInformation);
+        }
+
+        [HttpPost("edit-about-me")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> EditAboutMe([FromForm] AboutMeDTO dto)
+        {
+            if (ModelState.IsValid == false)
+            {
+                string errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                return BadRequest(new { errorMessage = errorMessage });
+            }
+
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            await _editAboutMeService.EditAboutMe(userId, dto);
+
+            return Ok();
+        }
+
+        [HttpGet("get-about-me")]
+        public async Task<ActionResult<AboutMeDTO>> GetAboutMe()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            AboutMeDTO aboutMe = await _getAboutMeService.GetAboutMe(userId);
+
+            return Ok(aboutMe);
         }
     }
 }
