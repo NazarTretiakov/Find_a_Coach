@@ -5,10 +5,12 @@ using FindACoach.Core.ServiceContracts;
 using FindACoach.Core.ServiceContracts.Authentication;
 using FindACoach.Core.ServiceContracts.CompleteProfileWindow;
 using FindACoach.Core.ServiceContracts.MyProfile;
+using FindACoach.Core.ServiceContracts.MyProfile.Activities;
 using FindACoach.Core.Services;
 using FindACoach.Core.Services.Authentication;
 using FindACoach.Core.Services.CompleteProfileWindow;
 using FindACoach.Core.Services.MyProfile;
+using FindACoach.Core.Services.MyProfile.Activities;
 using FindACoach.Infrastructure.DbContext;
 using FindACoach.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,8 +50,10 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IGetPersonalAndContactInformationService, GetPersonalAndContactInformationService>();
             services.AddScoped<IEditAboutMeService, EditAboutMeService>();
             services.AddScoped<IGetAboutMeService, GetAboutMeService>();
+            services.AddScoped<IAddActivityService, AddActivityService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IActivitiesRepository, ActivitiesRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

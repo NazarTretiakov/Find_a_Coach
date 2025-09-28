@@ -30,7 +30,7 @@ namespace FindACoach.Core.DTO.MyProfile
         [Phone(ErrorMessage = "Invalid phone number format.")]
         public string Phone { get; set; } = string.Empty;
 
-        public List<WebsiteDTO> Websites { get; set; } = new();
+        public List<WebsiteDTO> Websites { get; set; } = new List<WebsiteDTO>();
     }
 
     public class WebsiteDTO

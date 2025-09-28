@@ -4,6 +4,7 @@ using FindACoach.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindACoach.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250926091230_CreatedTablesRelatedToActivitiesFunctionality")]
+    partial class CreatedTablesRelatedToActivitiesFunctionality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -469,12 +472,12 @@ namespace FindACoach.Infrastructure.Migrations
                     b.Property<Guid>("PanelsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PreferredSkillsId")
+                    b.Property<Guid>("PrefferedSkillsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PanelsId", "PreferredSkillsId");
+                    b.HasKey("PanelsId", "PrefferedSkillsId");
 
-                    b.HasIndex("PreferredSkillsId");
+                    b.HasIndex("PrefferedSkillsId");
 
                     b.ToTable("SearchPersonPanelSkill");
                 });
@@ -671,7 +674,7 @@ namespace FindACoach.Infrastructure.Migrations
 
                     b.HasOne("FindACoach.Core.Domain.Entities.Skill", null)
                         .WithMany()
-                        .HasForeignKey("PreferredSkillsId")
+                        .HasForeignKey("PrefferedSkillsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -1,6 +1,6 @@
 interface Panel {
   nameOfPosition: string;
-  prefferedSkills: string;
+  preferredSkills: string;
   payment: string;
   description: string;
 }

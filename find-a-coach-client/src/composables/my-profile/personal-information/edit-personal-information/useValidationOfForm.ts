@@ -1,6 +1,6 @@
 import { Form } from "../../../../types/my-profile/personal-information/edit-personal-information/Form"
 import { Website } from "../../../../types/my-profile/personal-information/edit-personal-information/Website"
-import { ValidationError } from "../../../../types/my-profile/personal-information/edit-personal-information/ValidationError"
+import { ValidationError } from "../../../../types/ValidationError"
 
 
 export default function useValidationOfForm(formData: Form): ValidationError[] {

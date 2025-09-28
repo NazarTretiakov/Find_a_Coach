@@ -108,7 +108,7 @@ import LoadingSquare from '../../LoadingSquare.vue'
 
 import type { Form } from '@/types/my-profile/personal-information/edit-personal-information/Form'
 import type { Website } from '@/types/my-profile/personal-information/edit-personal-information/Website'
-import type { ValidationError } from '@/types/my-profile/personal-information/edit-personal-information/ValidationError'
+import type { ValidationError } from '@/types/ValidationError'
 import useValidationOfForm from '../../../composables/my-profile/personal-information/edit-personal-information/useValidationOfForm'
 import useEditPersonalInformation from '../../../composables/my-profile/personal-information/edit-personal-information/useEditPersonalInformation'
 import useGetPersonalAndContactInformation from "../../../composables/my-profile/personal-information/useGetPersonalAndContactInformation"

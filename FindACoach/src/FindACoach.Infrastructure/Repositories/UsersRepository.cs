@@ -77,7 +77,7 @@ namespace FindACoach.Infrastructure.Repositories
                 return "default-profile-image.png";
             }
 
-            string profileImagesFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "ProfileImages");
+            string profileImagesFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "UserProfiles");
             string oldProfileImagePath = Path.Combine(profileImagesFolder, activeUser.ImagePath);
 
             if (File.Exists(oldProfileImagePath) && activeUser.ImagePath != "default-profile-image.png")
@@ -132,7 +132,7 @@ namespace FindACoach.Infrastructure.Repositories
 
             PersonalInformationToResponse personalInformation = new PersonalInformationToResponse()
             {
-                ProfileImageUrl = $"{serverUrl}/Images/ProfileImages/{activeUser.ImagePath}",
+                ProfileImageUrl = $"{serverUrl}/Images/UserProfiles/{activeUser.ImagePath}",
                 FirstName = activeUser.FirstName,
                 LastName = activeUser.LastName,
                 PrimaryOccupation = activeUser.PrimaryOccupation,
@@ -171,7 +171,7 @@ namespace FindACoach.Infrastructure.Repositories
 
             PersonalAndContactInformationToResponse personalInformation = new PersonalAndContactInformationToResponse()
             {
-                ProfileImageUrl = $"{serverUrl}/Images/ProfileImages/{activeUser.ImagePath}",
+                ProfileImageUrl = $"{serverUrl}/Images/UserProfiles/{activeUser.ImagePath}",
                 FirstName = activeUser.FirstName,
                 LastName = activeUser.LastName,
                 PrimaryOccupation = activeUser.PrimaryOccupation,
