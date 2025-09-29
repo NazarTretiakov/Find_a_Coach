@@ -12,10 +12,13 @@
           </li>
         </ul>
       </li>
-      <li class="activities-section-items_activities">
-        <event-card></event-card>
+      <li v-if="activityCards.length == 1" class="activities-section-items_activities">
+        <event-card :activity="activityCards[0]" />
+      </li>
+      <li v-if="activityCards.length == 2" class="activities-section-items_activities">
+        <event-card :activity="activityCards[0]" />
         <div class="activities-section-items_activities-divider"></div>
-        <event-card></event-card>
+        <event-card :activity="activityCards[1]" />
       </li>
     </ul>
     <router-link class="activities-section-items_show-all-activities-link" to="/my-profile/activities">
@@ -28,13 +31,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
-import EventCard from './EventCard.vue';
+import EventCard from './ActivityCard.vue';
+
+import { useRouter } from 'vue-router'
+import useGetActivityCards from '@/composables/my-profile/activities/useGetActivityCards'
+import type { ActivityCard } from '@/types/my-profile/activities/ActivityCard'
 
 export default defineComponent({
   components: {
     EventCard
+  },
+  setup() {
+    const activityCards = ref<ActivityCard[]>([])
+    const router = useRouter()
+
+    onMounted(async () => {
+      const result = await useGetActivityCards()
+
+      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        activityCards.value = result
+      }
+    })
+
+    return { activityCards }
   }
 })
 </script>

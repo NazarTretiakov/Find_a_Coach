@@ -5,6 +5,7 @@ using FindACoach.Core.DTO.MyProfile.Activities;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
@@ -173,6 +174,33 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.Surveys.AddAsync(userSurvey);
 
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<List<ActivityCardToResponse>> GetLastTwoActivities(string userId)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+            var lastTwoActivities = await _db.Activities
+                .Where(a => a.UserId == Guid.Parse(userId))
+                .OrderByDescending(a => a.CreatedAt)
+                .Take(2)
+                .Select(a => new ActivityCardToResponse
+                {
+                    Id = a.Id,
+                    ImageNameOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                    FirstNameOfCreator = a.User.FirstName,
+                    LastNameOfCreator = a.User.LastName,
+                    PublicationDate = a.CreatedAt,
+                    Title = a.Title,
+                    Description = a.Description,
+                    ActivityType = a is Event ? "Event" :
+                                   a is Survey ? "Survey" :
+                                   a is QA ? "QA" :
+                                   a is Post ? "Post" :
+                                   "Unknown"
+                                   })
+                .ToListAsync();
+
+            return lastTwoActivities;
         }
 
         private async Task<string> AddActivityImage(IFormFile image)

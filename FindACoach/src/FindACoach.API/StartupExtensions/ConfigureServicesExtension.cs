@@ -51,6 +51,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IEditAboutMeService, EditAboutMeService>();
             services.AddScoped<IGetAboutMeService, GetAboutMeService>();
             services.AddScoped<IAddActivityService, AddActivityService>();
+            services.AddScoped<IActivitiesGetterService, ActivitiesGetterService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IActivitiesRepository, ActivitiesRepository>();

@@ -1,6 +1,6 @@
-import type { Form } from '@/types/my-profile/add-activity/Form'
+import type { Form } from '@/types/my-profile/activities/add-activity/Form'
 import type { ValidationError } from '@/types/ValidationError'
-import type { Panel } from '@/types/my-profile/add-activity/Panel'
+import type { Panel } from '@/types/my-profile/activities/add-activity/Panel'
 
 export default function useValidationOfActivityForm(formData: Form): ValidationError[] {
   const errors: ValidationError[] = []
@@ -19,13 +19,11 @@ export default function useValidationOfActivityForm(formData: Form): ValidationE
     errors.push({ fieldName: 'activityType', errorMessage: 'Activity type is required.' })
   }
 
-  if (formData.activityType == 'post' || formData.activityType == 'qa') {
-    if (!formData.description) {
-      errors.push({ fieldName: 'description', errorMessage: 'Description is required.' })
-    }
-    if (!isValidDescription(formData.description)) {
-      errors.push({ fieldName: 'description', errorMessage: 'Panel description must not be longer than 200 characters.' })
-    }
+  if (!formData.description) {
+    errors.push({ fieldName: 'description', errorMessage: 'Description is required.' })
+  }
+  if (!isValidDescription(formData.description)) {
+    errors.push({ fieldName: 'description', errorMessage: 'Panel description must not be longer than 200 characters.' })
   }
 
   for (let i = 0; i < formData.subjects.length; i++) {

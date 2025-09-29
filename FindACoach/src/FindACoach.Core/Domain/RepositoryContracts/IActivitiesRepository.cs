@@ -38,5 +38,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="dto">Data Transfer Object with data of post to add.</param>
         /// <returns></returns>
         Task AddPost(string userId, PostDTO dto);
+
+        /// <summary>
+        /// Retrieves two last activities of user.
+        /// </summary>
+        /// <param name="userId">User id which activities will be retrieved.</param>
+        /// <returns>ActivityCardToResponse object with data of activity.</returns>
+        Task<List<ActivityCardToResponse>> GetLastTwoActivities(string userId);
     }
 }

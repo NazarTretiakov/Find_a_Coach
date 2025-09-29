@@ -1,5 +1,7 @@
 ﻿using FindACoach.Core.DTO.MyProfile;
+using FindACoach.Core.DTO.MyProfile.Activities;
 using FindACoach.Core.ServiceContracts.MyProfile;
+using FindACoach.Core.ServiceContracts.MyProfile.Activities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,14 +14,16 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IGetPersonalAndContactInformationService _getPersonalAndContactInformationService;
         private readonly IEditAboutMeService _editAboutMeService;
         private readonly IGetAboutMeService _getAboutMeService;
+        private readonly IActivitiesGetterService _activitiesGetterService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService)
         {
             _editPersonalInformationService = editPersonalInformationService;
             _getPersonalInformationService = getPersonalInformationService;
             _getPersonalAndContactInformationService = getPersonalAndContactInformationService;
             _getAboutMeService = getAboutMeService;
             _editAboutMeService = editAboutMeService;
+            _activitiesGetterService = activitiesGetterService;
         }
 
         [HttpPost("edit-personal-information")]
@@ -84,6 +88,16 @@ namespace FindACoach.API.Controllers.MyProfile
             AboutMeDTO aboutMe = await _getAboutMeService.GetAboutMe(userId);
 
             return Ok(aboutMe);
+        }
+
+        [HttpGet("get-last-two-activities")]
+        public async Task<ActionResult<List<ActivityCardToResponse>>> GetLastTwoActivities()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            List<ActivityCardToResponse> activities = await _activitiesGetterService.GetLastTwoActivities(userId);
+
+            return Ok(activities);
         }
     }
 }

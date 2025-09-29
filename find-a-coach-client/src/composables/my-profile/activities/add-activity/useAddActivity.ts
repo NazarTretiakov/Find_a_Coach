@@ -1,5 +1,5 @@
 import { Result } from "@/types/Result"
-import { Form } from "@/types/my-profile/add-activity/Form"
+import { Form } from "@/types/my-profile/activities/add-activity/Form"
 import useEnsureValidToken from '../../../authentication/useEnsureValidToken'
 import { config } from '@/config'
 
