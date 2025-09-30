@@ -5,7 +5,7 @@
         <li class="event-items_header">
           <ul class="event-items_header-items">
             <li class="event-items_header-items_user">
-              <img :src="activity.imageNameOfCreator" alt="User profile image" class="event-items_header-items_user-icon">
+              <img :src="activity.imagePathOfCreator" alt="User profile image" class="event-items_header-items_user-icon">
               <h1 class="event-items_header-items_user-name">{{ activity.firstNameOfCreator }} {{ activity.lastNameOfCreator }}</h1>
             </li>
             <li class="event-items_header-items_date-of-publication">

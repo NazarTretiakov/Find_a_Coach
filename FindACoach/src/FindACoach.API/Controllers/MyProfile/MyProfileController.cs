@@ -99,5 +99,16 @@ namespace FindACoach.API.Controllers.MyProfile
 
             return Ok(activities);
         }
+
+        [HttpGet("get-activities-list")]
+        public async Task<ActionResult<List<ActivityForActivitiesListToResponse>>> GetActivitiesList(int page = 1, int pageSize = 7)
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            List<ActivityForActivitiesListToResponse> activities =
+                await _activitiesGetterService.GetActivitiesPaged(userId, page, pageSize);
+
+            return Ok(activities);
+        }
     }
 }

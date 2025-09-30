@@ -176,9 +176,41 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
+        public async Task<List<ActivityForActivitiesListToResponse>> GetActivitiesPaged(string userId, int page, int pageSize)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var userActivities = await _db.Activities
+                .Where(a => a.UserId == Guid.Parse(userId))
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new ActivityForActivitiesListToResponse
+                {
+                    Id = a.Id,
+                    ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                    FirstNameOfCreator = a.User.FirstName,
+                    LastNameOfCreator = a.User.LastName,
+                    PublicationDate = a.CreatedAt,
+                    Title = a.Title,
+                    Subjects = a.Subjects.Select(s => s.Title).ToList(),
+                    ImagePath = string.IsNullOrEmpty(a.ImagePath) ? null : $"{serverUrl}/Images/Activities/{a.ImagePath}",
+                    Description = a.Description,
+                    ActivityType = a is Event ? "Event" :
+                                   a is Survey ? "Survey" :
+                                   a is QA ? "QA" :
+                                   a is Post ? "Post" :
+                                   "Unknown"
+                })
+                .ToListAsync();
+
+            return userActivities;
+        }
+
         public async Task<List<ActivityCardToResponse>> GetLastTwoActivities(string userId)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
             var lastTwoActivities = await _db.Activities
                 .Where(a => a.UserId == Guid.Parse(userId))
                 .OrderByDescending(a => a.CreatedAt)
@@ -186,7 +218,7 @@ namespace FindACoach.Infrastructure.Repositories
                 .Select(a => new ActivityCardToResponse
                 {
                     Id = a.Id,
-                    ImageNameOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                    ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
                     FirstNameOfCreator = a.User.FirstName,
                     LastNameOfCreator = a.User.LastName,
                     PublicationDate = a.CreatedAt,
@@ -220,7 +252,7 @@ namespace FindACoach.Infrastructure.Repositories
             {
                 imageResult.Mutate(x => x.Resize(new ResizeOptions
                 {
-                    Size = new Size(560, 560),
+                    Size = new Size(560, 280),
                     Mode = ResizeMode.Crop
                 }));
 
