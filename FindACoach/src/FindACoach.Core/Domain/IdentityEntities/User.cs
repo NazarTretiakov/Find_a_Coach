@@ -1,4 +1,5 @@
 ﻿using FindACoach.Core.Domain.Entities;
+using FindACoach.Core.Domain.Entities.Activity;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -49,5 +50,12 @@ namespace FindACoach.Core.Domain.IdentityEntities
         public ICollection<Entities.Activity.Activity> Activities { get; set; } = new List<Entities.Activity.Activity>();
 
         public ICollection<Skill> Skills { get; set; } = new List<Skill>();
+
+        public ICollection<Like> Likes { get; set; } = new List<Like>();
+        
+        public ICollection<Save> Saves { get; set; } = new List<Save>();
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     }
 }

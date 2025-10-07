@@ -1,58 +1,60 @@
-<template> 
-  <div class="event">
+<template>
+  <loading-square v-if="isLoading"></loading-square>
+
+  <div v-else class="event">
     <ul class="event-header">
       <li class="event-header_user-info">
-        <router-link to="/user-profile" class="event-header_user-info-link">
-          <img class="event-header_user-info-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
-          <span class="event-header_user-info-user-name">Janusz Kowalski</span>
+        <router-link :to="`/user-profile/${event.userId}`" class="event-header_user-info-link">
+          <img class="event-header_user-info-profile-image" :src="event.userImagePath" alt="User profile image">
+          <span class="event-header_user-info-user-name">{{ event.userFirstName }} {{ event.userLastName }}</span>
         </router-link>  
       </li>
       <li class="event-header_publication-time">
-        <span class="event-header_publication-time-element">2 days ago</span>
+        <span class="event-header_publication-time-element">{{ formatDate(event.createdAt) }}</span>
       </li>
     </ul>
-    <h1 class="event-title">Starting an store checking project</h1>
-    <span class="event-subjects">Logistics, Business, Marketing</span>
-    <img class="event-image" src="../../../assets/images/activities-image.jpeg" alt="Image of the event">
-    <h3 class="event-searching-for">Searching for two people:</h3>
-    <div :class="!isPositionPanelOpened[0] ? 'event-position' : 'event-position-opened'">
-      <ul :class="!isPositionPanelOpened[0] ? 'event-position-header' : 'event-position-opened-header'">
-        <li :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../assets/images/icons/position-icon.svg" alt="Position icon">
-          <span :class="!isPositionPanelOpened[0] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
+
+    <h1 class="event-title">{{ event.title }}</h1>
+    <span class="event-subjects">{{ event.subjects.join(', ') }}</span>
+
+    <img v-if="event.imagePath" class="event-image" :src="event.imagePath" alt="Image of the event">
+
+    <h3 v-if="event.searchPersonPanels.length == 1" class="event-searching-for">
+      Searching for {{ event.searchPersonPanels.length }} person:
+    </h3>
+    <h3 v-if="event.searchPersonPanels.length > 1" class="event-searching-for">
+      Searching for {{ event.searchPersonPanels.length }} people:
+    </h3>
+
+    <div v-for="(panel, index) in event.searchPersonPanels" :key="panel.id" :class="!isPositionPanelOpened[index] ? 'event-position' : 'event-position-opened'">
+      <ul :class="!isPositionPanelOpened[index] ? 'event-position-header' : 'event-position-opened-header'">
+        <li :class="!isPositionPanelOpened[index] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
+          <img :class="!isPositionPanelOpened[index] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="@/assets/images/icons/position-icon.svg" alt="Position icon">
+          <span :class="!isPositionPanelOpened[index] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">{{ panel.positionName }}</span>
         </li>
-        <li :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(0)" :class="!isPositionPanelOpened[0] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
+        <li :class="!isPositionPanelOpened[index] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
+          <img @click="triggerPositionPanelOpening(index)" :class="!isPositionPanelOpened[index] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="@/assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
         </li>
       </ul>
-      <the-skills :class="!isPositionPanelOpened[0] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
-      <span :class="!isPositionPanelOpened[0] ? 'event-position-payment' : 'event-position-opened-payment'">Payment: Unpaid</span>
-      <p :class="!isPositionPanelOpened[0] ? 'event-position-description' : 'event-position-opened-description'">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
-      <apply-on-event-button :class="!isPositionPanelOpened[0] ? 'event-position-button' : 'event-position-opened-button'"></apply-on-event-button>
+
+      <the-skills v-if="panel.preferredSkills && panel.preferredSkills.length > 0" :skills="panel.preferredSkills" :class="!isPositionPanelOpened[index] ? 'event-position-skills' : 'event-position-opened-skills'" />
+
+      <span :class="!isPositionPanelOpened[index] ? 'event-position-payment' : 'event-position-opened-payment'">Payment: {{ panel.payment || 'Unpaid' }}</span>
+
+      <p :class="!isPositionPanelOpened[index] ? 'event-position-description' : 'event-position-opened-description'">{{ panel.description }}</p>
+
+      <apply-on-event-button :class="!isPositionPanelOpened[index] ? 'event-position-button' : 'event-position-opened-button'" />
     </div>
 
-    <div :class="!isPositionPanelOpened[1] ? 'event-position' : 'event-position-opened'">
-      <ul :class="!isPositionPanelOpened[1] ? 'event-position-header' : 'event-position-opened-header'">
-        <li :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side' : 'event-position-opened-header_left-side'">
-          <img :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-icon' : 'event-position-opened-header_left-side-icon'" src="../../../assets/images/icons/position-icon.svg" alt="Position icon">
-          <span :class="!isPositionPanelOpened[1] ? 'event-position-header_left-side-name' : 'event-position-opened-header_left-side-name'">Logistics coordinator</span>
-        </li>
-        <li :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side' : 'event-position-opened-header_right-side'">
-          <img @click="triggerPositionPanelOpening(1)" :class="!isPositionPanelOpened[1] ? 'event-position-header_right-side-arrow-icon' : 'event-position-opened-header_right-side-arrow-icon'" src="../../../assets/images/icons/arrow-down-icon.svg" alt="Arrow down icon">
-        </li>
-      </ul>
-      <the-skills :class="!isPositionPanelOpened[1] ? 'event-position-skills' : 'event-position-opened-skills'"></the-skills>
-      <span :class="!isPositionPanelOpened[1] ? 'event-position-payment' : 'event-position-opened-payment'">Payment: Unpaid</span>
-      <p :class="!isPositionPanelOpened[1] ? 'event-position-description' : 'event-position-opened-description'">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
-      <apply-on-event-button :class="!isPositionPanelOpened[1] ? 'event-position-button' : 'event-position-opened-button'"></apply-on-event-button>
-    </div>
-    <span class="event-date-of-beginning">Date of beginning: 14 august 2022</span>
-    <p class="event-description">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
+    <span class="event-date-of-beginning">Date of beginning: {{ formatDate(event.beginningDate) }}</span>
+    <p class="event-description">{{ event.description }}</p>
+
     <h2 class="event-comments-header">Comments</h2>
     <ul class="event-create-comment-bar">
       <li class="event-create-comment-bar_left-side">
-        <input class="event-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment...">
-        <svg class="event-create-comment-bar_left-side-icon"
+        <input class="event-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment..." v-model="inputFieldAddCommentContent">
+        <svg @click="createComment" 
+          class="event-create-comment-bar_left-side-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -62,18 +64,18 @@
       </li>
       <li class="event-create-comment-bar_right-side">
         <div class="event-create-comment-bar_right-side-like">
-          <img @click="triggerLike" v-if="!isLiked" class="event-create-comment-bar_right-side-like-icon" src="../../../assets/images/icons/like-icon.svg" alt="Like icon">
-          <svg @click="triggerLike" v-if="isLiked"  class="event-create-comment-bar_right-side-like-icon"
+          <img @click="toggleLike" v-if="!event.isLiked" class="event-create-comment-bar_right-side-like-icon" src="../../../assets/images/icons/like-icon.svg" alt="Like icon">
+          <svg @click="toggleLike" v-if="event.isLiked"  class="event-create-comment-bar_right-side-like-icon"
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
             width="30px"
             viewBox="0 -960 960 960">
             <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52" fill="red" />
           </svg>
-          <span class="event-create-comment-bar_right-side-like-amount">123</span>
+          <span class="event-create-comment-bar_right-side-like-amount">{{ event.numberOfLikes }}</span>
         </div>
-        <img @click="triggerSave" v-if="!isSaved" class="event-create-comment-bar_right-side-save-icon" src="../../../assets/images/icons/save-icon.svg" alt="Save icon">
-        <svg @click="triggerSave" v-else class="event-create-comment-bar_right-side-save-icon"
+        <img @click="toggleSave" v-if="!event.isSaved" class="event-create-comment-bar_right-side-save-icon" src="../../../assets/images/icons/save-icon.svg" alt="Save icon">
+        <svg @click="toggleSave" v-else class="event-create-comment-bar_right-side-save-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -83,68 +85,194 @@
       </li>
     </ul>
     <ul class="event-comments">
-      <li class="event-comments_comment">
+      <li v-for="(comment, index) in event.comments" :key="comment.commentId" class="event-comments_comment">
         <ul class="event-comments_comment-header">
           <li class="event-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="event-comments_comment-header_left-side-user-name-link">
-              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="event-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
+            <router-link :to="`/user-profile/${comment.userId}`" class="event-comments_comment-header_left-side-user-name-link">
+              <img
+                class="event-comments_comment-header_left-side-user-profile-image"
+                :src="comment.userImagePath || '@/assets/images/icons/user-icon.jpg'"
+                alt="User profile photo"
+              >
+              <span class="event-comments_comment-header_left-side-user-name">
+                {{ comment.userFirstName }} {{ comment.userLastName }}
+              </span>
             </router-link>
           </li>
           <li class="event-comments_comment-header_right-side">
-            <span class="event-comments_comment-header_right-side-time-of-publication">1 day ago</span>
+            <span class="event-comments_comment-header_right-side-time-of-publication">
+              {{ formatDate(comment.dateOfCreation) }}
+            </span>
           </li>
         </ul>
-        <p class="event-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
-        <div class="event-comments_comment-divider"></div>
+        <p class="event-comments_comment-content">{{ comment.content }}</p>
+        <button v-if="activeUserEmail == comment.userEmail" @click="deleteComment(comment.commentId)" class="event-comments_comment-delete-button">Delete comment</button>
+        <div v-if="index !== event.comments.length - 1" class="event-comments_comment-divider"></div>
       </li>
-      <li class="event-comments_comment">
-        <ul class="event-comments_comment-header">
-          <li class="event-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="event-comments_comment-header_left-side-user-name-link">
-              <img class="event-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="event-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
-            </router-link>
-          </li>
-          <li class="event-comments_comment-header_right-side">
-            <span class="event-comments_comment-header_right-side-time-of-publication">1 day ago</span>
-          </li>
-        </ul>
-        <p class="event-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
-      </li>
+      <li class="event-comments_load-more-comments-button" v-if="isLoadMoreCommentsButtonVisible" @click="loadMoreComments">Load more comments..</li>
     </ul>
   </div> 
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 
 import TheSkills from "../../my-profile/TheSkills.vue";
-import ApplyOnEventButton from "../../my-profile/activities-page/event/TheEvent.vue";
+import ApplyOnEventButton from "./ApplyOnEventButton.vue";
+import LoadingSquare from "../../LoadingSquare.vue";
+
+import { useAuthenticationStore } from '@/stores/authentication'
+import useGetEvent from '@/composables/forum/useGetEvent'
+import { useRouter } from "vue-router";
+import { Event } from "@/types/forum/Event";
+import useRelativeDate from "@/composables/forum/useRelativeDate"
+import useToggleLikeOfActivity from "@/composables/forum/useToggleLikeOfActivity";
+import useToggleSaveOfActivity from "@/composables/forum/useToggleSaveOfActivity";
+import useCreateComment from "@/composables/forum/useCreateComment";
+import useDeleteComment from "@/composables/forum/useDeleteComment";
+import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged";
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     TheSkills,
     ApplyOnEventButton,
+    LoadingSquare
   },
-  setup() {
+  setup(props) {
+    const authenticationStore = useAuthenticationStore()
+    const activeUserEmail = authenticationStore.email
+    const router = useRouter()
+    const event = ref<Event>({} as Event)
+    const isLoading = ref(true)
     const isPositionPanelOpened = ref<boolean[]>([false, false])
-    const isLiked = ref<boolean>(false)
-    const isSaved = ref<boolean>(false)
+    const inputFieldAddCommentContent = ref<string>('')
+    const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
+    let page = 1
+    const pageSize = 3
+
+    onMounted(async () => {
+      const startTime = performance.now()
+
+      const result = await useGetEvent(props.id)
+
+      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        event.value = result as Event
+        if (authenticationStore.userId == event.value.userId) {
+          router.push(`/my-profile/activities/event/${event.value.id}`)
+        }
+        isLoadMoreCommentsButtonVisible.value = event.value.comments.length == pageSize
+        console.log(event.value)
+      }
+
+      const elapsed = performance.now() - startTime
+      const remaining = 500 - elapsed
+      if (remaining > 0) {
+        setTimeout(() => { isLoading.value = false }, remaining)
+      } else {
+        isLoading.value = false
+      }
+    })
+
+    const formatDate = (date: string) => {
+      return useRelativeDate(date)
+    }
 
     const triggerPositionPanelOpening = (positionId: number) => {
       isPositionPanelOpened.value[positionId] = !isPositionPanelOpened.value[positionId]
     }
 
-    const triggerLike = () => {
-      isLiked.value = !isLiked.value
+    const toggleLike = async () => {
+      const result = await useToggleLikeOfActivity(event.value.id, authenticationStore.userId)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("numberOfLikes" in result) {
+        event.value.numberOfLikes = result.numberOfLikes
+        event.value.isLiked = result.isLiked
+      }
     }
 
-    const triggerSave = () => {
-      isSaved.value = !isSaved.value
+    const toggleSave = async () => {
+      const result = await useToggleSaveOfActivity(event.value.id, authenticationStore.userId)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("isSaved" in result) {
+        event.value.isSaved = result.isSaved
+      }
     }
 
-    return { isPositionPanelOpened, isLiked, isSaved, triggerPositionPanelOpening, triggerLike, triggerSave }
+    const createComment = async () => {
+      const result = await useCreateComment(event.value.id, authenticationStore.userId, inputFieldAddCommentContent.value)
+    
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("commentId" in result) {
+        console.log("Created comment: ", result)
+        inputFieldAddCommentContent.value = ''
+
+        event.value.comments.unshift({
+          commentId: result.commentId,
+          activityId: event.value.id,
+          userId: result.userId,
+          userEmail: result.userEmail,
+          userFirstName: result.userFirstName,
+          userLastName: result.userLastName,
+          userImagePath: result.userImagePath,
+          dateOfCreation: result.dateOfCreation,
+          content: result.content
+        })
+      }
+    }
+
+    const deleteComment = async (commentId: string) => {
+      const result = await useDeleteComment(commentId, authenticationStore.userId)
+    
+      if (!result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      event.value.comments = event.value.comments.filter(c => c.commentId !== commentId)
+    }
+
+    const loadMoreComments = async () => {
+      const result = await useGetCommentsPaged(event.value.id, page, pageSize)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        if (result.length < pageSize) {
+          isLoadMoreCommentsButtonVisible.value = false
+        }
+        event.value.comments.push(...result)
+        page++
+      }
+    }
+
+    return { event, formatDate, isPositionPanelOpened, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, isLoading }
   }
 });
 </script>
@@ -195,10 +323,13 @@ export default defineComponent({
       &-profile-image {
         width: 36px;
         margin-right: 10px;
+        border-radius: 20px;
+        border: 1px solid #000000;
 
         @media (max-width: $breakpoint) {
           width: 30px;
           margin-right: 8px;
+          border-radius: 15px;
         }
       }
       &-user-name {
@@ -394,6 +525,7 @@ export default defineComponent({
     }
 
     &-skills {
+      display: block;
       margin-top: 20px;
     }
     &-payment {
@@ -406,8 +538,10 @@ export default defineComponent({
       }
     }
     &-description {
+      display: block;
       font-size: 14px;
       margin-top: 10px;
+      white-space: pre-wrap;
 
       @media (max-width: $breakpoint) {
         font-size: 12px;
@@ -431,6 +565,7 @@ export default defineComponent({
   &-description {
     font-size: 14px;
     margin-top: 20px;
+    white-space: pre-wrap;
 
     @media (max-width: $breakpoint) {
       font-size: 12px;
@@ -536,7 +671,7 @@ export default defineComponent({
     list-style: none;
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 40px;
 
     &_comment {
 
@@ -553,6 +688,8 @@ export default defineComponent({
           &-user-profile-image {
             width: 30px;
             margin-right: 10px;
+            border-radius: 30px;
+            border: 1px solid #000000;
           }
 
           &-user-name {
@@ -591,9 +728,35 @@ export default defineComponent({
       &-content {
         font-size: 14px;
         margin-top: 14px;
+        padding: 0 20px;
+        white-space: pre-wrap;
 
         @media (max-width: $breakpoint) {
           font-size: 12px;
+          padding: 0 10px;
+        }
+      }
+
+      &-delete-button {
+        border: 2px solid $errorColor;
+        color: $errorColor;
+        background-color: $mainBackgroundColor;
+        width: 140px;
+        height: 36px;
+        border-radius: 12px;
+        transition: background-color 0.3s ease;
+        font-size: 14px;
+        margin: 20px 20px 0 20px;
+
+        &:hover {
+          background-color: #ffe4e4;
+        }
+
+        @media (max-width: $breakpoint) {
+          width: 130px;
+          height: 34px;
+          font-size: 12px;
+          margin: 10px 10px 0 10px;
         }
       }
 
@@ -603,35 +766,22 @@ export default defineComponent({
         margin-bottom: 24px;
       }
     }
-  }
 
-  &-delete {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    border-top: 2px solid $grayBorderColor;
-    margin: 40px -50px 0 -50px;
-    padding: 14px 0;
-    transition: background-color 0.3s ease;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-
-    @media (max-width: $breakpoint) {
-      margin: 40px -30px 0 -30px;
-    }
-
-    &-inscription {
+    &_load-more-comments-button {
       font-size: 14px;
-      color: $errorColor;
+      display: flex;
+      justify-self: center;
+      align-self: center;
+      margin-top: 20px;
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
 
       @media (max-width: $breakpoint) {
         font-size: 12px;
       }
-    }
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ececec;
     }
   }
 }

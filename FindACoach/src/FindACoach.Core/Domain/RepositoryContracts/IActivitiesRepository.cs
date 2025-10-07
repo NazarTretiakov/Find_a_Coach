@@ -1,4 +1,5 @@
-﻿using FindACoach.Core.DTO.MyProfile.Activities;
+﻿using FindACoach.Core.DTO.Forum;
+using FindACoach.Core.DTO.MyProfile.Activities;
 
 namespace FindACoach.Core.Domain.RepositoryContracts
 {
@@ -54,5 +55,20 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
         Task<List<ActivityForActivitiesListToResponse>> GetActivitiesPaged(string userId, int page, int pageSize);
+
+        /// <summary>
+        /// Retrieves activity by id.
+        /// </summary>
+        /// <param name="id">Id of activity which will be retrieved.</param>
+        /// <returns>ActivityToResponse object with data of activity.</returns>
+        Task<ActivityToResponse> GetActivity(string id);
+
+        /// <summary>
+        /// Deletes activity from the system.
+        /// </summary>
+        /// <param name="activityId">Activity id which will be deleted.</param>
+        /// <param name="userId">User id which created the activity.</param>
+        /// <returns></returns>
+        Task DeleteActivity(string activityId, string userId);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.MyProfile.Activities;
-using FindACoach.Core.ServiceContracts.MyProfile.Activities;
+using FindACoach.Core.ServiceContracts.Forum.Activities;
 
-namespace FindACoach.Core.Services.MyProfile.Activities
+namespace FindACoach.Core.Services.Forum.Activities
 {
     public class AddActivityService : IAddActivityService
     {

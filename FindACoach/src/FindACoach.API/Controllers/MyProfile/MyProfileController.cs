@@ -1,7 +1,7 @@
 ﻿using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.DTO.MyProfile.Activities;
+using FindACoach.Core.ServiceContracts.Forum.Activities;
 using FindACoach.Core.ServiceContracts.MyProfile;
-using FindACoach.Core.ServiceContracts.MyProfile.Activities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -105,8 +105,7 @@ namespace FindACoach.API.Controllers.MyProfile
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            List<ActivityForActivitiesListToResponse> activities =
-                await _activitiesGetterService.GetActivitiesPaged(userId, page, pageSize);
+            List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetActivitiesPaged(userId, page, pageSize);
 
             return Ok(activities);
         }

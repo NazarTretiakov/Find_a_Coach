@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="`/activities/${activity.id}`" class="event-link">
+  <router-link :to="`/my-profile/activities/${activity.activityType.toLowerCase()}/${activity.id}`" class="event-link">
     <div class="event">
       <ul class="event-items">
         <li class="event-items_header">

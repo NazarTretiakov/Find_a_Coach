@@ -4,13 +4,13 @@ using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.ServiceContracts;
 using FindACoach.Core.ServiceContracts.Authentication;
 using FindACoach.Core.ServiceContracts.CompleteProfileWindow;
+using FindACoach.Core.ServiceContracts.Forum.Activities;
 using FindACoach.Core.ServiceContracts.MyProfile;
-using FindACoach.Core.ServiceContracts.MyProfile.Activities;
 using FindACoach.Core.Services;
 using FindACoach.Core.Services.Authentication;
 using FindACoach.Core.Services.CompleteProfileWindow;
+using FindACoach.Core.Services.Forum.Activities;
 using FindACoach.Core.Services.MyProfile;
-using FindACoach.Core.Services.MyProfile.Activities;
 using FindACoach.Infrastructure.DbContext;
 using FindACoach.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -52,9 +52,18 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IGetAboutMeService, GetAboutMeService>();
             services.AddScoped<IAddActivityService, AddActivityService>();
             services.AddScoped<IActivitiesGetterService, ActivitiesGetterService>();
+            services.AddScoped<IToggleLikeService, ToggleLikeService>();
+            services.AddScoped<IToggleSaveService, ToggleSaveService>();
+            services.AddScoped<ICommentsAdderService, CommentsAdderService>();
+            services.AddScoped<ICommentsGetterService, CommentsGetterService>();
+            services.AddScoped<ICommentsRemoverService, CommentsRemoverService>();
+            services.AddScoped<IActivitiesRemoverService, ActivitiesRemoverService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IActivitiesRepository, ActivitiesRepository>();
+            services.AddScoped<ILikesRepository, LikesRepository>();
+            services.AddScoped<ISavesRepository, SavesRepository>();
+            services.AddScoped<ICommentsRepository, CommentsRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

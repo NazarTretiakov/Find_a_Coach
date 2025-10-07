@@ -3,7 +3,7 @@
 
   <ul class="page-sections">
     <li class="page-sections_left-side">
-      <the-event></the-event>
+      <the-event :id="id"></the-event>
     </li>
     <li class="page-sections_right-side">
       <recommended-people></recommended-people>
@@ -22,19 +22,34 @@ import TheEvent from '../../../../components/my-profile/activities-page/event/Th
 import RecommendedPeople from '../../../../components/my-profile/RecommendedPeople.vue'
 import TheFooter from '../../../../components/TheFooter.vue'
 
-
 export default defineComponent({
-  components: {
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+    components: {
     ProfileStickyHeader,
     TheEvent,
     RecommendedPeople,
     TheFooter
+  },
+  setup(props) {
+    console.log("id:" +props.id)
+    return {}
   }
 })
 </script>
 
 <style lang="scss" scoped>
-@use '../../../../assets/styles/config' as *;
+@use '@/assets/styles/config' as *;
+
+.header {
+  z-index: 2;
+  position: sticky;
+  top: 0;
+}
 
 .page-sections {
   display: flex;

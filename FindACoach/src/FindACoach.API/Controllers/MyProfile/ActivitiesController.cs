@@ -1,6 +1,5 @@
 ﻿using FindACoach.Core.DTO.MyProfile.Activities;
-using FindACoach.Core.ServiceContracts.MyProfile.Activities;
-using FindACoach.Core.Services.MyProfile.Activities;
+using FindACoach.Core.ServiceContracts.Forum.Activities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -9,9 +8,12 @@ namespace FindACoach.API.Controllers.MyProfile
     public class ActivitiesController : CustomControllerBase
     {
         private readonly IAddActivityService _addActivityService;
-        public ActivitiesController(IAddActivityService addActivityService)
+        private readonly IActivitiesRemoverService _activitiesRemoverService;
+
+        public ActivitiesController(IAddActivityService addActivityService, IActivitiesRemoverService activitiesRemoverService)
         {
             _addActivityService = addActivityService;
+            _activitiesRemoverService = activitiesRemoverService;
         }
 
         [HttpPost("add")]
@@ -48,6 +50,14 @@ namespace FindACoach.API.Controllers.MyProfile
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             await _addActivityService.AddActivity(userId, dto);
+
+            return Ok();
+        }
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteActivity([FromBody] DeleteActivityDTO dto)
+        {
+            await _activitiesRemoverService.DeleteActivity(dto.ActivityId, dto.UserId);
 
             return Ok();
         }

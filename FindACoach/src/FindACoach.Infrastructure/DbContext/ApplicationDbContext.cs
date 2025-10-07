@@ -22,6 +22,9 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<SurveyOption> SurveyOptions { get; set; }
         public DbSet<QAAnswer> QAAnswers { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Save> Saves { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public ApplicationDbContext(DbContextOptions options): base(options) {  }
 
@@ -43,6 +46,9 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<SurveyOption>().ToTable("SurveyOptions");
             builder.Entity<QAAnswer>().ToTable("QAAnswers");
             builder.Entity<Skill>().ToTable("Skills");
+            builder.Entity<Like>().ToTable("Likes");
+            builder.Entity<Save>().ToTable("Saves");
+            builder.Entity<Comment>().ToTable("Comments");
 
 
             builder.Entity<User>()
@@ -100,6 +106,42 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Skill>()
                 .HasMany(s => s.Panels)
                 .WithMany(p => p.PreferredSkills);
+
+            builder.Entity<Like>()
+                .HasOne(l => l.Activity)
+                .WithMany(a => a.Likes)
+                .HasForeignKey(l => l.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Like>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.Likes)
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Save>()
+                .HasOne(s => s.Activity)
+                .WithMany(a => a.Saves)
+                .HasForeignKey(s => s.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Save>()
+                .HasOne(s => s.User)
+                .WithMany(u => u.Saves)
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.Activity)
+                .WithMany(a => a.Comments)
+                .HasForeignKey(c => c.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using FindACoach.Core.DTO.MyProfile.Activities;
+﻿using FindACoach.Core.DTO.Forum;
+using FindACoach.Core.DTO.MyProfile.Activities;
 
-namespace FindACoach.Core.ServiceContracts.MyProfile.Activities
+namespace FindACoach.Core.ServiceContracts.Forum.Activities
 {
     /// <summary>
     /// Represents the service for retriving activities from system
@@ -22,5 +23,12 @@ namespace FindACoach.Core.ServiceContracts.MyProfile.Activities
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
         Task<List<ActivityForActivitiesListToResponse>> GetActivitiesPaged(string userId, int page, int pageSize);
+
+        /// <summary>
+        /// Retrieves activity by id.
+        /// </summary>
+        /// <param name="id">Id of activity which will be retrieved.</param>
+        /// <returns>ActivityToResponse object with data of activity.</returns>
+        Task<ActivityToResponse> GetActivity(string id);
     }
 }

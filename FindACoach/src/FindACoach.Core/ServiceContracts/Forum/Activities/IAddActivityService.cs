@@ -1,7 +1,7 @@
 ﻿using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.DTO.MyProfile.Activities;
 
-namespace FindACoach.Core.ServiceContracts.MyProfile.Activities
+namespace FindACoach.Core.ServiceContracts.Forum.Activities
 {
     /// <summary>
     /// Represents the service for adding activity.

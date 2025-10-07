@@ -3,7 +3,7 @@
 
   <ul class="page-sections">
     <li class="page-sections_left-side">
-      <the-event></the-event>
+      <the-event :id="id"></the-event>
     </li>
     <li class="page-sections_right-side">
       <recommended-people></recommended-people>
@@ -24,11 +24,21 @@ import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     BasicStickyHeader,
     TheEvent,
     RecommendedPeople,
     TheFooter
+  },
+  setup(props) {
+    console.log("id:" +props.id)
+    return {}
   }
 })
 </script>

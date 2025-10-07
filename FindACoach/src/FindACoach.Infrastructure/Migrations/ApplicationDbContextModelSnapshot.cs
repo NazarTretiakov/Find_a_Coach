@@ -56,6 +56,56 @@ namespace FindACoach.Infrastructure.Migrations
                     b.UseTptMappingStrategy();
                 });
 
+            modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.Property<DateTime>("DateOfCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments", (string)null);
+                });
+
+            modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.Like", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Likes", (string)null);
+                });
+
             modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.QAAnswer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -75,6 +125,27 @@ namespace FindACoach.Infrastructure.Migrations
                     b.HasIndex("QAId");
 
                     b.ToTable("QAAnswers", (string)null);
+                });
+
+            modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.Save", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Saves", (string)null);
                 });
 
             modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.SearchPersonPanel", b =>
@@ -536,6 +607,44 @@ namespace FindACoach.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.Comment", b =>
+                {
+                    b.HasOne("FindACoach.Core.Domain.Entities.Activity.Activity", "Activity")
+                        .WithMany("Comments")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FindACoach.Core.Domain.IdentityEntities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.Like", b =>
+                {
+                    b.HasOne("FindACoach.Core.Domain.Entities.Activity.Activity", "Activity")
+                        .WithMany("Likes")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FindACoach.Core.Domain.IdentityEntities.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.QAAnswer", b =>
                 {
                     b.HasOne("FindACoach.Core.Domain.Entities.Activity.QA", "QA")
@@ -545,6 +654,25 @@ namespace FindACoach.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("QA");
+                });
+
+            modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.Save", b =>
+                {
+                    b.HasOne("FindACoach.Core.Domain.Entities.Activity.Activity", "Activity")
+                        .WithMany("Saves")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FindACoach.Core.Domain.IdentityEntities.User", "User")
+                        .WithMany("Saves")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.SearchPersonPanel", b =>
@@ -729,6 +857,12 @@ namespace FindACoach.Infrastructure.Migrations
 
             modelBuilder.Entity("FindACoach.Core.Domain.Entities.Activity.Activity", b =>
                 {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+
+                    b.Navigation("Saves");
+
                     b.Navigation("Subjects");
                 });
 
@@ -736,7 +870,13 @@ namespace FindACoach.Infrastructure.Migrations
                 {
                     b.Navigation("Activities");
 
+                    b.Navigation("Comments");
+
                     b.Navigation("Connections");
+
+                    b.Navigation("Likes");
+
+                    b.Navigation("Saves");
 
                     b.Navigation("Websites");
                 });

@@ -1,6 +1,6 @@
 <template> 
   <button class="button">
-    Apply on event
+    Show applications
   </button> 
 </template>
 
@@ -8,16 +8,18 @@
 @use '../../../../assets/styles/config' as *;
 
 .button {
-  color: $mainBackgroundColor;
-  background-color: $mainColor;
+  color: $mainColor;
+  background-color: $mainBackgroundColor;
+  border: 2px solid $mainColor;
   width: 160px;
   height: 40px;
   border-radius: 12px;
   transition: background-color 0.3s ease;
   font-size: 14px;
+  font-weight: bold;
 
   &:hover {
-    background-color: $mainColorHoverColor;
+    background-color: $mainBackgroundColorHoverColor;
   }
 
   @media (max-width: $breakpoint) {

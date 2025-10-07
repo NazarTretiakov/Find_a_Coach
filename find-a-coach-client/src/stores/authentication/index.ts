@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
-import actions from './actions.ts'
-import getters from './getters.ts'
+import actions from './actions'
+import getters from './getters'
 import type { AuthenticationState } from '../../types/authentication/AuthenticationState.ts'
 
 

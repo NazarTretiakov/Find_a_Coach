@@ -1,15 +1,21 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.Entities.Activity;
+using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
+using FindACoach.Core.DTO.Forum;
 using FindACoach.Core.DTO.MyProfile.Activities;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Security.Claims;
 
 namespace FindACoach.Infrastructure.Repositories
 {
@@ -18,12 +24,18 @@ namespace FindACoach.Infrastructure.Repositories
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILikesRepository _likesRepository;
+        private readonly ISavesRepository _savesRepository;
 
-        public ActivitiesRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public ActivitiesRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILikesRepository likesRepository, ISavesRepository savesRepository)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
+            _likesRepository = likesRepository;
+            _savesRepository = savesRepository;
         }
 
         public async Task AddEvent(string userId, EventDTO dto)
@@ -176,6 +188,30 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
+        public async Task DeleteActivity(string activityId, string userId)
+        {
+            var informationToDeleteActivity = await _db.Activities
+                .Where(c => c.Id == Guid.Parse(activityId))
+                .Select(c => new 
+                {
+                    Activity = c,
+                    UserId = c.User.Id
+                })
+                .FirstOrDefaultAsync(c => c.Activity.Id == Guid.Parse(activityId));
+
+            if (informationToDeleteActivity == null)
+            {
+                throw new ArgumentNullException("Activity id is incorrect.");
+            }
+            if (informationToDeleteActivity.UserId != Guid.Parse(userId))
+            {
+                throw new ArgumentException("Only creator of the activity can delete it.");
+            }
+
+            _db.Activities.Remove(informationToDeleteActivity.Activity);
+            await _db.SaveChangesAsync();
+        }
+
         public async Task<List<ActivityForActivitiesListToResponse>> GetActivitiesPaged(string userId, int page, int pageSize)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
@@ -205,6 +241,199 @@ namespace FindACoach.Infrastructure.Repositories
                 .ToListAsync();
 
             return userActivities;
+        }
+
+        public async Task<ActivityToResponse> GetActivity(string id)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var principal = _httpContextAccessor.HttpContext?.User;
+            if (principal == null)
+            {
+                throw new UnauthorizedAccessException("User is not authenticated");
+            }
+
+            string? actviveUserId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (actviveUserId == null)
+            {
+                throw new UnauthorizedAccessException("Cannot resolve user id from claims");
+            }
+
+            bool isActivityLikedByActiveUser = await _likesRepository.IsActivityLikedByUser(actviveUserId, id);
+            bool isActivitySavedByActiveUser = await _savesRepository.IsActivitySavedByUser(actviveUserId, id);
+
+            Guid guidIdOfActivity = Guid.Parse(id);
+            Core.Domain.Entities.Activity.Activity activity = await _db.Activities.FirstOrDefaultAsync(a => a.Id == guidIdOfActivity);
+
+            if (activity == null)
+            {
+                throw new ArgumentException("The activity with given id don't exist.");
+            }
+            else if (activity is Event)
+            {
+                EventToResponse? eventToResponse = await _db.Events.Where(e => e.Id == guidIdOfActivity)
+                                                                  .Select(e => new EventToResponse
+                                                                  {
+                                                                      Id = e.Id,
+                                                                      UserId = e.User.Id,
+                                                                      UserImagePath = $"{serverUrl}/Images/UserProfiles/{e.User.ImagePath}",
+                                                                      UserFirstName = e.User.FirstName,
+                                                                      UserLastName = e.User.LastName,
+                                                                      Title = e.Title,
+                                                                      ImagePath = string.IsNullOrEmpty(e.ImagePath) ? null : $"{serverUrl}/Images/Activities/{e.ImagePath}",
+                                                                      Description = e.Description,
+                                                                      CreatedAt = e.CreatedAt,
+                                                                      Subjects = e.Subjects.Select(s => s.Title).ToList(),
+                                                                      BeginningDate = e.BeginningDate,
+                                                                      SearchPersonPanels = (List<SearchPersonPanelToResponse>)e.SearchPersonPanels.Select(p => new SearchPersonPanelToResponse
+                                                                      {
+                                                                          Id = p.Id,
+                                                                          PositionName = p.PositionName,
+                                                                          Description = p.Description,
+                                                                          Payment = p.Payment,
+                                                                          PreferredSkills = p.PreferredSkills.Select(s => s.Title).ToList()
+                                                                      }).ToList(),
+                                                                      IsLiked = isActivityLikedByActiveUser,
+                                                                      NumberOfLikes = e.Likes.Count,
+                                                                      IsSaved = isActivitySavedByActiveUser,
+                                                                      Comments = e.Comments
+                                                                        .Where(c => c.ActivityId == e.Id)
+                                                                        .OrderByDescending(c => c.DateOfCreation)
+                                                                        .Take(3)
+                                                                        .Select(c => new CommentToResponse()
+                                                                        {
+                                                                            CommentId = c.Id,
+                                                                            ActivityId = c.ActivityId,
+                                                                            UserId = c.UserId,
+                                                                            UserEmail = c.User.Email,
+                                                                            UserFirstName = c.User.FirstName,
+                                                                            UserLastName = c.User.LastName,
+                                                                            UserImagePath = $"{serverUrl}/Images/UserProfiles/{c.User.ImagePath}",
+                                                                            DateOfCreation = c.DateOfCreation,
+                                                                            Content = c.Content
+                                                                        }).ToList()
+                                                                  })
+                                                                  .FirstOrDefaultAsync(e => e.Id == guidIdOfActivity);
+
+                return eventToResponse;
+            }
+            else if (activity is Survey)
+            {
+                SurveyToResponse? surveyToResponse = await _db.Surveys.Where(s => s.Id == guidIdOfActivity)
+                                                                       .Select(s => new SurveyToResponse
+                                                                       {
+                                                                           Id = s.Id,
+                                                                           UserId = s.User.Id,
+                                                                           UserImagePath = $"{serverUrl}/Images/UserProfiles/{s.User.ImagePath}",
+                                                                           UserFirstName = s.User.FirstName,
+                                                                           UserLastName = s.User.LastName,
+                                                                           Title = s.Title,
+                                                                           ImagePath = string.IsNullOrEmpty(s.ImagePath) ? null : $"{serverUrl}/Images/Activities/{s.ImagePath}",
+                                                                           Description = s.Description,
+                                                                           CreatedAt = s.CreatedAt,
+                                                                           Subjects = s.Subjects.Select(s => s.Title).ToList(),
+                                                                           Options = s.Options.Select(o => new SurveyOptionToResponse
+                                                                           {
+                                                                               Id = o.Id,
+                                                                               Inscription = o.Inscription
+                                                                           }).ToList(),
+                                                                           IsLiked = isActivityLikedByActiveUser,
+                                                                           NumberOfLikes = s.Likes.Count,
+                                                                           IsSaved = isActivitySavedByActiveUser,
+                                                                           Comments = s.Comments
+                                                                            .Where(c => c.ActivityId == s.Id)
+                                                                            .OrderByDescending(c => c.DateOfCreation)
+                                                                            .Select(c => new CommentToResponse()
+                                                                            {
+                                                                                CommentId = c.Id,
+                                                                                ActivityId = c.ActivityId,
+                                                                                UserId = c.UserId,
+                                                                                UserEmail = c.User.Email,
+                                                                                UserFirstName = c.User.FirstName,
+                                                                                UserLastName = c.User.LastName,
+                                                                                UserImagePath = $"{serverUrl}/Images/UserProfiles/{c.User.ImagePath}",
+                                                                                DateOfCreation = c.DateOfCreation,
+                                                                                Content = c.Content
+                                                                            }).ToList()
+                                                                       })
+                                                                       .FirstOrDefaultAsync(s => s.Id == guidIdOfActivity);
+
+                return surveyToResponse;
+            }
+            else if (activity is QA)
+            {
+                QAToResponse? QAToResponse = await _db.QAs.Where(qa => qa.Id == guidIdOfActivity)
+                                                          .Select(qa => new QAToResponse
+                                                          {
+                                                              Id = qa.Id,
+                                                              UserId = qa.User.Id,
+                                                              UserImagePath = $"{serverUrl}/Images/UserProfiles/{qa.User.ImagePath}",
+                                                              UserFirstName = qa.User.FirstName,
+                                                              UserLastName = qa.User.LastName,
+                                                              Title = qa.Title,
+                                                              ImagePath = string.IsNullOrEmpty(qa.ImagePath) ? null : $"{serverUrl}/Images/Activities/{qa.ImagePath}",
+                                                              Description = qa.Description,
+                                                              CreatedAt = qa.CreatedAt,
+                                                              IsLiked = isActivityLikedByActiveUser,
+                                                              NumberOfLikes = qa.Likes.Count,
+                                                              IsSaved = isActivitySavedByActiveUser,
+                                                              Comments = qa.Comments
+                                                                 .Where(c => c.ActivityId == qa.Id)
+                                                                 .OrderByDescending(c => c.DateOfCreation)
+                                                                 .Select(c => new CommentToResponse()
+                                                                 {
+                                                                     CommentId = c.Id,
+                                                                     ActivityId = c.ActivityId,
+                                                                     UserId = c.UserId,
+                                                                     UserEmail = c.User.Email,
+                                                                     UserFirstName = c.User.FirstName,
+                                                                     UserLastName = c.User.LastName,
+                                                                     UserImagePath = $"{serverUrl}/Images/UserProfiles/{c.User.ImagePath}",
+                                                                     DateOfCreation = c.DateOfCreation,
+                                                                     Content = c.Content
+                                                                 }).ToList()
+                                                          })
+                                                          .FirstOrDefaultAsync(qa => qa.Id == guidIdOfActivity);
+
+                return QAToResponse;
+            }
+            else
+            {
+                PostToResponse? postToResponse = await _db.Posts.Where(p => p.Id == guidIdOfActivity)
+                                          .Select(p => new PostToResponse
+                                          {
+                                              Id = p.Id,
+                                              UserId = p.User.Id,
+                                              UserImagePath = $"{serverUrl}/Images/UserProfiles/{p.User.ImagePath}",
+                                              UserFirstName = p.User.FirstName,
+                                              UserLastName = p.User.LastName,
+                                              Title = p.Title,
+                                              ImagePath = string.IsNullOrEmpty(p.ImagePath) ? null : $"{serverUrl}/Images/Activities/{p.ImagePath}",
+                                              Description = p.Description,
+                                              CreatedAt = p.CreatedAt,
+                                              IsLiked = isActivityLikedByActiveUser,
+                                              NumberOfLikes = p.Likes.Count,
+                                              IsSaved = isActivitySavedByActiveUser,
+                                              Comments = p.Comments
+                                                .Where(c => c.ActivityId == p.Id)
+                                                .OrderByDescending(c => c.DateOfCreation)
+                                                .Select(c => new CommentToResponse()
+                                                {
+                                                    CommentId = c.Id,
+                                                    ActivityId = c.ActivityId,
+                                                    UserId = c.UserId,
+                                                    UserEmail = c.User.Email,
+                                                    UserFirstName = c.User.FirstName,
+                                                    UserLastName = c.User.LastName,
+                                                    UserImagePath = $"{serverUrl}/Images/UserProfiles/{c.User.ImagePath}",
+                                                    DateOfCreation = c.DateOfCreation,
+                                                    Content = c.Content
+                                                }).ToList()
+                                          })
+                                          .FirstOrDefaultAsync(p => p.Id == guidIdOfActivity);
+
+                return postToResponse;
+            }
         }
 
         public async Task<List<ActivityCardToResponse>> GetLastTwoActivities(string userId)

@@ -17,7 +17,7 @@
     </ul>
 
     <ul class="activities-items">
-      <router-link v-for="(activity, index) in activities" :key="activity.id" class="activities-items_activity-link" :to="`/my-profile/activities/${activity.id}`">
+      <router-link v-for="(activity, index) in activities" :key="activity.id" class="activities-items_activity-link" :to="`/my-profile/activities/${activity.activityType.toLowerCase()}/${activity.id}`">
         <li class="activities-items_activity">
           <ul class="activities-items_activity-header">
             <li class="activities-items_activity-header_user-info">
@@ -46,10 +46,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from "vue"
+
+import LoadingSquare from '@/components/LoadingSquare.vue'
+
 import useGetActivitiesList from '@/composables/my-profile/activities/useGetActivitiesList'
 import { useRouter } from "vue-router"
 import { ActivityOfActivitiesList } from "@/types/my-profile/activities/ActivityOfActivitiesList"
-import LoadingSquare from '@/components/LoadingSquare.vue'
+import useRelativeDate from "@/composables/forum/useRelativeDate"
 
 export default defineComponent({
   components: { LoadingSquare },
@@ -79,13 +82,7 @@ export default defineComponent({
       const now = new Date()
       return activities.value.map(activity => {
         const pubDate = new Date(activity.publicationDate)
-        const diffMs = now.getTime() - pubDate.getTime()
-        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-        if (diffDays < 7) return diffDays === 0 ? 'Today' : `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
-        const diffWeeks = Math.floor(diffDays / 7)
-        if (diffWeeks < 4) return `${diffWeeks} week${diffWeeks > 1 ? 's' : ''} ago`
-        const diffMonths = Math.floor(diffDays / 30)
-        return `${diffMonths} month${diffMonths > 1 ? 's' : ''} ago`
+        return useRelativeDate(pubDate)
       })
     })
 
