@@ -3,7 +3,7 @@
 
   <ul class="page-sections">
     <li class="page-sections_left-side">
-      <the-survey></the-survey>
+      <the-survey :id="id"></the-survey>
     </li>
     <li class="page-sections_right-side">
       <recommended-people></recommended-people>
@@ -16,14 +16,20 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import BasicStickyHeader from '../../../components/BasicStickyHeader.vue'
-import TheSurvey from '../../../components/forum/survey/TheSurvey.vue'
+import BasicStickyHeader from '@/components/BasicStickyHeader.vue'
+import TheSurvey from '@/components/forum/survey/TheSurvey.vue'
 
-import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
-import TheFooter from '../../../components/TheFooter.vue'
+import RecommendedPeople from '@/components/my-profile/RecommendedPeople.vue'
+import TheFooter from '@/components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     BasicStickyHeader,
     TheSurvey,
@@ -34,7 +40,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../../assets/styles/config' as *;
+@use '@/assets/styles/config' as *;
 
 .header {
   z-index: 2;

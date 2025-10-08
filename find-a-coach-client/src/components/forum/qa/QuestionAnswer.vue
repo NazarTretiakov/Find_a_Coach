@@ -1,21 +1,26 @@
 <template> 
-  <div class="qa">
+  <loading-square v-if="isLoading"></loading-square>
+
+  <div v-else class="qa">
     <ul class="qa-header">
       <li class="qa-header_user-info">
-        <router-link to="/user-profile" class="qa-header_user-info-link">
-          <img class="qa-header_user-info-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
-          <span class="qa-header_user-info-user-name">Janusz Kowalski</span>
+        <router-link :to="`/user-profile/${qa.userId}`" class="qa-header_user-info-link">
+          <img class="qa-header_user-info-profile-image" :src="qa.userImagePath" alt="User profile image">
+          <span class="qa-header_user-info-user-name">{{ qa.userFirstName }} {{ qa.userLastName }}</span>
         </router-link>  
       </li>
       <li class="qa-header_publication-time">
-        <span class="qa-header_publication-time-element">2 days ago</span>
+        <span class="qa-header_publication-time-element">{{ formatDate(qa.createdAt) }}</span>
       </li>
     </ul>
-    <h1 class="qa-title">Starting an store checking project</h1>
-    <span class="qa-subjects">Logistics, Business, Marketing</span>
-    <img class="qa-image" src="../../../assets/images/activities-image.jpeg" alt="Image of the qa">
-    <p class="qa-description">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
-    
+
+    <h1 class="qa-title">{{ qa.title }}</h1>
+    <span class="qa-subjects">{{ qa.subjects?.join(', ') }}</span>
+
+    <img v-if="qa.imagePath" class="qa-image" :src="qa.imagePath" alt="Image of the qa">
+
+    <p class="qa-description">{{ qa.description }}</p>
+
     <div class="qa-answer-text-area">
       <label class="qa-answer-text-area-label" for="answer">Leave your answer</label>
       <textarea 
@@ -30,10 +35,12 @@
     </div>
     
     <h2 class="qa-comments-header">Comments</h2>
+
     <ul class="qa-create-comment-bar">
       <li class="qa-create-comment-bar_left-side">
-        <input class="qa-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment...">
-        <svg class="qa-create-comment-bar_left-side-icon"
+        <input class="qa-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment..." v-model="inputFieldAddCommentContent">
+        <svg @click="createComment"
+          class="qa-create-comment-bar_left-side-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -41,20 +48,22 @@
           <path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Z" fill="#B1B1B1" />          
         </svg>
       </li>
+
       <li class="qa-create-comment-bar_right-side">
         <div class="qa-create-comment-bar_right-side-like">
-          <img @click="triggerLike" v-if="!isLiked" class="qa-create-comment-bar_right-side-like-icon" src="../../../assets/images/icons/like-icon.svg" alt="Like icon">
-          <svg @click="triggerLike" v-if="isLiked"  class="qa-create-comment-bar_right-side-like-icon"
+          <img @click="toggleLike" v-if="!qa.isLiked" class="qa-create-comment-bar_right-side-like-icon" src="@/assets/images/icons/like-icon.svg" alt="Like icon">
+          <svg @click="toggleLike" v-if="qa.isLiked" class="qa-create-comment-bar_right-side-like-icon"
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
             width="30px"
             viewBox="0 -960 960 960">
             <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52" fill="red" />
           </svg>
-          <span class="qa-create-comment-bar_right-side-like-amount">123</span>
+          <span class="qa-create-comment-bar_right-side-like-amount">{{ qa.numberOfLikes }}</span>
         </div>
-        <img @click="triggerSave" v-if="!isSaved" class="qa-create-comment-bar_right-side-save-icon" src="../../../assets/images/icons/save-icon.svg" alt="Save icon">
-        <svg @click="triggerSave" v-else class="qa-create-comment-bar_right-side-save-icon"
+
+        <img @click="toggleSave" v-if="!qa.isSaved" class="qa-create-comment-bar_right-side-save-icon" src="@/assets/images/icons/save-icon.svg" alt="Save icon">
+        <svg @click="toggleSave" v-else class="qa-create-comment-bar_right-side-save-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -63,68 +72,188 @@
         </svg>
       </li>
     </ul>
+
     <ul class="qa-comments">
-      <li class="qa-comments_comment">
+      <li v-for="(comment, index) in qa.comments" :key="comment.commentId" class="qa-comments_comment">
         <ul class="qa-comments_comment-header">
           <li class="qa-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="qa-comments_comment-header_left-side-user-name-link">
-              <img class="qa-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="qa-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
+            <router-link :to="`/user-profile/${comment.userId}`" class="qa-comments_comment-header_left-side-user-name-link">
+              <img class="qa-comments_comment-header_left-side-user-profile-image" :src="comment.userImagePath" alt="User profile photo">
+              <span class="qa-comments_comment-header_left-side-user-name">{{ comment.userFirstName }} {{ comment.userLastName }}</span>
             </router-link>
           </li>
           <li class="qa-comments_comment-header_right-side">
-            <span class="qa-comments_comment-header_right-side-time-of-publication">1 day ago</span>
+            <span class="qa-comments_comment-header_right-side-time-of-publication">{{ formatDate(comment.dateOfCreation) }}</span>
           </li>
         </ul>
-        <p class="qa-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
-        <div class="qa-comments_comment-divider"></div>
+        <p class="qa-comments_comment-content">{{ comment.content }}</p>
+        <button v-if="activeUserEmail == comment.userEmail" @click="deleteComment(comment.commentId)" class="qa-comments_comment-delete-button">Delete comment</button>
+        <div v-if="index !== qa.comments.length - 1" class="qa-comments_comment-divider"></div>
       </li>
-      <li class="qa-comments_comment">
-        <ul class="qa-comments_comment-header">
-          <li class="qa-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="qa-comments_comment-header_left-side-user-name-link">
-              <img class="qa-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="qa-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
-            </router-link>
-          </li>
-          <li class="qa-comments_comment-header_right-side">
-            <span class="qa-comments_comment-header_right-side-time-of-publication">1 day ago</span>
-          </li>
-        </ul>
-        <p class="qa-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
-      </li>
+      <li class="qa-comments_load-more-comments-button" v-if="isLoadMoreCommentsButtonVisible" @click="loadMoreComments">Load more comments..</li>
     </ul>
-  </div> 
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue"
+import LoadingSquare from "@/components/LoadingSquare.vue"
+import { useRouter } from "vue-router"
+
+import useGetqa from "@/composables/forum/useGetQA"
+import type { QA } from "@/types/forum/QA"
+import useToggleLikeOfActivity from "@/composables/forum/useToggleLikeOfActivity"
+import useToggleSaveOfActivity from "@/composables/forum/useToggleSaveOfActivity"
+import { useAuthenticationStore } from "@/stores/authentication"
+import useRelativeDate from "@/composables/forum/useRelativeDate"
+import useCreateComment from "@/composables/forum/useCreateComment"
+import useDeleteComment from "@/composables/forum/useDeleteComment"
+import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged"
 
 export default defineComponent({
-  setup() {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  components: {
+    LoadingSquare
+  },
+  setup(props) {
+    const authenticationStore = useAuthenticationStore()
+    const activeUserEmail = authenticationStore.email
+    const router = useRouter()
+    const qa = ref<QA>({} as QA)
+    const isLoading = ref(true)
     const valueOfTextArea = ref<string>('')
     const maxNumberOfSigns = 400
-    const isLiked = ref<boolean>(false)
-    const isSaved = ref<boolean>(false)
+    const inputFieldAddCommentContent = ref<string>('')
+    const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
+    let page = 1
+    const pageSize = 3
 
     const numberOfSignsEntered = computed(() => valueOfTextArea.value.length)
     const isLimitExceeded = computed(() => numberOfSignsEntered.value > maxNumberOfSigns)
 
-    const triggerLike = () => {
-      isLiked.value = !isLiked.value
+    onMounted(async () => {
+      const startTime = performance.now()
+
+      const result = await useGetqa(props.id)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        router.push("/error-page")
+      } else {
+        qa.value = result as QA
+        if (authenticationStore.userId == qa.value.userId) {
+          router.push(`/my-profile/activities/qa/${qa.value.id}`)
+        }
+        isLoadMoreCommentsButtonVisible.value = qa.value.comments.length == pageSize
+        console.log("Loaded qa: ", qa.value)
+      }
+
+      const elapsed = performance.now() - startTime
+      const remaining = 500 - elapsed
+      if (remaining > 0) {
+        setTimeout(() => { isLoading.value = false }, remaining)
+      } else {
+        isLoading.value = false
+      }
+    })
+
+    const formatDate = (date: string) => {
+      return useRelativeDate(date)
     }
 
-    const triggerSave = () => {
-      isSaved.value = !isSaved.value
+    const toggleLike = async () => {
+      const result = await useToggleLikeOfActivity(qa.value.id, authenticationStore.userId)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("numberOfLikes" in result) {
+        qa.value.numberOfLikes = result.numberOfLikes
+        qa.value.isLiked = result.isLiked
+      }
+
     }
 
-    return { valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, isLiked, isSaved, triggerLike, triggerSave }
+    const toggleSave = async () => {
+      const result = await useToggleSaveOfActivity(qa.value.id, authenticationStore.userId)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("isSaved" in result) {
+        qa.value.isSaved = result.isSaved
+      }
+    }
+
+    const createComment = async () => {
+      const result = await useCreateComment(qa.value.id, authenticationStore.userId, inputFieldAddCommentContent.value)
+    
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("commentId" in result) {
+        console.log("Created comment: ", result)
+        inputFieldAddCommentContent.value = ''
+
+        qa.value.comments.unshift({
+          commentId: result.commentId,
+          activityId: qa.value.id,
+          userId: result.userId,
+          userEmail: result.userEmail,
+          userFirstName: result.userFirstName,
+          userLastName: result.userLastName,
+          userImagePath: result.userImagePath,
+          dateOfCreation: result.dateOfCreation,
+          content: result.content
+        })
+      }
+    }
+
+    const deleteComment = async (commentId: string) => {
+      const result = await useDeleteComment(commentId, authenticationStore.userId)
+    
+      if (!result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      qa.value.comments = qa.value.comments.filter(c => c.commentId !== commentId)
+    }
+
+    const loadMoreComments = async () => {
+      const result = await useGetCommentsPaged(qa.value.id, page, pageSize)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        if (result.length < pageSize) {
+          isLoadMoreCommentsButtonVisible.value = false
+        }
+        qa.value.comments.push(...result)
+        page++
+      }
+    }
+
+    return { qa, valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, isLoading, toggleLike, toggleSave , inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible }
   }
 });
 </script>
 
 <style lang="scss" scoped>
-@use "../../../assets/styles/config" as *;
+@use "@/assets/styles/config" as *;
 
 .qa {
   margin: 50px 0 100px 100px;
@@ -134,7 +263,7 @@ export default defineComponent({
 
   @media (max-width: $breakpoint) {
     margin: 50px 10px 100px 10px;
-    padding: 0 30px 30px 30px;
+    padding: 0 30px;
   }
 
   &-header {
@@ -169,6 +298,8 @@ export default defineComponent({
       &-profile-image {
         width: 36px;
         margin-right: 10px;
+        border-radius: 50%;
+        border: 1px solid #000000;
 
         @media (max-width: $breakpoint) {
           width: 30px;
@@ -401,6 +532,8 @@ export default defineComponent({
           &-user-profile-image {
             width: 30px;
             margin-right: 10px;
+            border-radius: 50%;
+            border: 1px solid #000000;
           }
 
           &-user-name {
@@ -445,41 +578,51 @@ export default defineComponent({
         }
       }
 
+      &-delete-button {
+        border: 2px solid $errorColor;
+        color: $errorColor;
+        background-color: $mainBackgroundColor;
+        width: 140px;
+        height: 36px;
+        border-radius: 12px;
+        transition: background-color 0.3s ease;
+        font-size: 14px;
+        margin: 20px 20px 0 20px;
+
+        &:hover {
+          background-color: #ffe4e4;
+        }
+
+        @media (max-width: $breakpoint) {
+          width: 130px;
+          height: 34px;
+          font-size: 12px;
+          margin: 10px 10px 0 10px;
+        }
+      }
+
       &-divider {
         border-bottom: 1px solid $grayBorderColor;
         height: 24px;
         margin-bottom: 24px;
       }
     }
-  }
 
-  &-delete {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    border-top: 2px solid $grayBorderColor;
-    margin: 40px -50px 0 -50px;
-    padding: 14px 0;
-    transition: background-color 0.3s ease;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-
-    @media (max-width: $breakpoint) {
-      margin: 40px -30px 0 -30px;
-    }
-
-    &-inscription {
+    &_load-more-comments-button {
       font-size: 14px;
-      color: $errorColor;
+      display: flex;
+      justify-self: center;
+      align-self: center;
+      margin-top: 20px;
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
 
       @media (max-width: $breakpoint) {
         font-size: 12px;
       }
-    }
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ececec;
     }
   }
 }

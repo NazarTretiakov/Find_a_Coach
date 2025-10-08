@@ -1,34 +1,39 @@
-<template> 
-  <div class="survey">
+<template>
+  <loading-square v-if="isLoading"></loading-square>
+
+  <div v-else class="survey">
     <ul class="survey-header">
       <li class="survey-header_user-info">
-        <router-link to="/user-profile" class="survey-header_user-info-link">
-          <img class="survey-header_user-info-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
-          <span class="survey-header_user-info-user-name">Janusz Kowalski</span>
+        <router-link :to="`/user-profile/${survey.userId}`" class="survey-header_user-info-link">
+          <img class="survey-header_user-info-profile-image" :src="survey.userImagePath" alt="User profile image">
+          <span class="survey-header_user-info-user-name">{{ survey.userFirstName }} {{ survey.userLastName }}</span>
         </router-link>  
       </li>
       <li class="survey-header_publication-time">
-        <span class="survey-header_publication-time-element">2 days ago</span>
+        <span class="survey-header_publication-time-element">{{ formatDate(survey.createdAt) }}</span>
       </li>
     </ul>
-    <h1 class="survey-title">Starting an store checking project</h1>
-    <span class="survey-subjects">Logistics, Business, Marketing</span>
-    <img class="survey-image" src="../../../assets/images/activities-image.jpeg" alt="Image of the survey">
-    <p class="survey-description">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js.</p>
-    
-    <div class="survey-options">
+
+    <h1 class="survey-title">{{ survey.title }}</h1>
+    <span class="survey-subjects">{{ survey.subjects?.join(', ') }}</span>
+
+    <img v-if="survey.imagePath" class="survey-image" :src="survey.imagePath" alt="Image of the survey">
+
+    <p class="survey-description">{{ survey.description }}</p>
+
+    <div class="survey-options" v-if="survey.options && survey.options.length > 0">
       <h2 class="survey-options-header">Select an option to view the survey results</h2>
 
-      <div v-for="(answer, index) in answers" :key="index" class="survey-options-survey-option">
+      <div v-for="(option, index) in survey.options" :key="index" class="survey-options-survey-option">
         <div class="survey-options-survey-option-incription">
-          <span class="survey-options-survey-option-incription-name">{{ answer.text }}</span>
+          <span class="survey-options-survey-option-incription-name">{{ option.inscription }}</span>
           <span v-if="selectedAnswer !== null" class="survey-options-survey-option-incription-percent-of-votes">
-            {{ getPercentage(answer.votes).toFixed(1) }}%
+            {{ getPercentage(answers[index].votes).toFixed(1) }}%
           </span>
         </div>
 
         <v-progress-linear
-          :model-value="selectedAnswer !== null ? getPercentage(answer.votes) : 0"
+          :model-value="selectedAnswer !== null ? getPercentage(answers[index].votes) : 0"
           :color="selectedAnswer !== null ? '#234CA2' : 'grey'"
           bg-color="grey"
           height="16"
@@ -38,12 +43,14 @@
         ></v-progress-linear>
       </div>
     </div>
-    
+
     <h2 class="survey-comments-header">Comments</h2>
+
     <ul class="survey-create-comment-bar">
       <li class="survey-create-comment-bar_left-side">
-        <input class="survey-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment...">
-        <svg class="survey-create-comment-bar_left-side-icon"
+        <input class="survey-create-comment-bar_left-side-input" type="text" placeholder="Leave your comment..." v-model="inputFieldAddCommentContent">
+        <svg @click="createComment"
+          class="survey-create-comment-bar_left-side-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -51,20 +58,22 @@
           <path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Z" fill="#B1B1B1" />          
         </svg>
       </li>
+
       <li class="survey-create-comment-bar_right-side">
         <div class="survey-create-comment-bar_right-side-like">
-          <img @click="triggerLike" v-if="!isLiked" class="survey-create-comment-bar_right-side-like-icon" src="../../../assets/images/icons/like-icon.svg" alt="Like icon">
-          <svg @click="triggerLike" v-if="isLiked"  class="survey-create-comment-bar_right-side-like-icon"
+          <img @click="toggleLike" v-if="!survey.isLiked" class="survey-create-comment-bar_right-side-like-icon" src="@/assets/images/icons/like-icon.svg" alt="Like icon">
+          <svg @click="toggleLike" v-if="survey.isLiked" class="survey-create-comment-bar_right-side-like-icon"
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
             width="30px"
             viewBox="0 -960 960 960">
             <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52" fill="red" />
           </svg>
-          <span class="survey-create-comment-bar_right-side-like-amount">123</span>
+          <span class="survey-create-comment-bar_right-side-like-amount">{{ survey.numberOfLikes }}</span>
         </div>
-        <img @click="triggerSave" v-if="!isSaved" class="survey-create-comment-bar_right-side-save-icon" src="../../../assets/images/icons/save-icon.svg" alt="Save icon">
-        <svg @click="triggerSave" v-else class="survey-create-comment-bar_right-side-save-icon"
+
+        <img @click="toggleSave" v-if="!survey.isSaved" class="survey-create-comment-bar_right-side-save-icon" src="@/assets/images/icons/save-icon.svg" alt="Save icon">
+        <svg @click="toggleSave" v-else class="survey-create-comment-bar_right-side-save-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
           viewBox="0 -960 960 960"
@@ -73,60 +82,186 @@
         </svg>
       </li>
     </ul>
+
     <ul class="survey-comments">
-      <li class="survey-comments_comment">
+      <li v-for="(comment, index) in survey.comments" :key="comment.commentId" class="survey-comments_comment">
         <ul class="survey-comments_comment-header">
           <li class="survey-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="survey-comments_comment-header_left-side-user-name-link">
-              <img class="survey-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="survey-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
+            <router-link :to="`/user-profile/${comment.userId}`" class="survey-comments_comment-header_left-side-user-name-link">
+              <img class="survey-comments_comment-header_left-side-user-profile-image" :src="comment.userImagePath" alt="User profile photo">
+              <span class="survey-comments_comment-header_left-side-user-name">{{ comment.userFirstName }} {{ comment.userLastName }}</span>
             </router-link>
           </li>
           <li class="survey-comments_comment-header_right-side">
-            <span class="survey-comments_comment-header_right-side-time-of-publication">1 day ago</span>
+            <span class="survey-comments_comment-header_right-side-time-of-publication">{{ formatDate(comment.dateOfCreation) }}</span>
           </li>
         </ul>
-        <p class="survey-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
-        <div class="survey-comments_comment-divider"></div>
+        <p class="survey-comments_comment-content">{{ comment.content }}</p>
+        <button v-if="activeUserEmail == comment.userEmail" @click="deleteComment(comment.commentId)" class="survey-comments_comment-delete-button">Delete comment</button>
+        <div v-if="index !== survey.comments.length - 1" class="survey-comments_comment-divider"></div>
       </li>
-      <li class="survey-comments_comment">
-        <ul class="survey-comments_comment-header">
-          <li class="survey-comments_comment-header_left-side">
-            <router-link to="/user-profile" class="survey-comments_comment-header_left-side-user-name-link">
-              <img class="survey-comments_comment-header_left-side-user-profile-image" src="../../../assets/images/icons/user-icon.jpg" alt="User profile photo">
-              <span class="survey-comments_comment-header_left-side-user-name">Matvii Tretiakov</span>
-            </router-link>
-          </li>
-          <li class="survey-comments_comment-header_right-side">
-            <span class="survey-comments_comment-header_right-side-time-of-publication">1 day ago</span>
-          </li>
-        </ul>
-        <p class="survey-comments_comment-content">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów.</p>
-      </li>
+      <li class="survey-comments_load-more-comments-button" v-if="isLoadMoreCommentsButtonVisible" @click="loadMoreComments">Load more comments..</li>
     </ul>
-  </div> 
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, onMounted, computed } from "vue"
+import LoadingSquare from "@/components/LoadingSquare.vue"
+import { useRouter } from "vue-router"
 
-import type { Answer } from '../../../types/survey/Answer'
+import useGetSurvey from "@/composables/forum/useGetSurvey"
+import useToggleLikeOfActivity from "@/composables/forum/useToggleLikeOfActivity"
+import useToggleSaveOfActivity from "@/composables/forum/useToggleSaveOfActivity"
+import { useAuthenticationStore } from "@/stores/authentication"
+import useRelativeDate from "@/composables/forum/useRelativeDate"
+import useCreateComment from "@/composables/forum/useCreateComment"
+import useDeleteComment from "@/composables/forum/useDeleteComment"
+import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged"
+import type { Answer } from "@/types/survey/Answer"
+import type { Survey } from "@/types/forum/Survey"
 
 export default defineComponent({
-  setup() {
-    const isLiked = ref<boolean>(false)
-    const isSaved = ref<boolean>(false)
-    const selectedAnswer = ref<number | null>(null);
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  components: { 
+    LoadingSquare
+  },
+  setup(props) {
+    const authenticationStore = useAuthenticationStore()
+    const activeUserEmail = authenticationStore.email
+    const router = useRouter()
+    const isLoading = ref(true)
+    const survey = ref<Survey>({} as Survey)
+    const selectedAnswer = ref<string | null>(null)
     const answers = ref<Answer[]>([
       { text: "Answer 1", votes: 43 },
       { text: "Some great second answer", votes: 15 },
       { text: "Third answer that also exists", votes: 20 },
-    ]);
+    ])
+    const inputFieldAddCommentContent = ref<string>('')
+    const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
+    let page = 1
+    const pageSize = 3
 
+    onMounted(async () => {
+      const startTime = performance.now()
+
+      const result = await useGetSurvey(props.id)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        router.push("/error-page")
+      } else {
+        survey.value = result as Survey
+        if (authenticationStore.userId == survey.value.userId) {
+          router.push(`/my-profile/activities/survey/${survey.value.id}`)
+        }
+        isLoadMoreCommentsButtonVisible.value = survey.value.comments.length == pageSize
+        console.log("Loaded survey: ", survey.value)
+      }
+
+      const elapsed = performance.now() - startTime
+      const remaining = 500 - elapsed
+      if (remaining > 0) {
+        setTimeout(() => { isLoading.value = false }, remaining)
+      } else {
+        isLoading.value = false
+      }
+    })
+
+    const formatDate = (date: string) => {
+      return useRelativeDate(date)
+    }
+
+    const toggleLike = async () => {
+      const result = await useToggleLikeOfActivity(survey.value.id, authenticationStore.userId)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("numberOfLikes" in result) {
+        survey.value.numberOfLikes = result.numberOfLikes
+        survey.value.isLiked = result.isLiked
+      }
+
+    }
+
+    const toggleSave = async () => {
+      const result = await useToggleSaveOfActivity(survey.value.id, authenticationStore.userId)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("isSaved" in result) {
+        survey.value.isSaved = result.isSaved
+      }
+    }
+
+    const createComment = async () => {
+      const result = await useCreateComment(survey.value.id, authenticationStore.userId, inputFieldAddCommentContent.value)
+    
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      if ("commentId" in result) {
+        console.log("Created comment: ", result)
+        inputFieldAddCommentContent.value = ''
+
+        survey.value.comments.unshift({
+          commentId: result.commentId,
+          activityId: survey.value.id,
+          userId: result.userId,
+          userEmail: result.userEmail,
+          userFirstName: result.userFirstName,
+          userLastName: result.userLastName,
+          userImagePath: result.userImagePath,
+          dateOfCreation: result.dateOfCreation,
+          content: result.content
+        })
+      }
+    }
+
+    const deleteComment = async (commentId: string) => {
+      const result = await useDeleteComment(commentId, authenticationStore.userId)
+    
+      if (!result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      survey.value.comments = survey.value.comments.filter(c => c.commentId !== commentId)
+    }
+
+    const loadMoreComments = async () => {
+      const result = await useGetCommentsPaged(survey.value.id, page, pageSize)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        if (result.length < pageSize) {
+          isLoadMoreCommentsButtonVisible.value = false
+        }
+        survey.value.comments.push(...result)
+        page++
+      }
+    }
 
     const vote = (index: number) => {
       if (selectedAnswer.value === null) {
-        selectedAnswer.value = index;
+        selectedAnswer.value = index.toString();
         answers.value[index].votes++;
       }
     };
@@ -138,22 +273,14 @@ export default defineComponent({
     const getPercentage = (votes: number) => {
       return totalVotes.value > 0 ? (votes / totalVotes.value) * 100 : 0;
     };
-
-    const triggerLike = () => {
-      isLiked.value = !isLiked.value
-    }
-
-    const triggerSave = () => {
-      isSaved.value = !isSaved.value
-    }
-
-    return { answers, vote, selectedAnswer, getPercentage, isLiked, isSaved, triggerLike, triggerSave }
-  }
-});
+    
+    return { survey, isLoading, toggleLike, toggleSave , vote, answers, selectedAnswer, getPercentage, inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible }
+  },
+})
 </script>
 
 <style lang="scss" scoped>
-@use "../../../assets/styles/config" as *;
+@use "@/assets/styles/config" as *;
 
 .survey {
   margin: 50px 0 100px 100px;
@@ -163,7 +290,7 @@ export default defineComponent({
 
   @media (max-width: $breakpoint) {
     margin: 50px 10px 100px 10px;
-    padding: 0 30px 30px 30px;
+    padding: 0 30px;
   }
 
   &-header {
@@ -198,6 +325,8 @@ export default defineComponent({
       &-profile-image {
         width: 36px;
         margin-right: 10px;
+        border-radius: 50%;
+        border: 1px solid #000000;
 
         @media (max-width: $breakpoint) {
           width: 30px;
@@ -274,7 +403,7 @@ export default defineComponent({
     }
 
     &-survey-option {
-      margin: 14px 0;
+      margin: 20px 0;
 
       &-incription {
         font-size: 14px;
@@ -417,6 +546,8 @@ export default defineComponent({
           &-user-profile-image {
             width: 30px;
             margin-right: 10px;
+            border-radius: 50%;
+            border: 1px solid #000000;
           }
 
           &-user-name {
@@ -461,41 +592,51 @@ export default defineComponent({
         }
       }
 
+      &-delete-button {
+        border: 2px solid $errorColor;
+        color: $errorColor;
+        background-color: $mainBackgroundColor;
+        width: 140px;
+        height: 36px;
+        border-radius: 12px;
+        transition: background-color 0.3s ease;
+        font-size: 14px;
+        margin: 20px 20px 0 20px;
+
+        &:hover {
+          background-color: #ffe4e4;
+        }
+
+        @media (max-width: $breakpoint) {
+          width: 130px;
+          height: 34px;
+          font-size: 12px;
+          margin: 10px 10px 0 10px;
+        }
+      }
+
       &-divider {
         border-bottom: 1px solid $grayBorderColor;
         height: 24px;
         margin-bottom: 24px;
       }
     }
-  }
 
-  &-delete {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    border-top: 2px solid $grayBorderColor;
-    margin: 40px -50px 0 -50px;
-    padding: 14px 0;
-    transition: background-color 0.3s ease;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-
-    @media (max-width: $breakpoint) {
-      margin: 40px -30px 0 -30px;
-    }
-
-    &-inscription {
+    &_load-more-comments-button {
       font-size: 14px;
-      color: $errorColor;
+      display: flex;
+      justify-self: center;
+      align-self: center;
+      margin-top: 20px;
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
 
       @media (max-width: $breakpoint) {
         font-size: 12px;
       }
-    }
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ececec;
     }
   }
 }

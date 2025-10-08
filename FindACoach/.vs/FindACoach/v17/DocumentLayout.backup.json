@@ -13,10 +13,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\forum\\activities\\activitiesremoverservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\forum\\activities\\activitiesremoverservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\repositories\\commentsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\commentsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,6 +25,14 @@
           "SelectedChildIndex": 4,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "ActivitiesController.cs",
@@ -36,7 +40,7 @@
               "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\MyProfile\\ActivitiesController.cs",
               "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\ActivitiesController.cs",
               "RelativeToolTip": "src\\FindACoach.API\\Controllers\\MyProfile\\ActivitiesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAYwDUAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-07T08:18:50.507Z",
               "IsPinned": true,
@@ -53,16 +57,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-07T08:24:50.956Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -70,24 +65,11 @@
               "Title": "ActivitiesRepository.cs",
               "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
               "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs*",
-              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs*",
-              "ViewState": "AgIAAP4AAAAAAAAAAAAwwAkBAAAqAAAAAAAAAA==",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
+              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
+              "ViewState": "AgIAAJEBAAAAAAAAAAAwwKUBAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-06T09:20:30.95Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "CommentsRepository.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\CommentsRepository.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\CommentsRepository.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\CommentsRepository.cs",
-              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\CommentsRepository.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAYwDkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T08:26:49.166Z",
               "EditorCaption": ""
             }
           ]

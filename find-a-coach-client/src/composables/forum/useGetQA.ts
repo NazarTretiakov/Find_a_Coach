@@ -1,11 +1,11 @@
 import useEnsureValidToken from '../authentication/useEnsureValidToken'
 import { config } from '@/config'
-import { Event } from '@/types/forum/Event'
+import type { QA } from '@/types/forum/QA'
 import { Result } from "@/types/Result"
 
 const API_URL = config.apiBaseUrl + '/Activity'
 
-export default async function useGetEvent(id: string): Promise<Event | Result> {
+export default async function useGetQA(id: string): Promise<QA | Result> {
   try {
     const token = await useEnsureValidToken()
 
@@ -20,13 +20,13 @@ export default async function useGetEvent(id: string): Promise<Event | Result> {
       const responseData = await response.json();
       return {
         isSuccessful: false,
-        errorMessage: responseData.title || 'Unexpected error occured while getting event.',
+        errorMessage: responseData.title || 'Unexpected error occured while getting QA.',
       }
     }
 
-    const event: Event = await response.json()
+    const qa: QA = await response.json()
     
-    return event
+    return qa
   } catch (error) {
     return {
       isSuccessful: false,

@@ -111,8 +111,8 @@
       </li>
       <li class="event-comments_load-more-comments-button" v-if="isLoadMoreCommentsButtonVisible" @click="loadMoreComments">Load more comments..</li>
     </ul>
-    <div class="event-delete">
-      <span class="event-delete-inscription" @click="deleteActivity(event.id)">Delete event</span>
+    <div class="event-delete" @click="deleteActivity(event.id)">
+      <span class="event-delete-inscription">Delete event</span>
     </div>
   </div> 
 </template>

@@ -1,11 +1,11 @@
 import useEnsureValidToken from '../authentication/useEnsureValidToken'
 import { config } from '@/config'
-import { Event } from '@/types/forum/Event'
+import { Post } from '@/types/forum/Post'
 import { Result } from "@/types/Result"
 
 const API_URL = config.apiBaseUrl + '/Activity'
 
-export default async function useGetEvent(id: string): Promise<Event | Result> {
+export default async function useGetPost(id: string): Promise<Post | Result> {
   try {
     const token = await useEnsureValidToken()
 
@@ -24,9 +24,9 @@ export default async function useGetEvent(id: string): Promise<Event | Result> {
       }
     }
 
-    const event: Event = await response.json()
+    const post: Post = await response.json()
     
-    return event
+    return post
   } catch (error) {
     return {
       isSuccessful: false,

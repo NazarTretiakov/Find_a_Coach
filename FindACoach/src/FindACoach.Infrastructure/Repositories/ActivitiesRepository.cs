@@ -343,6 +343,7 @@ namespace FindACoach.Infrastructure.Repositories
                                                                            Comments = s.Comments
                                                                             .Where(c => c.ActivityId == s.Id)
                                                                             .OrderByDescending(c => c.DateOfCreation)
+                                                                            .Take(3)
                                                                             .Select(c => new CommentToResponse()
                                                                             {
                                                                                 CommentId = c.Id,
@@ -380,6 +381,7 @@ namespace FindACoach.Infrastructure.Repositories
                                                               Comments = qa.Comments
                                                                  .Where(c => c.ActivityId == qa.Id)
                                                                  .OrderByDescending(c => c.DateOfCreation)
+                                                                 .Take(3)
                                                                  .Select(c => new CommentToResponse()
                                                                  {
                                                                      CommentId = c.Id,
@@ -417,6 +419,7 @@ namespace FindACoach.Infrastructure.Repositories
                                               Comments = p.Comments
                                                 .Where(c => c.ActivityId == p.Id)
                                                 .OrderByDescending(c => c.DateOfCreation)
+                                                .Take(3)
                                                 .Select(c => new CommentToResponse()
                                                 {
                                                     CommentId = c.Id,
@@ -487,7 +490,7 @@ namespace FindACoach.Infrastructure.Repositories
 
                 await imageResult.SaveAsync(imagePathToCreateFile, new JpegEncoder
                 {
-                    Quality = 90
+                    Quality = 95
                 });
             }
 

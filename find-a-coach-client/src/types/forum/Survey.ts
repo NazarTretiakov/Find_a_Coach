@@ -2,7 +2,7 @@ import type { Activity } from "./Activity"
 import type { SurveyOption } from "./SurveyOption"
 
 interface Survey extends Activity {
-  surveyOptions: SurveyOption[];
+  options: SurveyOption[];
 }
 
 export type { Survey }

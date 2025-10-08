@@ -3,7 +3,7 @@
 
   <ul class="page-sections">
     <li class="page-sections_left-side">
-      <question-answer></question-answer>
+      <question-answer :id="id"></question-answer>
     </li>
     <li class="page-sections_right-side">
       <recommended-people></recommended-people>
@@ -24,6 +24,12 @@ import TheFooter from '../../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     ProfileStickyHeader,
     QuestionAnswer,
