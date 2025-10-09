@@ -1,5 +1,6 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.Entities.Activity;
+using FindACoach.Core.Domain.Entities.User;
 using FindACoach.Core.Domain.IdentityEntities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace FindACoach.Infrastructure.DbContext
     {
         public DbSet<Website> Websites { get; set; }
         public DbSet<Connection> Connections { get; set; }
+        public DbSet<Position> Positions { get; set; }
         public DbSet<Core.Domain.Entities.Activity.Activity> Activities { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Survey> Surveys { get; set; }
@@ -35,6 +37,7 @@ namespace FindACoach.Infrastructure.DbContext
 
             builder.Entity<Website>().ToTable("Websites");
             builder.Entity<Connection>().ToTable("Connections");
+            builder.Entity<Position>().ToTable("Positions");
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>().ToTable("Activities");
             builder.Entity<Event>().ToTable("Events");
@@ -68,6 +71,11 @@ namespace FindACoach.Infrastructure.DbContext
                 .WithMany()
                 .HasForeignKey(c => c.ConnectedUserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Position>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Positions)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>()
                .HasOne(a => a.User)
@@ -106,6 +114,10 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Skill>()
                 .HasMany(s => s.Panels)
                 .WithMany(p => p.PreferredSkills);
+
+            builder.Entity<Skill>()
+                .HasMany(s => s.Positions)
+                .WithMany(p => p.Skills);
 
             builder.Entity<Like>()
                 .HasOne(l => l.Activity)

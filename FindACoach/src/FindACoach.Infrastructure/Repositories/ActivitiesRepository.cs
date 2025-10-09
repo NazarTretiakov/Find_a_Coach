@@ -82,13 +82,22 @@ namespace FindACoach.Infrastructure.Repositories
 
                 string[] panelPreferredSkills = panelDTO.PreferredSkills.Split(',', StringSplitOptions.RemoveEmptyEntries);
 
-                foreach (var skill in panelPreferredSkills.Select(s => s.Trim()))
+                foreach (var skillTitle in panelPreferredSkills.Select(s => s.Trim()))
                 {
-                    panelEntity.PreferredSkills.Add(new Skill
+                    Skill skill = await _db.Skills.FirstOrDefaultAsync(s => s.Title == skillTitle);
+
+                    if (skill != null)
                     {
-                        Id = Guid.NewGuid(),
-                        Title = skill
-                    });
+                        panelEntity.PreferredSkills.Add(skill);
+                    }
+                    else
+                    {
+                        panelEntity.PreferredSkills.Add(new Skill
+                        {
+                            Id = Guid.NewGuid(),
+                            Title = skillTitle
+                        });
+                    }
                 }
             }
 

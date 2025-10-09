@@ -10,7 +10,7 @@
         </router-link>  
       </li>
       <li class="event-header_publication-time">
-        <span class="event-header_publication-time-element">{{ formatDate(event.createdAt) }}</span>
+        <span class="event-header_publication-time-element">{{ formatRelativeDate(event.createdAt) }}</span>
       </li>
     </ul>
 
@@ -46,7 +46,7 @@
       <show-applications-button :class="!isPositionPanelOpened[index] ? 'event-position-button' : 'event-position-opened-button'" />
     </div>
 
-    <span class="event-date-of-beginning">Date of beginning: {{ formatDate(event.beginningDate) }}</span>
+    <span class="event-date-of-beginning">Date of beginning: {{ formatToReadableDate(event.beginningDate) }}</span>
     <p class="event-description">{{ event.description }}</p>
 
     <h2 class="event-comments-header">Comments</h2>
@@ -64,7 +64,7 @@
       </li>
       <li class="event-create-comment-bar_right-side">
         <div class="event-create-comment-bar_right-side-like">
-          <img @click="toggleLike" v-if="!event.isLiked" class="event-create-comment-bar_right-side-like-icon" src="../../../assets/images/icons/like-icon.svg" alt="Like icon">
+          <img @click="toggleLike" v-if="!event.isLiked" class="event-create-comment-bar_right-side-like-icon" src="@/assets/images/icons/like-icon.svg" alt="Like icon">
           <svg @click="toggleLike" v-if="event.isLiked"  class="event-create-comment-bar_right-side-like-icon"
             xmlns="http://www.w3.org/2000/svg"
             height="30px"
@@ -74,7 +74,7 @@
           </svg>
           <span class="event-create-comment-bar_right-side-like-amount">{{ event.numberOfLikes }}</span>
         </div>
-        <img @click="toggleSave" v-if="!event.isSaved" class="event-create-comment-bar_right-side-save-icon" src="../../../assets/images/icons/save-icon.svg" alt="Save icon">
+        <img @click="toggleSave" v-if="!event.isSaved" class="event-create-comment-bar_right-side-save-icon" src="@/assets/images/icons/save-icon.svg" alt="Save icon">
         <svg @click="toggleSave" v-else class="event-create-comment-bar_right-side-save-icon"
           xmlns="http://www.w3.org/2000/svg"
           height="30px"
@@ -101,7 +101,7 @@
           </li>
           <li class="event-comments_comment-header_right-side">
             <span class="event-comments_comment-header_right-side-time-of-publication">
-              {{ formatDate(comment.dateOfCreation) }}
+              {{ formatRelativeDate(comment.dateOfCreation) }}
             </span>
           </li>
         </ul>
@@ -129,6 +129,7 @@ import useGetEvent from '@/composables/forum/useGetEvent'
 import { useRouter } from "vue-router";
 import { Event } from "@/types/forum/Event";
 import useRelativeDate from "@/composables/forum/useRelativeDate"
+import useformatToReadableDate from "@/composables/useFormatToReadableDate";
 import useToggleLikeOfActivity from "@/composables/forum/useToggleLikeOfActivity";
 import useToggleSaveOfActivity from "@/composables/forum/useToggleSaveOfActivity";
 import useCreateComment from "@/composables/forum/useCreateComment";
@@ -187,8 +188,12 @@ export default defineComponent({
       }
     })
 
-    const formatDate = (date: string) => {
+    const formatRelativeDate = (date: string) => {
       return useRelativeDate(date)
+    }
+
+    const formatToReadableDate = (date: string) => {
+      return useformatToReadableDate(date)
     }
 
     const triggerPositionPanelOpening = (positionId: number) => {
@@ -287,7 +292,7 @@ export default defineComponent({
       router.push('/my-profile/activities')
     }
 
-    return { event, formatDate, isPositionPanelOpened, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, deleteActivity, isLoading }
+    return { event, formatRelativeDate, formatToReadableDate, isPositionPanelOpened, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, deleteActivity, isLoading }
   }
 });
 </script>

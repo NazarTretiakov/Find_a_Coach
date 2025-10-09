@@ -128,8 +128,8 @@ import RemoveButton from '../../../input-fields/RemoveButton.vue';
 import AddButton from '../../../input-fields/AddButton.vue';
 import SaveButton from '../../../input-fields/SaveButton.vue';
 
-import type { Form } from '@/types/my-profile/add-activity/Form'
-import type { Panel } from '@/types/my-profile/add-activity/Panel'
+import type { Form } from '@/types/my-profile/activities/add-activity/Form'
+import type { Panel } from '@/types/my-profile/activities/add-activity/Panel'
 import useFormValidation from '@/composables/my-profile/activities/add-activity/useFormValidation'
 import { useRouter } from 'vue-router'
 import useAddActivity from '@/composables/my-profile/activities/add-activity/useAddActivity';

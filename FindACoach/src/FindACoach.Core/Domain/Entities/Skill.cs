@@ -1,5 +1,5 @@
 ﻿using FindACoach.Core.Domain.Entities.Activity;
-using FindACoach.Core.Domain.IdentityEntities;
+using FindACoach.Core.Domain.Entities.User;
 using System.ComponentModel.DataAnnotations;
 
 namespace FindACoach.Core.Domain.Entities
@@ -13,7 +13,8 @@ namespace FindACoach.Core.Domain.Entities
         [StringLength(50)]
         public string Title { get; set; } = string.Empty;
 
-        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<IdentityEntities.User> Users { get; set; } = new List<IdentityEntities.User>();
         public ICollection<SearchPersonPanel> Panels { get; set; } = new List<SearchPersonPanel>();
+        public ICollection<Position> Positions { get; set; } = new List<Position>();
     }
 }

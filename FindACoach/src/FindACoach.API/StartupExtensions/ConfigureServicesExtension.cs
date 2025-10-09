@@ -50,6 +50,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IGetPersonalAndContactInformationService, GetPersonalAndContactInformationService>();
             services.AddScoped<IEditAboutMeService, EditAboutMeService>();
             services.AddScoped<IGetAboutMeService, GetAboutMeService>();
+            services.AddScoped<IPositionsAdderService, PositionsAdderService>();
             services.AddScoped<IAddActivityService, AddActivityService>();
             services.AddScoped<IActivitiesGetterService, ActivitiesGetterService>();
             services.AddScoped<IToggleLikeService, ToggleLikeService>();
@@ -60,6 +61,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IActivitiesRemoverService, ActivitiesRemoverService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IPositionsRepository, PositionsRepository>();
             services.AddScoped<IActivitiesRepository, ActivitiesRepository>();
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<ISavesRepository, SavesRepository>();

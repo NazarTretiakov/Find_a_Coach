@@ -1,5 +1,6 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.Entities.Activity;
+using FindACoach.Core.Domain.Entities.User;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -46,6 +47,8 @@ namespace FindACoach.Core.Domain.IdentityEntities
         public ICollection<Website> Websites { get; set; } = new List<Website>();
 
         public ICollection<Connection> Connections { get; set; } = new List<Connection>();
+
+        public ICollection<Position> Positions { get; set; } = new List<Position>();
 
         public ICollection<Entities.Activity.Activity> Activities { get; set; } = new List<Entities.Activity.Activity>();
 

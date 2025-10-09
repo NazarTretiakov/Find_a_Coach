@@ -1,5 +1,4 @@
-﻿using FindACoach.Core.Domain.IdentityEntities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FindACoach.Core.Domain.Entities
 {
@@ -10,7 +9,7 @@ namespace FindACoach.Core.Domain.Entities
 
         [Required]
         public Guid UserId { get; set; }
-        public User User { get; set; }
+        public IdentityEntities.User User { get; set; }
 
         [Required]
         [StringLength(2048)]
