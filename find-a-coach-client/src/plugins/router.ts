@@ -93,7 +93,7 @@ const router = createRouter({
     { path: '/my-profile/activities/post/:id', component: PostPage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/experience', component: ExperiencePage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-position', component: AddPosition, meta: { requiresAuth: true } },
-    { path: '/my-profile/edit-position', component: EditPosition, meta: { requiresAuth: true } },
+    { path: '/my-profile/edit-position/:id', component: EditPosition, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/education', component: EducationPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-education', component: AddEducation, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-education', component: EditEducation, meta: { requiresAuth: true } },
@@ -138,9 +138,20 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
-    } else {
-      return { top: 0 }
+    } 
+    
+    if (to.hash) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            el: to.hash,
+            behavior: 'smooth'
+          })
+        }, 300)
+      })
     }
+
+    return { top: 0 }
   }
 })
 

@@ -79,7 +79,6 @@ export default defineComponent({
     )
 
     const formattedDates = computed(() => {
-      const now = new Date()
       return activities.value.map(activity => {
         const pubDate = new Date(activity.publicationDate)
         return useRelativeDate(pubDate)

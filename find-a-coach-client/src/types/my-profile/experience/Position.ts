@@ -1,13 +1,14 @@
-interface AddPositionForm {
+interface Position {
+  positionId: string;
   title: string;
   employmentType: string;
   companyName: string;
   isCurrentlyWorkingHere: boolean;
-  startDate: Date | null;
-  endDate: Date | null;
+  startDate: string | null;
+  endDate: string | null;
   location: string;
   description: string;
-  skills: string[];
+  skillTitles: string[];
 }
 
-export type { AddPositionForm };
+export type { Position };

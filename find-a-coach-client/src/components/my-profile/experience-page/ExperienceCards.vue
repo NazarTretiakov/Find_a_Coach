@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="experience">
     <ul class="experience-header">
       <li class="experience-header_inscription">
@@ -8,68 +8,140 @@
         <router-link to="/my-profile/add-position" class="experience-header_add-button-link">
           <button class="experience-header_add-button-element">
             <svg class="experience-header_add-button-element-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <span class="experience-header_add-button-element-inscription">Add</span>
           </button>
         </router-link>
       </li>
     </ul>
+
     <ul class="experience-items">
-      <li class="experience-items_position">
+      <li v-for="position in positions" :key="position.positionId" class="experience-items_position" :id="position.positionId">
         <ul class="experience-items_position-items">
           <li class="experience-items_position-items_title">
             <ul class="experience-items_position-items_title-items">
-              <li class="experience-items_position-items_title-items_name"><h2 class="experience-items_position-items_title-items_name-element">Technical department employee</h2></li>
-              <li class="experience-items_position-items_title-items_edit"><router-link to="/my-profile/edit-position"><img class="experience-items_position-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
+              <li class="experience-items_position-items_title-items_name">
+                <h2 class="experience-items_position-items_title-items_name-element">{{ position.title }}</h2>
+              </li>
+              <li class="experience-items_position-items_title-items_edit">
+                <router-link :to="`/my-profile/edit-position/${position.positionId}`">
+                  <img class="experience-items_position-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon" />
+                </router-link>
+              </li>
             </ul>
           </li>
-          <li class="experience-items_position-items_company-and-type-of-employment"><span class="experience-items_position-items_company-and-type-of-employment-element">The Best Company - Freelance</span></li>
-          <li class="experience-items_position-items_location"><span class="experience-items_position-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="experience-items_position-items_time"><span class="experience-items_position-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="experience-items_position-items_description"><p class="experience-items_position-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="experience-items_position-items_skills"><the-skills></the-skills></li>
-        </ul>
-        <div class="experience-items_position-delete">
-          <span class="experience-items_position-delete-inscription">Delete position</span>
-        </div>
-      </li>
-            <li class="experience-items_position">
-        <ul class="experience-items_position-items">
-          <li class="experience-items_position-items_title">
-            <ul class="experience-items_position-items_title-items">
-              <li class="experience-items_position-items_title-items_name"><h2 class="experience-items_position-items_title-items_name-element">Technical department employee</h2></li>
-              <li class="experience-items_position-items_title-items_edit"><router-link to="/my-profile/edit-position"><img class="experience-items_position-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
-            </ul>
+
+          <li class="experience-items_position-items_company-and-type-of-employment">
+            <span class="experience-items_position-items_company-and-type-of-employment-element">{{ position.companyName }} - {{ convertEmploymentType(position.employmentType) }}</span>
           </li>
-          <li class="experience-items_position-items_company-and-type-of-employment"><span class="experience-items_position-items_company-and-type-of-employment-element">The Best Company - Freelance</span></li>
-          <li class="experience-items_position-items_location"><span class="experience-items_position-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="experience-items_position-items_time"><span class="experience-items_position-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="experience-items_position-items_description"><p class="experience-items_position-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="experience-items_position-items_skills"><the-skills></the-skills></li>
+
+          <li class="experience-items_position-items_location">
+            <span class="experience-items_position-items_location-element">{{ position.location }}</span>
+          </li>
+
+          <li class="experience-items_position-items_time">
+            <span class="experience-items_position-items_time-element">{{ formatDate(position.startDate) }} - {{ position.isCurrentlyWorkingHere ? 'Present' : formatDate(position.endDate) }} ({{ getDuration(position.startDate, position.endDate, position.isCurrentlyWorkingHere) }})</span>
+          </li>
+
+          <li class="experience-items_position-items_description">
+            <p class="experience-items_position-items_description-element">{{ position.description }}</p>
+          </li>
+
+          <li class="experience-items_position-items_skills">
+            <the-skills :skills="position.skillTitles"></the-skills>
+          </li>
         </ul>
-        <div class="experience-items_position-delete">
+
+        <div class="experience-items_position-delete" @click="deletePosition(position.positionId)">
           <span class="experience-items_position-delete-inscription">Delete position</span>
         </div>
       </li>
     </ul>
-    <div class="experience-load-more-experience">
-      <span class="experience-load-more-experience-inscription">Load more experience</span>
-    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
 
+<script lang="ts">
+import { defineComponent, onMounted, ref } from 'vue'
+
+import { useRouter } from 'vue-router'
+import { useAuthenticationStore } from '@/stores/authentication'
+import useGetAllPositions from '@/composables/my-profile/experience/useGetAllPositions'
 import TheSkills from '../TheSkills.vue'
+import { Position } from '@/types/my-profile/experience/Position'
+import useFormatToReadableDate from '@/composables/useFormatToReadableDate'
+import useConvertEmploymentTypeToReadable from '@/composables/my-profile/experience/useConvertEmploymentTypeToReadable'
+import useDeletePosition from '@/composables/my-profile/experience/useDeletePosition'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  components: { TheSkills },
+  setup() {
+    const authenticationStore = useAuthenticationStore()
+    const router = useRouter()
+    const positions = ref<Position[]>([])
+
+    async function loadPositions() {
+      const result = await useGetAllPositions(authenticationStore.userId)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        positions.value = result as Position[]
+      }
+    }
+
+    function convertEmploymentType(employmentType: string): string {
+      return useConvertEmploymentTypeToReadable(employmentType)
+    }
+
+    function formatDate(date: Date | string | null): string {
+      return useFormatToReadableDate(date?.toString() || '')
+    }
+
+    function getDuration(start: Date | string | null, end: Date | string | null, isCurrent: boolean): string {
+      if (!start) return ''
+      const startDate = new Date(start)
+      const endDate = isCurrent ? new Date() : end ? new Date(end) : new Date()
+      const diff = endDate.getTime() - startDate.getTime()
+
+      const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30))
+      const years = Math.floor(months / 12)
+      const remainingMonths = months % 12
+
+      if (years > 0 && remainingMonths > 0) return `${years} yr ${remainingMonths} mon`
+      if (years > 0) return `${years} yr`
+      if (remainingMonths > 0) return `${remainingMonths} mon`
+      return 'Less than 1 mon'
+    }
+
+    const deletePosition = async (positionId: string) => {
+      const result = await useDeletePosition(positionId)
+    
+      if (!result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      positions.value = positions.value.filter(position => position.positionId !== positionId)
+    }
+
+    onMounted(() => loadPositions())
+
+    return {
+      positions,
+      convertEmploymentType,
+      formatDate,
+      getDuration,
+      deletePosition
+    }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../../assets/styles/config' as *;
@@ -86,7 +158,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin-bottom: 30px;
 
     @media (max-width: $breakpoint) {
       margin-bottom: 20px;
@@ -157,7 +228,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_position {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px 50px 0 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;

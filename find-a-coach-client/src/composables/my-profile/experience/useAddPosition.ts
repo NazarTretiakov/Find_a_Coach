@@ -1,11 +1,11 @@
 import { Result } from "@/types/Result"
-import type { AddPositionForm } from "@/types/my-profile/experience/AddPositionForm"
+import type { PositionForm } from "@/types/my-profile/experience/PositionForm"
 import useEnsureValidToken from '@/composables/authentication/useEnsureValidToken'
 import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/Experience'
 
-export default async function useAddPosition(formData: AddPositionForm): Promise<Result> {
+export default async function useAddPosition(formData: PositionForm): Promise<Result> {
   try {
     const token = await useEnsureValidToken()
 

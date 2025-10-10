@@ -470,7 +470,7 @@ namespace FindACoach.Infrastructure.Repositories
                                    a is QA ? "QA" :
                                    a is Post ? "Post" :
                                    "Unknown"
-                                   })
+                })
                 .ToListAsync();
 
             return lastTwoActivities;

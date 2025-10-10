@@ -1,4 +1,4 @@
-import type { AddPositionForm } from '@/types/my-profile/experience/AddPositionForm'
+import type { AddPositionForm } from '@/types/my-profile/experience/PositionForm'
 import type { ValidationError } from '@/types/ValidationError'
 
 export default function useValidationOfAddPositionForm(formData: AddPositionForm): ValidationError[] {

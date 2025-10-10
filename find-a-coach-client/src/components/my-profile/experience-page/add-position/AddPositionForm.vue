@@ -138,7 +138,7 @@ import AddButton from '../../../input-fields/AddButton.vue'
 import SaveButton from '../../../input-fields/SaveButton.vue'
 import LoadingSquare from '../../../LoadingSquare.vue'
 
-import type { AddPositionForm } from '@/types/my-profile/experience/AddPositionForm'
+import type { PositionForm } from '@/types/my-profile/experience/PositionForm'
 import type { ValidationError } from '@/types/ValidationError'
 
 import useValidationOfAddPositionForm from '@/composables/my-profile/experience/useValidationOfAddPositionForm'
@@ -166,7 +166,7 @@ export default defineComponent({
       { value: 'internship', label: 'Internship' }
     ]
 
-    const formData = ref<AddPositionForm>({
+    const formData = ref<PositionForm>({
       title: '',
       employmentType: '',
       companyName: '',
