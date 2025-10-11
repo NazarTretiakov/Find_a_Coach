@@ -99,11 +99,11 @@ export default defineComponent({
       return useConvertEmploymentTypeToReadable(employmentType)
     }
 
-    function formatDate(date: Date | null): string {
+    function formatDate(date: Date | string | null): string {
       return useFormatToReadableDate(date?.toString() || '')
     }
 
-    function getDuration(start: Date | null, end: Date | null, isCurrent: boolean): string {
+    function getDuration(start: Date | string | null, end: Date | string | null, isCurrent: boolean): string {
       if (!start) return ''
       const startDate = new Date(start)
       const endDate = isCurrent ? new Date() : end ? new Date(end) : new Date()

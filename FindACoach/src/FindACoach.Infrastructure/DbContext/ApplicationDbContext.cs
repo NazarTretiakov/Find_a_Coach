@@ -14,6 +14,7 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<Website> Websites { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<School> Schools { get; set; }
         public DbSet<Core.Domain.Entities.Activity.Activity> Activities { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Survey> Surveys { get; set; }
@@ -38,6 +39,7 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Website>().ToTable("Websites");
             builder.Entity<Connection>().ToTable("Connections");
             builder.Entity<Position>().ToTable("Positions");
+            builder.Entity<School>().ToTable("Schools");
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>().ToTable("Activities");
             builder.Entity<Event>().ToTable("Events");
@@ -75,6 +77,11 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Position>()
                 .HasOne(p => p.User)
                 .WithMany(u => u.Positions)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<School>()
+                .HasOne(s => s.User)
+                .WithMany(u => u.Schools)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>()

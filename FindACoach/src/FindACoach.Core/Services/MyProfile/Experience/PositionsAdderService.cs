@@ -1,5 +1,4 @@
 ﻿using FindACoach.Core.Domain.RepositoryContracts;
-using FindACoach.Core.DTO.MyProfile.Activities;
 using FindACoach.Core.DTO.MyProfile.Experience;
 using FindACoach.Core.ServiceContracts.Forum.Activities;
 

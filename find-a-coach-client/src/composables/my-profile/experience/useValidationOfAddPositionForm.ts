@@ -1,7 +1,7 @@
-import type { AddPositionForm } from '@/types/my-profile/experience/PositionForm'
+import type { PositionForm } from '@/types/my-profile/experience/PositionForm'
 import type { ValidationError } from '@/types/ValidationError'
 
-export default function useValidationOfAddPositionForm(formData: AddPositionForm): ValidationError[] {
+export default function useValidationOfAddPositionForm(formData: PositionForm): ValidationError[] {
   const errors: ValidationError[] = []
 
   if (!formData.title || formData.title.trim() === '') {
