@@ -1,7 +1,7 @@
-﻿namespace FindACoach.Core.ServiceContracts.Forum.Activities
+﻿namespace FindACoach.Core.ServiceContracts.MyProfile.Experience
 {
     /// <summary>
-    /// Represents the service for deleting activities.
+    /// Represents the service for deleting positions.
     /// </summary>
     public interface IPositionsRemoverService
     {

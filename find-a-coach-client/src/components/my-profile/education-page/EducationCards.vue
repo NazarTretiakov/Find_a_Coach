@@ -27,7 +27,7 @@
           <li class="education-items_school-items_time"><span class="education-items_school-items_time-element">{{ formatDate(school.startDate) }} - {{ formatDate(school.endDate) }}</span></li>
           <li class="education-items_school-items_skills"><the-skills :skills="school.skillTitles"></the-skills></li>
         </ul>
-        <div class="education-items_school-delete"><span class="education-items_school-delete-inscription">Delete education</span></div>
+        <div class="education-items_school-delete" @click="deleteSchool(school.schoolId)"><span class="education-items_school-delete-inscription">Delete education</span></div>
       </li>
     </ul>
   </div>
@@ -40,7 +40,7 @@ import { useAuthenticationStore } from '@/stores/authentication'
 import TheSkills from '../TheSkills.vue'
 import { School } from '@/types/my-profile/education/School'
 import useGetAllSchools from '@/composables/my-profile/education/useGetAllSchools'
-import useFormatToReadableDate from '@/composables/useFormatToReadableDate'
+import useDeleteSchool from '@/composables/my-profile/education/useDeleteSchool'
 
 export default defineComponent({
   components: { TheSkills },
@@ -72,9 +72,20 @@ export default defineComponent({
       return formattedDate
     }
 
+    const deleteSchool = async (schoolId: string) => {
+      const result = await useDeleteSchool(schoolId)
+    
+      if (!result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      schools.value = schools.value.filter(school => school.schoolId !== schoolId)
+    }
+
     onMounted(() => loadSchools())
 
-    return { schools, formatDate }
+    return { schools, formatDate, deleteSchool }
   }
 })
 </script>

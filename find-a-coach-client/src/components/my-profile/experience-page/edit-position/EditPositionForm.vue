@@ -89,7 +89,6 @@ import type { ValidationError } from '@/types/ValidationError'
 import useValidationOfAddPositionForm from '@/composables/my-profile/experience/useValidationOfAddPositionForm'
 import useEditPosition from '@/composables/my-profile/experience/useEditPosition'
 import useGetPosition from '@/composables/my-profile/experience/useGetPosition'
-import useFormatDateForInputs from '@/composables/my-profile/experience/useFormatDateForInput'
 
 export default defineComponent({
   components: {
@@ -178,11 +177,6 @@ export default defineComponent({
         isLoading.value = false
       }
     })
-
-    const formatDateForInput = (dateString: string): string => {
-      const formatedDate = useFormatDateForInputs(dateString)
-      return formatedDate
-    }
 
     const addSkill = () => {
       if (formData.value.skills.length >= 4) {
@@ -376,6 +370,17 @@ export default defineComponent({
     &_save-button {
       margin: 70px 0 100px 0;
     }
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+
+  @media (max-width: $breakpoint) {
+    font-size: 12px;
   }
 }
 </style>

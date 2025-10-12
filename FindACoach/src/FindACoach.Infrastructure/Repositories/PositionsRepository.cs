@@ -77,9 +77,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task DeletePosition(string positionId, string activeUserId)
         {
-            Position position = await _db.Positions
-                .Include(p => p.Skills)
-                .FirstOrDefaultAsync(p => p.Id == Guid.Parse(positionId));
+            Position position = await _db.Positions.FirstOrDefaultAsync(p => p.Id == Guid.Parse(positionId));
 
             if (position == null)
             {
@@ -99,6 +97,7 @@ namespace FindACoach.Infrastructure.Repositories
         public async Task EditPosition(EditPositionDTO dto, string editorId)
         {
             Position position = await _db.Positions
+                .Where(p => p.Id == Guid.Parse(dto.PositionId))
                 .Include(p => p.Skills)
                 .FirstOrDefaultAsync(p => p.Id == Guid.Parse(dto.PositionId));
 

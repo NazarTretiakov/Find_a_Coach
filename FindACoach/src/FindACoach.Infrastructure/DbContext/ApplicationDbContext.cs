@@ -126,6 +126,10 @@ namespace FindACoach.Infrastructure.DbContext
                 .HasMany(s => s.Positions)
                 .WithMany(p => p.Skills);
 
+            builder.Entity<Skill>()
+                .HasMany(s => s.Schools)
+                .WithMany(s => s.Skills);
+
             builder.Entity<Like>()
                 .HasOne(l => l.Activity)
                 .WithMany(a => a.Likes)

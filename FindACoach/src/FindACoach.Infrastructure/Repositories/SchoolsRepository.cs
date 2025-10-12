@@ -60,20 +60,90 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public Task DeleteSchool(string schoolId, string activeUserId)
+        public async Task DeleteSchool(string schoolId, string activeUserId)
         {
-            throw new NotImplementedException();
+            School school = await _db.Schools.FirstOrDefaultAsync(s => s.Id == Guid.Parse(schoolId));
+
+            if (school == null)
+            {
+                throw new ArgumentException("Position with specified id doesn't exist.");
+            }
+
+            if (school.UserId.ToString() != activeUserId)
+            {
+                throw new UnauthorizedAccessException("Only creator of position can edit the position.");
+            }
+
+            _db.Schools.Remove(school);
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine();
+            }
         }
 
-        public Task EditSchool(EditSchoolDTO dto, string editorId)
+        public async Task EditSchool(EditSchoolDTO dto, string editorId)
         {
-            throw new NotImplementedException();
+            DegreeOptions degree = Enum.Parse<DegreeOptions>(dto.Degree, ignoreCase: true);
+
+            if (degree != DegreeOptions.Bachelor && degree != DegreeOptions.Master && degree != DegreeOptions.Doctor && degree != DegreeOptions.Habilitation && degree != DegreeOptions.Professor)
+            {
+                throw new ArgumentException("Given degree is incorrect.");
+            }
+
+            School school = await _db.Schools
+                .Where(s => s.Id == Guid.Parse(dto.SchoolId))
+                .Include(s => s.Skills)
+                .FirstOrDefaultAsync(s => s.Id == Guid.Parse(dto.SchoolId));
+
+            if (school == null)
+            {
+                throw new ArgumentException("School with specified id doesn't exist.");
+            }
+
+            if (school.UserId.ToString() != editorId)
+            {
+                throw new UnauthorizedAccessException("Only user which added that school can edit it.");
+            }
+
+            school.SchoolName = dto.SchoolName;
+            school.Degree = degree;
+            school.FieldOfStudy = dto.FieldOfStudy;
+            school.StartDate = dto.StartDate;
+            school.EndDate = dto.EndDate;
+            school.Location = dto.Location;
+
+            school.Skills.Clear();
+
+            foreach (var skillTitle in dto.SkillTitles)
+            {
+                Skill skill = await _db.Skills.FirstOrDefaultAsync(s => s.Title == skillTitle);
+                if (skill != null)
+                {
+                    school.Skills.Add(skill);
+                }
+                else
+                {
+                    school.Skills.Add(new Skill
+                    {
+                        Id = Guid.NewGuid(),
+                        Title = skillTitle
+                    });
+                }
+            }
+
+            await _db.SaveChangesAsync();
         }
 
         public async Task<List<SchoolToResponse>> GetAllSchools(string userId)
         {
             var schools = await _db.Schools
                 .Where(s => s.UserId == Guid.Parse(userId))
+                .OrderByDescending(s => s.EndDate)
                 .Select(s => new SchoolToResponse()
                 {
                     SchoolId = s.Id,
@@ -116,8 +186,6 @@ namespace FindACoach.Infrastructure.Repositories
         {
             var school = await _db.Schools
                 .Where(s => s.Id == Guid.Parse(schoolId))
-                .OrderByDescending(s => s.EndDate)
-                .Take(2)
                 .Select(s => new SchoolToResponse()
                 {
                     SchoolId = s.Id,

@@ -16,5 +16,7 @@ namespace FindACoach.Core.Domain.Entities
         public ICollection<IdentityEntities.User> Users { get; set; } = new List<IdentityEntities.User>();
         public ICollection<SearchPersonPanel> Panels { get; set; } = new List<SearchPersonPanel>();
         public ICollection<Position> Positions { get; set; } = new List<Position>();
+
+        public ICollection<School> Schools { get; set; } = new List<School>();
     }
 }

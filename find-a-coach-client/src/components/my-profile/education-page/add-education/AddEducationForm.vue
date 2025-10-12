@@ -336,4 +336,15 @@ export default defineComponent({
     }
   }
 }
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+
+  @media (max-width: $breakpoint) {
+    font-size: 12px;
+  }
+}
 </style>

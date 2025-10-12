@@ -1,5 +1,4 @@
 ﻿using FindACoach.Core.DTO.MyProfile.Experience;
-using FindACoach.Core.ServiceContracts.Forum.Activities;
 using FindACoach.Core.ServiceContracts.MyProfile.Experience;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

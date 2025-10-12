@@ -9,11 +9,15 @@ namespace FindACoach.API.Controllers.MyProfile
     {
         private readonly ISchoolsAdderService _schoolsAdderService;
         private readonly ISchoolsGetterService _schoolsGetterService;
+        private readonly ISchoolsEditorService _schoolsEditorService;
+        private readonly ISchoolsRemoverService _schoolsRemoverService; 
 
-        public EducationController(ISchoolsAdderService schoolsAdderService, ISchoolsGetterService schoolsGetterService)
+        public EducationController(ISchoolsAdderService schoolsAdderService, ISchoolsGetterService schoolsGetterService, ISchoolsEditorService schoolsEditorService, ISchoolsRemoverService schoolsRemoverService)
         {
             _schoolsAdderService = schoolsAdderService;
             _schoolsGetterService = schoolsGetterService;
+            _schoolsEditorService = schoolsEditorService;
+            _schoolsRemoverService = schoolsRemoverService;
         }
 
         [HttpPost("add-school")]
@@ -53,6 +57,22 @@ namespace FindACoach.API.Controllers.MyProfile
             var school = await _schoolsGetterService.GetSchool(schoolId);
 
             return Ok(school);
+        }
+
+        [HttpPost("edit-school")]
+        public async Task<IActionResult> EditSchool([FromBody] EditSchoolDTO dto)
+        {
+            await _schoolsEditorService.EditSchool(dto);
+
+            return Ok();
+        }
+
+        [HttpPost("delete-school")]
+        public async Task<IActionResult> DeleteSchool([FromBody] DeleteSchoolDTO dto)
+        {
+            await _schoolsRemoverService.DeleteSchool(dto.SchoolId);
+
+            return Ok();
         }
     }
 }

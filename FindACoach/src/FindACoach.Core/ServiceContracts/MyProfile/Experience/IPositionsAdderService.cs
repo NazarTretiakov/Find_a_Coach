@@ -1,6 +1,6 @@
 ﻿using FindACoach.Core.DTO.MyProfile.Experience;
 
-namespace FindACoach.Core.ServiceContracts.Forum.Activities
+namespace FindACoach.Core.ServiceContracts.MyProfile.Experience
 {
     /// <summary>
     /// Represents the service for adding position.

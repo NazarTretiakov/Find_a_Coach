@@ -1,6 +1,6 @@
 ﻿using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.MyProfile.Experience;
-using FindACoach.Core.ServiceContracts.Forum.Activities;
+using FindACoach.Core.ServiceContracts.MyProfile.Experience;
 
 namespace FindACoach.Core.Services.Forum.Activities
 {

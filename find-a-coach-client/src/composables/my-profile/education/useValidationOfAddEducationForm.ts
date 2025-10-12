@@ -6,12 +6,12 @@ export default function useValidationOfAddEducationForm(formData: EducationForm)
 
   if (!formData.schoolName || formData.schoolName.trim() === '') {
     errors.push({
-      fieldName: 'school',
+      fieldName: 'schoolName',
       errorMessage: 'School name is required.'
     })
   } else if (formData.schoolName.length > 60) {
     errors.push({
-      fieldName: 'school',
+      fieldName: 'schoolName',
       errorMessage: 'School name cannot exceed 60 characters.'
     })
   }
@@ -25,12 +25,12 @@ export default function useValidationOfAddEducationForm(formData: EducationForm)
 
   if (!formData.fieldOfStudy || formData.fieldOfStudy.trim() === '') {
     errors.push({
-      fieldName: 'school',
+      fieldName: 'fieldOfStudy',
       errorMessage: 'Field of study is required.'
     })
   } else if (formData.fieldOfStudy.length > 60) {
     errors.push({
-      fieldName: 'school',
+      fieldName: 'fieldOfStudy',
       errorMessage: 'Field of study cannot exceed 60 characters.'
     })
   }

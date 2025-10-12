@@ -73,7 +73,7 @@ import { useAuthenticationStore } from '@/stores/authentication'
 import { Position } from '@/types/my-profile/experience/Position'
 import useFormatToReadableDate from '@/composables/useFormatToReadableDate'
 import useConvertEmploymentTypeToReadable from '@/composables/my-profile/experience/useConvertEmploymentTypeToReadable'
-import useGetLastTwoPositions from '@/composables/my-profile/experience/useGetAllPositions'
+import useGetLastTwoPositions from '@/composables/my-profile/experience/useGetLastTwoPositions'
 
 export default defineComponent({
   components: { TheSkills },

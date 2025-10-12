@@ -32,15 +32,12 @@ export default defineComponent({
   flex-direction: column;
   min-height: 100vh;
 }
-
 .header {
   z-index: 1;
 }
-
 .content {
   flex: 1;
 }
-
 .footer {
   margin-top: auto;
 }

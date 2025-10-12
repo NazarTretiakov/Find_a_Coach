@@ -1,22 +1,22 @@
 ﻿using FindACoach.Core.Domain.RepositoryContracts;
-using FindACoach.Core.ServiceContracts.MyProfile.Experience;
+using FindACoach.Core.ServiceContracts.MyProfile.Education;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
 namespace FindACoach.Core.Services.MyProfile.Experience
 {
-    public class PositionsRemoverService : IPositionsRemoverService
+    public class SchoolsRemoverService : ISchoolsRemoverService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IPositionsRepository _positionsRepository;
+        private readonly ISchoolsRepository _schoolsRepository;
 
-        public PositionsRemoverService(IHttpContextAccessor httpContextAccessor, IPositionsRepository positionsRepository)
+        public SchoolsRemoverService(IHttpContextAccessor httpContextAccessor, ISchoolsRepository schoolsRepository)
         {
             _httpContextAccessor = httpContextAccessor;
-            _positionsRepository = positionsRepository;
+            _schoolsRepository = schoolsRepository;
         }
 
-        public async Task DeletePosition(string positionId)
+        public async Task DeleteSchool(string schoolId)
         {
             var principal = _httpContextAccessor.HttpContext?.User;
             if (principal == null)
@@ -30,7 +30,7 @@ namespace FindACoach.Core.Services.MyProfile.Experience
                 throw new UnauthorizedAccessException("Cannot resolve user id from claims");
             }
 
-            await _positionsRepository.DeletePosition(positionId, activeUserId);
+            await _schoolsRepository.DeleteSchool(schoolId, activeUserId);
         }
     }
 }

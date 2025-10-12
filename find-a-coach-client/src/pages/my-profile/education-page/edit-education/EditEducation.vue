@@ -1,9 +1,11 @@
 <template> 
-  <profile-sticky-header class="header"></profile-sticky-header>
+  <div class="layout">
+    <profile-sticky-header class="header"></profile-sticky-header>
 
-  <edit-education-form class="edit-education-form"></edit-education-form>
+    <edit-education-form :id="id" class="edit-education-form"></edit-education-form>
 
-  <the-footer></the-footer>
+    <the-footer></the-footer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -14,6 +16,12 @@ import EditEducationForm from '../../../../components/my-profile/education-page/
 import TheFooter from '../../../../components/TheFooter.vue'
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     ProfileStickyHeader,
     EditEducationForm,
@@ -23,11 +31,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  .header {
-    z-index: 1;
-  }
-
-  .edit-education-form {
-    z-index: 2;
-  }
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.header {
+  z-index: 1;
+}
+.edit-education-form {
+  flex: 1;
+}
+.footer {
+  margin-top: auto;
+}
 </style>

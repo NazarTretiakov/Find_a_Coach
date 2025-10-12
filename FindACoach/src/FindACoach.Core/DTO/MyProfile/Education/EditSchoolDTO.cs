@@ -1,5 +1,4 @@
-﻿using FindACoach.Core.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FindACoach.Core.DTO.MyProfile.Education
 {
@@ -13,7 +12,7 @@ namespace FindACoach.Core.DTO.MyProfile.Education
         public string SchoolName { get; set; } = string.Empty;
 
         [Required]
-        public DegreeOptions Degree { get; set; }
+        public string Degree { get; set; }
 
         [Required]
         [StringLength(60, MinimumLength = 2)]
@@ -23,7 +22,7 @@ namespace FindACoach.Core.DTO.MyProfile.Education
         public DateTime StartDate { get; set; }
 
         [Required]
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         [StringLength(40)]
         public string? Location { get; set; }
