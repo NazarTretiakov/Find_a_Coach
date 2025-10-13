@@ -3,73 +3,128 @@
     <ul class="projects-section-items">
       <li class="projects-section-items_header">
         <ul class="projects-section-items_header-items">
-          <li class="projects-section-items_header-items_incription"><h1 class="projects-section-items_header-items_incription-element">Projects</h1></li>
+          <li class="projects-section-items_header-items_incription">
+            <h1 class="projects-section-items_header-items_incription-element">Projects</h1>
+          </li>
           <li class="projects-section-items_header-items_buttons">
             <ul class="projects-section-items_header-items_buttons-items">
-              <li class="projects-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-project" class="projects-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="projects-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="projects-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/projects" class="projects-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="projects-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="projects-section-items_header-items_buttons-items_add">
+                <router-link to="/my-profile/add-project" class="projects-section-items_header-items_buttons-items_add-link">
+                  <img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="projects-section-items_header-items_buttons-items_add-element" />
+                </router-link>
+              </li>
+              <li class="projects-section-items_header-items_buttons-items_edit">
+                <router-link to="/my-profile/projects" class="projects-section-items_header-items_buttons-items_edit-link">
+                  <img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="projects-section-items_header-items_buttons-items_edit-element" />
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>
       </li>
-      <li class="projects-section-items_project">
+
+      <li v-for="(project, index) in projects" :key="project.projectId" class="projects-section-items_project">
         <ul class="projects-section-items_project-items">
           <li class="projects-section-items_project-items_title">
             <ul class="projects-section-items_project-items_title-items">
-              <li class="projects-section-items_project-items_title-items_name"><router-link to="/path-to-all-projects-of-user-with-scrollable-thing" class="projects-section-items_project-items_title-items_name-link"><h2 class="projects-section-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></router-link></li>
-              <li class="projects-section-items_project-items_title-items_time"><span class="projects-section-items_project-items_title-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
+              <li class="projects-section-items_project-items_title-items_name">
+                <router-link :to="`/my-profile/projects/#${project.projectId}`" class="projects-section-items_project-items_title-items_name-link">
+                  <h2 class="projects-section-items_project-items_title-items_name-element">{{ project.title }}</h2>
+                </router-link>
+              </li>
+              <li class="projects-section-items_project-items_title-items_time">
+                <span class="projects-section-items_project-items_title-items_time-element">{{ formatDate(project.startDate) }} - {{ formatDate(project.endDate) }}</span>
+              </li>
             </ul>
           </li>
-          <li class="projects-section-items_project-items_participated-with">
-            <span class="projects-section-items_project-items_participated-with-element">Participated with: Ulia Malska, Ariana Popa, Grzegorz Brzędrzyszczykiewicz</span>
+
+          <li v-if="project.participants.length > 0" class="projects-section-items_project-items_participated-with">
+            <span class="projects-section-items_project-items_participated-with-element">Participated with: {{ project.participants.join(', ') }}</span>
           </li>
-          <li class="projects-section-items_project-items_type"><span class="projects-section-items_project-items_type-element">Job-related project</span></li>
-          <li class="projects-section-items_project-items_location"><span class="projects-section-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="projects-section-items_project-items_time"><span class="projects-section-items_project-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="projects-section-items_project-items_description"><p class="projects-section-items_project-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="projects-section-items_project-items_skills"><router-link to="/path-to-all-projectss-of-user-with-scrollable-thing" class="projects-section-items_project-items_skills-link"><the-skills></the-skills></router-link></li>
+
+          <li class="projects-section-items_project-items_type">
+            <span class="projects-section-items_project-items_type-element">{{ getReadableRelatedTo(project.relatedTo) }}</span>
+          </li>
+
+          <li class="projects-section-items_project-items_location">
+            <span class="projects-section-items_project-items_location-element">{{ project.location }}</span>
+          </li>
+
+          <li v-if="project.description" class="projects-section-items_project-items_description">
+            <p class="projects-section-items_project-items_description-element">{{ project.description }}</p>
+          </li>
+
+          <li v-if="project.skillTitles && project.skillTitles.length > 0" class="projects-section-items_project-items_skills">
+            <router-link :to="`/my-profile/projects/#${project.projectId}`" class="projects-section-items_project-items_skills-link">
+              <the-skills :skills="project.skillTitles" />
+            </router-link>
+          </li>
         </ul>
-        <div class="projects-section-items_project-divider"></div>
-      </li>
-      <li class="projects-section-items_project">
-        <ul class="projects-section-items_project-items">
-          <li class="projects-section-items_project-items_title">
-            <ul class="projects-section-items_project-items_title-items">
-              <li class="projects-section-items_project-items_title-items_name"><router-link to="/path-to-all-projects-of-user-with-scrollable-thing" class="projects-section-items_project-items_title-items_name-link"><h2 class="projects-section-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></router-link></li>
-              <li class="projects-section-items_project-items_title-items_time"><span class="projects-section-items_project-items_title-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-            </ul>
-          </li>
-          <li class="projects-section-items_project-items_participated-with">
-            <span class="projects-section-items_project-items_participated-with-element">Participated with: Ulia Malska, Ariana Popa, Grzegorz Brzędrzyszczykiewicz</span>
-          </li>
-          <li class="projects-section-items_project-items_type"><span class="projects-section-items_project-items_type-element">Job-related project</span></li>
-          <li class="projects-section-items_project-items_location"><span class="projects-section-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="projects-section-items_project-items_time"><span class="projects-section-items_project-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="projects-section-items_project-items_description"><p class="projects-section-items_project-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="projects-section-items_project-items_skills"><router-link to="/path-to-all-projectss-of-user-with-scrollable-thing" class="projects-section-items_project-items_skills-link"><the-skills></the-skills></router-link></li>
-        </ul>
+
+        <div v-if="index !== projects.length - 1" class="projects-section-items_project-divider"></div>
       </li>
     </ul>
+
     <router-link class="projects-section-items_show-all-projects-link" to="/my-profile/projects">
       <div class="projects-section-items_show-all-projects">
         <span class="projects-section-items_show-all-projects-element">Show all projects</span>
-        <img class="projects-section-items_show-all-projects-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
+        <img class="projects-section-items_show-all-projects-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon" />
       </div>
     </router-link>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-import TheSkills from './TheSkills.vue';
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import TheSkills from './TheSkills.vue'
+import { useAuthenticationStore } from '@/stores/authentication'
+import type { Project } from '@/types/my-profile/projects/Project'
+import useGetLastTwoProjects from '@/composables/my-profile/projects/useGetLastTwoProjects'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  components: { TheSkills },
+  setup() {
+    const authenticationStore = useAuthenticationStore()
+    const router = useRouter()
+    const projects = ref<Project[]>([])
+
+    async function loadProjects() {
+      const result = await useGetLastTwoProjects(authenticationStore.userId)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        projects.value = result as Project[]
+        console.log('Loaded projects:', projects.value)
+      }
+    }
+
+    function formatDate(date: Date | string | null): string {
+      if (!date) return ''
+      return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+    }
+
+    function getReadableRelatedTo(value: string): string {
+      switch (value) {
+        case 'Job': return 'Job-related project'
+        case 'Education': return 'Education-related project'
+        case 'Event': return 'Event project'
+        case 'Other': return 'Other project'
+        default: return value
+      }
+    }
+
+    onMounted(() => loadProjects())
+
+    return { projects, formatDate, getReadableRelatedTo }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

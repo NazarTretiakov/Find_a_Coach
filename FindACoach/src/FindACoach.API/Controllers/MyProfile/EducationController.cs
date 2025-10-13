@@ -23,11 +23,6 @@ namespace FindACoach.API.Controllers.MyProfile
         [HttpPost("add-school")]
         public async Task<IActionResult> AddSchool([FromBody] AddSchoolDTO dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             await _schoolsAdderService.AddSchool(userId, dto);

@@ -52,6 +52,8 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         public ICollection<School> Schools { get; set; } = new List<School>();
 
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
+
         public ICollection<Entities.Activity.Activity> Activities { get; set; } = new List<Entities.Activity.Activity>();
 
         public ICollection<Skill> Skills { get; set; } = new List<Skill>();

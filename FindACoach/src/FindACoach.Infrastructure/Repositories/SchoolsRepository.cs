@@ -16,6 +16,7 @@ namespace FindACoach.Infrastructure.Repositories
         {
             _db = db;
         }
+
         public async Task AddSchool(string userId, AddSchoolDTO dto)
         {
             DegreeOptions degree = Enum.Parse<DegreeOptions>(dto.Degree, ignoreCase: true);

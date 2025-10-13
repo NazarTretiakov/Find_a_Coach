@@ -1,7 +1,6 @@
 <template> 
   <div class="header">
     <profile-sticky-header></profile-sticky-header>
-    <search-panel></search-panel>
   </div>
 
   <ul class="projects-sections">
@@ -20,7 +19,6 @@
 import { defineComponent } from 'vue'
 
 import ProfileStickyHeader from '../../../components/my-profile/ProfileStickyHeader.vue'
-import SearchPanel from '../../../components/SearchPanel.vue'
 import ProjectsCards from '../../../components/my-profile/projects-page/ProjectsCards.vue'
 
 import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
@@ -30,7 +28,6 @@ import TheFooter from '../../../components/TheFooter.vue'
 export default defineComponent({
   components: {
     ProfileStickyHeader,
-    SearchPanel,
     ProjectsCards,
     RecommendedPeople,
     TheFooter

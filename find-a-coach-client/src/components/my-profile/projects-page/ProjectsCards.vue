@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="projects">
     <ul class="projects-header">
       <li class="projects-header_inscription">
@@ -15,64 +15,103 @@
         </router-link>
       </li>
     </ul>
+
     <ul class="projects-items">
-      <li class="projects-items_project">
+      <li v-for="project in projects" :key="project.projectId" class="projects-items_project" :id="project.projectId">
         <ul class="projects-items_project-items">
           <li class="projects-items_project-items_title">
             <ul class="projects-items_project-items_title-items">
-              <li class="projects-items_project-items_title-items_name"><h2 class="projects-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></li>
-              <li class="projects-items_project-items_title-items_edit"><router-link to="/my-profile/edit-project"><img class="projects-items_project-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
+              <li class="projects-items_project-items_title-items_name">
+                <h2 class="projects-items_project-items_title-items_name-element">{{ project.title }}</h2>
+              </li>
+              <li class="projects-items_project-items_title-items_edit">
+                <router-link :to="`/my-profile/edit-project/${project.projectId}`">
+                  <img class="projects-items_project-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"/>
+                </router-link>
+              </li>
             </ul>
           </li>
+
           <li class="projects-items_project-items_participated-with">
-            <span class="projects-items_project-items_participated-with-element">Participated with: Ulia Malska, Ariana Popa, Grzegorz Brzędrzyszczykiewicz</span>
+            <span class="projects-items_project-items_participated-with-element">
+              Participated with: {{ project.participants.join(', ') }}
+            </span>
           </li>
-          <li class="projects-items_project-items_type"><span class="projects-items_project-items_type-element">Job-related project</span></li>
-          <li class="projects-items_project-items_location"><span class="projects-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="projects-items_project-items_time"><span class="projects-items_project-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="projects-items_project-items_description"><p class="projects-items_project-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="projects-items_project-items_skills"><the-skills></the-skills></li>
+
+          <li class="projects-items_project-items_type">
+            <span class="projects-items_project-items_type-element">{{ getReadableRelatedTo(project.relatedTo) }}</span>
+          </li>
+
+          <li class="projects-items_project-items_location">
+            <span class="projects-items_project-items_location-element">{{ project.location }}</span>
+          </li>
+
+          <li class="projects-items_project-items_time">
+            <span class="projects-items_project-items_time-element">{{ formatDate(project.startDate) }} - {{ formatDate(project.endDate) }}</span>
+          </li>
+
+          <li v-if="project.description" class="projects-items_project-items_description">
+            <p class="projects-items_project-items_description-element" v-html="project.description"></p>
+          </li>
+
+          <li v-if="project.skillTitles && project.skillTitles.length > 0" class="projects-items_project-items_skills">
+            <the-skills :skills="project.skillTitles"></the-skills>
+          </li>
         </ul>
-        <div class="projects-items_project-delete">
-          <span class="projects-items_project-delete-inscription">Delete project</span>
-        </div>
-      </li>
-      <li class="projects-items_project">
-        <ul class="projects-items_project-items">
-          <li class="projects-items_project-items_title">
-            <ul class="projects-items_project-items_title-items">
-              <li class="projects-items_project-items_title-items_name"><h2 class="projects-items_project-items_title-items_name-element">Pregląd regał magazynowych for Amazon company</h2></li>
-              <li class="projects-items_project-items_title-items_edit"><router-link to="/my-profile/edit-project"><img class="projects-items_project-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
-            </ul>
-          </li>
-          <li class="projects-items_project-items_participated-with">
-            <span class="projects-items_project-items_participated-with-element">Participated with: Ulia Malska, Ariana Popa, Grzegorz Brzędrzyszczykiewicz</span>
-          </li>
-          <li class="projects-items_project-items_type"><span class="projects-items_project-items_type-element">Job-related project</span></li>
-          <li class="projects-items_project-items_location"><span class="projects-items_project-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="projects-items_project-items_time"><span class="projects-items_project-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="projects-items_project-items_description"><p class="projects-items_project-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="projects-items_project-items_skills"><the-skills></the-skills></li>
-        </ul>
+
         <div class="projects-items_project-delete">
           <span class="projects-items_project-delete-inscription">Delete project</span>
         </div>
       </li>
     </ul>
-    <div class="projects-load-more-projects">
-      <span class="projects-load-more-projects-inscription">Load more projects</span>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import TheSkills from '../TheSkills.vue'
+import { Project } from '@/types/my-profile/projects/Project'
+import useGetAllProjects from '@/composables/my-profile/projects/useGetAllProjects'
+import { useAuthenticationStore } from '@/stores/authentication'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  components: { TheSkills },
+  setup() {
+    const projects = ref<Project[]>([])
+    const authenticationStore = useAuthenticationStore()
+    const router = useRouter()
+
+    const loadProjects = async () => {
+      const result = await useGetAllProjects(authenticationStore.userId)
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        projects.value = result as Project[]
+      }
+    }
+    
+    function getReadableRelatedTo(value: string): string {
+      switch (value) {
+        case 'Job': return 'Job-related project'
+        case 'Education': return 'Education-related project'
+        case 'Event': return 'Event project'
+        case 'Other': return 'Other project'
+        default: return value
+      }
+    }
+
+    const formatDate = (date: Date | string | null) => {
+      if (!date) return ''
+      return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+    }
+
+    onMounted(loadProjects)
+
+    return { projects, formatDate, getReadableRelatedTo }
   }
 })
 </script>
@@ -313,34 +352,6 @@ export default defineComponent({
           cursor: pointer;
           background-color: #ececec;
         }
-      }
-    }
-  }
-
-  &-load-more-projects {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px $grayBorderColor solid;
-    border-radius: 20px;
-    height: 50px;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ececec;
-    }
-
-    &-link {
-      color: #000000;
-      text-decoration: none;
-    }
-
-    &-inscription {
-      font-size: 14px;
-
-      @media (max-width: $breakpoint) {
-        font-size: 12px;
       }
     }
   }

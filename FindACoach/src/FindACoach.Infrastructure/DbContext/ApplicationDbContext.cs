@@ -15,6 +15,7 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<Connection> Connections { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<School> Schools { get; set; }
+        public DbSet<Project> Projects { get; set; }
         public DbSet<Core.Domain.Entities.Activity.Activity> Activities { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Survey> Surveys { get; set; }
@@ -40,6 +41,7 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Connection>().ToTable("Connections");
             builder.Entity<Position>().ToTable("Positions");
             builder.Entity<School>().ToTable("Schools");
+            builder.Entity<Project>().ToTable("Projects");
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>().ToTable("Activities");
             builder.Entity<Event>().ToTable("Events");
@@ -82,6 +84,11 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<School>()
                 .HasOne(s => s.User)
                 .WithMany(u => u.Schools)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Project>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Projects)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>()
@@ -129,6 +136,10 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Skill>()
                 .HasMany(s => s.Schools)
                 .WithMany(s => s.Skills);
+
+            builder.Entity<Skill>()
+                .HasMany(s => s.Projects)
+                .WithMany(p => p.Skills);
 
             builder.Entity<Like>()
                 .HasOne(l => l.Activity)
