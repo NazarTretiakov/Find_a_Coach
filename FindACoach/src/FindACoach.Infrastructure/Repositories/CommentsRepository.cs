@@ -1,8 +1,6 @@
 ﻿using FindACoach.Core.Domain.Entities.Activity;
-using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Forum;
-using FindACoach.Core.DTO.MyProfile.Activities;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

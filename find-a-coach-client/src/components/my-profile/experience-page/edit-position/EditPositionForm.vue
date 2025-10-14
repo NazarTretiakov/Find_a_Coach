@@ -348,7 +348,7 @@ export default defineComponent({
         }
 
         &_skill {
-          margin-top: 30px;
+          margin-top: 10px;
 
           &-name {
             margin-top: 20px;

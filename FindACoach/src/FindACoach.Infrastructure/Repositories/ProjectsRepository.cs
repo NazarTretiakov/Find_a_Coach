@@ -54,11 +54,13 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 else
                 {
-                    project.Skills.Add(new Skill
+                    skill = new Skill
                     {
                         Id = Guid.NewGuid(),
                         Title = skillTitle
-                    });
+                    };
+                    _db.Skills.Add(skill);
+                    project.Skills.Add(skill);
                 }
             }
 
@@ -67,14 +69,84 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public Task DeleteProject(string projectId, string activeUserId)
+        public async Task DeleteProject(string projectId, string activeUserId)
         {
-            throw new NotImplementedException();
+            Project project = await _db.Projects.FirstOrDefaultAsync(s => s.Id == Guid.Parse(projectId));
+
+            if (project == null)
+            {
+                throw new ArgumentException("Project with specified id doesn't exist.");
+            }
+
+            if (project.UserId.ToString() != activeUserId)
+            {
+                throw new UnauthorizedAccessException("Only creator of project can edit it.");
+            }
+
+            _db.Projects.Remove(project);
+
+            await _db.SaveChangesAsync();
         }
 
-        public Task EditProject(EditProjectDTO dto, string editorId)
+        public async Task EditProject(EditProjectDTO dto, string editorId)
         {
-            throw new NotImplementedException();
+            RelatedTo relatedTo = Enum.Parse<RelatedTo>(dto.RelatedTo);
+
+            if (relatedTo != RelatedTo.Job && relatedTo != RelatedTo.Education && relatedTo != RelatedTo.Event && relatedTo != RelatedTo.Other)
+            {
+                throw new ArgumentException("Given \"related to\" information of project is incorrect.");
+            }
+
+            for (int i = 0; i < dto.Participants.Count; i++)
+            {
+                dto.Participants[i] = dto.Participants[i].Trim();
+            }
+
+            Project project = await _db.Projects
+                .Where(s => s.Id == Guid.Parse(dto.ProjectId))
+                .Include(s => s.Skills)
+                .FirstOrDefaultAsync(s => s.Id == Guid.Parse(dto.ProjectId));
+
+            if (project == null)
+            {
+                throw new ArgumentException("Project with specified id doesn't exist.");
+            }
+
+            if (project.UserId.ToString() != editorId)
+            {
+                throw new UnauthorizedAccessException("Only user which added that project can edit it.");
+            }
+
+            project.Title = dto.Title;
+            project.RelatedTo = relatedTo;
+            project.StartDate = dto.StartDate;
+            project.EndDate = dto.EndDate;
+            project.Location = dto.Location;
+            project.Description = dto.Description;
+            project.Participants = string.Join(",", dto.Participants);
+
+            project.Skills.Clear();
+
+            foreach (var skillTitle in dto.SkillTitles)
+            {
+                Skill skill = await _db.Skills.FirstOrDefaultAsync(s => s.Title == skillTitle);
+                if (skill != null)
+                {
+                    project.Skills.Add(skill);
+                }
+                else
+                {
+                    skill = new Skill
+                    {
+                        Id = Guid.NewGuid(),
+                        Title = skillTitle
+                    };
+                    _db.Skills.Add(skill);
+                    project.Skills.Add(skill);
+                }
+            }
+
+            await _db.SaveChangesAsync();
         }
 
         public async Task<List<ProjectToResponse>> GetAllProjects(string userId)

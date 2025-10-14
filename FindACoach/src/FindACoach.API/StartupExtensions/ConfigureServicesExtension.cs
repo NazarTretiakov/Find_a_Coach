@@ -66,6 +66,8 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<ISchoolsRemoverService, SchoolsRemoverService>();
             services.AddScoped<IProjectsAdderService, ProjectsAdderService>();
             services.AddScoped<IProjectsGetterService, ProjectsGetterService>();
+            services.AddScoped<IProjectsEditorService, ProjectsEditorService>();
+            services.AddScoped<IProjectsRemoverService, ProjectsRemoverService>();
             services.AddScoped<IAddActivityService, AddActivityService>();
             services.AddScoped<IActivitiesGetterService, ActivitiesGetterService>();
             services.AddScoped<IToggleLikeService, ToggleLikeService>();

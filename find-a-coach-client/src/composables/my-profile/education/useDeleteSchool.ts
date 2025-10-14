@@ -4,7 +4,7 @@ import { Result } from "@/types/Result"
 
 const API_URL = config.apiBaseUrl + '/Education'
 
-export default async function useDeleteComment(schoolId: string): Promise<Result> {
+export default async function useDeleteSchool(schoolId: string): Promise<Result> {
   try {
     const token = await useEnsureValidToken()
 

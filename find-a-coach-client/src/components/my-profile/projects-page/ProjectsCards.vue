@@ -26,7 +26,7 @@
               </li>
               <li class="projects-items_project-items_title-items_edit">
                 <router-link :to="`/my-profile/edit-project/${project.projectId}`">
-                  <img class="projects-items_project-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"/>
+                  <img class="projects-items_project-items_title-items_edit-element" src="@/assets/images/icons/edit-icon.svg" alt="Edit icon"/>
                 </router-link>
               </li>
             </ul>
@@ -59,7 +59,7 @@
           </li>
         </ul>
 
-        <div class="projects-items_project-delete">
+        <div class="projects-items_project-delete" @click="deleteProject(project.projectId)">
           <span class="projects-items_project-delete-inscription">Delete project</span>
         </div>
       </li>
@@ -74,6 +74,7 @@ import TheSkills from '../TheSkills.vue'
 import { Project } from '@/types/my-profile/projects/Project'
 import useGetAllProjects from '@/composables/my-profile/projects/useGetAllProjects'
 import { useAuthenticationStore } from '@/stores/authentication'
+import useDeleteProject from '@/composables/my-profile/projects/useDeleteProject'
 
 export default defineComponent({
   components: { TheSkills },
@@ -109,9 +110,20 @@ export default defineComponent({
       return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
     }
 
+    const deleteProject = async (projectId: string) => {
+      const result = await useDeleteProject(projectId)
+    
+      if (!result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      projects.value = projects.value.filter(project => project.projectId !== projectId)
+    }
+
     onMounted(loadProjects)
 
-    return { projects, formatDate, getReadableRelatedTo }
+    return { projects, formatDate, getReadableRelatedTo, deleteProject }
   }
 })
 </script>

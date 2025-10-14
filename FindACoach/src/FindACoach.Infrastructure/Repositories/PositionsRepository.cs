@@ -62,11 +62,13 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 else
                 {
-                    position.Skills.Add(new Skill
+                    skill = new Skill
                     {
                         Id = Guid.NewGuid(),
                         Title = skillTitle
-                    });
+                    };
+                    _db.Skills.Add(skill);
+                    position.Skills.Add(skill);
                 }
             }
 
@@ -149,11 +151,13 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 else
                 {
-                    position.Skills.Add(new Skill
+                    skill = new Skill
                     {
                         Id = Guid.NewGuid(),
                         Title = skillTitle
-                    });
+                    };
+                    _db.Skills.Add(skill);
+                    position.Skills.Add(skill);
                 }
             }
 

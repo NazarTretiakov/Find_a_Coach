@@ -5,11 +5,11 @@ import { Project } from "@/types/my-profile/projects/Project"
 
 const API_URL = config.apiBaseUrl + '/Projects'
 
-export default async function useGetProject(schoolId: string): Promise<Result | Project> {
+export default async function useGetProject(projectId: string): Promise<Result | Project> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get?schoolId=${schoolId}`, {
+    const response = await fetch(`${API_URL}/get?projectid=${projectId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`

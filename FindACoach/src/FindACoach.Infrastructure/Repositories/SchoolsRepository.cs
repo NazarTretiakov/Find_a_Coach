@@ -48,11 +48,13 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 else
                 {
-                    school.Skills.Add(new Skill
+                    skill = new Skill
                     {
                         Id = Guid.NewGuid(),
                         Title = skillTitle
-                    });
+                    };
+                    _db.Skills.Add(skill);
+                    school.Skills.Add(skill);
                 }
             }
 
@@ -77,14 +79,7 @@ namespace FindACoach.Infrastructure.Repositories
 
             _db.Schools.Remove(school);
 
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch(Exception exception)
-            {
-                Console.WriteLine();
-            }
+            await _db.SaveChangesAsync();
         }
 
         public async Task EditSchool(EditSchoolDTO dto, string editorId)
@@ -129,11 +124,13 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 else
                 {
-                    school.Skills.Add(new Skill
+                    skill = new Skill
                     {
                         Id = Guid.NewGuid(),
                         Title = skillTitle
-                    });
+                    };
+                    _db.Skills.Add(skill);
+                    school.Skills.Add(skill);
                 }
             }
 

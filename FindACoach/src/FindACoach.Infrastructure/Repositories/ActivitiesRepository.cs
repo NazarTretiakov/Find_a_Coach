@@ -1,5 +1,6 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.Entities.Activity;
+using FindACoach.Core.Domain.Entities.User;
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Forum;
@@ -92,11 +93,13 @@ namespace FindACoach.Infrastructure.Repositories
                     }
                     else
                     {
-                        panelEntity.PreferredSkills.Add(new Skill
+                        skill = new Skill
                         {
                             Id = Guid.NewGuid(),
                             Title = skillTitle
-                        });
+                        };
+                        _db.Skills.Add(skill);
+                        panelEntity.PreferredSkills.Add(skill);
                     }
                 }
             }

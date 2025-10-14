@@ -11,6 +11,10 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "noEmit": false,
+    "allowJs": false,
     "target": "esnext",
     "useDefineForClassFields": true,
     "module": "es2020",

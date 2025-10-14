@@ -1,28 +1,22 @@
 import { Result } from "@/types/Result"
 import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 import { config } from '@/config'
-import { EducationForm } from '@/types/my-profile/education/EducationForm'
+import type { ProjectForm } from "@/types/my-profile/projects/ProjectForm"
 
-const API_URL = config.apiBaseUrl + '/Education'
+const API_URL = config.apiBaseUrl + '/Projects'
 
-export default async function useEditSchool(schoolId: string, formData: EducationForm): Promise<Result> {
+export default async function useEditProject(projectId: string, formData: ProjectForm): Promise<Result> {
   try {
     const token = await useEnsureValidToken()
 
     const bodyData = {
-      schoolId,
-      schoolName: formData.schoolName,
-      degree: formData.degree,
-      fieldOfStudy: formData.fieldOfStudy,
-      startDate: `${formData.startDate}T00:00:00`,
-      endDate: `${formData.endDate}T00:00:00`,
-      location: formData.location,
-      skillTitles: formData.skills
+      projectId,
+      ...formData
     }
     
     console.log(bodyData)
 
-    const response = await fetch(`${API_URL}/edit-school`, {
+    const response = await fetch(`${API_URL}/edit`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -35,7 +29,7 @@ export default async function useEditSchool(schoolId: string, formData: Educatio
       const responseData = await response.json()
       return {
         isSuccessful: false,
-        errorMessage: responseData.errorMessage || 'Unexpected error occurred while editing the school.',
+        errorMessage: responseData.errorMessage || 'Unexpected error occurred while editing the project.',
       }
     }
 

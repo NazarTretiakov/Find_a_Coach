@@ -9,11 +9,15 @@ namespace FindACoach.API.Controllers.MyProfile
     {
         private readonly IProjectsAdderService _projectsAdderService;
         private readonly IProjectsGetterService _projectsGetterService;
+        private readonly IProjectsEditorService _projectsEditorService;
+        private readonly IProjectsRemoverService _projectsRemoverService;
 
-        public ProjectsController(IProjectsAdderService projectsAdderService, IProjectsGetterService projectsGetterService)
+        public ProjectsController(IProjectsAdderService projectsAdderService, IProjectsGetterService projectsGetterService, IProjectsEditorService projectsEditorService, IProjectsRemoverService projectsRemoverService)
         {
             _projectsAdderService = projectsAdderService;
             _projectsGetterService = projectsGetterService;
+            _projectsEditorService = projectsEditorService;
+            _projectsRemoverService = projectsRemoverService;
         }
 
         [HttpPost("add")]
@@ -48,6 +52,22 @@ namespace FindACoach.API.Controllers.MyProfile
             var project = await _projectsGetterService.GetProject(projectId);
 
             return Ok(project);
+        }
+
+        [HttpPost("edit")]
+        public async Task<IActionResult> EditProject([FromBody] EditProjectDTO dto)
+        {
+            await _projectsEditorService.EditProject(dto);
+
+            return Ok();
+        }
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteProject([FromBody] DeleteProjectDTO dto)
+        {
+            await _projectsRemoverService.DeleteProject(dto.ProjectId);
+
+            return Ok();
         }
     }
 }

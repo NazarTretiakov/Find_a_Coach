@@ -5,7 +5,7 @@ namespace FindACoach.Core.DTO.MyProfile.Projects
     public class EditProjectDTO
     {
         [Required]
-        public Guid ProjectId { get; set; }
+        public string ProjectId { get; set; }
 
         [Required]
         [StringLength(60, MinimumLength = 2)]
@@ -22,6 +22,9 @@ namespace FindACoach.Core.DTO.MyProfile.Projects
 
         [StringLength(40)]
         public string? Location { get; set; }
+
+        [StringLength(500)]
+        public string? Description { get; set; }
 
         public List<string> SkillTitles { get; set; } = new List<string>();
         public List<string> Participants { get; set; } = new List<string>();

@@ -1,7 +1,7 @@
 <template> 
   <profile-sticky-header class="header"></profile-sticky-header>
 
-  <edit-project-form class="edit-project-form"></edit-project-form>
+  <edit-project-form :id="id" class="edit-project-form"></edit-project-form>
 
   <the-footer></the-footer>
 </template>
@@ -14,6 +14,12 @@ import EditProjectForm from '../../../../components/my-profile/projects-page/edi
 import TheFooter from '../../../../components/TheFooter.vue'
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     ProfileStickyHeader,
     EditProjectForm,

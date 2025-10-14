@@ -99,7 +99,7 @@ const router = createRouter({
     { path: '/my-profile/edit-education/:id', component: EditEducation, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/projects', component: ProjectsPage, meta: { requiresAuth: true} },
     { path: '/my-profile/add-project', component: AddProject, meta: { requiresAuth: true } },
-    { path: '/my-profile/edit-project', component: EditProject, meta: { requiresAuth: true } },
+    { path: '/my-profile/edit-project/:id', component: EditProject, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/certifications', component: CertificationsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-certification', component: AddCertification, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-certification', component: EditCertification, meta: { requiresAuth: true } },
