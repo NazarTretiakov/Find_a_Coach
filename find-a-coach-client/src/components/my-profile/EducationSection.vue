@@ -46,7 +46,6 @@ import TheSkills from './TheSkills.vue'
 import { useAuthenticationStore } from '@/stores/authentication'
 import { School } from '@/types/my-profile/education/School'
 import useGetLastTwoSchools from '@/composables/my-profile/education/useGetLastTwoSchools'
-import useFormatToReadableDate from '@/composables/useFormatToReadableDate'
 
 export default defineComponent({
   components: { TheSkills },

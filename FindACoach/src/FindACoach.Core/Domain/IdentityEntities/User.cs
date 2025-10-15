@@ -64,5 +64,6 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+        public ICollection<Certification> Certifications { get; set; } = new List<Certification>();
     }
 }

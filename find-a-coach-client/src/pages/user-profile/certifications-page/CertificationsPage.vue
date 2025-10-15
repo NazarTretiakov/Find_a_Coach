@@ -17,7 +17,6 @@
 import { defineComponent } from 'vue'
 
 import BasicStickyHeader from '../../../components/BasicStickyHeader.vue'
-import SearchPanel from '../../../components/SearchPanel.vue'
 import CertificationsCards from '../../../components/user-profile/certifications-page/CertificationsCards.vue'
 
 import RecommendedPeople from '../../../components/user-profile/RecommendedPeople.vue'
@@ -27,7 +26,6 @@ import TheFooter from '../../../components/TheFooter.vue'
 export default defineComponent({
   components: {
     BasicStickyHeader,
-    SearchPanel,
     CertificationsCards,
     RecommendedPeople,
     TheFooter

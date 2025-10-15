@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="certifications">
     <ul class="certifications-header">
       <li class="certifications-header_inscription">
@@ -15,65 +15,93 @@
         </router-link>
       </li>
     </ul>
+
     <ul class="certifications-items">
-      <li class="certifications-items_certification">
+      <li v-for="certification in certifications" :key="certification.certificationId" class="certifications-items_certification" :id="certification.certificationId">
         <ul class="certifications-items_certification-items">
           <li class="certifications-items_certification-items_title">
             <ul class="certifications-items_certification-items_title-items">
-              <li class="certifications-items_certification-items_title-items_name"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></li>
-              <li class="certifications-items_certification-items_title-items_issued"><router-link to="/my-profile/edit-certification"><img class="certifications-items_certification-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
+              <li class="certifications-items_certification-items_title-items_name">
+                <h2 class="certifications-items_certification-items_title-items_name-element">{{ certification.title }}</h2>
+              </li>
+              <li class="certifications-items_certification-items_title-items_issued">
+                <router-link :to="`/my-profile/edit-certification/${certification.certificationId}`">
+                  <img class="certifications-items_certification-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon">
+                </router-link>
+              </li>
             </ul>
           </li>
-          <li class="certifications-items_certification-items_organization-that-issued"><span class="certifications-items_certification-items_organization-that-issued-element">Udemy</span></li>
-          <li class="certifications-items_certification-items_issued"><span class="certifications-items_certification-items_issued-element">Issued Jan 2024</span></li>
+
+          <li class="certifications-items_certification-items_organization-that-issued">
+            <span class="certifications-items_certification-items_organization-that-issued-element">{{ certification.issuingOrganization }}</span>
+          </li>
+
+          <li class="certifications-items_certification-items_issued">
+            <span class="certifications-items_certification-items_issued-element">Issued {{ formatDate(certification.issueDate) }}</span>
+          </li>
+
           <li class="certifications-items_certification-items_source">
-            <img class="certifications-items_certification-items_source-image" src="../../../assets/images/certification-example.jpg" alt="Certification example">
-            <span class="certifications-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
+            <img v-if="certification.imagePath" class="certifications-items_certification-items_source-image" :src="certification.imagePath" alt="Certification image">
+            <span class="certifications-items_certification-items_source-id">
+              Id: 
+              <a :href="certification.credentialUrl" target="_blank" rel="noopener noreferrer" class="certifications-items_certification-items_source-id-link">
+                {{ certification.credentialId }}
+              </a>
+            </span>
           </li>
-          <li class="certifications-items_certification-items_skills"><the-skills></the-skills></li>
+
+          <li class="certifications-items_certification-items_skills">
+            <the-skills :skills="certification.skillTitles"></the-skills>
+          </li>
         </ul>
-        <div class="certifications-items_certification-delete">
-          <span class="certifications-items_certification-delete-inscription">Delete certification</span>
-        </div>
-      </li>
-      <li class="certifications-items_certification">
-        <ul class="certifications-items_certification-items">
-          <li class="certifications-items_certification-items_title">
-            <ul class="certifications-items_certification-items_title-items">
-              <li class="certifications-items_certification-items_title-items_name"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></li>
-              <li class="certifications-items_certification-items_title-items_issued"><router-link to="/my-profile/edit-certification"><img class="certifications-items_certification-items_title-items_edit-element" src="../../../assets/images/icons/edit-icon.svg" alt="Edit icon"></router-link></li>
-            </ul>
-          </li>
-          <li class="certifications-items_certification-items_organization-that-issued"><span class="certifications-items_certification-items_organization-that-issued-element">Udemy</span></li>
-          <li class="certifications-items_certification-items_issued"><span class="certifications-items_certification-items_issued-element">Issued Jan 2024</span></li>
-          <li class="certifications-items_certification-items_source">
-            <img class="certifications-items_certification-items_source-image" src="../../../assets/images/certification-example.jpg" alt="Certification example">
-            <span class="certifications-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
-          </li>
-          <li class="certifications-items_certification-items_skills"><the-skills></the-skills></li>
-        </ul>
+
         <div class="certifications-items_certification-delete">
           <span class="certifications-items_certification-delete-inscription">Delete certification</span>
         </div>
       </li>
     </ul>
-    <div class="certifications-load-more-certifications">
-      <span class="certifications-load-more-certifications-inscription">Load more certifications</span>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
 import TheSkills from '../TheSkills.vue'
+import { Certification } from '@/types/my-profile/certifications/Certification'
+import useGetAllCertifications from '@/composables/my-profile/certifications/useGetAllCertifications'
+import { useAuthenticationStore } from '@/stores/authentication'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  components: { TheSkills },
+  setup() {
+    const authenticationStore = useAuthenticationStore()    
+    const router = useRouter()
+    const certifications = ref<Certification[]>([])
+
+    async function loadCertifications() {
+      const result = await useGetAllCertifications(authenticationStore.userId)
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        certifications.value = result as Certification[]
+      }
+    }
+
+    function formatDate(date: string | null): string {
+      if (!date) return ''
+      return new Date(date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    }
+
+    onMounted(() => loadCertifications())
+
+    return { certifications, formatDate }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../../assets/styles/config' as *;
@@ -308,34 +336,6 @@ export default defineComponent({
           height: 20px;
           margin-bottom: 20px;
         }
-      }
-    }
-  }
-
-  &-load-more-certifications {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px $grayBorderColor solid;
-    border-radius: 20px;
-    height: 50px;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ececec;
-    }
-
-    &-link {
-      color: #000000;
-      text-decoration: none;
-    }
-
-    &-inscription {
-      font-size: 14px;
-
-      @media (max-width: $breakpoint) {
-        font-size: 12px;
       }
     }
   }

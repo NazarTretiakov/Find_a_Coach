@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FindACoach.Core.Domain.Entities.User;
+using System.ComponentModel.DataAnnotations;
 
 namespace FindACoach.Core.Domain.Entities.Activity
 {
@@ -30,6 +31,5 @@ namespace FindACoach.Core.Domain.Entities.Activity
         public ICollection<Save> Saves { get; set; } = new List<Save>();
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
     }
 }

@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\Activities\" />
+    <Folder Include="wwwroot\Images\Certifications\" />
     <Folder Include="wwwroot\Images\UserProfiles\" />
   </ItemGroup>
 

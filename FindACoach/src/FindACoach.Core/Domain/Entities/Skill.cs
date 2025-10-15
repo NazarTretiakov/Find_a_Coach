@@ -18,5 +18,6 @@ namespace FindACoach.Core.Domain.Entities
         public ICollection<Position> Positions { get; set; } = new List<Position>();
         public ICollection<School> Schools { get; set; } = new List<School>();
         public ICollection<Project> Projects { get; set; } = new List<Project>();
+        public ICollection<Certification> Certifications { get; set; } = new List<Certification>();
     }
 }

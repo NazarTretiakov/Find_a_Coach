@@ -5,6 +5,7 @@ namespace FindACoach.Core.Domain.Entities.User
 {
     public class Project
     {
+        [Key]
         public Guid Id { get; set; }
 
         public Guid UserId { get; set; }
