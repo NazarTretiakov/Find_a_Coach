@@ -178,6 +178,10 @@ export default defineComponent({
           skillTitles: result.skillTitles || [],
           participants: result.participants || []
         } as ProjectForm
+
+        if (formData.value.skillTitles.length == 5) {
+          isAddSkillButtonVisible.value = false
+        }
       }
 
       const elapsed = performance.now() - startTime

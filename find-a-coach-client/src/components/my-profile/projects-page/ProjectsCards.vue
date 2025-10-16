@@ -143,11 +143,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin-bottom: 30px;
-
-    @media (max-width: $breakpoint) {
-      margin-bottom: 20px;
-    }
 
     &_inscription {
       &-element {
@@ -214,7 +209,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_project {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px 50px 0 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;

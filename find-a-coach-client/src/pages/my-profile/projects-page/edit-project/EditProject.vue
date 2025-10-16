@@ -1,9 +1,11 @@
 <template> 
-  <profile-sticky-header class="header"></profile-sticky-header>
+  <div class="layout">
+    <profile-sticky-header class="header"></profile-sticky-header>
 
-  <edit-project-form :id="id" class="edit-project-form"></edit-project-form>
+    <edit-project-form :id="id" class="edit-project-form"></edit-project-form>
 
-  <the-footer></the-footer>
+    <the-footer class="footer"></the-footer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,11 +31,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  .header {
-    z-index: 1;
-  }
-
-  .edit-project-form {
-    z-index: 2;
-  }
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.header {
+  z-index: 1;
+}
+.edit-certification-form {
+  flex: 1;
+}
+.footer {
+  margin-top: auto;
+}
 </style>

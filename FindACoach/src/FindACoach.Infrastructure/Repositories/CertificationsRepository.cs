@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
@@ -67,50 +68,71 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
-        private async Task<string> ChangeCertificationImage(Certification certification, IFormFile image)
+        public async Task DeleteCertification(string certificationId, string activeUserId)
         {
-            if (image == null || image.Length == 0)
+            Certification certification = await _db.Certifications.FirstOrDefaultAsync(s => s.Id == Guid.Parse(certificationId));
+
+            if (certification == null)
             {
-                return "";
+                throw new ArgumentException("Certification with specified id doesn't exist.");
             }
 
-            string certificationImagesFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "Certifications");
-            string oldProfileImagePath = Path.Combine(certificationImagesFolder, certification.ImagePath);
-
-            if (File.Exists(oldProfileImagePath))
+            if (certification.UserId.ToString() != activeUserId)
             {
-                File.Delete(oldProfileImagePath);
+                throw new UnauthorizedAccessException("Only creator of certification can edit the position.");
             }
 
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
-            string imagePathToCreateFile = Path.Combine(certificationImagesFolder, uniqueFileName);
+            _db.Certifications.Remove(certification);
 
-            using (var imageStream = image.OpenReadStream())
-            using (var imageResult = Image.Load(imageStream))
-            {
-                imageResult.Mutate(x => x.Resize(new ResizeOptions
-                {
-                    Size = new Size(400, 280),
-                    Mode = ResizeMode.Crop
-                }));
-
-                await imageResult.SaveAsync(imagePathToCreateFile, new JpegEncoder
-                {
-                    Quality = 90
-                });
-            }
-
-            return uniqueFileName;
+            await _db.SaveChangesAsync();
         }
 
-        public Task DeleteCertification(string certificationId, string activeUserId)
+        public async Task EditCertification(EditCertificationDTO dto, string editorId)
         {
-            throw new NotImplementedException();
-        }
+            Certification certification = await _db.Certifications
+                .Where(s => s.Id == Guid.Parse(dto.CertificationId))
+                .Include(s => s.Skills)
+                .FirstOrDefaultAsync(s => s.Id == Guid.Parse(dto.CertificationId));
 
-        public Task EditCertification(EditCertificationDTO dto, string editorId)
-        {
-            throw new NotImplementedException();
+            if (certification == null)
+            {
+                throw new ArgumentException("Certification with specified id doesn't exist.");
+            }
+
+            if (certification.UserId.ToString() != editorId)
+            {
+                throw new UnauthorizedAccessException("Only user which added that certification can edit it.");
+            }
+
+            certification.Title = dto.Title;
+            certification.IssuingOrganization = dto.IssuingOrganization;
+            certification.IssueDate = dto.IssueDate;
+            certification.CredentialId = dto.CredentialId;
+            certification.CredentialUrl = dto.CredentialUrl;
+            certification.ImagePath = await ChangeCertificationImage(certification, dto.Image);
+
+            certification.Skills.Clear();
+
+            foreach (var skillTitle in dto.SkillTitles)
+            {
+                Skill skill = await _db.Skills.FirstOrDefaultAsync(s => s.Title == skillTitle);
+                if (skill != null)
+                {
+                    certification.Skills.Add(skill);
+                }
+                else
+                {
+                    skill = new Skill
+                    {
+                        Id = Guid.NewGuid(),
+                        Title = skillTitle
+                    };
+                    _db.Skills.Add(skill);
+                    certification.Skills.Add(skill);
+                }
+            }
+
+            await _db.SaveChangesAsync();
         }
 
         public async Task<List<CertificationToResponse>> GetAllCertifications(string userId)
@@ -181,6 +203,42 @@ namespace FindACoach.Infrastructure.Repositories
                 .ToListAsync();
 
             return certifications;
+        }
+
+        private async Task<string> ChangeCertificationImage(Certification certification, IFormFile image)
+        {
+            string certificationImagesFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "Certifications");
+            string oldProfileImagePath = Path.Combine(certificationImagesFolder, certification.ImagePath);
+
+            if (File.Exists(oldProfileImagePath))
+            {
+                File.Delete(oldProfileImagePath);
+            }
+
+            if (image == null || image.Length == 0)
+            {
+                return "";
+            }
+
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+            string imagePathToCreateFile = Path.Combine(certificationImagesFolder, uniqueFileName);
+
+            using (var imageStream = image.OpenReadStream())
+            using (var imageResult = Image.Load(imageStream))
+            {
+                imageResult.Mutate(x => x.Resize(new ResizeOptions
+                {
+                    Size = new Size(400, 280),
+                    Mode = ResizeMode.Crop
+                }));
+
+                await imageResult.SaveAsync(imagePathToCreateFile, new JpegEncoder
+                {
+                    Quality = 100
+                });
+            }
+
+            return uniqueFileName;
         }
     }
 }

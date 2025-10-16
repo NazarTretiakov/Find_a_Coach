@@ -55,7 +55,7 @@
           </li>
         </ul>
 
-        <div class="certifications-items_certification-delete">
+        <div class="certifications-items_certification-delete" @click="deleteCertification(certification.certificationId)">
           <span class="certifications-items_certification-delete-inscription">Delete certification</span>
         </div>
       </li>
@@ -69,6 +69,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import TheSkills from '../TheSkills.vue'
 import { Certification } from '@/types/my-profile/certifications/Certification'
 import useGetAllCertifications from '@/composables/my-profile/certifications/useGetAllCertifications'
+import useDeleteCertification from '@/composables/my-profile/certifications/useDeleteCertification'
 import { useAuthenticationStore } from '@/stores/authentication'
 import { useRouter } from 'vue-router'
 
@@ -95,9 +96,20 @@ export default defineComponent({
       return new Date(date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
     }
 
+    const deleteCertification = async (certificationId: string) => {
+      const result = await useDeleteCertification(certificationId)
+    
+      if (!result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+
+      certifications.value = certifications.value.filter(certification => certification.certificationId !== certificationId)
+    }
+
     onMounted(() => loadCertifications())
 
-    return { certifications, formatDate }
+    return { certifications, formatDate, deleteCertification }
   }
 })
 </script>
@@ -118,11 +130,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin-bottom: 30px;
-
-    @media (max-width: $breakpoint) {
-      margin-bottom: 20px;
-    }
 
     &_inscription {
       &-element {
@@ -190,7 +197,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_certification {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px 50px 0 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;

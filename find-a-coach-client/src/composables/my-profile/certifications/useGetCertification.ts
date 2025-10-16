@@ -5,11 +5,11 @@ import { Certification } from "@/types/my-profile/certifications/Certification"
 
 const API_URL = config.apiBaseUrl + '/Certifications'
 
-export default async function useGetSchool(schoolId: string): Promise<Result | Certification> {
+export default async function useGetCertification(certificationId: string): Promise<Result | Certification> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get?schoolId=${schoolId}`, {
+    const response = await fetch(`${API_URL}/get?certificationId=${certificationId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`

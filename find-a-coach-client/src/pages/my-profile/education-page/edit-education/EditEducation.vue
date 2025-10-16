@@ -4,7 +4,7 @@
 
     <edit-education-form :id="id" class="edit-education-form"></edit-education-form>
 
-    <the-footer></the-footer>
+    <the-footer class="footer"></the-footer>
   </div>
 </template>
 

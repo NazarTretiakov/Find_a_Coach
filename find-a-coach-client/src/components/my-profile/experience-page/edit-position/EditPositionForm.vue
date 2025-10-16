@@ -164,6 +164,10 @@ export default defineComponent({
           description: result.description || '',
           skills: result.skillTitles || []
         }
+
+        if (formData.value.skills.length == 5) {
+          isAddSkillButtonVisible.value = false
+        }
       }
 
       const elapsed = performance.now() - startTime

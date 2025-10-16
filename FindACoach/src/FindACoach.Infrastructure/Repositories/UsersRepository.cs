@@ -72,17 +72,17 @@ namespace FindACoach.Infrastructure.Repositories
 
         private async Task<string> ChangeProfileImage(User activeUser, IFormFile image)
         {
-            if (image == null || image.Length == 0)
-            {
-                return "default-profile-image.png";
-            }
-
             string profileImagesFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "UserProfiles");
             string oldProfileImagePath = Path.Combine(profileImagesFolder, activeUser.ImagePath);
 
             if (File.Exists(oldProfileImagePath) && activeUser.ImagePath != "default-profile-image.png")
             {
                 File.Delete(oldProfileImagePath);
+            }
+
+            if (image == null || image.Length == 0)
+            {
+                return "default-profile-image.png";
             }
 
             string uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;

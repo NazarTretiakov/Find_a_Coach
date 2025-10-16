@@ -148,6 +148,10 @@ export default defineComponent({
           endDate: result.endDate ? result.endDate.split('T')[0] : null,
           skills: result.skillTitles || []
         }
+
+        if (formData.value.skills.length == 5) {
+          isAddSkillButtonVisible.value = false
+        }
       }
 
       const elapsed = performance.now() - startTime

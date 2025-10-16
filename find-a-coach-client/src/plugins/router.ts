@@ -102,7 +102,7 @@ const router = createRouter({
     { path: '/my-profile/edit-project/:id', component: EditProject, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/certifications', component: CertificationsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-certification', component: AddCertification, meta: { requiresAuth: true } },
-    { path: '/my-profile/edit-certification', component: EditCertification, meta: { requiresAuth: true } },
+    { path: '/my-profile/edit-certification/:id', component: EditCertification, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/skills', component: SkillsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/languages', component: LanguagesPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-language', component: AddLanguage, meta: { requiresAuth: true } },

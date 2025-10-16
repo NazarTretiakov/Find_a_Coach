@@ -69,12 +69,12 @@ namespace FindACoach.Infrastructure.Repositories
 
             if (school == null)
             {
-                throw new ArgumentException("Position with specified id doesn't exist.");
+                throw new ArgumentException("School with specified id doesn't exist.");
             }
 
             if (school.UserId.ToString() != activeUserId)
             {
-                throw new UnauthorizedAccessException("Only creator of position can edit the position.");
+                throw new UnauthorizedAccessException("Only creator of school can edit the position.");
             }
 
             _db.Schools.Remove(school);
