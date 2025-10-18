@@ -4,8 +4,6 @@ using FindACoach.Core.Domain.Entities.User;
 using FindACoach.Core.Domain.IdentityEntities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Reflection.Emit;
 
 namespace FindACoach.Infrastructure.DbContext
 {

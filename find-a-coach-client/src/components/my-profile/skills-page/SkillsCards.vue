@@ -1,61 +1,81 @@
-<template> 
+<template>
   <div class="skills">
-    <h1 class="skills-header">Skills</h1>
-    <ul class="skills-items">
-      <li class="skills-items_skill">
-        <ul class="skills-items_skill-items">
-          <li class="skills-items_skill-items_name"><h2 class="skills-items_skill-items_name-element">JavaScript</h2></li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/education-icon.svg" alt="Education icon">
-            <span class="skills-items_skill-items_source-inscription">Pomeranian University in Słupsk</span>
-          </li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/job-icon.svg" alt="Job icon">
-            <span class="skills-items_skill-items_source-inscription">The Best Company</span>
-          </li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/certification-icon.svg" alt="Certification icon">
-            <span class="skills-items_skill-items_source-inscription">JavaScript + TypeScript Course</span>
-          </li>
-        </ul>
-        <div class="skills-items_skill-delete">
-          <span class="skills-items_skill-delete-inscription">Delete skill</span>
-        </div>
-      </li>
-      <li class="skills-items_skill">
-        <ul class="skills-items_skill-items">
-          <li class="skills-items_skill-items_name"><h2 class="skills-items_skill-items_name-element">Store management</h2></li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/project-icon.svg" alt="Project icon">
-            <span class="skills-items_skill-items_source-inscription">Store management for Amazon company</span>
-          </li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/certification-icon.svg" alt="Certification icon">
-            <span class="skills-items_skill-items_source-inscription">Complete store management guide</span>
-          </li>
-        </ul>
-        <div class="skills-items_skill-delete">
-          <span class="skills-items_skill-delete-inscription">Delete skill</span>
-        </div>
+    <ul class="skills-header">
+      <li class="skills-header_inscription"><h1 class="skills-header_inscription-element">Skills</h1></li>
+      <li class="skills-header_add-button">
+        <router-link to="/my-profile/add-skill" class="skills-header_add-button-link">
+          <button class="skills-header_add-button-element">
+            <svg class="skills-header_add-button-element-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="skills-header_add-button-element-inscription">Add</span>
+          </button>
+        </router-link>
       </li>
     </ul>
-    <div class="skills-load-more-skills">
-      <span class="skills-load-more-skills-inscription">Load more skills</span>
-    </div>
+
+    <ul class="skills-items">
+      <li v-for="skill in skills" :key="skill.skillId" class="skills-items_skill" :id="skill.skillId">
+        <ul class="skills-items_skill-items">
+          <li class="skills-items_skill-items_name"><h2 class="skills-items_skill-items_name-element">{{ skill.title }}</h2></li>
+
+          <li v-for="(usage, index) in skill.usages" :key="index" class="skills-items_skill-items_source">
+            <img class="skills-items_skill-items_source-icon" :src="getUsageIcon(usage.type)" :alt="`${usage.type} icon`" />
+            <span class="skills-items_skill-items_source-inscription">{{ usage.title }}</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
 
-import TheSkills from '../TheSkills.vue'
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthenticationStore } from '@/stores/authentication'
+import type { Skill } from '@/types/my-profile/skills/Skill'
+import useGetAllSkills from '@/composables/my-profile/skills/useGetAllSkills'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  setup() {
+    const authenticationStore = useAuthenticationStore()
+    const router = useRouter()
+    const skills = ref<Skill[]>([])
+
+    async function loadSkills() {
+      const result = await useGetAllSkills(authenticationStore.userId)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        skills.value = result as Skill[]
+      }
+    }
+
+    function getUsageIcon(type: string): string {
+      switch (type) {
+        case 'Project':
+          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
+        case 'Company':
+          return new URL('@/assets/images/icons/job-icon.svg', import.meta.url).href
+        case 'Certification':
+          return new URL('@/assets/images/icons/certification-icon.svg', import.meta.url).href
+        case 'School':
+          return new URL('@/assets/images/icons/education-icon.svg', import.meta.url).href
+        default:
+          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
+      }
+    }
+
+    onMounted(() => loadSkills())
+
+    return { skills, getUsageIcon }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../../assets/styles/config' as *;
@@ -68,12 +88,67 @@ export default defineComponent({
   }
 
   &-header {
-    font-size: 28px;
-    margin-left: 6px;
-    margin-bottom: 30px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
 
-    @media (max-width: $breakpoint) {
-      font-size: 20px;
+    &_inscription {
+      &-element {
+        font-size: 28px;
+        margin-left: 6px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 20px;
+        }
+      }
+    }
+
+    &_add-button {
+      display: flex;
+      align-items: flex-end;
+
+      &-element {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid $grayBorderColor;
+        border-radius: 10px;
+        width: 100px;
+        height: 40px;
+        transition: transform 0.3s ease;
+
+        @media (max-width: $breakpoint) {
+          height: 36px;
+        }
+
+        &:hover {
+          transform: scale(1.10);
+        }
+
+        &-icon {
+          width: 30px;
+          margin-right: 8px;
+          color: $grayBorderColor;
+
+          @media (max-width: $breakpoint) {
+            width: 24px;
+            margin-right: 6px;
+          }
+        }
+        &-inscription {
+          font-size: 20px;
+          color: $grayBorderColor;
+
+          @media (max-width: $breakpoint) {
+            font-size: 16px;
+          }
+        }
+      }
+
+      &-link {
+        text-decoration: none;
+      }
     }
   }
 
@@ -83,13 +158,13 @@ export default defineComponent({
     flex-direction: column;
 
     &_skill {
-      margin-bottom: 30px;
-      padding: 50px 50px 0 50px;
+      margin-top: 30px;
+      padding: 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;
 
       @media (max-width: $breakpoint) {
-        padding: 30px 30px 0 30px;
+        padding: 30px;
       }
       
       &-items {
@@ -131,64 +206,6 @@ export default defineComponent({
             }
           }
         }
-      }
-      
-      &-delete {
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        border-top: 2px solid $grayBorderColor;
-        margin: 40px -50px 0 -50px;
-        padding: 14px 0;
-        transition: background-color 0.3s ease;
-        border-bottom-right-radius: 20px;
-        border-bottom-left-radius: 20px;
-
-        @media (max-width: $breakpoint) {
-          margin: 40px -30px 0 -30px;
-        }
-
-        &-inscription {
-          font-size: 14px;
-          color: $errorColor;
-
-          @media (max-width: $breakpoint) {
-            font-size: 12px;
-          }
-        }
-
-        &:hover {
-          cursor: pointer;
-          background-color: #ececec;
-        }
-      }
-    }
-  }
-
-  &-load-more-skills  {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px $grayBorderColor solid;
-    border-radius: 20px;
-    height: 50px;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ececec;
-    }
-
-    &-link {
-      color: #000000;
-      text-decoration: none;
-    }
-
-    &-inscription {
-      font-size: 14px;
-
-      @media (max-width: $breakpoint) {
-        font-size: 12px;
       }
     }
   }

@@ -10,6 +10,7 @@ using FindACoach.Core.ServiceContracts.MyProfile.Certifications;
 using FindACoach.Core.ServiceContracts.MyProfile.Education;
 using FindACoach.Core.ServiceContracts.MyProfile.Experience;
 using FindACoach.Core.ServiceContracts.MyProfile.Projects;
+using FindACoach.Core.ServiceContracts.MyProfile.Skills;
 using FindACoach.Core.Services;
 using FindACoach.Core.Services.Authentication;
 using FindACoach.Core.Services.CompleteProfileWindow;
@@ -74,6 +75,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<ICertificationsGetterService, CertificationsGetterService>();
             services.AddScoped<ICertificationsEditorService, CertificationsEditorService>();
             services.AddScoped<ICertificationsRemoverService, CertificationsRemoverService>();
+            services.AddScoped<ISkillsGetterService, SkillsGetterService>();
             services.AddScoped<IAddActivityService, AddActivityService>();
             services.AddScoped<IActivitiesGetterService, ActivitiesGetterService>();
             services.AddScoped<IToggleLikeService, ToggleLikeService>();
@@ -88,6 +90,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<ISchoolsRepository, SchoolsRepository>();
             services.AddScoped<IProjectsRepository, ProjectsRepository>();
             services.AddScoped<ICertificationsRepository, CertificationsRepository>();
+            services.AddScoped<ISkillsRepository, SkillsRepository>();
             services.AddScoped<IActivitiesRepository, ActivitiesRepository>();
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<ISavesRepository, SavesRepository>();

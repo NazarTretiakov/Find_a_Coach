@@ -1,9 +1,11 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.Entities.User;
+using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.MyProfile.Projects;
 using FindACoach.Core.Enums;
 using FindACoach.Infrastructure.DbContext;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FindACoach.Infrastructure.Repositories
@@ -11,14 +13,26 @@ namespace FindACoach.Infrastructure.Repositories
     public class ProjectsRepository : IProjectsRepository
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<User> _userManager;
 
-        public ProjectsRepository(ApplicationDbContext db)
+        public ProjectsRepository(ApplicationDbContext db, UserManager<User> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         public async Task AddProject(string userId, AddProjectDTO dto)
         {
+            User user = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Include(u => u.Skills)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+            if (user == null)
+            {
+                throw new ArgumentException("User with specified id doesn't exist.");
+            }
+
             RelatedTo relatedTo = Enum.Parse<RelatedTo>(dto.RelatedTo);
 
             if (relatedTo != RelatedTo.Job && relatedTo != RelatedTo.Education && relatedTo != RelatedTo.Event && relatedTo != RelatedTo.Other)
@@ -50,6 +64,10 @@ namespace FindACoach.Infrastructure.Repositories
 
                 if (skill != null)
                 {
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     project.Skills.Add(skill);
                 }
                 else
@@ -60,6 +78,10 @@ namespace FindACoach.Infrastructure.Repositories
                         Title = skillTitle
                     };
                     _db.Skills.Add(skill);
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     project.Skills.Add(skill);
                 }
             }
@@ -71,16 +93,45 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task DeleteProject(string projectId, string activeUserId)
         {
-            Project project = await _db.Projects.FirstOrDefaultAsync(s => s.Id == Guid.Parse(projectId));
+            Project project = await _db.Projects
+                .Where(c => c.Id == Guid.Parse(projectId))
+                .Include(c => c.Skills)
+                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(projectId));
 
             if (project == null)
             {
                 throw new ArgumentException("Project with specified id doesn't exist.");
             }
 
+            User user = await _userManager.Users
+                .Where(u => u.Id == project.UserId)
+                .Include(u => u.Skills)
+                .FirstOrDefaultAsync(u => u.Id == project.UserId);
+            if (user == null)
+            {
+                throw new ArgumentException("User with specified id doesn't exist.");
+            }
+
             if (project.UserId.ToString() != activeUserId)
             {
                 throw new UnauthorizedAccessException("Only creator of project can edit it.");
+            }
+
+            foreach (var positionSkill in project.Skills.ToList())
+            {
+                foreach (var userSkill in user.Skills.ToList())
+                {
+                    bool isSkillUsedElsewhere =
+                        user.Positions.Any(p => p.Skills.Any(s => s.Id == userSkill.Id && p.Id != project.Id)) ||
+                        user.Certifications.Any(c => c.Skills.Any(s => s.Id == userSkill.Id)) ||
+                        user.Projects.Any(pr => pr.Skills.Any(s => s.Id == userSkill.Id)) ||
+                        user.Schools.Any(sc => sc.Skills.Any(s => s.Id == userSkill.Id));
+
+                    if (!isSkillUsedElsewhere && userSkill.Id == positionSkill.Id)
+                    {
+                        user.Skills.Remove(userSkill);
+                    }
+                }
             }
 
             _db.Projects.Remove(project);
@@ -112,6 +163,15 @@ namespace FindACoach.Infrastructure.Repositories
                 throw new ArgumentException("Project with specified id doesn't exist.");
             }
 
+            User user = await _userManager.Users
+                .Where(u => u.Id == project.UserId)
+                .Include(u => u.Skills)
+                .FirstOrDefaultAsync(u => u.Id == project.UserId);
+            if (user == null)
+            {
+                throw new ArgumentException("User with specified id doesn't exist.");
+            }
+
             if (project.UserId.ToString() != editorId)
             {
                 throw new UnauthorizedAccessException("Only user which added that project can edit it.");
@@ -125,6 +185,23 @@ namespace FindACoach.Infrastructure.Repositories
             project.Description = dto.Description;
             project.Participants = string.Join(",", dto.Participants);
 
+            foreach (var positionSkill in project.Skills.ToList())
+            {
+                foreach (var userSkill in user.Skills.ToList())
+                {
+                    bool isSkillUsedElsewhere =
+                    user.Positions.Any(p => p.Skills.Any(s => s.Id == userSkill.Id && p.Id != project.Id)) ||
+                    user.Certifications.Any(c => c.Skills.Any(s => s.Id == userSkill.Id)) ||
+                    user.Projects.Any(pr => pr.Skills.Any(s => s.Id == userSkill.Id)) ||
+                    user.Schools.Any(sc => sc.Skills.Any(s => s.Id == userSkill.Id));
+
+                    if (!isSkillUsedElsewhere && userSkill.Id == positionSkill.Id)
+                    {
+                        user.Skills.Remove(userSkill);
+                    }
+                }
+            }
+
             project.Skills.Clear();
 
             foreach (var skillTitle in dto.SkillTitles)
@@ -132,6 +209,10 @@ namespace FindACoach.Infrastructure.Repositories
                 Skill skill = await _db.Skills.FirstOrDefaultAsync(s => s.Title == skillTitle);
                 if (skill != null)
                 {
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     project.Skills.Add(skill);
                 }
                 else
@@ -142,6 +223,10 @@ namespace FindACoach.Infrastructure.Repositories
                         Title = skillTitle
                     };
                     _db.Skills.Add(skill);
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     project.Skills.Add(skill);
                 }
             }

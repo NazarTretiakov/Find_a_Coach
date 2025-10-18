@@ -6,9 +6,9 @@ using FindACoach.Core.DTO.MyProfile.Certifications;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
@@ -18,18 +18,30 @@ namespace FindACoach.Infrastructure.Repositories
     public class CertificationsRepository : ICertificationsRepository
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<User> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IConfiguration _configuration;
 
-        public CertificationsRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public CertificationsRepository(ApplicationDbContext db, UserManager<User> userManager, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _db = db;
+            _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
         }
 
         public async Task AddCertification(string userId, AddCertificationDTO dto)
         {
+            User user = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Include(u => u.Skills)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+            if (user == null)
+            {
+                throw new ArgumentException("User with specified id doesn't exist.");
+            }
+
             Certification certification = new Certification()
             {
                 Id = Guid.NewGuid(),
@@ -49,6 +61,10 @@ namespace FindACoach.Infrastructure.Repositories
 
                 if (skill != null)
                 {
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     certification.Skills.Add(skill);
                 }
                 else
@@ -59,6 +75,10 @@ namespace FindACoach.Infrastructure.Repositories
                         Title = skillTitle
                     };
                     _db.Skills.Add(skill);
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     certification.Skills.Add(skill);
                 }
             }
@@ -70,11 +90,22 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task DeleteCertification(string certificationId, string activeUserId)
         {
-            Certification certification = await _db.Certifications.FirstOrDefaultAsync(s => s.Id == Guid.Parse(certificationId));
-
+            Certification certification = await _db.Certifications
+                .Where(c => c.Id == Guid.Parse(certificationId))
+                .Include(c => c.Skills)
+                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(certificationId));
             if (certification == null)
             {
                 throw new ArgumentException("Certification with specified id doesn't exist.");
+            }
+
+            User user = await _userManager.Users
+                .Where(u => u.Id == certification.UserId)
+                .Include(u => u.Skills)
+                .FirstOrDefaultAsync(u => u.Id == certification.UserId);
+            if (user == null)
+            {
+                throw new ArgumentException("User with specified id doesn't exist.");
             }
 
             if (certification.UserId.ToString() != activeUserId)
@@ -82,6 +113,22 @@ namespace FindACoach.Infrastructure.Repositories
                 throw new UnauthorizedAccessException("Only creator of certification can edit the position.");
             }
 
+            foreach(var certificationSkill in certification.Skills.ToList())
+            {
+                foreach (var userSkill in user.Skills.ToList())
+                {
+                    bool isSkillUsedElsewhere =
+                        user.Positions.Any(p => p.Skills.Any(s => s.Id == userSkill.Id && p.Id != certification.Id)) ||
+                        user.Certifications.Any(c => c.Skills.Any(s => s.Id == userSkill.Id)) ||
+                        user.Projects.Any(pr => pr.Skills.Any(s => s.Id == userSkill.Id)) ||
+                        user.Schools.Any(sc => sc.Skills.Any(s => s.Id == userSkill.Id));
+
+                    if (!isSkillUsedElsewhere && userSkill.Id == certificationSkill.Id)
+                    {
+                        user.Skills.Remove(userSkill);
+                    }
+                }
+            }
             _db.Certifications.Remove(certification);
 
             await _db.SaveChangesAsync();
@@ -99,6 +146,15 @@ namespace FindACoach.Infrastructure.Repositories
                 throw new ArgumentException("Certification with specified id doesn't exist.");
             }
 
+            User user = await _userManager.Users
+                .Where(u => u.Id == certification.UserId)
+                .Include(u => u.Skills)
+                .FirstOrDefaultAsync(u => u.Id == certification.UserId);
+            if (user == null)
+            {
+                throw new ArgumentException("User with specified id doesn't exist.");
+            }
+
             if (certification.UserId.ToString() != editorId)
             {
                 throw new UnauthorizedAccessException("Only user which added that certification can edit it.");
@@ -111,13 +167,35 @@ namespace FindACoach.Infrastructure.Repositories
             certification.CredentialUrl = dto.CredentialUrl;
             certification.ImagePath = await ChangeCertificationImage(certification, dto.Image);
 
+            foreach (var certificationSkill in certification.Skills.ToList())
+            {
+                foreach (var userSkill in user.Skills.ToList())
+                {
+                    bool isSkillUsedElsewhere =
+                    user.Positions.Any(p => p.Skills.Any(s => s.Id == userSkill.Id && p.Id != certification.Id)) ||
+                    user.Certifications.Any(c => c.Skills.Any(s => s.Id == userSkill.Id)) ||
+                    user.Projects.Any(pr => pr.Skills.Any(s => s.Id == userSkill.Id)) ||
+                    user.Schools.Any(sc => sc.Skills.Any(s => s.Id == userSkill.Id));
+
+                    if (!isSkillUsedElsewhere && userSkill.Id == certificationSkill.Id)
+                    {
+                        user.Skills.Remove(userSkill);
+                    }
+                }
+            }
+
             certification.Skills.Clear();
 
             foreach (var skillTitle in dto.SkillTitles)
             {
                 Skill skill = await _db.Skills.FirstOrDefaultAsync(s => s.Title == skillTitle);
+
                 if (skill != null)
                 {
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     certification.Skills.Add(skill);
                 }
                 else
@@ -128,6 +206,10 @@ namespace FindACoach.Infrastructure.Repositories
                         Title = skillTitle
                     };
                     _db.Skills.Add(skill);
+                    if (!user.Skills.Any(s => s.Id == skill.Id))
+                    {
+                        user.Skills.Add(skill);
+                    }
                     certification.Skills.Add(skill);
                 }
             }
