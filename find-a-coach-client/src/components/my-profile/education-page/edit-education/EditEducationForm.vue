@@ -193,6 +193,8 @@ export default defineComponent({
 
         if (result.isSuccessful) {
           router.push('/my-profile/education')
+        } else {
+          console.error(result.errorMessage)
         }
       }
     }

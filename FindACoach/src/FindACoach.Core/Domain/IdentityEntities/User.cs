@@ -54,6 +54,10 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         public ICollection<Project> Projects { get; set; } = new List<Project>();
 
+        public ICollection<Certification> Certifications { get; set; } = new List<Certification>();
+
+        public ICollection<Language> Languages { get; set; } = new List<Language>();
+
         public ICollection<Entities.Activity.Activity> Activities { get; set; } = new List<Entities.Activity.Activity>();
 
         public ICollection<Skill> Skills { get; set; } = new List<Skill>();
@@ -63,7 +67,5 @@ namespace FindACoach.Core.Domain.IdentityEntities
         public ICollection<Save> Saves { get; set; } = new List<Save>();
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-        public ICollection<Certification> Certifications { get; set; } = new List<Certification>();
     }
 }

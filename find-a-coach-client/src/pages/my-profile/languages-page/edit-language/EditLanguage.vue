@@ -1,10 +1,10 @@
 <template> 
-  <div class="page">
-    <profile-sticky-header class="page-header"></profile-sticky-header>
+  <div class="layout">
+    <profile-sticky-header class="header"></profile-sticky-header>
 
-    <edit-language-form class="page-edit-language-form"></edit-language-form>
+    <edit-language-form :id="id" class="form"></edit-language-form>
 
-    <the-footer class="page-footer"></the-footer>
+    <the-footer class="footer"></the-footer>
   </div>
 </template>
 
@@ -16,6 +16,12 @@ import EditLanguageForm from '../../../../components/my-profile/languages-page/e
 import TheFooter from '../../../../components/TheFooter.vue'
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     ProfileStickyHeader,
     EditLanguageForm,
@@ -25,21 +31,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.page {
+.layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-
-  &-header {
-    z-index: 1;
-  }
-
-  &-edit-language-form {
-    flex: 1;
-  }
-
-  &-footer {
-    margin-top: auto;
-  }
+}
+.header {
+  z-index: 1;
+}
+.form {
+  flex: 1;
+}
+.footer {
+  margin-top: auto;
 }
 </style>

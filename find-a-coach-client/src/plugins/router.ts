@@ -106,7 +106,7 @@ const router = createRouter({
     { path: '/my-profile/skills', component: SkillsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/languages', component: LanguagesPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-language', component: AddLanguage, meta: { requiresAuth: true } },
-    { path: '/my-profile/edit-language', component: EditLanguage, meta: { requiresAuth: true } },
+    { path: '/my-profile/edit-language/:id', component: EditLanguage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/recommendations', component: RecommendationsPage, meta: { requiresAuth: true } }, 
     { path: '/my-profile/settings', redirect: "/my-profile/settings/notifications", meta: { requiresAuth: true } },
     { path: '/my-profile/settings/notifications', component: NotificationsSettingsPage, meta: { requiresAuth: true } },

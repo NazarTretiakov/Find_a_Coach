@@ -6,38 +6,66 @@
           <li class="languages-section-items_header-items_incription"><h1 class="languages-section-items_header-items_incription-element">Languages</h1></li>
           <li class="languages-section-items_header-items_buttons">
             <ul class="languages-section-items_header-items_buttons-items">
-              <li class="languages-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-language" class="languages-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="languages-section-items_header-items_buttons-items_add-element"></router-link></li>
-              <li class="languages-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/languages" class="languages-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="languages-section-items_header-items_buttons-items_edit-element"></router-link></li>
+              <li class="languages-section-items_header-items_buttons-items_add"><router-link to="/my-profile/add-language" class="languages-section-items_header-items_buttons-items_add-link"><img src="../../assets/images/icons/add-icon.svg" alt="Add icon" class="languages-section-items_header-items_buttons-items_add-element" /></router-link></li>
+              <li class="languages-section-items_header-items_buttons-items_edit"><router-link to="/my-profile/languages" class="languages-section-items_header-items_buttons-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="languages-section-items_header-items_buttons-items_edit-element" /></router-link></li>
             </ul>
           </li>
         </ul>
       </li>
-      <li class="languages-section-items_language">
+
+      <li v-for="(language, index) in languages" :key="language.languageId" class="languages-section-items_language">
         <ul class="languages-section-items_language-items">
-          <li class="languages-section-items_language-items_name">
-            <router-link to="/path-to-all-languages-of-user-with-scrollable-thing" class="languages-section-items_language-items_name-link"><h2 class="languages-section-items_language-items_name-element">English</h2></router-link>
-          </li>
-          <li class="languages-section-items_language-items_level-of-knowledge"><span class="languages-section-items_language-items_level-of-knowledge-element">Professional working proficiency</span></li>
+          <li class="languages-section-items_language-items_name"><router-link :to="`/my-profile/languages/#${language.languageId}`" class="languages-section-items_language-items_name-link"><h2 class="languages-section-items_language-items_name-element">{{ language.title }}</h2></router-link></li>
+          <li class="languages-section-items_language-items_level-of-knowledge"><span class="languages-section-items_language-items_level-of-knowledge-element">{{ mapProficiency(language.proficiency) }}</span></li>
         </ul>
-        <div class="languages-section-items_language-divider"></div>
-      </li>
-      <li class="languages-section-items_language">
-        <ul class="languages-section-items_language-items">
-          <li class="languages-section-items_language-items_name">
-            <router-link to="/path-to-all-languages-of-user-with-scrollable-thing" class="languages-section-items_language-items_name-link"><h2 class="languages-section-items_language-items_name-element">Polish</h2></router-link>
-          </li>
-          <li class="languages-section-items_language-items_level-of-knowledge"><span class="languages-section-items_language-items_level-of-knowledge-element">Professional working proficiency</span></li>
-        </ul>
+        <div v-if="index !== languages.length - 1" class="languages-section-items_language-divider"></div>
       </li>
     </ul>
+
     <router-link class="languages-section-items_show-all-languages-link" to="/my-profile/languages">
       <div class="languages-section-items_show-all-languages">
         <span class="languages-section-items_show-all-languages-element">Show all languages</span>
-        <img class="languages-section-items_show-all-languages-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
+        <img class="languages-section-items_show-all-languages-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon" />
       </div>
     </router-link>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthenticationStore } from '@/stores/authentication'
+import type { Language } from '@/types/my-profile/languages/Language'
+import useGetTwoLanguages from '@/composables/my-profile/languages/useGetLastTwoLanguages'
+import useConvertLanguageProficiency from '@/composables/my-profile/languages/useConvertLanguageProficiency'
+
+export default defineComponent({
+  setup() {
+    const authenticationStore = useAuthenticationStore()
+    const router = useRouter()
+    const languages = ref<Language[]>([])
+
+    async function loadLanguages() {
+      const result = await useGetTwoLanguages(authenticationStore.userId)
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        languages.value = result as Language[]
+      }
+    }
+
+    function mapProficiency(proficiency: string): string {
+      return useConvertLanguageProficiency(proficiency)
+    }
+
+    onMounted(() => loadLanguages())
+    return { languages, mapProficiency }
+  }
+})
+</script>
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

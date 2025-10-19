@@ -2,6 +2,7 @@
 using FindACoach.Core.Domain.Entities.Activity;
 using FindACoach.Core.Domain.Entities.User;
 using FindACoach.Core.Domain.IdentityEntities;
+using FindACoach.Core.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<School> Schools { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Certification> Certifications { get; set; }
+        public DbSet<Language> Languages { get; set; }
         public DbSet<Core.Domain.Entities.Activity.Activity> Activities { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Survey> Surveys { get; set; }
@@ -42,6 +44,7 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<School>().ToTable("Schools");
             builder.Entity<Project>().ToTable("Projects");
             builder.Entity<Certification>().ToTable("Certifications");
+            builder.Entity<Language>().ToTable("Languages");
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>().ToTable("Activities");
             builder.Entity<Event>().ToTable("Events");
@@ -94,6 +97,11 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Certification>()
                 .HasOne(c => c.User)
                 .WithMany(u => u.Certifications)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Language>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.Languages)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>()

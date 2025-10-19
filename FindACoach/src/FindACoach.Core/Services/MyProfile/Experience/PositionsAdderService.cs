@@ -2,7 +2,7 @@
 using FindACoach.Core.DTO.MyProfile.Experience;
 using FindACoach.Core.ServiceContracts.MyProfile.Experience;
 
-namespace FindACoach.Core.Services.Forum.Activities
+namespace FindACoach.Core.Services.MyProfile.Experience
 {
     public class PositionsAdderService : IPositionsAdderService
     {
