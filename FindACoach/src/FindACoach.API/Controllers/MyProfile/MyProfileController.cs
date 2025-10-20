@@ -15,8 +15,9 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IEditAboutMeService _editAboutMeService;
         private readonly IGetAboutMeService _getAboutMeService;
         private readonly IActivitiesGetterService _activitiesGetterService;
+        private readonly IIsProfileSectionsCompletedService _isProfileSectionsCompletedService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService, IIsProfileSectionsCompletedService isProfileSectionsCompletedService)
         {
             _editPersonalInformationService = editPersonalInformationService;
             _getPersonalInformationService = getPersonalInformationService;
@@ -24,6 +25,7 @@ namespace FindACoach.API.Controllers.MyProfile
             _getAboutMeService = getAboutMeService;
             _editAboutMeService = editAboutMeService;
             _activitiesGetterService = activitiesGetterService;
+            _isProfileSectionsCompletedService = isProfileSectionsCompletedService;
         }
 
         [HttpPost("edit-personal-information")]
@@ -108,6 +110,14 @@ namespace FindACoach.API.Controllers.MyProfile
             List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetActivitiesPaged(userId, page, pageSize);
 
             return Ok(activities);
+        }
+
+        [HttpGet("is-profile-sections-completed")]
+        public async Task<ActionResult<IsProfileSectionsCompletedToResponse>> IsProfileSectionsCompleted()
+        {
+            var isProfileSectionsCompletedInfo = await _isProfileSectionsCompletedService.IsProfileSectionsCompleted();
+
+            return Ok(isProfileSectionsCompletedInfo);
         }
     }
 }

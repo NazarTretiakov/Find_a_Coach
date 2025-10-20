@@ -4,14 +4,14 @@
   <ul class="profile-sections">
     <li class="profile-sections_left-side">
       <personal-information></personal-information>
-      <about-me></about-me>
-      <activities-section></activities-section>
-      <experience-section></experience-section>
-      <education-section></education-section>
-      <projects-section></projects-section>
-      <certifications-section></certifications-section>
-      <skills-section></skills-section>
-      <languages-section></languages-section>
+      <about-me v-if="isProfileSectionsCompleted.isDescription"></about-me>
+      <activities-section v-if="isProfileSectionsCompleted.isActivities"></activities-section>
+      <experience-section v-if="isProfileSectionsCompleted.isExperience"></experience-section>
+      <education-section v-if="isProfileSectionsCompleted.isEducation"></education-section>
+      <projects-section v-if="isProfileSectionsCompleted.isProjects"></projects-section>
+      <certifications-section v-if="isProfileSectionsCompleted.isCertifications"></certifications-section>
+      <skills-section v-if="isProfileSectionsCompleted.isSkills"></skills-section>
+      <languages-section v-if="isProfileSectionsCompleted.isLanguages"></languages-section>
       <recommendations-section></recommendations-section>
     </li>
     <li class="profile-sections_right-side">
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
 import ProfileStickyHeader from '../../components/my-profile/ProfileStickyHeader.vue'
 import PersonalInformation from '../../components/my-profile/PersonalInformation.vue'
@@ -38,6 +38,10 @@ import LanguagesSection from '../../components/my-profile/LanguagesSection.vue';
 import RecommendationsSection from '../../components/my-profile/RecommendationsSection.vue';
 import RecommendedPeople from '../../components/my-profile/RecommendedPeople.vue'
 import TheFooter from '../../components/TheFooter.vue'
+
+import { useRouter } from 'vue-router'
+import useIsProfileSectionsCompleted from '@/composables/my-profile/useIsProfileSectionsCompleted'
+import type { IsProfileSectionsCompleted } from '@/types/my-profile/IsProfileSectionsCompleted'
 
 export default defineComponent({
   components: {
@@ -54,6 +58,27 @@ export default defineComponent({
     RecommendationsSection,
     RecommendedPeople,
     TheFooter
+  },
+  setup() {
+    const router = useRouter()
+    const isProfileSectionsCompleted = ref<IsProfileSectionsCompleted>({} as IsProfileSectionsCompleted)
+
+    async function loadIsProfileSectionsCompletedInfo() {
+      const result = await useIsProfileSectionsCompleted()
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        isProfileSectionsCompleted.value = result as IsProfileSectionsCompleted
+      }
+    }
+
+    onMounted(() => loadIsProfileSectionsCompletedInfo())
+
+    return { isProfileSectionsCompleted }
   }
 })
 </script>

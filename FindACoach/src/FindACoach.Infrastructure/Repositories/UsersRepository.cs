@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FindACoach.Infrastructure.Repositories
 {
@@ -18,12 +20,14 @@ namespace FindACoach.Infrastructure.Repositories
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
 
-        public UsersRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public UsersRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, UserManager<User> userManager)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _userManager = userManager;
         }
 
         public async Task ChangeCompleteProfileWindowState(string userId, bool isVisible, string title)
@@ -201,6 +205,81 @@ namespace FindACoach.Infrastructure.Repositories
             user.AboutMe = dto.AboutMe;
 
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<IsProfileSectionsCompletedToResponse> IsProfileSectionsCompleted(string activeUserId)
+        {
+            var isProfileSectionsCompleted = new IsProfileSectionsCompletedToResponse()
+            {
+                IsCoreInfo = true,
+                IsDescription = true,
+                IsActivities = true,
+                IsEducation = true,
+                IsExperience = true,
+                IsProjects = true,
+                IsCertifications = true,
+                IsLanguages = true,
+                IsSkills = true
+            };
+
+            User activeUser = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(activeUserId))
+                .Include(u => u.Activities)
+                .Include(u => u.Positions)
+                .Include(u => u.Schools)
+                .Include(u => u.Projects)
+                .Include(u => u.Certifications)
+                .Include(u => u.Skills)
+                .Include(u => u.Languages)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(activeUserId));
+            if (activeUser == null)
+            {
+                throw new UnauthorizedAccessException("User with supplied id donesn't exist.");
+            }
+
+            if (activeUser.FirstName.IsNullOrEmpty() ||
+                activeUser.LastName.IsNullOrEmpty() ||
+                activeUser.Headline.IsNullOrEmpty() ||
+                activeUser.PrimaryOccupation.IsNullOrEmpty() ||
+                activeUser.Phone.IsNullOrEmpty() ||
+                activeUser.Location.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsCoreInfo = false;
+            }
+            if (activeUser.AboutMe.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsDescription = false;
+            }
+            if (activeUser.Activities.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsActivities = false;
+            }
+            if (activeUser.Positions.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsExperience = false;
+            }
+            if (activeUser.Schools.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsEducation = false;
+            }
+            if (activeUser.Projects.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsProjects = false;
+            }
+            if (activeUser.Certifications.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsCertifications = false;
+            }
+            if (activeUser.Skills.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsSkills = false;
+            }
+            if (activeUser.Languages.IsNullOrEmpty())
+            {
+                isProfileSectionsCompleted.IsLanguages = false;
+            }
+
+            return isProfileSectionsCompleted;
         }
     }   
 }

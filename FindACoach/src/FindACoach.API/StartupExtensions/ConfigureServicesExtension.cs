@@ -56,6 +56,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IEmailSenderService, EmailSenderService>();
             services.AddScoped<IGetStateService, GetStateService>();
             services.AddScoped<IChangeStateService, ChangeStateService>();
+            services.AddScoped<IIsProfileSectionsCompletedService, IsProfileSectionsFilledService>();
             services.AddScoped<IEditPersonalInformationService, EditPersonalInformationService>();
             services.AddScoped<IGetPersonalInformationService, GetPersonalInformationService>();
             services.AddScoped<IGetPersonalAndContactInformationService, GetPersonalAndContactInformationService>();

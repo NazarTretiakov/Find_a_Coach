@@ -59,5 +59,11 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="userId">User id which information will be retrieved.</param>
         /// <returns>AboutMeDTO object with information.</returns>
         Task<AboutMeDTO> GetAboutMe(string userId);
+
+        /// <summary>
+        /// Determines whether all required sections of the user's profile are filled.
+        /// </summary>
+        /// <returns>IsProfileSectionsFilledToResponse object with info about if the each section is filled or not.</returns>
+        Task<IsProfileSectionsCompletedToResponse> IsProfileSectionsCompleted(string activeUserId);
     }
 }
