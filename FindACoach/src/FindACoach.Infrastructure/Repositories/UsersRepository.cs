@@ -281,5 +281,24 @@ namespace FindACoach.Infrastructure.Repositories
 
             return isProfileSectionsCompleted;
         }
+
+        public async Task<ContactInformationToResponse> GetContactInformation(string userId)
+        {
+            var contactInformation = await _db.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Select(u => new ContactInformationToResponse()
+                {
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    Websites = u.Websites.Select(w => new WebsiteDTO()
+                    {
+                        Url = w.Url,
+                        Type = w.Type
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            return contactInformation;
+        }
     }   
 }

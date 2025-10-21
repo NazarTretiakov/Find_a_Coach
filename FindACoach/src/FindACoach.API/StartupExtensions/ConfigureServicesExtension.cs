@@ -60,6 +60,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IEditPersonalInformationService, EditPersonalInformationService>();
             services.AddScoped<IGetPersonalInformationService, GetPersonalInformationService>();
             services.AddScoped<IGetPersonalAndContactInformationService, GetPersonalAndContactInformationService>();
+            services.AddScoped<IContactInformationGetterService, ContactInformationGetterService>();
             services.AddScoped<IEditAboutMeService, EditAboutMeService>();
             services.AddScoped<IGetAboutMeService, GetAboutMeService>();
             services.AddScoped<IPositionsAdderService, PositionsAdderService>();

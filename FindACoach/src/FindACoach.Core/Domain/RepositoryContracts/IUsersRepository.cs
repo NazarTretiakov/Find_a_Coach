@@ -39,6 +39,13 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         Task<PersonalInformationToResponse> GetPersonalInformation(string userId);
 
         /// <summary>
+        /// Retrieves contact information of user.
+        /// </summary>
+        /// <param name="userId">User id which contact information will be retrieved.</param>
+        /// <returns>ContactInformationToResponse object with contact information.</returns>
+        Task<ContactInformationToResponse> GetContactInformation(string userId);
+
+        /// <summary>
         /// Retrieves personal and contact information of user.
         /// </summary>
         /// <param name="userId">User id which personal information will be retrieved.</param>

@@ -12,16 +12,18 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IEditPersonalInformationService _editPersonalInformationService;
         private readonly IGetPersonalInformationService _getPersonalInformationService;
         private readonly IGetPersonalAndContactInformationService _getPersonalAndContactInformationService;
+        private readonly IContactInformationGetterService _contactInformationGetterService;
         private readonly IEditAboutMeService _editAboutMeService;
         private readonly IGetAboutMeService _getAboutMeService;
         private readonly IActivitiesGetterService _activitiesGetterService;
         private readonly IIsProfileSectionsCompletedService _isProfileSectionsCompletedService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService, IIsProfileSectionsCompletedService isProfileSectionsCompletedService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IContactInformationGetterService contactInformationGetterService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService, IIsProfileSectionsCompletedService isProfileSectionsCompletedService)
         {
             _editPersonalInformationService = editPersonalInformationService;
             _getPersonalInformationService = getPersonalInformationService;
             _getPersonalAndContactInformationService = getPersonalAndContactInformationService;
+            _contactInformationGetterService = contactInformationGetterService;
             _getAboutMeService = getAboutMeService;
             _editAboutMeService = editAboutMeService;
             _activitiesGetterService = activitiesGetterService;
@@ -63,6 +65,14 @@ namespace FindACoach.API.Controllers.MyProfile
             PersonalAndContactInformationToResponse personalInformation = await _getPersonalAndContactInformationService.GetPersonalAndContactInformation(userId);
 
             return Ok(personalInformation);
+        }
+
+        [HttpGet("get-contact-information")]
+        public async Task<ActionResult<ContactInformationToResponse>> GetContactInformation()
+        {
+            var contactInformation = await _contactInformationGetterService.GetContactInformation();
+
+            return Ok(contactInformation);
         }
 
         [HttpPost("edit-about-me")]

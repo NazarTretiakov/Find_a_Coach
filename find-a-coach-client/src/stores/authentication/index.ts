@@ -11,9 +11,9 @@ export const useAuthenticationStore = defineStore('authentication', {
       email: null as string | null,
       role: null as string | null,
       token: null as string | null,
-      tokenExpiration: null as Date | null,
+      expiration: null as Date | null,
       refreshToken: null as string | null,
-      refreshTokenExpiration: null as Date | null
+      refreshTokenExpirationDateTime: null as Date | null
     }
   },
   actions, 

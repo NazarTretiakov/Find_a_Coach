@@ -21,7 +21,7 @@ export default defineComponent({
       if (authenticationDataRaw != null) {
         const parsedAuthenticationData = JSON.parse(authenticationDataRaw)
 
-        authenticationStore.writeAllFieldsInStore(parsedAuthenticationData.email, parsedAuthenticationData.role, parsedAuthenticationData.token, parsedAuthenticationData.tokenExpiration, parsedAuthenticationData.refreshToken, parsedAuthenticationData.refreshTokenExpiration)
+        authenticationStore.writeAllFieldsInStore(parsedAuthenticationData.email, parsedAuthenticationData.role, parsedAuthenticationData.token, parsedAuthenticationData.expiration, parsedAuthenticationData.refreshToken, parsedAuthenticationData.refreshTokenExpirationDateTime)
       }
     })
 

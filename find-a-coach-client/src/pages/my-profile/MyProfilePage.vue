@@ -1,25 +1,28 @@
 <template>
-  <profile-sticky-header class="header"></profile-sticky-header>
+  <div class="layout">
+    <profile-sticky-header class="header"></profile-sticky-header>
 
-  <ul class="profile-sections">
-    <li class="profile-sections_left-side">
-      <personal-information></personal-information>
-      <about-me v-if="isProfileSectionsCompleted.isDescription"></about-me>
-      <activities-section v-if="isProfileSectionsCompleted.isActivities"></activities-section>
-      <experience-section v-if="isProfileSectionsCompleted.isExperience"></experience-section>
-      <education-section v-if="isProfileSectionsCompleted.isEducation"></education-section>
-      <projects-section v-if="isProfileSectionsCompleted.isProjects"></projects-section>
-      <certifications-section v-if="isProfileSectionsCompleted.isCertifications"></certifications-section>
-      <skills-section v-if="isProfileSectionsCompleted.isSkills"></skills-section>
-      <languages-section v-if="isProfileSectionsCompleted.isLanguages"></languages-section>
-      <recommendations-section></recommendations-section>
-    </li>
-    <li class="profile-sections_right-side">
-      <recommended-people></recommended-people>
-    </li>
-  </ul>
+    <loading-square v-if="isLoading"></loading-square>
+    <ul v-else class="profile-sections">
+      <li class="profile-sections_left-side">
+        <personal-information></personal-information>
+        <about-me v-if="isProfileSectionsCompleted.isDescription"></about-me>
+        <activities-section v-if="isProfileSectionsCompleted.isActivities"></activities-section>
+        <experience-section v-if="isProfileSectionsCompleted.isExperience"></experience-section>
+        <education-section v-if="isProfileSectionsCompleted.isEducation"></education-section>
+        <projects-section v-if="isProfileSectionsCompleted.isProjects"></projects-section>
+        <certifications-section v-if="isProfileSectionsCompleted.isCertifications"></certifications-section>
+        <skills-section v-if="isProfileSectionsCompleted.isSkills"></skills-section>
+        <languages-section v-if="isProfileSectionsCompleted.isLanguages"></languages-section>
+        <recommendations-section></recommendations-section>
+      </li>
+      <li class="profile-sections_right-side">
+        <recommended-people></recommended-people>
+      </li>
+    </ul>
 
-  <the-footer></the-footer>
+    <the-footer class="footer"></the-footer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,6 +30,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 
 import ProfileStickyHeader from '../../components/my-profile/ProfileStickyHeader.vue'
 import PersonalInformation from '../../components/my-profile/PersonalInformation.vue'
+import LoadingSquare from '@/components/LoadingSquare.vue'
 import AboutMe from '../../components/my-profile/AboutMe.vue'
 import ActivitiesSection from '../../components/my-profile/ActivitiesSection.vue'
 import ExperienceSection from '../../components/my-profile/ExperienceSection.vue'
@@ -46,6 +50,7 @@ import type { IsProfileSectionsCompleted } from '@/types/my-profile/IsProfileSec
 export default defineComponent({
   components: {
     ProfileStickyHeader,
+    LoadingSquare,
     PersonalInformation,
     AboutMe,
     ActivitiesSection,
@@ -62,8 +67,11 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const isProfileSectionsCompleted = ref<IsProfileSectionsCompleted>({} as IsProfileSectionsCompleted)
+    const isLoading = ref<boolean>(true)
 
     async function loadIsProfileSectionsCompletedInfo() {
+      const startTime = performance.now()
+
       const result = await useIsProfileSectionsCompleted()
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
@@ -74,11 +82,19 @@ export default defineComponent({
       } else {
         isProfileSectionsCompleted.value = result as IsProfileSectionsCompleted
       }
+
+      const elapsed = performance.now() - startTime
+      const remaining = 500 - elapsed
+      if (remaining > 0) {
+        setTimeout(() => (isLoading.value = false), remaining)
+      } else {
+        isLoading.value = false
+      }
     }
 
     onMounted(() => loadIsProfileSectionsCompletedInfo())
 
-    return { isProfileSectionsCompleted }
+    return { isProfileSectionsCompleted, isLoading }
   }
 })
 </script>
@@ -87,13 +103,14 @@ export default defineComponent({
 @use '../../assets/styles/config' as *;
 
 .header {
-  z-index: 2;
+  z-index: 1;
 }
 
 .profile-sections {
   display: flex;
   list-style: none;
   padding: 0;
+  flex: 1;
 
   &_left-side {
     width: 80%;
@@ -115,5 +132,13 @@ export default defineComponent({
       margin-bottom: 100px;
     }
   }
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.footer {
+  margin-top: auto;
 }
 </style>

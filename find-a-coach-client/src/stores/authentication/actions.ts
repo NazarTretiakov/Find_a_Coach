@@ -64,8 +64,9 @@ export default {
           errorMessage: responseData.errorMessage || 'Unexpected error occured while logging in.',
         }
       }
+      console.log(responseData)
 
-      authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.tokenExpiration), responseData.refreshToken, new Date(responseData.refreshTokenExpiration))
+      authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.expiration), responseData.refreshToken, new Date(responseData.refreshTokenExpirationDateTime))
       authenticationStore.saveAuthenticationStateInLocalStore()
 
       return {
@@ -220,7 +221,7 @@ export default {
         }
       }
 
-      authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.tokenExpiration), responseData.refreshToken, new Date(responseData.refreshTokenExpiration))
+      authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.expiration), responseData.refreshToken, new Date(responseData.refreshTokenExpirationDateTime))
       authenticationStore.saveAuthenticationStateInLocalStore()
 
       return {
@@ -267,7 +268,7 @@ export default {
         }
       }
 
-      authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.tokenExpiration), responseData.refreshToken, new Date(responseData.refreshTokenExpiration))
+      authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.expiration), responseData.refreshToken, new Date(responseData.refreshTokenExpirationDateTime))
       authenticationStore.saveAuthenticationStateInLocalStore()
 
       return {
@@ -283,15 +284,15 @@ export default {
     }
   },
 
-  writeAllFieldsInStore(email: string, role: string, token: string, tokenExpiration: Date, refreshToken: string, refreshTokenExpiration: Date): void {
+  writeAllFieldsInStore(email: string, role: string, token: string, expiration: Date, refreshToken: string, refreshTokenExpirationDateTime: Date): void {
     const authenticationStore = useAuthenticationStore()
     
     authenticationStore.email = email
     authenticationStore.role = role
     authenticationStore.token = token
-    authenticationStore.tokenExpiration = tokenExpiration
+    authenticationStore.expiration = expiration
     authenticationStore.refreshToken = refreshToken
-    authenticationStore.refreshTokenExpiration = refreshTokenExpiration
+    authenticationStore.refreshTokenExpirationDateTime = refreshTokenExpirationDateTime
   },
 
   clearAllFieldsInStore(): void {
@@ -300,15 +301,15 @@ export default {
     authenticationStore.email = null
     authenticationStore.role = null
     authenticationStore.token = null
-    authenticationStore.tokenExpiration = null
+    authenticationStore.expiration = null
     authenticationStore.refreshToken = null
-    authenticationStore.refreshTokenExpiration = null
+    authenticationStore.refreshTokenExpirationDateTime = null
   },
 
   saveAuthenticationStateInLocalStore(): void {
     const authenticationStore = useAuthenticationStore()
     
-    if (authenticationStore.email == null || authenticationStore.role == null || authenticationStore.token == null || authenticationStore.tokenExpiration == null || authenticationStore.refreshToken == null || authenticationStore.refreshTokenExpiration == null) {
+    if (authenticationStore.email == null || authenticationStore.role == null || authenticationStore.token == null || authenticationStore.expiration == null || authenticationStore.refreshToken == null || authenticationStore.refreshTokenExpirationDateTime == null) {
       throw Error('One or more fields in authentication state is null.')
     }
 
@@ -316,9 +317,9 @@ export default {
       email: authenticationStore.email,
       role: authenticationStore.role,
       token: authenticationStore.token,
-      tokenExpiration: authenticationStore.tokenExpiration,
+      expiration: authenticationStore.expiration,
       refreshToken: authenticationStore.refreshToken,
-      refreshTokenExpiration: authenticationStore.refreshTokenExpiration,
+      refreshTokenExpirationDateTime: authenticationStore.refreshTokenExpirationDateTime,
     }))
   },
 
