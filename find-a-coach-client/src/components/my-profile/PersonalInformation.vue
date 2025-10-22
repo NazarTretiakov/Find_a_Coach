@@ -7,14 +7,16 @@
             <img class="personal-information-items_left-side-items_image-element" :src="personalInformation.profileImageUrl" alt="User profile image" />
           </li>
           <li class="personal-information-items_left-side-items_name">
-            <h1 class="personal-information-items_left-side-items_name-element"> {{ personalInformation.firstName }} {{ personalInformation.lastName }}</h1>
+            <h1 v-if="personalInformation.firstName || personalInformation.lastName" class="personal-information-items_left-side-items_name-element"> {{ personalInformation.firstName }} {{ personalInformation.lastName }}</h1>
+            <h1 v-else class="personal-information-items_left-side-items_name-element">Unnamed user</h1>
           </li>
           <li class="personal-information-items_left-side-items_incription">
-            <span class="personal-information-items_left-side-items_incription-element"> {{ personalInformation.headline }}</span>
+            <span v-if="personalInformation.headline" class="personal-information-items_left-side-items_incription-element"> {{ personalInformation.headline }}</span>
+            <span v-else class="personal-information-items_left-side-items_incription-element">No inscription provided</span>
           </li>
           <li class="personal-information-items_left-side-items_location">
-            <span class="personal-information-items_left-side-items_location-element">{{ personalInformation.location }}</span>
-            <span class="personal-information-items_left-side-items_location-divider">-</span>
+            <span v-if="personalInformation.location" class="personal-information-items_left-side-items_location-element">{{ personalInformation.location }}</span>
+            <span v-if="personalInformation.location" class="personal-information-items_left-side-items_location-divider">-</span>
             <router-link to="/my-profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link>
           </li>
           <li class="personal-information-items_left-side-items_connections">
@@ -30,7 +32,8 @@
       <li class="personal-information-items_right-side">
         <ul class="personal-information-items_right-side-items">
           <li class="personal-information-items_right-side-items_edit"><router-link to="/my-profile/edit-personal-information" class="personal-information-items_right-side-items_edit-link"><img src="../../assets/images/icons/edit-icon.svg" alt="Edit icon" class="personal-information-items_right-side-items_edit-icon"></router-link></li>
-          <li class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="../../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">{{ personalInformation.primaryOccupation }}</span></li>
+          <li v-if="personalInformation.primaryOccupation" class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="../../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">{{ personalInformation.primaryOccupation }}</span></li>
+          <li v-else class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="../../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">No occupation provided</span></li>
         </ul>
       </li>
     </ul>
@@ -43,6 +46,7 @@ import AddProfileSectionButton from "./AddProfileSectionButton.vue"
 import type { PersonalInformation } from "@/types/my-profile/personal-information/PersonalInformation"
 import useGetPersonalInformation from "../../composables/my-profile/personal-information/useGetPersonalInformation"
 import { useRouter } from "vue-router"
+import { useAuthenticationStore } from "@/stores/authentication"
 
 export default defineComponent({
   components: {
@@ -50,10 +54,11 @@ export default defineComponent({
   },
   setup() {
     const personalInformation = ref<PersonalInformation | null>(null)
+    const authenticationStore = useAuthenticationStore()
     const router = useRouter()
 
     onMounted(async () => {
-      const result = await useGetPersonalInformation()
+      const result = await useGetPersonalInformation(authenticationStore.userId)
 
       if ("isSuccessful" in result) {
         if (!result.isSuccessful) {

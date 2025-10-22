@@ -67,7 +67,7 @@ namespace FindACoach.Infrastructure.Repositories
 
                 if (skillFromDb.Schools != null)
                 {
-                    foreach(School school in  skillFromDb.Schools)
+                    foreach(School school in skillFromDb.Schools.Where(s => s.UserId == Guid.Parse(userId)))
                     {
                         skillToResponse.Usages.Add(new UsageOfSkill()
                         {
@@ -78,7 +78,7 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 if (skillFromDb.Positions != null)
                 {
-                    foreach (Position position in skillFromDb.Positions)
+                    foreach (Position position in skillFromDb.Positions.Where(s => s.UserId == Guid.Parse(userId)))
                     {
                         skillToResponse.Usages.Add(new UsageOfSkill()
                         {
@@ -89,7 +89,7 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 if (skillFromDb.Projects != null)
                 {
-                    foreach (Project project in skillFromDb.Projects)
+                    foreach (Project project in skillFromDb.Projects.Where(s => s.UserId == Guid.Parse(userId)))
                     {
                         skillToResponse.Usages.Add(new UsageOfSkill()
                         {
@@ -100,7 +100,7 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 if (skillFromDb.Certifications != null)
                 {
-                    foreach (Certification certification in skillFromDb.Certifications)
+                    foreach (Certification certification in skillFromDb.Certifications.Where(s => s.UserId == Guid.Parse(userId)))
                     {
                         skillToResponse.Usages.Add(new UsageOfSkill()
                         {

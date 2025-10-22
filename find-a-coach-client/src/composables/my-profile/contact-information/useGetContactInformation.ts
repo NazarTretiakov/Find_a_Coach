@@ -5,11 +5,11 @@ import { ContactInformation } from '@/types/my-profile/contact-information/Conta
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetContactInformation(): Promise<ContactInformation | Result> {
+export default async function useGetContactInformation(userId: string): Promise<ContactInformation | Result> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get-contact-information`, {
+    const response = await fetch(`${API_URL}/get-contact-information?userId=${userId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`

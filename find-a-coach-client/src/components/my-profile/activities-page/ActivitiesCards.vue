@@ -51,6 +51,7 @@ import LoadingSquare from '@/components/LoadingSquare.vue'
 
 import useGetActivitiesList from '@/composables/my-profile/activities/useGetActivitiesList'
 import { useRouter } from "vue-router"
+import { useAuthenticationStore } from "@/stores/authentication"
 import { ActivityOfActivitiesList } from "@/types/my-profile/activities/ActivityOfActivitiesList"
 import useRelativeDate from "@/composables/forum/useRelativeDate"
 
@@ -58,6 +59,7 @@ export default defineComponent({
   components: { LoadingSquare },
   setup() {
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const activities = ref<ActivityOfActivitiesList[]>([])
     const page = ref<number>(1)
     const pageSize = 7
@@ -86,7 +88,7 @@ export default defineComponent({
     })
 
     async function loadActivities() {
-      const result = await useGetActivitiesList(page.value, pageSize)
+      const result = await useGetActivitiesList(authenticationStore.userId, page.value, pageSize)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
         if (!result.isSuccessful) {

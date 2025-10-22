@@ -3,16 +3,16 @@
 
   <ul class="profile-sections">
     <li class="profile-sections_left-side">
-      <personal-information></personal-information>
-      <about-me></about-me>
-      <activities-section></activities-section>
-      <experience-section></experience-section>
-      <education-section></education-section>
-      <projects-section></projects-section>
-      <certifications-section></certifications-section>
-      <skills-section></skills-section>
-      <languages-section></languages-section>
-      <recommendations-section></recommendations-section>
+      <personal-information :id="id"></personal-information>
+      <about-me :id="id"></about-me>
+      <activities-section :id="id"></activities-section>
+      <experience-section :id="id"></experience-section>
+      <education-section :id="id"></education-section>
+      <projects-section :id="id"></projects-section>
+      <certifications-section :id="id"></certifications-section>
+      <skills-section :id="id"></skills-section>
+      <languages-section :id="id"></languages-section>
+      <recommendations-section :id="id"></recommendations-section>
     </li>
     <li class="profile-sections_right-side">
       <recommended-people></recommended-people>
@@ -40,6 +40,12 @@ import RecommendedPeople from '../../components/user-profile/RecommendedPeople.v
 import TheFooter from '../../components/TheFooter.vue'
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     BasicStickyHeader,
     PersonalInformation,

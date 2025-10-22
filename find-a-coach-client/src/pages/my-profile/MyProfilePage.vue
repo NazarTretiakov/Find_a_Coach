@@ -46,6 +46,7 @@ import TheFooter from '../../components/TheFooter.vue'
 import { useRouter } from 'vue-router'
 import useIsProfileSectionsCompleted from '@/composables/my-profile/useIsProfileSectionsCompleted'
 import type { IsProfileSectionsCompleted } from '@/types/my-profile/IsProfileSectionsCompleted'
+import { useAuthenticationStore } from "@/stores/authentication"
 
 export default defineComponent({
   components: {
@@ -68,11 +69,12 @@ export default defineComponent({
     const router = useRouter()
     const isProfileSectionsCompleted = ref<IsProfileSectionsCompleted>({} as IsProfileSectionsCompleted)
     const isLoading = ref<boolean>(true)
+    const authenticationStore = useAuthenticationStore()
 
     async function loadIsProfileSectionsCompletedInfo() {
       const startTime = performance.now()
 
-      const result = await useIsProfileSectionsCompleted()
+      const result = await useIsProfileSectionsCompleted(authenticationStore.userId)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
         if (!result.isSuccessful) {
@@ -111,6 +113,7 @@ export default defineComponent({
   list-style: none;
   padding: 0;
   flex: 1;
+  z-index: 0;
 
   &_left-side {
     width: 80%;

@@ -5,11 +5,11 @@ import { IsProfileSectionsCompleted } from "@/types/my-profile/IsProfileSections
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useIsProfileSectionsCompleted(): Promise<Result | IsProfileSectionsCompleted> {
+export default async function useIsProfileSectionsCompleted(userId: string): Promise<Result | IsProfileSectionsCompleted> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/is-profile-sections-completed`, {
+    const response = await fetch(`${API_URL}/is-profile-sections-completed?userId=${userId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`

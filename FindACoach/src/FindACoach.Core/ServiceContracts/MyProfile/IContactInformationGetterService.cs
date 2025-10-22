@@ -10,7 +10,8 @@ namespace FindACoach.Core.ServiceContracts.MyProfile
         /// <summary>
         /// Retrieves contact information of user.
         /// </summary>
+        /// <param name="userId">User id which contact information will be retrieved</param>
         /// <returns>ContactInformationToResponse object with contact information.</returns>
-        Task<ContactInformationToResponse> GetContactInformation();
+        Task<ContactInformationToResponse> GetContactInformation(string userId);
     }
 }

@@ -8,11 +8,9 @@ namespace FindACoach.Core.Domain.IdentityEntities
 {
     public class User : IdentityUser<Guid>
     {
-        [Required]
         [StringLength(20, MinimumLength = 2)]
         public string? FirstName { get; set; }
 
-        [Required]
         [StringLength(20, MinimumLength = 2)]
         public string? LastName { get; set; }
 
@@ -27,22 +25,23 @@ namespace FindACoach.Core.Domain.IdentityEntities
         [StringLength(100)]
         public string CompleteProfileWindowTitle { get; set; } = string.Empty;
 
+        [Required]
         [StringLength(400)]
         public string ImagePath { get; set; } = string.Empty;
 
         [StringLength(30)]
-        public string PrimaryOccupation { get; set; } = string.Empty;
+        public string? PrimaryOccupation { get; set; } = string.Empty;
 
         [StringLength(100, MinimumLength = 4)]
-        public string Headline { get; set; } = string.Empty;
+        public string? Headline { get; set; } = string.Empty;
 
         [StringLength(50, MinimumLength = 4)]
-        public string Location { get; set; } = string.Empty;
+        public string? Location { get; set; } = string.Empty;
 
         [StringLength(9, MinimumLength = 9)]
-        public string Phone { get; set; } = string.Empty;
+        public string? Phone { get; set; } = string.Empty;
 
-        public string AboutMe { get; set; } = string.Empty;
+        public string? AboutMe { get; set; } = string.Empty;
 
         public ICollection<Website> Websites { get; set; } = new List<Website>();
 

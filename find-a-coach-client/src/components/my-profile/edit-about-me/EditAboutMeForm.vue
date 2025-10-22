@@ -34,6 +34,7 @@ import LoadingSquare from '../../LoadingSquare.vue'
 import useGetAboutMe from '../../../composables/my-profile/about-me/useGetAboutMe'
 import useEditAboutMe from '../../../composables/my-profile/about-me/useEditAboutMe'
 import { useRouter } from 'vue-router'
+import { useAuthenticationStore } from "@/stores/authentication"
 
 export default defineComponent({
   components: {
@@ -43,6 +44,7 @@ export default defineComponent({
   }, 
   setup() {
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const isLoading = ref<boolean>(true)
     const aboutMe = ref<string>('')
     const error = ref<string>('')
@@ -50,7 +52,7 @@ export default defineComponent({
     onMounted(async () => {
       const startTime = performance.now()
       
-      const result = await useGetAboutMe()
+      const result = await useGetAboutMe(authenticationStore.userId)
       if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
         if (!result.isSuccessful) router.push('/error-page')
       } else {

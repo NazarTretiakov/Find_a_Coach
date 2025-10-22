@@ -10,7 +10,8 @@ namespace FindACoach.Core.ServiceContracts.MyProfile
         /// <summary>
         /// Determines whether all required sections of the user's profile are completed.
         /// </summary>
+        /// <param name="userId">User id which profile sections will be checked on completion.</param>
         /// <returns>IsProfileSectionsFilledToResponse object with info about if the each section is filled or not.</returns>
-        Task<IsProfileSectionsCompletedToResponse> IsProfileSectionsCompleted();
+        Task<IsProfileSectionsCompletedToResponse> IsProfileSectionsCompleted(string userId);
     }
 }

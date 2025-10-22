@@ -38,6 +38,7 @@ import EventCard from './ActivityCard.vue';
 import { useRouter } from 'vue-router'
 import useGetActivityCards from '@/composables/my-profile/activities/useGetActivityCards'
 import type { ActivityCard } from '@/types/my-profile/activities/ActivityCard'
+import { useAuthenticationStore } from "@/stores/authentication"
 
 export default defineComponent({
   components: {
@@ -46,9 +47,10 @@ export default defineComponent({
   setup() {
     const activityCards = ref<ActivityCard[]>([])
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
 
     onMounted(async () => {
-      const result = await useGetActivityCards()
+      const result = await useGetActivityCards(authenticationStore.userId)
 
       if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
         if (!result.isSuccessful) {

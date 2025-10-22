@@ -22,11 +22,13 @@
 import { defineComponent, ref, computed, onMounted } from "vue"
 import useGetAboutMe from '../../composables/my-profile/about-me/useGetAboutMe'
 import { useRouter } from "vue-router"
+import { useAuthenticationStore } from "@/stores/authentication"
 
 export default defineComponent({
   setup() {
     const aboutMe = ref<string>('')
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const isFullTextVisible = ref(false)
     const maxLength = 200
 
@@ -43,7 +45,7 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      const result = await useGetAboutMe()
+      const result = await useGetAboutMe(authenticationStore.userId)
 
       if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
         if (!result.isSuccessful) {

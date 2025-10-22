@@ -5,13 +5,13 @@ import { Result } from '@/types/Result'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetPersonalInformation(): Promise<PersonalInformation | Result> {
+export default async function useGetPersonalInformation(userId: string): Promise<PersonalInformation | Result> {
   const token = await useEnsureValidToken()
 
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get-personal-information`, {
+    const response = await fetch(`${API_URL}/get-personal-information?userId=${userId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`

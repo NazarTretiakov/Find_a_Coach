@@ -48,10 +48,8 @@ namespace FindACoach.API.Controllers.MyProfile
         }
 
         [HttpGet("get-personal-information")]
-        public async Task<ActionResult<PersonalInformationToResponse>> GetPersonalInformation()
+        public async Task<ActionResult<PersonalInformationToResponse>> GetPersonalInformation(string userId)
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             PersonalInformationToResponse personalInformation = await _getPersonalInformationService.GetPersonalInformation(userId);
 
             return Ok(personalInformation);
@@ -65,14 +63,6 @@ namespace FindACoach.API.Controllers.MyProfile
             PersonalAndContactInformationToResponse personalInformation = await _getPersonalAndContactInformationService.GetPersonalAndContactInformation(userId);
 
             return Ok(personalInformation);
-        }
-
-        [HttpGet("get-contact-information")]
-        public async Task<ActionResult<ContactInformationToResponse>> GetContactInformation()
-        {
-            var contactInformation = await _contactInformationGetterService.GetContactInformation();
-
-            return Ok(contactInformation);
         }
 
         [HttpPost("edit-about-me")]
@@ -92,40 +82,42 @@ namespace FindACoach.API.Controllers.MyProfile
             return Ok();
         }
 
-        [HttpGet("get-about-me")]
-        public async Task<ActionResult<AboutMeDTO>> GetAboutMe()
+        [HttpGet("get-contact-information")]
+        public async Task<ActionResult<ContactInformationToResponse>> GetContactInformation(string userId)
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var contactInformation = await _contactInformationGetterService.GetContactInformation(userId);
 
+            return Ok(contactInformation);
+        }
+
+        [HttpGet("get-about-me")]
+        public async Task<ActionResult<AboutMeDTO>> GetAboutMe(string userId)
+        {
             AboutMeDTO aboutMe = await _getAboutMeService.GetAboutMe(userId);
 
             return Ok(aboutMe);
         }
 
         [HttpGet("get-last-two-activities")]
-        public async Task<ActionResult<List<ActivityCardToResponse>>> GetLastTwoActivities()
+        public async Task<ActionResult<List<ActivityCardToResponse>>> GetLastTwoActivities(string userId)
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             List<ActivityCardToResponse> activities = await _activitiesGetterService.GetLastTwoActivities(userId);
 
             return Ok(activities);
         }
 
         [HttpGet("get-activities-list")]
-        public async Task<ActionResult<List<ActivityForActivitiesListToResponse>>> GetActivitiesList(int page = 1, int pageSize = 7)
+        public async Task<ActionResult<List<ActivityForActivitiesListToResponse>>> GetActivitiesList(string userId, int page = 1, int pageSize = 7)
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetActivitiesPaged(userId, page, pageSize);
 
             return Ok(activities);
         }
 
         [HttpGet("is-profile-sections-completed")]
-        public async Task<ActionResult<IsProfileSectionsCompletedToResponse>> IsProfileSectionsCompleted()
+        public async Task<ActionResult<IsProfileSectionsCompletedToResponse>> IsProfileSectionsCompleted(string userId)
         {
-            var isProfileSectionsCompletedInfo = await _isProfileSectionsCompletedService.IsProfileSectionsCompleted();
+            var isProfileSectionsCompletedInfo = await _isProfileSectionsCompletedService.IsProfileSectionsCompleted(userId);
 
             return Ok(isProfileSectionsCompletedInfo);
         }

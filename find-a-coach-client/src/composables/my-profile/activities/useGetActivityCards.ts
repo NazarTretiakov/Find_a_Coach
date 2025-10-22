@@ -5,11 +5,11 @@ import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetActivityCards(): Promise<Result | ActivityCard[]> {
+export default async function useGetActivityCards(userId: string): Promise<Result | ActivityCard[]> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get-last-two-activities`, {
+    const response = await fetch(`${API_URL}/get-last-two-activities?userId=${userId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`

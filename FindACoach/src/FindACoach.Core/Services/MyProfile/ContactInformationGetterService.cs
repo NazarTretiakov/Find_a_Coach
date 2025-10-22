@@ -4,18 +4,18 @@ using FindACoach.Core.ServiceContracts.MyProfile;
 
 namespace FindACoach.Core.Services.MyProfile
 {
-    public class IsProfileSectionsFilledService : IIsProfileSectionsCompletedService
+    public class ContactInformationGetterService : IContactInformationGetterService
     {
         private readonly IUsersRepository _usersRepository;
 
-        public IsProfileSectionsFilledService(IUsersRepository usersRepository)
+        public ContactInformationGetterService(IUsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
         }
 
-        public async Task<IsProfileSectionsCompletedToResponse> IsProfileSectionsCompleted(string userId)
+        public async Task<ContactInformationToResponse> GetContactInformation(string userId)
         {
-            return await _usersRepository.IsProfileSectionsCompleted(userId);
+            return await _usersRepository.GetContactInformation(userId);
         }
     }
 }

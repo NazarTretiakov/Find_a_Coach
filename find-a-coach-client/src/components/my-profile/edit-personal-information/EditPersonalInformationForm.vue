@@ -113,6 +113,7 @@ import useValidationOfForm from '../../../composables/my-profile/personal-inform
 import useEditPersonalInformation from '../../../composables/my-profile/personal-information/edit-personal-information/useEditPersonalInformation'
 import useGetPersonalAndContactInformation from "../../../composables/my-profile/personal-information/useGetPersonalAndContactInformation"
 import { useRouter } from 'vue-router'
+import { useAuthenticationStore } from "@/stores/authentication"
 
 export default defineComponent({
   components: {
@@ -126,6 +127,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const isLoading = ref<boolean>(true)
 
     const profileImage = ref<File | null>(null)
@@ -148,7 +150,7 @@ export default defineComponent({
     onMounted(async () => {
       const startTime = performance.now()
 
-      const result = await useGetPersonalAndContactInformation()
+      const result = await useGetPersonalAndContactInformation(authenticationStore.userId)
 
       if ("isSuccessful" in result) {
         if (!result.isSuccessful) {

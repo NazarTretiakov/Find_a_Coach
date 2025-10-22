@@ -1,13 +1,27 @@
 <template>
-  <div class="personal-information">
+  <div class="personal-information" v-if="personalInformation">
     <ul class="personal-information-items">
       <li class="personal-information-items_left-side">
         <ul class="personal-information-items_left-side-items">
-          <li class="personal-information-items_left-side-items_image"><img class="personal-information-items_left-side-items_image-element" src="../../assets/images/icons/user-icon.jpg" alt="User profile image"></li>
-          <li class="personal-information-items_left-side-items_name"><h1 class="personal-information-items_left-side-items_name-element">Janusz Kowalski</h1></li>
-          <li class="personal-information-items_left-side-items_incription"><span class="personal-information-items_left-side-items_incription-element">Pracownik działu technicznego firmy The Best Storage w Gdańsku</span></li>
-          <li class="personal-information-items_left-side-items_location"><span class="personal-information-items_left-side-items_location-element">Gdańsk, Woj. Pomorskie, Polska</span><span class="personal-information-items_left-side-items_location-divider">-</span><router-link to="/user-profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link></li>
-          <li class="personal-information-items_left-side-items_connections"><router-link to="/network/connections" class="personal-information-items_left-side-items_connections-link">45 connections</router-link></li>
+          <li class="personal-information-items_left-side-items_image">
+            <img class="personal-information-items_left-side-items_image-element" :src="personalInformation.profileImageUrl" alt="User profile image" />
+          </li>
+          <li class="personal-information-items_left-side-items_name">
+            <h1 v-if="personalInformation.firstName || personalInformation.lastName" class="personal-information-items_left-side-items_name-element"> {{ personalInformation.firstName }} {{ personalInformation.lastName }}</h1>
+            <h1 v-else class="personal-information-items_left-side-items_name-element">Unnamed user</h1>
+          </li>
+          <li class="personal-information-items_left-side-items_incription">
+            <span v-if="personalInformation.headline" class="personal-information-items_left-side-items_incription-element"> {{ personalInformation.headline }}</span>
+            <span v-else class="personal-information-items_left-side-items_incription-element">No inscription provided</span>
+          </li>
+          <li class="personal-information-items_left-side-items_location">
+            <span v-if="personalInformation.location" class="personal-information-items_left-side-items_location-element">{{ personalInformation.location }}</span>
+            <span v-if="personalInformation.location" class="personal-information-items_left-side-items_location-divider">-</span>
+            <router-link to="/my-profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link>
+          </li>
+          <li class="personal-information-items_left-side-items_connections">
+            <router-link to="/network/connections" class="personal-information-items_left-side-items_connections-link">{{ personalInformation.connectionsAmount }} connections</router-link>
+          </li>
           <li class="personal-information-items_left-side-items_buttons">
             <button class="personal-information-items_left-side-items_buttons-connect">
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff">
@@ -26,12 +40,46 @@
       <li class="personal-information-items_right-side">
         <ul class="personal-information-items_right-side-items">
           <li class="personal-information-items_right-side-items_edit"></li>
-          <li class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="..//../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">Logistics and Marketing</span></li>
+          <li class="personal-information-items_right-side-items_occupation"><img class="personal-information-items_right-side-items_occupation-icon" src="../../assets/images/icons/occupation-icon.svg" alt="Occupation icon"><span class="personal-information-items_right-side-items_occupation-incription">{{ personalInformation.primaryOccupation }}</span></li>
         </ul>
       </li>
     </ul>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, onMounted } from "vue"
+import type { PersonalInformation } from "@/types/my-profile/personal-information/PersonalInformation"
+import useGetPersonalInformation from "../../composables/my-profile/personal-information/useGetPersonalInformation"
+import { useRouter } from "vue-router"
+
+export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const personalInformation = ref<PersonalInformation | null>(null)
+    const router = useRouter()
+
+    onMounted(async () => {
+      const result = await useGetPersonalInformation(props.id)
+
+      if ("isSuccessful" in result) {
+        if (!result.isSuccessful) {
+          router.push("/error-page")  // TODO: redirect there to "unauthorized" page
+        }
+      } else {
+        personalInformation.value = result
+      }
+    })
+
+    return { personalInformation }
+  },
+})
+</script>
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;
@@ -64,6 +112,8 @@
         &_image {
           &-element {
             width: 140px;
+            border-radius: 50%;
+            border: 1px solid #000000;
 
             @media (max-width: $breakpoint) {
               width: 120px;

@@ -1,11 +1,64 @@
 <template>
   <div class="about-me">
     <ul class="about-me-header">
-      <li class="about-me-header-title"><h1 class="about-me-header-title-element">About me</h1></li>
+      <li class="about-me-header-title">
+        <h1 class="about-me-header-title-element">About me</h1>
+      </li>
     </ul>
-    <p class="about-me-paragraph">Jestem osobą proaktywną, z ciągłą chęcią do rozwoju. Lubię pracować w zespole – uważam, że współpraca w zespole odgrywa kluczową rolę w osiąganiu wspólnych celów. Rozumiem ważność samokształcenia oraz rozwijania umiejętności miękkich.Zawodowo zajmuję się programowaniem backendu na platformie .NET. Mam doświadczenie w tworzeniu aplikacji webowych w technologiach: ASP.NET Core MVC oraz ASP.NET Core Web API. Także posiadam umiejętności programowania frontendu w Vue.js. Interesuję się również tworzeniem aplikacji mobilnych oraz desktopowych przy użyciu technologii .NET MAUI oraz WPF.</p>
+
+    <p class="about-me-paragraph" style="white-space: pre-wrap;">
+      {{ displayText }}
+      <span v-if="isTruncated" class="about-me-paragraph-see-more" @click="showFullText">...see more</span>
+    </p>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, computed, onMounted } from "vue"
+import useGetAboutMe from '../../composables/my-profile/about-me/useGetAboutMe'
+import { useRouter } from "vue-router"
+
+export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const aboutMe = ref<string>('')
+    const router = useRouter()
+    const isFullTextVisible = ref(false)
+    const maxLength = 200
+
+    const isTruncated = computed(() => !isFullTextVisible.value && (aboutMe.value.length > maxLength))
+    const displayText = computed(() => {
+      if (isFullTextVisible.value || aboutMe.value.length <= maxLength) {
+        return aboutMe.value
+      }
+      return aboutMe.value.substring(0, maxLength)
+    })
+
+    const showFullText = () => {
+      isFullTextVisible.value = true
+    }
+
+    onMounted(async () => {
+      const result = await useGetAboutMe(props.id)
+
+      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        aboutMe.value = result as string
+      }
+    })
+
+    return { aboutMe, displayText, isTruncated, showFullText }
+  },
+})
+</script>
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;
@@ -50,6 +103,19 @@
 
     @media (max-width: $breakpoint) {
       font-size: 12px;
+    }
+
+    &-see-more {
+      color: $grayBorderColor;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: $breakpoint) {
+        font-size: 12px;
+      }
     }
   }
 }

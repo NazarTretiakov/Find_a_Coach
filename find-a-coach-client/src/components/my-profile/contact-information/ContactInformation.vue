@@ -40,6 +40,7 @@ import LoadingSquare from '@/components/LoadingSquare.vue'
 import { useRouter } from 'vue-router'
 import { ContactInformation } from '@/types/my-profile/contact-information/ContactInformation'
 import useGetContactInformation from '@/composables/my-profile/contact-information/useGetContactInformation'
+import { useAuthenticationStore } from '@/stores/authentication'
 
 export default defineComponent({
   components: {
@@ -47,13 +48,14 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const contactInformation = ref<ContactInformation>({} as ContactInformation)
     const isLoading = ref<boolean>(true)
 
     async function loadContactInformation() {
       const startTime = performance.now()
 
-      const result = await useGetContactInformation()
+      const result = await useGetContactInformation(authenticationStore.userId)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
         if (!result.isSuccessful) {

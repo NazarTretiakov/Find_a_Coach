@@ -121,7 +121,7 @@ const router = createRouter({
     { path: '/forum/qa/:id', component: QuestionAnswer, meta: { requiresAuth: true }, props: true },
     { path: '/forum/survey/:id', component: Survey, meta: { requiresAuth: true }, props: true },
     { path: '/forum/post/:id', component: Post, meta: { requiresAuth: true }, props: true },
-    { path: '/user-profile', component: UserProfilePage, meta: { requiresAuth: true } },
+    { path: '/user-profile/:id', component: UserProfilePage, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/leave-review', component: UserLeaveReviewPage, meta: { requiresAuth: true } },
     { path: '/user-profile/contact-information', component: UserContactInformation, meta: { requiresAuth: true } },
     { path: '/user-profile/activities', component: UserProfileActivities, meta: { requiresAuth: true } },

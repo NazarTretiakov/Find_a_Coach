@@ -5,11 +5,11 @@ import { ActivityOfActivitiesList } from "@/types/my-profile/activities/Activity
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetActivityCards(page: number, pageSize: number): Promise<Result | ActivityOfActivitiesList[]> {
+export default async function useGetActivityCards(userId: string, page: number, pageSize: number): Promise<Result | ActivityOfActivitiesList[]> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get-activities-list?page=${page}&pageSize=${pageSize}`, {
+    const response = await fetch(`${API_URL}/get-activities-list?userId=${userId}&page=${page}&pageSize=${pageSize}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
