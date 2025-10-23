@@ -33,6 +33,8 @@
         <span :class="isLimitExceeded ? 'qa-answer-text-area-number-of-signs-entered-exceeded' : 'qa-answer-text-area-number-of-signs-entered'">{{ numberOfSignsEntered }}</span>/<span class="qa-answer-text-area-number-of-signs-max">{{ maxNumberOfSigns }}</span>
       </span>
     </div>
+
+    <send-answer-button></send-answer-button>
     
     <h2 class="qa-comments-header">Comments</h2>
 
@@ -98,8 +100,9 @@
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from "vue"
 import LoadingSquare from "@/components/LoadingSquare.vue"
-import { useRouter } from "vue-router"
+import SendAnswerButton from "./SendAnswerButton.vue"
 
+import { useRouter } from "vue-router"
 import useGetqa from "@/composables/forum/useGetQA"
 import type { QA } from "@/types/forum/QA"
 import useToggleLikeOfActivity from "@/composables/forum/useToggleLikeOfActivity"
@@ -118,7 +121,8 @@ export default defineComponent({
     },
   },
   components: {
-    LoadingSquare
+    LoadingSquare,
+    SendAnswerButton
   },
   setup(props) {
     const authenticationStore = useAuthenticationStore()

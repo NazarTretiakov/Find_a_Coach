@@ -1,54 +1,73 @@
-<template> 
+<template>
   <div class="education">
     <ul class="education-header">
-      <li class="education-header_inscription">
-        <h1 class="education-header_inscription-element">Education</h1>
-      </li>
+      <li class="education-header_inscription"><h1 class="education-header_inscription-element">Education</h1></li>
     </ul>
+
     <ul class="education-items">
-      <li class="education-items_school">
+      <li v-for="school in schools" :key="school.schoolId" class="education-items_school" :id="school.schoolId">
         <ul class="education-items_school-items">
           <li class="education-items_school-items_title">
             <ul class="education-items_school-items_title-items">
-              <li class="education-items_school-items_title-items_name"><h2 class="education-items_school-items_title-items_name-element">Gdańsk University of Technology</h2></li>
+              <li class="education-items_school-items_title-items_name"><h2 class="education-items_school-items_title-items_name-element">{{ school.schoolName }}</h2></li>
             </ul>
           </li>
-          <li class="education-items_school-items_academic-degree"><span class="education-items_school-items_academic-degree-element">Bachelor's degree</span></li>
-          <li class="education-items_school-items_field-of-study"><span class="education-items_school-items_field-of-study-element">Economic Analyst - Financial Analyst</span></li>
-          <li class="education-items_school-items_location"><span class="education-items_school-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="education-items_school-items_time"><span class="education-items_school-items_time-element">2022 - 2026</span></li>
-          <li class="education-items_school-items_skills"><the-skills></the-skills></li>
-        </ul>
-      </li>
-      <li class="education-items_school">
-        <ul class="education-items_school-items">
-          <li class="education-items_school-items_title">
-            <ul class="education-items_school-items_title-items">
-              <li class="education-items_school-items_title-items_name"><h2 class="education-items_school-items_title-items_name-element">Gdańsk University of Technology</h2></li>
-            </ul>
-          </li>
-          <li class="education-items_school-items_academic-degree"><span class="education-items_school-items_academic-degree-element">Bachelor's degree</span></li>
-          <li class="education-items_school-items_field-of-study"><span class="education-items_school-items_field-of-study-element">Economic Analyst - Financial Analyst</span></li>
-          <li class="education-items_school-items_location"><span class="education-items_school-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="education-items_school-items_time"><span class="education-items_school-items_time-element">2022 - 2026</span></li>
-          <li class="education-items_school-items_skills"><the-skills></the-skills></li>
+          <li class="education-items_school-items_academic-degree"><span class="education-items_school-items_academic-degree-element">{{ school.degree }}</span></li>
+          <li class="education-items_school-items_field-of-study"><span class="education-items_school-items_field-of-study-element">{{ school.fieldOfStudy }}</span></li>
+          <li class="education-items_school-items_location"><span class="education-items_school-items_location-element">{{ school.location }}</span></li>
+          <li class="education-items_school-items_time"><span class="education-items_school-items_time-element">{{ formatDate(school.startDate) }} - {{ formatDate(school.endDate) }}</span></li>
+          <li class="education-items_school-items_skills"><the-skills :skills="school.skillTitles"></the-skills></li>
         </ul>
       </li>
     </ul>
-    <div class="education-load-more-education">
-      <span class="education-load-more-education-inscription">Load more education</span>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import TheSkills from '../TheSkills.vue'
+import { School } from '@/types/my-profile/education/School'
+import useGetAllSchools from '@/composables/my-profile/education/useGetAllSchools'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  components: { TheSkills },
+  setup(props) {
+    const router = useRouter()
+    const schools = ref<School[]>([])
+
+    async function loadSchools() {
+      const result = await useGetAllSchools(props.id)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        schools.value = result as School[]
+      }
+    }
+
+    function formatDate(date: string | null): string {
+      if (!date) return ''
+      
+      const formattedDate = new Date(date).toLocaleDateString("en-US", {
+        year: "numeric"
+      });
+
+      return formattedDate
+    }
+
+    onMounted(() => loadSchools())
+
+    return { schools, formatDate }
   }
 })
 </script>
@@ -68,11 +87,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin-bottom: 30px;
-
-    @media (max-width: $breakpoint) {
-      margin-bottom: 20px;
-    }
 
     &_inscription {
       &-element {
@@ -92,7 +106,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_school {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;

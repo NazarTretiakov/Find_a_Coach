@@ -6,46 +6,86 @@
           <li class="skills-section-items_header-items_inscription"><h1 class="skills-section-items_header-items_inscription-element">Skills</h1></li>
         </ul>
       </li>
-      <li class="skills-section-items_skill">
+
+      <li v-for="(skill, index) in skills" :key="skill.skillId" class="skills-section-items_skill">
         <ul class="skills-section-items_skill-items">
-          <li class="skills-section-items_skill-items_name"><router-link to="/path-to-all-skills-of-user-with-scrollable-thing" class="skills-section-items_skill-items_name-link"><h2 class="skills-section-items_skill-items_name-element">Store management</h2></router-link></li>
-          <li class="skills-section-items_skill-items_source">
-            <img class="skills-section-items_skill-items_source-icon" src="../../assets/images/icons/project-icon.svg" alt="Project icon">
-            <span class="skills-section-items_skill-items_source-inscription">Store management for Amazon company</span>
+          <li class="skills-section-items_skill-items_name">
+            <router-link :to="`/user-profile/${id}/skills/#${skill.skillId}`" class="skills-section-items_skill-items_name-link">
+              <h2 class="skills-section-items_skill-items_name-element">{{ skill.title }}</h2>
+            </router-link>
           </li>
-          <li class="skills-section-items_skill-items_source">
-            <img class="skills-section-items_skill-items_source-icon" src="../../assets/images/icons/certification-icon.svg" alt="Certification icon">
-            <span class="skills-section-items_skill-items_source-inscription">Complete store management guide</span>
+
+          <li v-for="(usage, i) in skill.usages" :key="i" class="skills-section-items_skill-items_source">
+            <img class="skills-section-items_skill-items_source-icon" :src="getUsageIcon(usage.type)" :alt="`${usage.type} icon`" />
+            <span class="skills-section-items_skill-items_source-inscription">{{ usage.title }}</span>
           </li>
         </ul>
-        <div class="skills-section-items_skill-divider"></div>
-      </li>
-      <li class="skills-section-items_skill">
-        <ul class="skills-section-items_skill-items">
-          <li class="skills-section-items_skill-items_name"><router-link to="/path-to-all-skills-of-user-with-scrollable-thing" class="skills-section-items_skill-items_name-link"><h2 class="skills-section-items_skill-items_name-element">JavaScript</h2></router-link></li>
-          <li class="skills-section-items_skill-items_source">
-            <img class="skills-section-items_skill-items_source-icon" src="../../assets/images/icons/education-icon.svg" alt="Education icon">
-            <span class="skills-section-items_skill-items_source-inscription">Pomeranian University in Słupsk</span>
-          </li>
-          <li class="skills-section-items_skill-items_source">
-            <img class="skills-section-items_skill-items_source-icon" src="../../assets/images/icons/job-icon.svg" alt="Job icon">
-            <span class="skills-section-items_skill-items_source-inscription">The Best Company</span>
-          </li>
-          <li class="skills-section-items_skill-items_source">
-            <img class="skills-section-items_skill-items_source-icon" src="../../assets/images/icons/certification-icon.svg" alt="Certification icon">
-            <span class="skills-section-items_skill-items_source-inscription">JavaScript + TypeScript Course</span>
-          </li>
-        </ul>
+
+        <div v-if="index !== skills.length - 1" class="skills-section-items_skill-divider"></div>
       </li>
     </ul>
-    <router-link class="skills-section-items_show-all-skills-link" to="/user-profile/skills">
+
+    <router-link class="skills-section-items_show-all-skills-link" :to="`/user-profile/${id}/skills`">
       <div class="skills-section-items_show-all-skills">
         <span class="skills-section-items_show-all-skills-element">Show all skills</span>
-        <img class="skills-section-items_show-all-skills-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
-        </div>
+        <img class="skills-section-items_show-all-skills-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon" />
+      </div>
     </router-link>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import type { Skill } from '@/types/my-profile/skills/Skill'
+import useGetTwoSkillsWithMostUsages from '@/composables/my-profile/skills/useGetLastTwoSkillsWithMostUsages'
+
+export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const router = useRouter()
+    const skills = ref<Skill[]>([])
+
+    async function loadSkills() {
+      const result = await useGetTwoSkillsWithMostUsages(props.id)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        skills.value = result as Skill[]
+        console.log('Loaded skills:', skills.value)
+      }
+    }
+
+    function getUsageIcon(type: string): string {
+      switch (type) {
+        case 'Project':
+          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
+        case 'Company':
+          return new URL('@/assets/images/icons/job-icon.svg', import.meta.url).href
+        case 'Certification':
+          return new URL('@/assets/images/icons/certification-icon.svg', import.meta.url).href
+        case 'School':
+          return new URL('@/assets/images/icons/education-icon.svg', import.meta.url).href
+        default:
+          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
+      }
+    }
+
+    onMounted(() => loadSkills())
+
+    return { skills, getUsageIcon }
+  }
+})
+</script>
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

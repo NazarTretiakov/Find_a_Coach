@@ -3,7 +3,7 @@
 
   <ul class="languages-sections">
     <li class="languages-sections_left-side">
-      <languages-cards></languages-cards>
+      <languages-cards :id="id"></languages-cards>
     </li>
     <li class="languages-sections_right-side">
       <recommended-people></recommended-people>
@@ -25,6 +25,12 @@ import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     BasicStickyHeader,
     SearchPanel,

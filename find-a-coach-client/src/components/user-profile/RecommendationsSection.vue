@@ -50,7 +50,7 @@
         </ul>
       </li>
     </ul>
-    <router-link class="recommendations-section-items_show-all-recommendations-link" to="/user-profile/recommendations">
+    <router-link class="recommendations-section-items_show-all-recommendations-link" :to="`/user-profile/${id}/recommendations`">
       <div class="recommendations-section-items_show-all-recommendations">
         <span class="recommendations-section-items_show-all-recommendations-element">Show all recommendations</span>
         <img class="recommendations-section-items_show-all-recommendations-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
@@ -63,6 +63,12 @@
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   setup() {
     const isReceivedRecommendationsVisible = ref<boolean>(true)
     const isGivenRecommendationsVisible = ref<boolean>(false)

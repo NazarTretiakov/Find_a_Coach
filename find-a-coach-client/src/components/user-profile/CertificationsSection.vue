@@ -3,46 +3,48 @@
     <ul class="certifications-section-items">
       <li class="certifications-section-items_header">
         <ul class="certifications-section-items_header-items">
-          <li class="certifications-section-items_header-items_incription"><h1 class="certifications-section-items_header-items_incription-element">Certifications</h1></li>
+          <li class="certifications-section-items_header-items_incription">
+            <h1 class="certifications-section-items_header-items_incription-element">Certifications</h1>
+          </li>
         </ul>
       </li>
-      <li class="certifications-section-items_certification">
+
+      <li v-for="(certification, index) in certifications" :key="certification.certificationId" class="certifications-section-items_certification">
         <ul class="certifications-section-items_certification-items">
           <li class="certifications-section-items_certification-items_title">
             <ul class="certifications-section-items_certification-items_title-items">
-              <li class="certifications-section-items_certification-items_title-items_name"><router-link to="/path-to-all-certifications-of-user-with-scrollable-thing" class="certifications-section-items_certification-items_title-items_name-link"><h2 class="certifications-section-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></router-link></li>
-              <li class="certifications-section-items_certification-items_title-items_issued"><span class="certifications-section-items_certification-items_title-items_issued-element">Issued Jan 2024</span></li>
+              <li class="certifications-section-items_certification-items_title-items_name">
+                <router-link :to="`/user-profile/${id}/certifications/#${certification.certificationId}`" class="certifications-section-items_certification-items_title-items_name-link">
+                  <h2 class="certifications-section-items_certification-items_title-items_name-element">{{ certification.title }}</h2>
+                </router-link>
+              </li>
+              <li class="certifications-section-items_certification-items_title-items_issued">
+                <span class="certifications-section-items_certification-items_title-items_issued-element">Issued {{ formatDate(certification.issueDate) }}</span>
+              </li>
             </ul>
           </li>
-          <li class="certifications-section-items_certification-items_organization-that-issued"><span class="certifications-section-items_certification-items_organization-that-issued-element">Udemy</span></li>
-          <li class="certifications-section-items_certification-items_issued"><span class="certifications-section-items_certification-items_issued-element">Issued Jan 2024</span></li>
+
+          <li class="certifications-section-items_certification-items_organization-that-issued">
+            <span class="certifications-section-items_certification-items_organization-that-issued-element">{{ certification.issuingOrganization }}</span>
+          </li>
+
           <li class="certifications-section-items_certification-items_source">
-            <img class="certifications-section-items_certification-items_source-image" src="../../assets/images/certification-example.jpg" alt="Certification example">
-            <span class="certifications-section-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-section-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
+            <img v-if="certification.imagePath" class="certifications-section-items_certification-items_source-image" :src="certification.imagePath" alt="Certification image">
+            <span class="certifications-section-items_certification-items_source-id">Id: <a :href="certification.credentialUrl" target="_blank" class="certifications-section-items_certification-items_source-id-link">{{ certification.credentialId }}</a></span>
           </li>
-          <li class="certifications-section-items_certification-items_skills"><router-link to="/path-to-all-certificationss-of-user-with-scrollable-thing" class="certifications-section-items_certification-items_skills-link"><the-skills></the-skills></router-link></li>
+
+          <li class="certifications-section-items_certification-items_skills">
+            <router-link :to="`/user-profile/${id}/certifications/#${certification.certificationId}`" class="certifications-section-items_certification-items_skills-link">
+              <the-skills :skills="certification.skillTitles"></the-skills>
+            </router-link>
+          </li>
         </ul>
-        <div class="certifications-section-items_certification-divider"></div>
-      </li>
-      <li class="certifications-section-items_certification">
-        <ul class="certifications-section-items_certification-items">
-          <li class="certifications-section-items_certification-items_title">
-            <ul class="certifications-section-items_certification-items_title-items">
-              <li class="certifications-section-items_certification-items_title-items_name"><router-link to="/path-to-all-certifications-of-user-with-scrollable-thing" class="certifications-section-items_certification-items_title-items_name-link"><h2 class="certifications-section-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></router-link></li>
-              <li class="certifications-section-items_certification-items_title-items_issued"><span class="certifications-section-items_certification-items_title-items_issued-element">Issued Jan 2024</span></li>
-            </ul>
-          </li>
-          <li class="certifications-section-items_certification-items_organization-that-issued"><span class="certifications-section-items_certification-items_organization-that-issued-element">Udemy</span></li>
-          <li class="certifications-section-items_certification-items_issued"><span class="certifications-section-items_certification-items_issued-element">Issued Jan 2024</span></li>
-          <li class="certifications-section-items_certification-items_source">
-            <img class="certifications-section-items_certification-items_source-image" src="../../assets/images/certification-example.jpg" alt="Certification example">
-            <span class="certifications-section-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-section-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
-          </li>
-          <li class="certifications-section-items_certification-items_skills"><router-link to="/path-to-all-certificationss-of-user-with-scrollable-thing" class="certifications-section-items_certification-items_skills-link"><the-skills></the-skills></router-link></li>
-        </ul>
+
+        <div v-if="index !== certifications.length - 1" class="certifications-section-items_certification-divider"></div>
       </li>
     </ul>
-    <router-link class="certifications-section-items_show-all-certifications-link" to="/user-profile/certifications">
+
+    <router-link class="certifications-section-items_show-all-certifications-link" :to="`/user-profile/${id}/certifications`">
       <div class="certifications-section-items_show-all-certifications">
         <span class="certifications-section-items_show-all-certifications-element">Show all certifications</span>
         <img class="certifications-section-items_show-all-certifications-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
@@ -52,13 +54,49 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-import TheSkills from './TheSkills.vue';
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import TheSkills from './TheSkills.vue'
+import { Certification } from '@/types/my-profile/certifications/Certification'
+import useGetLastTwoCertifications from '@/composables/my-profile/certifications/useGetLastTwoCertifications'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  components: { TheSkills },
+  setup(props) {
+    const router = useRouter()
+    const certifications = ref<Certification[]>([])
+
+    async function loadCertifications() {
+      const result = await useGetLastTwoCertifications(props.id)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        certifications.value = result as Certification[]
+      }
+    }
+
+    function formatDate(date: string | null): string {
+      if (!date) return ''
+      const formattedDate = new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short'
+      })
+      return formattedDate
+    }
+
+    onMounted(() => loadCertifications())
+
+    return { certifications, formatDate }
   }
 })
 </script>

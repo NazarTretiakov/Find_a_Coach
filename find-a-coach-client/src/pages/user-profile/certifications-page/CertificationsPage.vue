@@ -3,7 +3,7 @@
 
   <ul class="certifications-sections">
     <li class="certifications-sections_left-side">
-      <certifications-cards></certifications-cards>
+      <certifications-cards :id="id"></certifications-cards>
     </li>
     <li class="certifications-sections_right-side">
       <recommended-people></recommended-people>
@@ -24,6 +24,12 @@ import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     BasicStickyHeader,
     CertificationsCards,

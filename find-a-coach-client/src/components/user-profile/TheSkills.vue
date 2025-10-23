@@ -1,11 +1,28 @@
 <template>
-  <div class="skills">
+  <div class="skills" v-if="skills && skills.length > 0">
     <ul class="skills-items">
-      <li class="skills-items_icon"><img src="../../assets/images/icons/skills-icon.svg" alt="Skills icon"></li>
-      <li class="skills-items_skills"><span class="skills-items_skills-element">Team Work, Finance, Microsoft Office and + 5 more skills</span></li>
+      <li class="skills-items_icon">
+        <img src="@/assets/images/icons/skills-icon.svg" alt="Skills icon" />
+      </li>
+      <li class="skills-items_skills">
+        {{ skills.join(', ') }}
+      </li>
     </ul>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  props: {
+    skills: {
+      type: Array as () => string[],
+      required: true
+    }
+  }
+});
+</script>
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

@@ -17,7 +17,7 @@
           <li class="personal-information-items_left-side-items_location">
             <span v-if="personalInformation.location" class="personal-information-items_left-side-items_location-element">{{ personalInformation.location }}</span>
             <span v-if="personalInformation.location" class="personal-information-items_left-side-items_location-divider">-</span>
-            <router-link to="/my-profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link>
+            <router-link :to="`/user-profile/${id}/contact-information`" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link>
           </li>
           <li class="personal-information-items_left-side-items_connections">
             <router-link to="/network/connections" class="personal-information-items_left-side-items_connections-link">{{ personalInformation.connectionsAmount }} connections</router-link>

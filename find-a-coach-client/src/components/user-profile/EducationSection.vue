@@ -6,55 +6,78 @@
           <li class="education-section-items_header-items_incription"><h1 class="education-section-items_header-items_incription-element">Education</h1></li>
         </ul>
       </li>
-      <li class="education-section-items_education">
+
+      <li v-for="(school, index) in schools" :key="school.schoolId" class="education-section-items_education">
         <ul class="education-section-items_education-items">
           <li class="education-section-items_education-items_title">
             <ul class="education-section-items_education-items_title-items">
-              <li class="education-section-items_education-items_title-items_name"><router-link to="/path-to-all-educations-of-user-with-scrollable-thing" class="education-section-items_education-items_title-items_name-link"><h2 class="education-section-items_education-items_title-items_name-element">Gdańsk University of Technology</h2></router-link></li>
-              <li class="education-section-items_education-items_title-items_time"><span class="education-section-items_education-items_title-items_time-element">2022 - 2026</span></li>
+              <li class="education-section-items_education-items_title-items_name"><router-link :to="`/user-profile/${id}/education/#${school.schoolId}`" class="education-section-items_education-items_title-items_name-link"><h2 class="education-section-items_education-items_title-items_name-element">{{ school.schoolName }}</h2></router-link></li>
+              <li class="education-section-items_education-items_title-items_time"><span class="education-section-items_education-items_title-items_time-element">{{ formatDate(school.startDate) }} - {{ formatDate(school.endDate) }}</span></li>
             </ul>
           </li>
-          <li class="education-section-items_education-items_academic-degree"><span class="education-section-items_education-items_academic-degree-element">Bachelor's degree</span></li>
-          <li class="education-section-items_education-items_field-of-study"><span class="education-section-items_education-items_field-of-study-element">Economic Analyst - Financial Analyst</span></li>
-          <li class="education-section-items_education-items_location"><span class="education-section-items_education-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="education-section-items_education-items_time"><span class="education-section-items_education-items_time-element">2022 - 2026</span></li>
-          <li class="education-section-items_education-items_skills"><router-link to="/path-to-all-educations-of-user-with-scrollable-thing" class="education-section-items_education-items_skills-link"><the-skills></the-skills></router-link></li>
+          <li class="education-section-items_education-items_academic-degree"><span class="education-section-items_education-items_academic-degree-element">{{ school.degree }}</span></li>
+          <li class="education-section-items_education-items_field-of-study"><span class="education-section-items_education-items_field-of-study-element">{{ school.fieldOfStudy }}</span></li>
+          <li class="education-section-items_education-items_location"><span class="education-section-items_education-items_location-element">{{ school.location }}</span></li>
+          <li class="education-section-items_education-items_skills"><router-link :to="`/user-profile/${id}/education/#${school.schoolId}`" class="education-section-items_education-items_skills-link"><the-skills :skills="school.skillTitles"></the-skills></router-link></li>
         </ul>
-        <div class="education-section-items_education-divider"></div>
+        <div v-if="index !== schools.length - 1" class="education-section-items_education-divider"></div>
       </li>
-      <li class="education-section-items_education">
-        <ul class="education-section-items_education-items">
-          <li class="education-section-items_education-items_title">
-            <ul class="education-section-items_education-items_title-items">
-              <li class="education-section-items_education-items_title-items_name"><router-link to="/path-to-all-educations-of-user-with-scrollable-thing" class="education-section-items_education-items_title-items_name-link"><h2 class="education-section-items_education-items_title-items_name-element">Gdańsk University of Technology</h2></router-link></li>
-              <li class="education-section-items_education-items_title-items_time"><span class="education-section-items_education-items_title-items_time-element">2022 - 2026</span></li>
-            </ul>
-          </li>
-          <li class="education-section-items_education-items_academic-degree"><span class="education-section-items_education-items_academic-degree-element">Bachelor's degree</span></li>
-          <li class="education-section-items_education-items_field-of-study"><span class="education-section-items_education-items_field-of-study-element">Economic Analyst - Financial Analyst</span></li>
-          <li class="education-section-items_education-items_location"><span class="education-section-items_education-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="education-section-items_education-items_time"><span class="education-section-items_education-items_time-element">2022 - 2026</span></li>
-          <li class="education-section-items_education-items_skills"><router-link to="/path-to-all-educations-of-user-with-scrollable-thing" class="education-section-items_education-items_skills-link"><the-skills></the-skills></router-link></li>
-        </ul>
-      </li> 
     </ul>
-    <router-link class="education-section-items_show-all-education-link" to="/user-profile/education">
+
+    <router-link class="education-section-items_show-all-education-link" :to="`/user-profile/${id}/education`">
       <div class="education-section-items_show-all-education">
         <span class="education-section-items_show-all-education-element">Show all education</span>
-        <img class="education-section-items_show-all-education-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
-        </div>
+        <img class="education-section-items_show-all-education-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon" />
+      </div>
     </router-link>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-import TheSkills from './TheSkills.vue';
+import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import TheSkills from './TheSkills.vue'
+import { School } from '@/types/my-profile/education/School'
+import useGetLastTwoSchools from '@/composables/my-profile/education/useGetLastTwoSchools'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  components: { TheSkills },
+  setup(props) {
+    const router = useRouter()
+    const schools = ref<School[]>([])
+
+    async function loadSchools() {
+      const result = await useGetLastTwoSchools(props.id)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        schools.value = result as School[]
+      }
+    }
+
+    function formatDate(date: string | null): string {
+      if (!date) return ''
+      
+      const formattedDate = new Date(date).toLocaleDateString("en-US", {
+        year: "numeric"
+      });
+
+      return formattedDate
+    }
+
+    onMounted(() => loadSchools())
+
+    return { schools, formatDate }
   }
 })
 </script>

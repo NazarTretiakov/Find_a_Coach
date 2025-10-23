@@ -21,18 +21,7 @@
 
     <p class="qa-description">{{ qa.description }}</p>
 
-    <div class="qa-answer-text-area">
-      <label class="qa-answer-text-area-label" for="answer">Leave your answer</label>
-      <textarea 
-        v-model="valueOfTextArea"
-        class="qa-answer-text-area-element" 
-        name="answer" 
-        id="answer"
-      ></textarea>
-      <span class="qa-answer-text-area-number-of-signs">
-        <span :class="isLimitExceeded ? 'qa-answer-text-area-number-of-signs-entered-exceeded' : 'qa-answer-text-area-number-of-signs-entered'">{{ numberOfSignsEntered }}</span>/<span class="qa-answer-text-area-number-of-signs-max">{{ maxNumberOfSigns }}</span>
-      </span>
-    </div>
+    <show-answers-button></show-answers-button>
     
     <h2 class="qa-comments-header">Comments</h2>
 
@@ -114,6 +103,7 @@ import useCreateComment from "@/composables/forum/useCreateComment"
 import useDeleteComment from "@/composables/forum/useDeleteComment"
 import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged"
 import useDeleteActivity from "@/composables/my-profile/activities/useDeleteActivity"
+import ShowAnswersButton from "./ShowAnswersButton.vue"
 
 export default defineComponent({
   props: {
@@ -123,7 +113,8 @@ export default defineComponent({
     },
   },
   components: {
-    LoadingSquare
+    LoadingSquare,
+    ShowAnswersButton
   },
   setup(props) {
     const authenticationStore = useAuthenticationStore()
@@ -372,63 +363,10 @@ export default defineComponent({
 
   &-description {
     font-size: 14px;
-    margin-top: 20px;
+    margin: 20px 0 30px 0;
 
     @media (max-width: $breakpoint) {
       font-size: 12px;
-    }
-  }
-
-  &-answer-text-area {
-    width: 100%;
-    margin-top: 40px;
-
-    @media (max-width: $breakpoint) {
-      width: 100%;
-    }
-
-    &-label {
-      color: $grayBorderColor;
-      font-size: 14px;
-      display: block;
-      margin: 0 0 2px 2px;
-
-      @media (max-width: $breakpoint) {
-        font-size: 12px;
-      }
-    }
-    &-element {
-      border: 1px #000000 solid;
-      width: 100%;
-      height: 100px;
-      border-radius: 10px;
-      transition: border 0.2s ease;
-      padding: 0 8px;
-      font-size: 14px;
-
-      @media (max-width: $breakpoint) {
-        font-size: 12px;
-        width: 100%;
-        height: 60px;
-      }
-
-      &:hover {
-        border: 2px #000000 solid;
-      }
-    }
-    &-number-of-signs {
-      color: $grayBorderColor;
-      font-size: 14px;
-      display: block;
-      justify-self: flex-end;
-      margin: -6px 2px 0 0;
-
-      &-entered {
-
-        &-exceeded {
-          color: $errorColor;
-        }
-      }
     }
   }
 

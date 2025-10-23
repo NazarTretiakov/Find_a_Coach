@@ -3,7 +3,7 @@
 
   <ul class="experience-sections">
     <li class="experience-sections_left-side">
-      <experience-cards></experience-cards>
+      <experience-cards :id="id"></experience-cards>
     </li>
     <li class="experience-sections_right-side">
       <recommended-people></recommended-people>
@@ -25,6 +25,12 @@ import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     BasicStickyHeader,
     SearchPanel,

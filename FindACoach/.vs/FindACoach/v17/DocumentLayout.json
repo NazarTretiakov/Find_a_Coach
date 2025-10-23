@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,14 +27,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "MyProfileController.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "RelativeToolTip": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAwwF8AAABEAAAAAAAAAA==",
+              "Title": "AuthenticationController.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\AuthenticationController.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\AuthenticationController.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\AuthenticationController.cs",
+              "RelativeToolTip": "src\\FindACoach.API\\Controllers\\AuthenticationController.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAYwDoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T07:20:05.231Z",
+              "WhenOpened": "2025-10-22T07:58:20.597Z",
               "EditorCaption": ""
             }
           ]

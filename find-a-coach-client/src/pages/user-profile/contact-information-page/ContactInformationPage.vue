@@ -2,7 +2,7 @@
   <div class="page">
     <basic-sticky-header></basic-sticky-header>
 
-    <contact-information class="page-content"></contact-information>
+    <contact-information :id="id" class="page-content"></contact-information>
 
     <the-footer class="page-footer"></the-footer>
   </div>
@@ -16,6 +16,12 @@ import ContactInformation from '../../../components/user-profile/contact-informa
 import TheFooter from '../../../components/TheFooter.vue'
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     BasicStickyHeader,
     ContactInformation,

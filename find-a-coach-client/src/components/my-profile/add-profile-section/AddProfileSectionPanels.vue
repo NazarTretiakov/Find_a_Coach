@@ -38,6 +38,7 @@ import AddPanel from './AddPanel.vue'
 import { useRouter } from 'vue-router'
 import useIsProfileSectionsCompleted from '@/composables/my-profile/useIsProfileSectionsCompleted'
 import type { IsProfileSectionsCompleted } from '@/types/my-profile/IsProfileSectionsCompleted'
+import { useAuthenticationStore } from '@/stores/authentication'
 
 export default defineComponent({
   components: {
@@ -45,10 +46,11 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const isProfileSectionsCompleted = ref<IsProfileSectionsCompleted>({} as IsProfileSectionsCompleted)
 
     async function loadIsProfileSectionsCompletedInfo() {
-      const result = await useIsProfileSectionsCompleted()
+      const result = await useIsProfileSectionsCompleted(authenticationStore.userId)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
         if (!result.isSuccessful) {

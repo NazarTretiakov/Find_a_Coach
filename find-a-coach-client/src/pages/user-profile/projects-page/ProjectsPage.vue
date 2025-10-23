@@ -3,7 +3,7 @@
 
   <ul class="projects-sections">
     <li class="projects-sections_left-side">
-      <projects-cards></projects-cards>
+      <projects-cards :id="id"></projects-cards>
     </li>
     <li class="projects-sections_right-side">
       <recommended-people></recommended-people>
@@ -25,6 +25,12 @@ import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     BasicStickyHeader,
     SearchPanel,

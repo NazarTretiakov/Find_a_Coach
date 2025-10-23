@@ -1,52 +1,73 @@
-<template> 
+<template>
   <div class="skills">
-    <h1 class="skills-header">Skills</h1>
+    <ul class="skills-header">
+      <li class="skills-header_inscription"><h1 class="skills-header_inscription-element">Skills</h1></li>
+    </ul>
+
     <ul class="skills-items">
-      <li class="skills-items_skill">
+      <li v-for="skill in skills" :key="skill.skillId" class="skills-items_skill" :id="skill.skillId">
         <ul class="skills-items_skill-items">
-          <li class="skills-items_skill-items_name"><h2 class="skills-items_skill-items_name-element">JavaScript</h2></li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/education-icon.svg" alt="Education icon">
-            <span class="skills-items_skill-items_source-inscription">Pomeranian University in Słupsk</span>
-          </li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/job-icon.svg" alt="Job icon">
-            <span class="skills-items_skill-items_source-inscription">The Best Company</span>
-          </li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/certification-icon.svg" alt="Certification icon">
-            <span class="skills-items_skill-items_source-inscription">JavaScript + TypeScript Course</span>
-          </li>
-        </ul>
-      </li>
-      <li class="skills-items_skill">
-        <ul class="skills-items_skill-items">
-          <li class="skills-items_skill-items_name"><h2 class="skills-items_skill-items_name-element">Store management</h2></li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/project-icon.svg" alt="Project icon">
-            <span class="skills-items_skill-items_source-inscription">Store management for Amazon company</span>
-          </li>
-          <li class="skills-items_skill-items_source">
-            <img class="skills-items_skill-items_source-icon" src="../../../assets/images/icons/certification-icon.svg" alt="Certification icon">
-            <span class="skills-items_skill-items_source-inscription">Complete store management guide</span>
+          <li class="skills-items_skill-items_name"><h2 class="skills-items_skill-items_name-element">{{ skill.title }}</h2></li>
+
+          <li v-for="(usage, index) in skill.usages" :key="index" class="skills-items_skill-items_source">
+            <img class="skills-items_skill-items_source-icon" :src="getUsageIcon(usage.type)" :alt="`${usage.type} icon`" />
+            <span class="skills-items_skill-items_source-inscription">{{ usage.title }}</span>
           </li>
         </ul>
       </li>
     </ul>
-    <div class="skills-load-more-skills">
-      <span class="skills-load-more-skills-inscription">Load more skills</span>
-    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
 
-import TheSkills from '../TheSkills.vue'
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import type { Skill } from '@/types/my-profile/skills/Skill'
+import useGetAllSkills from '@/composables/my-profile/skills/useGetAllSkills'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const router = useRouter()
+    const skills = ref<Skill[]>([])
+
+    async function loadSkills() {
+      const result = await useGetAllSkills(props.id)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        skills.value = result as Skill[]
+      }
+    }
+
+    function getUsageIcon(type: string): string {
+      switch (type) {
+        case 'Project':
+          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
+        case 'Company':
+          return new URL('@/assets/images/icons/job-icon.svg', import.meta.url).href
+        case 'Certification':
+          return new URL('@/assets/images/icons/certification-icon.svg', import.meta.url).href
+        case 'School':
+          return new URL('@/assets/images/icons/education-icon.svg', import.meta.url).href
+        default:
+          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
+      }
+    }
+
+    onMounted(() => loadSkills())
+
+    return { skills, getUsageIcon }
   }
 })
 </script>
@@ -62,12 +83,20 @@ export default defineComponent({
   }
 
   &-header {
-    font-size: 28px;
-    margin-left: 6px;
-    margin-bottom: 30px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
 
-    @media (max-width: $breakpoint) {
-      font-size: 20px;
+    &_inscription {
+      &-element {
+        font-size: 28px;
+        margin-left: 6px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 20px;
+        }
+      }
     }
   }
 
@@ -77,7 +106,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_skill {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;

@@ -3,7 +3,7 @@ BasicStickyHeader<template>
 
   <ul class="experience-sections">
     <li class="experience-sections_left-side">
-      <education-cards></education-cards>
+      <education-cards :id="id"></education-cards>
     </li>
     <li class="experience-sections_right-side">
       <recommended-people></recommended-people>
@@ -25,6 +25,12 @@ import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     BasicStickyHeader,
     SearchPanel,

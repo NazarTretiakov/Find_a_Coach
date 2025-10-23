@@ -1,50 +1,71 @@
-<template> 
+<template>
   <div class="languages">
     <ul class="languages-header">
       <li class="languages-header_inscription">
         <h1 class="languages-header_inscription-element">Languages</h1>
       </li>
     </ul>
+
     <ul class="languages-items">
-      <li class="languages-items_language">
+      <li v-for="language in languages" :key="language.languageId" class="languages-items_language" :id="language.languageId">
         <ul class="languages-items_language-items">
           <li class="languages-items_language-items_header">
-            <h2 class="languages-items_language-items_header-name-of-language">English</h2>
+            <h2 class="languages-items_language-items_header-name-of-language">{{ language.title }}</h2>
           </li>
-          <li class="languages-items_language-items_level-of-knowledge"><span class="languages-items_language-items_level-of-knowledge-element">Upper-Intermediate - B2</span></li>
-        </ul>
-      </li>
-      <li class="languages-items_language">
-        <ul class="languages-items_language-items">
-          <li class="languages-items_language-items_header">
-            <h2 class="languages-items_language-items_header-name-of-language">Polish</h2>
+          <li class="languages-items_language-items_level-of-knowledge">
+            <span class="languages-items_language-items_level-of-knowledge-element">{{ mapProficiency(language.proficiency) }}</span>
           </li>
-          <li class="languages-items_language-items_level-of-knowledge"><span class="languages-items_language-items_level-of-knowledge-element">Advanced - C1</span></li>
-        </ul>
-      </li>
-      <li class="languages-items_language">
-        <ul class="languages-items_language-items">
-          <li class="languages-items_language-items_header">
-            <h2 class="languages-items_language-items_header-name-of-language">Spanish</h2>
-          </li>
-          <li class="languages-items_language-items_level-of-knowledge"><span class="languages-items_language-items_level-of-knowledge-element">Beginner - A1</span></li>
         </ul>
       </li>
     </ul>
-    <div class="languages-load-more-languages">
-      <span class="languages-load-more-languages-inscription">Load more languages</span>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-import TheSkills from '../TheSkills.vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import type { Language } from '@/types/my-profile/languages/Language'
+import useGetAllLanguages from '@/composables/my-profile/languages/useGetAllLanguages'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const router = useRouter()
+    const languages = ref<Language[]>([])
+
+    async function loadLanguages() {
+      const result = await useGetAllLanguages(props.id)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        languages.value = result as Language[]
+      }
+    }
+
+    function mapProficiency(level: string): string {
+      switch (level) {
+        case 'A1': return 'Beginner - A1'
+        case 'A2': return 'Pre-Intermediate - A2'
+        case 'B1': return 'Intermediate - B1'
+        case 'B2': return 'Upper-Intermediate - B2'
+        case 'C1': return 'Advanced - C1'
+        case 'C2': return 'Mastery - C2'
+        default: return level
+      }
+    }
+
+    onMounted(() => loadLanguages())
+
+    return { languages, mapProficiency }
   }
 })
 </script>
@@ -64,11 +85,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin-bottom: 30px;
-
-    @media (max-width: $breakpoint) {
-      margin-bottom: 20px;
-    }
 
     &_inscription {
       &-element {
@@ -88,7 +104,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_language {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;

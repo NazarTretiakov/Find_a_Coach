@@ -1,54 +1,115 @@
-<template> 
+<template>
   <div class="experience">
     <ul class="experience-header">
       <li class="experience-header_inscription">
         <h1 class="experience-header_inscription-element">Experience</h1>
       </li>
     </ul>
+
     <ul class="experience-items">
-      <li class="experience-items_position">
+      <li v-for="position in positions" :key="position.positionId" class="experience-items_position" :id="position.positionId">
         <ul class="experience-items_position-items">
           <li class="experience-items_position-items_title">
             <ul class="experience-items_position-items_title-items">
-              <li class="experience-items_position-items_title-items_name"><h2 class="experience-items_position-items_title-items_name-element">Technical department employee</h2></li>
+              <li class="experience-items_position-items_title-items_name">
+                <h2 class="experience-items_position-items_title-items_name-element">{{ position.title }}</h2>
+              </li>
             </ul>
           </li>
-          <li class="experience-items_position-items_company-and-type-of-employment"><span class="experience-items_position-items_company-and-type-of-employment-element">The Best Company - Freelance</span></li>
-          <li class="experience-items_position-items_location"><span class="experience-items_position-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="experience-items_position-items_time"><span class="experience-items_position-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="experience-items_position-items_description"><p class="experience-items_position-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="experience-items_position-items_skills"><the-skills></the-skills></li>
-        </ul>
-      </li>
-            <li class="experience-items_position">
-        <ul class="experience-items_position-items">
-          <li class="experience-items_position-items_title">
-            <ul class="experience-items_position-items_title-items">
-              <li class="experience-items_position-items_title-items_name"><h2 class="experience-items_position-items_title-items_name-element">Technical department employee</h2></li>
-            </ul>
+
+          <li class="experience-items_position-items_company-and-type-of-employment">
+            <span class="experience-items_position-items_company-and-type-of-employment-element">{{ position.companyName }} - {{ convertEmploymentType(position.employmentType) }}</span>
           </li>
-          <li class="experience-items_position-items_company-and-type-of-employment"><span class="experience-items_position-items_company-and-type-of-employment-element">The Best Company - Freelance</span></li>
-          <li class="experience-items_position-items_location"><span class="experience-items_position-items_location-element">Gdańsk, Woj. Pomorskie, Poland</span></li>
-          <li class="experience-items_position-items_time"><span class="experience-items_position-items_time-element">Jan 2024 - Present (1 yr 6 mon)</span></li>
-          <li class="experience-items_position-items_description"><p class="experience-items_position-items_description-element">- Projektowanie i implementacja logiki biznesowej z wykorzystaniem platformy .NET w kontekście systemu ERP enova365<br/>- Tworzenie serwisów REST API w platformie .NET do wykonania operacji CRUD na tabelach bazy danych systemu ERP enova365<br/>- Tworzenie dodatków w platformie .NET do realizacji specjalistycznych funkcji w systemie ERP enova365<br/>- Użycie JWT do uwierzytelniania i wymiany danych oraz Swaggera do testowania i dokumentowania tworzonych serwisów REST API</p></li>
-          <li class="experience-items_position-items_skills"><the-skills></the-skills></li>
+
+          <li class="experience-items_position-items_location">
+            <span class="experience-items_position-items_location-element">{{ position.location }}</span>
+          </li>
+
+          <li class="experience-items_position-items_time">
+            <span class="experience-items_position-items_time-element">{{ formatDate(position.startDate) }} - {{ position.isCurrentlyWorkingHere ? 'Present' : formatDate(position.endDate) }} ({{ getDuration(position.startDate, position.endDate, position.isCurrentlyWorkingHere) }})</span>
+          </li>
+
+          <li class="experience-items_position-items_description">
+            <p class="experience-items_position-items_description-element">{{ position.description }}</p>
+          </li>
+
+          <li class="experience-items_position-items_skills">
+            <the-skills :skills="position.skillTitles"></the-skills>
+          </li>
         </ul>
       </li>
     </ul>
-    <div class="experience-load-more-experience">
-      <span class="experience-load-more-experience-inscription">Load more experience</span>
-    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
 
+<script lang="ts">
+import { defineComponent, onMounted, ref } from 'vue'
+
+import { useRouter } from 'vue-router'
+import useGetAllPositions from '@/composables/my-profile/experience/useGetAllPositions'
 import TheSkills from '../TheSkills.vue'
+import { Position } from '@/types/my-profile/experience/Position'
+import useFormatToReadableDate from '@/composables/useFormatToReadableDate'
+import useConvertEmploymentTypeToReadable from '@/composables/my-profile/experience/useConvertEmploymentTypeToReadable'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  components: { TheSkills },
+  setup(props) {
+    const router = useRouter()
+    const positions = ref<Position[]>([])
+
+    async function loadPositions() {
+      const result = await useGetAllPositions(props.id)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        positions.value = result as Position[]
+      }
+    }
+
+    function convertEmploymentType(employmentType: string): string {
+      return useConvertEmploymentTypeToReadable(employmentType)
+    }
+
+    function formatDate(date: Date | string | null): string {
+      return useFormatToReadableDate(date?.toString() || '')
+    }
+
+    function getDuration(start: Date | string | null, end: Date | string | null, isCurrent: boolean): string {
+      if (!start) return ''
+      const startDate = new Date(start)
+      const endDate = isCurrent ? new Date() : end ? new Date(end) : new Date()
+      const diff = endDate.getTime() - startDate.getTime()
+
+      const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30))
+      const years = Math.floor(months / 12)
+      const remainingMonths = months % 12
+
+      if (years > 0 && remainingMonths > 0) return `${years} yr ${remainingMonths} mon`
+      if (years > 0) return `${years} yr`
+      if (remainingMonths > 0) return `${remainingMonths} mon`
+      return 'Less than 1 mon'
+    }
+
+    onMounted(() => loadPositions())
+
+    return {
+      positions,
+      convertEmploymentType,
+      formatDate,
+      getDuration
+    }
   }
 })
 </script>
@@ -68,11 +129,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin-bottom: 30px;
-
-    @media (max-width: $breakpoint) {
-      margin-bottom: 20px;
-    }
 
     &_inscription {
       &-element {
@@ -92,7 +148,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_position {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;

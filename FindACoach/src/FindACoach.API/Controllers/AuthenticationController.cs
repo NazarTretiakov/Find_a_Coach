@@ -56,16 +56,8 @@ namespace FindACoach.API.Controllers
                 CompleteProfileWindowTitle = "You have successfully created the account",
                 ImagePath = "default-profile-image.png"
             };
-            IdentityResult result = null;
-            try
-            {
-                result = await _userManager.CreateAsync(user, registerDTO.Password);
-            }
-            catch(Exception e)
-            {
 
-            }
-            //IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);
+            IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);
 
             if (result.Succeeded)
             {

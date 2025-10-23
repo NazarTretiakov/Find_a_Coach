@@ -6,7 +6,7 @@
 
   <ul class="activities-sections">
     <li class="activities-sections_left-side">
-      <activities-cards></activities-cards>
+      <activities-cards :id="id"></activities-cards>
     </li>
     <li class="activities-sections_right-side">
       <recommended-people></recommended-people>
@@ -28,6 +28,12 @@ import TheFooter from '../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     BasicHeader,
     SearchPanel,

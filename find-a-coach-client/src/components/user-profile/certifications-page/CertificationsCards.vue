@@ -1,58 +1,88 @@
-<template> 
+<template>
   <div class="certifications">
     <ul class="certifications-header">
       <li class="certifications-header_inscription">
         <h1 class="certifications-header_inscription-element">Certifications</h1>
       </li>
     </ul>
+
     <ul class="certifications-items">
-      <li class="certifications-items_certification">
+      <li v-for="certification in certifications" :key="certification.certificationId" class="certifications-items_certification" :id="certification.certificationId">
         <ul class="certifications-items_certification-items">
           <li class="certifications-items_certification-items_title">
             <ul class="certifications-items_certification-items_title-items">
-              <li class="certifications-items_certification-items_title-items_name"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></li>
+              <li class="certifications-items_certification-items_title-items_name">
+                <h2 class="certifications-items_certification-items_title-items_name-element">{{ certification.title }}</h2>
+              </li>
             </ul>
           </li>
-          <li class="certifications-items_certification-items_organization-that-issued"><span class="certifications-items_certification-items_organization-that-issued-element">Udemy</span></li>
-          <li class="certifications-items_certification-items_issued"><span class="certifications-items_certification-items_issued-element">Issued Jan 2024</span></li>
+
+          <li class="certifications-items_certification-items_organization-that-issued">
+            <span class="certifications-items_certification-items_organization-that-issued-element">{{ certification.issuingOrganization }}</span>
+          </li>
+
+          <li class="certifications-items_certification-items_issued">
+            <span class="certifications-items_certification-items_issued-element">Issued {{ formatDate(certification.issueDate) }}</span>
+          </li>
+
           <li class="certifications-items_certification-items_source">
-            <img class="certifications-items_certification-items_source-image" src="../../../assets/images/certification-example.jpg" alt="Certification example">
-            <span class="certifications-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
+            <img v-if="certification.imagePath" class="certifications-items_certification-items_source-image" :src="certification.imagePath" alt="Certification image">
+            <span class="certifications-items_certification-items_source-id">
+              Id: 
+              <a :href="certification.credentialUrl" target="_blank" rel="noopener noreferrer" class="certifications-items_certification-items_source-id-link">
+                {{ certification.credentialId }}
+              </a>
+            </span>
           </li>
-          <li class="certifications-items_certification-items_skills"><the-skills></the-skills></li>
-        </ul>
-      </li>
-      <li class="certifications-items_certification">
-        <ul class="certifications-items_certification-items">
-          <li class="certifications-items_certification-items_title">
-            <ul class="certifications-items_certification-items_title-items">
-              <li class="certifications-items_certification-items_title-items_name"><h2 class="certifications-items_certification-items_title-items_name-element">Complete JavaScript masterclass</h2></li>
-            </ul>
+
+          <li class="certifications-items_certification-items_skills">
+            <the-skills :skills="certification.skillTitles"></the-skills>
           </li>
-          <li class="certifications-items_certification-items_organization-that-issued"><span class="certifications-items_certification-items_organization-that-issued-element">Udemy</span></li>
-          <li class="certifications-items_certification-items_issued"><span class="certifications-items_certification-items_issued-element">Issued Jan 2024</span></li>
-          <li class="certifications-items_certification-items_source">
-            <img class="certifications-items_certification-items_source-image" src="../../../assets/images/certification-example.jpg" alt="Certification example">
-            <span class="certifications-items_certification-items_source-id">Id: <router-link to="/link-to-certification" class="certifications-items_certification-items_source-id-link">UC-87c7cbd1-d1pr-76d9-cg88-49365454882b</router-link></span>
-          </li>
-          <li class="certifications-items_certification-items_skills"><the-skills></the-skills></li>
         </ul>
       </li>
     </ul>
-    <div class="certifications-load-more-certifications">
-      <span class="certifications-load-more-certifications-inscription">Load more certifications</span>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
 import TheSkills from '../TheSkills.vue'
+import { Certification } from '@/types/my-profile/certifications/Certification'
+import useGetAllCertifications from '@/composables/my-profile/certifications/useGetAllCertifications'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
-  components: {
-    TheSkills
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  components: { TheSkills },
+  setup(props) {   
+    const router = useRouter()
+    const certifications = ref<Certification[]>([])
+
+    async function loadCertifications() {
+      const result = await useGetAllCertifications(props.id)
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        certifications.value = result as Certification[]
+      }
+    }
+
+    function formatDate(date: string | null): string {
+      if (!date) return ''
+      return new Date(date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    }
+
+    onMounted(() => loadCertifications())
+
+    return { certifications, formatDate }
   }
 })
 </script>
@@ -72,11 +102,6 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin-bottom: 30px;
-
-    @media (max-width: $breakpoint) {
-      margin-bottom: 20px;
-    }
 
     &_inscription {
       &-element {
@@ -96,7 +121,7 @@ export default defineComponent({
     flex-direction: column;
 
     &_certification {
-      margin-bottom: 30px;
+      margin-top: 30px;
       padding: 50px;
       border: 2px $grayBorderColor solid;
       border-radius: 20px;
