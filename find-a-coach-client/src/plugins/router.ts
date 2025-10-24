@@ -55,7 +55,7 @@ import QuestionAnswer from '../pages/forum/qa-page/QAPage.vue'
 import Survey from '../pages/forum/survey-page/SurveyPage.vue'
 import Post from '../pages/forum/post-page/PostPage.vue'
 import UserProfilePage from '../pages/user-profile/UserProfilePage.vue'
-import UserLeaveReviewPage from '../pages/user-profile/leave-review-page/LeaveReviewPage.vue'
+import UserLeaveReviewPage from '../pages/user-profile/leave-recommendation-page/LeaveRecommendationPage.vue'
 import UserContactInformation from '../pages/user-profile/contact-information-page/ContactInformationPage.vue'
 import UserProfileActivities from '../pages/user-profile/activities-page/ActivitiesPage.vue'
 import UserProfileExperience from '../pages/user-profile/experience-page/ExperiencePage.vue'
@@ -122,7 +122,7 @@ const router = createRouter({
     { path: '/forum/survey/:id', component: Survey, meta: { requiresAuth: true }, props: true },
     { path: '/forum/post/:id', component: Post, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/:id', component: UserProfilePage, meta: { requiresAuth: true }, props: true },
-    { path: '/user-profile/leave-review', component: UserLeaveReviewPage, meta: { requiresAuth: true } },
+    { path: '/user-profile/leave-recommendation', component: UserLeaveReviewPage, meta: { requiresAuth: true }, props: route => ({ id: route.query.id, name: route.query.name }) },
     { path: '/user-profile/:id/contact-information', component: UserContactInformation, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/:id/activities', component: UserProfileActivities, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/:id/experience', component: UserProfileExperience, meta: { requiresAuth: true }, props: true },

@@ -17,6 +17,7 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<Project> Projects { get; set; }
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Language> Languages { get; set; }
+        public DbSet<Recommendation> Recommendations { get; set; }
         public DbSet<Core.Domain.Entities.Activity.Activity> Activities { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Survey> Surveys { get; set; }
@@ -45,6 +46,7 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Project>().ToTable("Projects");
             builder.Entity<Certification>().ToTable("Certifications");
             builder.Entity<Language>().ToTable("Languages");
+            builder.Entity<Recommendation>().ToTable("Recommendations");
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>().ToTable("Activities");
             builder.Entity<Event>().ToTable("Events");
@@ -103,6 +105,16 @@ namespace FindACoach.Infrastructure.DbContext
                 .HasOne(l => l.User)
                 .WithMany(u => u.Languages)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Recommendation>()
+                .HasOne(r => r.RecommenderUser)
+                .WithMany(u => u.RecommendationsGiven)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Recommendation>()
+                .HasOne(r => r.RecommendedUser)
+                .WithMany(u => u.RecommendationsReceived)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>()
                .HasOne(a => a.User)

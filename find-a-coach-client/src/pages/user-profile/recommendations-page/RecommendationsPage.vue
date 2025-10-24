@@ -1,16 +1,20 @@
 <template> 
-  <basic-sticky-header class="header"></basic-sticky-header>
+  <div class="layout">
+    <div class="header">
+      <basic-sticky-header></basic-sticky-header>
+    </div>
 
-  <ul class="recommendations-sections">
-    <li class="recommendations-sections_left-side">
-      <recommendations-cards :id="id"></recommendations-cards>
-    </li>
-    <li class="recommendations-sections_right-side">
-      <recommended-people></recommended-people>
-    </li>
-  </ul>
+    <ul class="recommendations-sections">
+      <li class="recommendations-sections_left-side">
+        <recommendations-cards :id="id"></recommendations-cards>
+      </li>
+      <li class="recommendations-sections_right-side">
+        <recommended-people></recommended-people>
+      </li>
+    </ul>
 
-  <the-footer></the-footer>
+    <the-footer class="footer"></the-footer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -45,12 +49,14 @@ export default defineComponent({
 @use '../../../assets/styles/config' as *;
 
 .header {
-  z-index: 2;
+  z-index: 1;
   position: sticky;
   top: 0;
 }
 
 .recommendations-sections {
+  z-index: 0;
+  flex: 1;
   display: flex;
   list-style: none;
   padding: 0;
@@ -75,5 +81,13 @@ export default defineComponent({
       margin-bottom: 100px;
     }
   }
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.footer {
+  margin-top: auto;
 }
 </style>

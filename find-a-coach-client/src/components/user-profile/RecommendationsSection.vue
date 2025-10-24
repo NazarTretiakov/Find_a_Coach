@@ -4,63 +4,54 @@
       <li class="recommendations-section-items_header">
         <h1 class="recommendations-section-items_header-element">Recommendations</h1>
       </li>
+
       <li class="recommendations-section-items_type-of-recommendations">
         <ul class="recommendations-section-items_type-of-recommendations-items">
           <li class="recommendations-section-items_type-of-recommendations-items_received"><span @click="toggleRecommendationType('received')" class="recommendations-section-items_type-of-recommendations-items_received-element" :class="isReceivedRecommendationsVisible ? 'recommendations-section-items_type-of-recommendations-items_received-element-active' : 'recommendations-section-items_type-of-recommendations-items_received-element-unactive'">Received</span></li>
           <li class="recommendations-section-items_type-of-recommendations-items_given"><span @click="toggleRecommendationType('given')" class="recommendations-section-items_type-of-recommendations-items_given-element" :class="isGivenRecommendationsVisible ? 'recommendations-section-items_type-of-recommendations-items_received-element-active' : 'recommendations-section-items_type-of-recommendations-items_received-element-unactive'">Given</span></li>
         </ul>
       </li>
-      <li class="recommendations-section-items_recommendation">
+
+      <li v-for="(recommendation, index) in visibleRecommendations" :key="recommendation.recommendationId" class="recommendations-section-items_recommendation">
         <ul class="recommendations-section-items_recommendation-items">
           <li class="recommendations-section-items_recommendation-items_recommender-info">
-            <router-link to="/path-to-user-profile" class="recommendations-section-items_recommendation-items_recommender-info-link">
+            <router-link :to="`/user-profile/${recommendation.recommenderUserId}`" class="recommendations-section-items_recommendation-items_recommender-info-link">
               <ul class="recommendations-section-items_recommendation-items_recommender-info-items">
-                <li class="recommendations-section-items_recommendation-items_recommender-info-items-profile-image"><img class="recommendations-section-items_recommendation-items_recommender-info-items-profile-image-element" src="../../assets/images/icons/user-icon.jpg" alt="User profile image"></li>
+                <li class="recommendations-section-items_recommendation-items_recommender-info-items-profile-image"><img class="recommendations-section-items_recommendation-items_recommender-info-items-profile-image-element" :src="recommendation.recommenderUserProfileImagePath || '/default-profile.png'" alt="User profile image" /></li>
                 <li class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description">
-                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-name">Matvii Tretiakov</span>
-                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-incription">Marketing Expert | Team Leader | General Manager</span>
-                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-date-of-recommendation">June 7, 2025</span>
+                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-name">{{ recommendation.recommenderUserFirstName }} {{ recommendation.recommenderUserLastName }}</span>
+                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-incription">{{ recommendation.recommenderUserHeadline }}</span>
+                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-date-of-recommendation">{{ formatDate(recommendation.dateOfCreation) }}</span>
                 </li>
               </ul>
             </router-link>
           </li>
-          <li class="recommendations-section-items_recommendation-items_content">
-            <p class="recommendations-section-items_recommendation-items_content-element">Nazar is a highly motivated specialist in programming, problem solving, and creating innovative products. He consistently seeks out new challenges to expand his skills and deliver efficient, high-quality solutions. His strong analytical thinking and attention to detail make him a valuable asset to any development team.</p>
-          </li>
+          <li class="recommendations-section-items_recommendation-items_content"><p class="recommendations-section-items_recommendation-items_content-element">{{ recommendation.content }}</p></li>
         </ul>
-        <div class="recommendations-section-items_recommendation-divider"></div>
+        <div v-if="index !== visibleRecommendations.length - 1" class="recommendations-section-items_recommendation-divider"></div>
       </li>
-      <li class="recommendations-section-items_recommendation">
-        <ul class="recommendations-section-items_recommendation-items">
-          <li class="recommendations-section-items_recommendation-items_recommender-info">
-            <router-link to="/path-to-user-profile" class="recommendations-section-items_recommendation-items_recommender-info-link">
-              <ul class="recommendations-section-items_recommendation-items_recommender-info-items">
-                <li class="recommendations-section-items_recommendation-items_recommender-info-items-profile-image"><img class="recommendations-section-items_recommendation-items_recommender-info-items-profile-image-element" src="../../assets/images/icons/user-icon.jpg" alt="User profile image"></li>
-                <li class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description">
-                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-name">Matvii Tretiakov</span>
-                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-incription">Marketing Expert | Team Leader | General Manager</span>
-                  <span class="recommendations-section-items_recommendation-items_recommender-info-items-profile-description-date-of-recommendation">June 7, 2025</span>
-                </li>
-              </ul>
-            </router-link>
-          </li>
-          <li class="recommendations-section-items_recommendation-items_content">
-            <p class="recommendations-section-items_recommendation-items_content-element">Nazar is a highly motivated specialist in programming, problem solving, and creating innovative products. He consistently seeks out new challenges to expand his skills and deliver efficient, high-quality solutions. His strong analytical thinking and attention to detail make him a valuable asset to any development team.</p>
-          </li>
-        </ul>
-      </li>
+
+      <div class="recommendations-section-items_empty-state" v-if="!visibleRecommendations || visibleRecommendations.length == 0">
+        <span class="recommendations-section-items_empty-state-inscription" v-if="isGivenRecommendationsVisible">User hasn't given any recommendations yet.</span>
+        <span class="recommendations-section-items_empty-state-inscription" v-else>User hasn't received any recommendations yet.</span>
+      </div>
     </ul>
+
     <router-link class="recommendations-section-items_show-all-recommendations-link" :to="`/user-profile/${id}/recommendations`">
       <div class="recommendations-section-items_show-all-recommendations">
         <span class="recommendations-section-items_show-all-recommendations-element">Show all recommendations</span>
-        <img class="recommendations-section-items_show-all-recommendations-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon">
+        <img class="recommendations-section-items_show-all-recommendations-icon-arrow-forward" src="../../assets/images/icons/arrow-forward-icon.svg" alt="Arrow forward icon" />
       </div>
     </router-link>
   </div>
 </template>
 
+
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import type { Recommendation } from '@/types/my-profile/recommendations/Recommendation'
+import useGetLastTwoRecommendations from '@/composables/my-profile/recommendations/useGetLastTwoRecommendations'
 
 export default defineComponent({
   props: {
@@ -69,18 +60,61 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const router = useRouter()
+
+    const receivedRecommendations = ref<Recommendation[]>([])
+    const givenRecommendations = ref<Recommendation[]>([])
     const isReceivedRecommendationsVisible = ref<boolean>(true)
     const isGivenRecommendationsVisible = ref<boolean>(false)
 
-    const toggleRecommendationType = async function(recommendationType: string) {
-      if (recommendationType == "received" && isReceivedRecommendationsVisible.value == false || recommendationType == "given" && isGivenRecommendationsVisible.value == false) {
-        isReceivedRecommendationsVisible.value = !isReceivedRecommendationsVisible.value;
-        isGivenRecommendationsVisible.value = !isGivenRecommendationsVisible.value;
+    const toggleRecommendationType = (type: 'received' | 'given') => {
+      if (type === 'received') {
+        isReceivedRecommendationsVisible.value = true
+        isGivenRecommendationsVisible.value = false
+      } else {
+        isReceivedRecommendationsVisible.value = false
+        isGivenRecommendationsVisible.value = true
       }
     }
 
-    return { isReceivedRecommendationsVisible, isGivenRecommendationsVisible, toggleRecommendationType }
+    const visibleRecommendations = computed(() =>
+      isReceivedRecommendationsVisible.value ? receivedRecommendations.value : givenRecommendations.value
+    )
+
+    async function loadRecommendations() {
+      try {
+        const result = await useGetLastTwoRecommendations(props.id)
+        if (typeof result === 'object' && 'isSuccessful' in result) {
+          if (!result.isSuccessful) {
+            router.push('/error-page')
+            return
+          }
+        } else {
+          const recommendations = result as Recommendation[]
+          receivedRecommendations.value = recommendations.filter(r => r.recommendedUserId === props.id)
+          givenRecommendations.value = recommendations.filter(r => r.recommenderUserId === props.id)
+        }
+      } catch (error) {
+        console.error('Error loading recommendations:', error)
+        router.push('/error-page')
+      }
+    }
+
+    function formatDate(date: string | null): string {
+      if (!date) return ''
+      return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+    }
+
+    onMounted(() => loadRecommendations())
+
+    return {
+      isReceivedRecommendationsVisible,
+      isGivenRecommendationsVisible,
+      toggleRecommendationType,
+      visibleRecommendations,
+      formatDate
+    }
   }
 })
 </script>
@@ -213,6 +247,8 @@ export default defineComponent({
 
               &-element {
                 width: 40px;
+                border-radius: 50%;
+                border: 1px solid #000000;
 
                 @media (max-width: $breakpoint) {
                   width: 30px;
@@ -317,6 +353,20 @@ export default defineComponent({
       &-link {
         color: #000000;
         text-decoration: none;
+      }
+    }
+
+    &_empty-state {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &-inscription {
+        font-size: 14px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 12px;
+        }
       }
     }
   }

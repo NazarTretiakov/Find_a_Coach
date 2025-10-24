@@ -50,7 +50,7 @@ namespace FindACoach.Infrastructure.Repositories
 
             if (language.UserId.ToString() != activeUserId)
             {
-                throw new UnauthorizedAccessException("Only creator of language can edit the language.");
+                throw new UnauthorizedAccessException("Only creator of language can delete the language.");
             }
 
             _db.Languages.Remove(language);

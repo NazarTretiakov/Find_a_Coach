@@ -29,7 +29,7 @@
               </svg>
               <span class="personal-information-items_left-side-items_buttons-connect-inscription">Connect</span>
             </button>
-            <router-link to="/user-profile/leave-review" class="personal-information-items_left-side-items_buttons-leave-review-link">
+            <router-link :to="{ path: '/user-profile/leave-recommendation', query: { id: id, name: personalInformation.firstName }}" class="personal-information-items_left-side-items_buttons-leave-review-link">
               <button class="personal-information-items_left-side-items_buttons-leave-review">
                 <span class="personal-information-items_left-side-items_buttons-leave-review-inscription">Leave review</span>
               </button>

@@ -1,26 +1,26 @@
 <template> 
-  <div class="header">
-    <profile-sticky-header></profile-sticky-header>
-    <search-panel></search-panel>
+  <div class="layout">
+    <div class="header">
+      <profile-sticky-header></profile-sticky-header>
+    </div>
+
+    <ul class="recommendations-sections">
+      <li class="recommendations-sections_left-side">
+        <recommendations-cards></recommendations-cards>
+      </li>
+      <li class="recommendations-sections_right-side">
+        <recommended-people></recommended-people>
+      </li>
+    </ul>
+
+    <the-footer class="footer"></the-footer>
   </div>
-
-  <ul class="recommendations-sections">
-    <li class="recommendations-sections_left-side">
-      <recommendations-cards></recommendations-cards>
-    </li>
-    <li class="recommendations-sections_right-side">
-      <recommended-people></recommended-people>
-    </li>
-  </ul>
-
-  <the-footer></the-footer>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
 import ProfileStickyHeader from '../../../components/my-profile/ProfileStickyHeader.vue'
-import SearchPanel from '../../../components/SearchPanel.vue'
 import RecommendationsCards from '../../../components/my-profile/recommendations-page/RecommendationsCards.vue'
 
 import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
@@ -30,7 +30,6 @@ import TheFooter from '../../../components/TheFooter.vue'
 export default defineComponent({
   components: {
     ProfileStickyHeader,
-    SearchPanel,
     RecommendationsCards,
     RecommendedPeople,
     TheFooter
@@ -42,12 +41,14 @@ export default defineComponent({
 @use '../../../assets/styles/config' as *;
 
 .header {
-  z-index: 2;
+  z-index: 1;
   position: sticky;
   top: 0;
 }
 
 .recommendations-sections {
+  z-index: 0;
+  flex: 1;
   display: flex;
   list-style: none;
   padding: 0;
@@ -72,5 +73,13 @@ export default defineComponent({
       margin-bottom: 100px;
     }
   }
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.footer {
+  margin-top: auto;
 }
 </style>

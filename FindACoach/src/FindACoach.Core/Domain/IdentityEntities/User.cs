@@ -57,6 +57,10 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         public ICollection<Language> Languages { get; set; } = new List<Language>();
 
+        public ICollection<Recommendation> RecommendationsReceived { get; set; } = new List<Recommendation>();
+
+        public ICollection<Recommendation> RecommendationsGiven { get; set; } = new List<Recommendation>();
+
         public ICollection<Entities.Activity.Activity> Activities { get; set; } = new List<Entities.Activity.Activity>();
 
         public ICollection<Skill> Skills { get; set; } = new List<Skill>();

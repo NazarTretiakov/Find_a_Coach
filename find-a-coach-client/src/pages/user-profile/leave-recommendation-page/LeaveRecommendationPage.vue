@@ -2,7 +2,7 @@
   <div class="page">
     <basic-sticky-header></basic-sticky-header>
 
-    <leave-review-form class="page-content"></leave-review-form>
+    <leave-recommendation-form :id="id" :name="name" class="page-content"></leave-recommendation-form>
 
     <the-footer class="page-footer"></the-footer>
   </div>
@@ -12,13 +12,23 @@
 import { defineComponent } from 'vue'
 
 import BasicStickyHeader from '../../../components/BasicStickyHeader.vue'
-import LeaveReviewForm from '../../../components/user-profile/leave-review/LeaveReviewForm.vue'
+import LeaveRecommendationForm from '../../../components/user-profile/leave-review/LeaveRecommendationForm.vue'
 import TheFooter from '../../../components/TheFooter.vue'
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     BasicStickyHeader,
-    LeaveReviewForm,
+    LeaveRecommendationForm,
     TheFooter
   },
 })
