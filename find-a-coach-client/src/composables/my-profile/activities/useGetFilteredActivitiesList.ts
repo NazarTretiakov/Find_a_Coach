@@ -5,11 +5,13 @@ import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetActivityCards(userId: string): Promise<Result | ActivityOfActivitiesList[]> {
+export default async function useGetFilteredActivitiesList(userId: string, searchString: string, page: number, pageSize: number, ): Promise<Result | ActivityOfActivitiesList[]> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get-last-two-activities?userId=${userId}`, {
+    const encodedSearchString = encodeURIComponent(searchString)
+
+    const response = await fetch(`${API_URL}/get-filtered-activities-list?userId=${userId}&searchString=${encodedSearchString}&page=${page}&pageSize=${pageSize}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -20,7 +22,7 @@ export default async function useGetActivityCards(userId: string): Promise<Resul
       const responseData = await response.json()
       return {
         isSuccessful: false,
-        errorMessage: responseData.errorMessage || 'Unexpected error occurred while getting activity cards.',
+        errorMessage: responseData.errorMessage || 'Unexpected error occurred while getting filtered activities.',
       }
     }
 

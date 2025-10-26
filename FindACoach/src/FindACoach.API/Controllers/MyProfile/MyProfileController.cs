@@ -114,6 +114,14 @@ namespace FindACoach.API.Controllers.MyProfile
             return Ok(activities);
         }
 
+        [HttpGet("get-filtered-activities-list")]
+        public async Task<ActionResult<List<ActivityForActivitiesListToResponse>>> GetFilteredActivitiesList(string userId, string searchString, int page = 1, int pageSize = 7)
+        {
+            List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetFilteredActivitiesPaged(userId, page, pageSize, searchString);
+
+            return Ok(activities);
+        }
+
         [HttpGet("is-profile-sections-completed")]
         public async Task<ActionResult<IsProfileSectionsCompletedToResponse>> IsProfileSectionsCompleted(string userId)
         {

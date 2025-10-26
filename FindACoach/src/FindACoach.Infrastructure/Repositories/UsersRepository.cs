@@ -44,9 +44,9 @@ namespace FindACoach.Infrastructure.Repositories
         {
             User activeUser = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
 
-            if (activeUser is null)
+            if (activeUser == null)
             {
-                throw new Exception("User not found");
+                throw new UnauthorizedAccessException("User with supplied id donesn't exist.");
             }
 
             activeUser.FirstName = dto.Firstname;
@@ -114,9 +114,9 @@ namespace FindACoach.Infrastructure.Repositories
         {
             User activeUser = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
 
-            if (activeUser is null)
+            if (activeUser == null)
             {
-                throw new Exception("User not found");
+                throw new UnauthorizedAccessException("User with supplied id donesn't exist.");
             }
 
             CompleteProfileWindowStateDTO completeProfileWindowStateDTO = new CompleteProfileWindowStateDTO()

@@ -35,11 +35,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from "vue"
+import { defineComponent, ref, computed, onMounted, watch } from "vue"
 
 import LoadingSquare from '@/components/LoadingSquare.vue'
 
 import useGetActivitiesList from '@/composables/my-profile/activities/useGetActivitiesList'
+import useGetFilteredActivitiesList from '@/composables/my-profile/activities/useGetFilteredActivitiesList'
 import { useRouter } from "vue-router"
 import { ActivityOfActivitiesList } from "@/types/my-profile/activities/ActivityOfActivitiesList"
 import useRelativeDate from "@/composables/forum/useRelativeDate"
@@ -49,15 +50,22 @@ export default defineComponent({
     id: {
       type: String,
       required: true
+    },
+    searchString: { 
+      type: String, 
+      required: false, 
+      default: '' 
     }
   },
   components: { LoadingSquare },
   setup(props) {
     const router = useRouter()
+
     const activities = ref<ActivityOfActivitiesList[]>([])
     const page = ref<number>(1)
     const pageSize = 7
     const isMoreActivitiesLeft = ref<boolean>(true)
+    const isLoading = ref<boolean>(false)
 
     const activitiesInscriptions = computed(() =>
       activities.value.map(activity => {
@@ -82,28 +90,75 @@ export default defineComponent({
     })
 
     async function loadActivities() {
+      if (isLoading.value) return
+      isLoading.value = true
+
       const result = await useGetActivitiesList(props.id, page.value, pageSize)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
-        if (!result.isSuccessful) {
-          router.push('/error-page')
-          return
-        }
+        router.push('/error-page')
+        return
+      }
+
+      if (result.length < pageSize) {
+        isMoreActivitiesLeft.value = false
+      }
+
+      activities.value.push(...result)
+      page.value++
+      isLoading.value = false
+    }
+
+    async function loadFilteredActivities() {
+      if (isLoading.value) return
+      isLoading.value = true
+
+      const result = await useGetFilteredActivitiesList(props.id, props.searchString, page.value, pageSize)
+
+      if (typeof result === 'object' && 'isSuccessful' in result) {
+        router.push('/error-page')
+        return
+      }
+
+      if (result.length < pageSize) {
+        isMoreActivitiesLeft.value = false
+      }
+
+      activities.value.push(...result)
+      page.value++
+      isLoading.value = false
+    }
+
+    async function refreshActivities() {
+      activities.value = []
+      page.value = 1
+      isMoreActivitiesLeft.value = true
+
+      if (props.searchString.trim() === '') {
+        await loadActivities()
       } else {
-        if (result.length < pageSize) {
-          isMoreActivitiesLeft.value = false
-        }
-        activities.value.push(...result)
-        page.value++
+        await loadFilteredActivities()
       }
     }
+
+    watch(() => props.searchString, async () => {
+      await refreshActivities()
+    })
 
     onMounted(() => {
       loadActivities()
     })
 
-    return { activities, activitiesInscriptions, formattedDates, isMoreActivitiesLeft, loadActivities }
-  },
+    return { 
+      activities, 
+      activitiesInscriptions, 
+      formattedDates, 
+      isMoreActivitiesLeft, 
+      loadActivities,
+      loadFilteredActivities,
+      isLoading
+    }
+  }
 })
 
 </script>

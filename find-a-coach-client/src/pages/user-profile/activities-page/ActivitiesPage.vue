@@ -1,12 +1,12 @@
 <template> 
   <div class="header">
     <basic-header></basic-header>
-    <search-panel></search-panel>
+    <search-panel @search="handleSearch"></search-panel>
   </div>
 
   <ul class="activities-sections">
     <li class="activities-sections_left-side">
-      <activities-cards :id="id"></activities-cards>
+      <activities-cards :id="id" :search-string="searchString"></activities-cards>
     </li>
     <li class="activities-sections_right-side">
       <recommended-people></recommended-people>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import BasicHeader from '../../../components/BasicHeader.vue'
 import SearchPanel from '../../../components/SearchPanel.vue'
@@ -40,6 +40,16 @@ export default defineComponent({
     ActivitiesCards,
     RecommendedPeople,
     TheFooter
+  },
+  setup() {
+    const searchString = ref('')
+
+    const handleSearch = (text: string) => {
+      searchString.value = text
+      console.log(searchString.value)
+    }
+
+    return { searchString, handleSearch }
   }
 })
 </script>

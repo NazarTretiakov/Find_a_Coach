@@ -1,7 +1,5 @@
 <template>
-  <router-link to="/search" class="button-link">
-    <button class="button">Search</button>
-  </router-link>
+  <button class="button">Search</button>
 </template>
 
 <style lang="scss" scoped>

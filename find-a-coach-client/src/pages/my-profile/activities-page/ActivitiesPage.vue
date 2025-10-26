@@ -1,12 +1,12 @@
-<template> 
+<template>
   <div class="header">
     <profile-header></profile-header>
-    <search-panel></search-panel>
+    <search-panel @search="handleSearch"></search-panel>
   </div>
 
   <ul class="activities-sections">
     <li class="activities-sections_left-side">
-      <activities-cards></activities-cards>
+      <activities-cards :search-string="searchString"></activities-cards>
     </li>
     <li class="activities-sections_right-side">
       <recommended-people></recommended-people>
@@ -17,15 +17,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import ProfileHeader from '../../../components/my-profile/ProfileHeader.vue'
 import SearchPanel from '../../../components/SearchPanel.vue'
 import ActivitiesCards from '../../../components/my-profile/activities-page/ActivitiesCards.vue'
-
 import RecommendedPeople from '../../../components/my-profile/RecommendedPeople.vue'
 import TheFooter from '../../../components/TheFooter.vue'
-
 
 export default defineComponent({
   components: {
@@ -34,6 +32,16 @@ export default defineComponent({
     ActivitiesCards,
     RecommendedPeople,
     TheFooter
+  },
+  setup() {
+    const searchString = ref('')
+
+    const handleSearch = (text: string) => {
+      searchString.value = text
+      console.log(searchString.value)
+    }
+
+    return { searchString, handleSearch }
   }
 })
 </script>

@@ -3,15 +3,20 @@
   "WorkspaceRootPath": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\repositories\\recommendationsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\recommendationsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\repositories\\activitiesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\activitiesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/FindACoach/True/SqlTable/dbo.Recommendations.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+      "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\forum\\activities\\activitiesgetterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\forum\\activities\\activitiesgetterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\myprofile\\recommendationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\myprofile\\recommendationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\forum\\forumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\forum\\forumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,36 +26,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "RecommendationsController.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\RecommendationsController.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\MyProfile\\RecommendationsController.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\RecommendationsController.cs",
-              "RelativeToolTip": "src\\FindACoach.API\\Controllers\\MyProfile\\RecommendationsController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABUAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-24T06:55:24.948Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RecommendationsRepository.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\RecommendationsRepository.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\RecommendationsRepository.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\RecommendationsRepository.cs",
-              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\RecommendationsRepository.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAgwEsAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-24T07:51:31.622Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -61,12 +38,54 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ForumController.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\Forum\\ForumController.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\Forum\\ForumController.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\Forum\\ForumController.cs",
+              "RelativeToolTip": "src\\FindACoach.API\\Controllers\\Forum\\ForumController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T08:12:35.485Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MyProfileController.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "RelativeToolTip": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAUwHQAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T07:51:29.286Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "dbo.Recommendations [Data]",
-              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/FindACoach/True/SqlTable/dbo.Recommendations.sql",
-              "ToolTip": "dbo.Recommendations [Data]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2025-10-24T10:02:18.59Z",
+              "Title": "ActivitiesGetterService.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\ActivitiesGetterService.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.Core\\Services\\Forum\\Activities\\ActivitiesGetterService.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\ActivitiesGetterService.cs",
+              "RelativeToolTip": "src\\FindACoach.Core\\Services\\Forum\\Activities\\ActivitiesGetterService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T07:55:52.195Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ActivitiesRepository.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
+              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\ActivitiesRepository.cs",
+              "ViewState": "AgIAABIBAAAAAAAAAAAjwCoBAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T08:16:47.274Z",
               "EditorCaption": ""
             }
           ]

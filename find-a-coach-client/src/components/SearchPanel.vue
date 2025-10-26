@@ -12,28 +12,41 @@
           </li>
           <li class="search-panel-items_input-area-items_input-control">
             <input
+              v-model="searchText"
+              @keyup.enter="emitSearch"
               class="search-panel-items_input-area-items_input-control-element"
               type="text"
-              placeholder="Search coaches or posts..."
+              placeholder="Search..."
             />
           </li>
         </ul>
       </li>
       <li class="search-panel-items_search-button">
-        <search-button class="search-panel-items_search-button-element" />
+        <search-button
+          class="search-panel-items_search-button-element"
+          @click="emitSearch"
+        />
       </li>
     </ul>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import SearchButton from './SearchButton.vue'
 
 export default defineComponent({
-  components: {
-    SearchButton
-  }
+  components: { SearchButton },
+  emits: ['search'],
+  setup(_, { emit }) {
+    const searchText = ref('')
+
+    const emitSearch = () => {
+      emit('search', searchText.value.trim())
+    }
+
+    return { searchText, emitSearch }
+  },
 })
 </script>
 

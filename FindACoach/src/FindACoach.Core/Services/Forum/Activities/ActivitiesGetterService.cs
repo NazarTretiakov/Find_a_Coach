@@ -19,6 +19,31 @@ namespace FindACoach.Core.Services.Forum.Activities
             return await _activitiesRepository.GetActivitiesPaged(userId, page, pageSize);
         }
 
+        public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredActivitiesPaged(string userId, int page, int pageSize, string searchString)
+        {
+            return await _activitiesRepository.GetFilteredActivitiesPaged(userId, 
+                page, 
+                pageSize, 
+                a => a.Title.ToLower().Contains(searchString.ToLower()) ||
+                     a.Subjects.Any(s => s.Title.ToLower().Contains(searchString.ToLower()))
+            );
+        }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetRecommendedActivitiesPaged(string userId, int page, int pageSize)
+        {
+            return await _activitiesRepository.GetRecommendedActivitiesPaged(userId, page, pageSize);
+        }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, string searchString)
+        {
+            return await _activitiesRepository.GetFilteredRecommendedActivitiesPaged(
+                page,
+                pageSize,
+                a => a.Title.ToLower().Contains(searchString.ToLower()) ||
+                     a.Subjects.Any(s => s.Title.ToLower().Contains(searchString.ToLower()))
+            );
+        }
+
         public async Task<ActivityToResponse> GetActivity(string id)
         {
             return await _activitiesRepository.GetActivity(id);

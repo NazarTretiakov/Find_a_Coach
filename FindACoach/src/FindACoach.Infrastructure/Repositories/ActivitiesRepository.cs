@@ -1,6 +1,5 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.Entities.Activity;
-using FindACoach.Core.Domain.Entities.User;
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Forum;
@@ -14,8 +13,7 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
-using System.ComponentModel.Design;
-using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace FindACoach.Infrastructure.Repositories
@@ -28,8 +26,9 @@ namespace FindACoach.Infrastructure.Repositories
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILikesRepository _likesRepository;
         private readonly ISavesRepository _savesRepository;
+        private readonly UserManager<User> _userManager;
 
-        public ActivitiesRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILikesRepository likesRepository, ISavesRepository savesRepository)
+        public ActivitiesRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILikesRepository likesRepository, ISavesRepository savesRepository, UserManager<User> userManager)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
@@ -37,6 +36,7 @@ namespace FindACoach.Infrastructure.Repositories
             _httpContextAccessor = httpContextAccessor;
             _likesRepository = likesRepository;
             _savesRepository = savesRepository;
+            _userManager = userManager;
         }
 
         public async Task AddEvent(string userId, EventDTO dto)
@@ -230,6 +230,128 @@ namespace FindACoach.Infrastructure.Repositories
 
             var userActivities = await _db.Activities
                 .Where(a => a.UserId == Guid.Parse(userId))
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new ActivityForActivitiesListToResponse
+                {
+                    Id = a.Id,
+                    ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                    FirstNameOfCreator = a.User.FirstName,
+                    LastNameOfCreator = a.User.LastName,
+                    PublicationDate = a.CreatedAt,
+                    Title = a.Title,
+                    Subjects = a.Subjects.Select(s => s.Title).ToList(),
+                    ImagePath = string.IsNullOrEmpty(a.ImagePath) ? null : $"{serverUrl}/Images/Activities/{a.ImagePath}",
+                    Description = a.Description,
+                    ActivityType = a is Event ? "Event" :
+                                   a is Survey ? "Survey" :
+                                   a is QA ? "QA" :
+                                   a is Post ? "Post" :
+                                   "Unknown"
+                })
+                .ToListAsync();
+
+            return userActivities;
+        }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredActivitiesPaged(string userId, int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var userActivities = await _db.Activities
+                .Where(a => a.UserId == Guid.Parse(userId))
+                .Where(predicate)
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new ActivityForActivitiesListToResponse
+                {
+                    Id = a.Id,
+                    ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                    FirstNameOfCreator = a.User.FirstName,
+                    LastNameOfCreator = a.User.LastName,
+                    PublicationDate = a.CreatedAt,
+                    Title = a.Title,
+                    Subjects = a.Subjects.Select(s => s.Title).ToList(),
+                    ImagePath = string.IsNullOrEmpty(a.ImagePath) ? null : $"{serverUrl}/Images/Activities/{a.ImagePath}",
+                    Description = a.Description,
+                    ActivityType = a is Event ? "Event" :
+                                   a is Survey ? "Survey" :
+                                   a is QA ? "QA" :
+                                   a is Post ? "Post" :
+                                   "Unknown"
+                })
+                .ToListAsync();
+
+            return userActivities;
+        }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetRecommendedActivitiesPaged(string userId, int page, int pageSize)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            User user = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Select(u => new User()
+                {
+                    Id = u.Id,
+                    PrimaryOccupation = u.PrimaryOccupation,
+                    Skills = u.Skills
+                })
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User with supplied id donesn't exist.");
+            }
+
+            var userActivities = await _db.Activities
+                .Where(a => 
+                    a.Title.ToLower().Contains(user.PrimaryOccupation.ToLower()) ||
+                    a.Subjects.Any(s => s.Title.ToLower().Contains(user.PrimaryOccupation.ToLower())) ||
+                    a.Description.ToLower().Contains(user.PrimaryOccupation.ToLower()) ||
+                    user.Skills
+                        .Select(skill => skill.Title)
+                        .Any(skillTitle => a.Title.ToLower().Contains(skillTitle.ToLower())) ||
+                    user.Skills
+                        .Select(skill => skill.Title)
+                        .Any(skillTitle => a.Subjects.Any(s => s.Title.ToLower().Contains(skillTitle.ToLower())))
+                )
+                .OrderByDescending(a => a.Likes.Count)
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new ActivityForActivitiesListToResponse
+                {
+                    Id = a.Id,
+                    ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                    FirstNameOfCreator = a.User.FirstName,
+                    LastNameOfCreator = a.User.LastName,
+                    PublicationDate = a.CreatedAt,
+                    Title = a.Title,
+                    Subjects = a.Subjects.Select(s => s.Title).ToList(),
+                    ImagePath = string.IsNullOrEmpty(a.ImagePath) ? null : $"{serverUrl}/Images/Activities/{a.ImagePath}",
+                    Description = a.Description,
+                    ActivityType = a is Event ? "Event" :
+                                   a is Survey ? "Survey" :
+                                   a is QA ? "QA" :
+                                   a is Post ? "Post" :
+                                   "Unknown"
+                })
+                .ToListAsync();
+
+            return userActivities;
+        }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
+        {
+
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var userActivities = await _db.Activities
+                .Where(predicate)
+                .OrderByDescending(a => a.Likes.Count)
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
