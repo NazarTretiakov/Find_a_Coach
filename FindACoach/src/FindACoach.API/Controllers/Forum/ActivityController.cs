@@ -12,8 +12,10 @@ namespace FindACoach.API.Controllers.Forum
         private readonly ICommentsAdderService _commentsAdderService;
         private readonly ICommentsGetterService _commentsGetterService;
         private readonly ICommentsRemoverService _commentsRemoverService;
+        private readonly IQAAnswersCreatorService _QAAnswersCreatorService;
+        private readonly IQAAnswersGetterService _QAAnswersGetterService;
 
-        public ActivityController(IActivitiesGetterService activitiesGetterService, IToggleLikeService toggleLikeService, IToggleSaveService toggleSaveService, ICommentsAdderService commentsAdderService, ICommentsGetterService commentsGetterService, ICommentsRemoverService commentsRemoverService)
+        public ActivityController(IActivitiesGetterService activitiesGetterService, IToggleLikeService toggleLikeService, IToggleSaveService toggleSaveService, ICommentsAdderService commentsAdderService, ICommentsGetterService commentsGetterService, ICommentsRemoverService commentsRemoverService, IQAAnswersCreatorService qAAnswersCreatorService, IQAAnswersGetterService qAAnswersGetterService)
         {
             _activitiesGetterService = activitiesGetterService;
             _toggleLikeService = toggleLikeService;
@@ -21,6 +23,8 @@ namespace FindACoach.API.Controllers.Forum
             _commentsAdderService = commentsAdderService;
             _commentsGetterService = commentsGetterService;
             _commentsRemoverService = commentsRemoverService;
+            _QAAnswersCreatorService = qAAnswersCreatorService;
+            _QAAnswersGetterService = qAAnswersGetterService;
         }
 
         [HttpGet("get")]
@@ -69,6 +73,22 @@ namespace FindACoach.API.Controllers.Forum
             await _commentsRemoverService.DeleteComment(dto.CommentId, dto.UserId);
 
             return Ok();
+        }
+
+        [HttpPost("leave-qa-answer")]
+        public async Task<IActionResult> LeaveQAAnswer(LeaveQAAnswerDTO dto)
+        {
+            await _QAAnswersCreatorService.LeaveQAAnswer(dto);
+
+            return Ok();
+        }
+
+        [HttpGet("get-qa-answers")]
+        public async Task<ActionResult<QAAnswerToResponse>> GetQAAnswers([FromQuery] string QAId)
+        {
+            var QAAnswers = await _QAAnswersGetterService.GetQAAnswers(QAId);
+
+            return Ok(QAAnswers);
         }
     }
 }

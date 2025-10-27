@@ -97,6 +97,8 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<ICommentsGetterService, CommentsGetterService>();
             services.AddScoped<ICommentsRemoverService, CommentsRemoverService>();
             services.AddScoped<IActivitiesRemoverService, ActivitiesRemoverService>();
+            services.AddScoped<IQAAnswersCreatorService, QAAnswersCreatorService>();
+            services.AddScoped<IQAAnswersGetterService, QAAnswersGetterService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IPositionsRepository, PositionsRepository>();
@@ -110,6 +112,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<ISavesRepository, SavesRepository>();
             services.AddScoped<ICommentsRepository, CommentsRepository>();
+            services.AddScoped<IQAAnswersRepository, QAAnswersRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

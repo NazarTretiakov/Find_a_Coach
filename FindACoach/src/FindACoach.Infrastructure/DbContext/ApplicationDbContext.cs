@@ -2,7 +2,6 @@
 using FindACoach.Core.Domain.Entities.Activity;
 using FindACoach.Core.Domain.Entities.User;
 using FindACoach.Core.Domain.IdentityEntities;
-using FindACoach.Core.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -145,6 +144,12 @@ namespace FindACoach.Infrastructure.DbContext
                 .WithMany(q => q.Answers)
                 .HasForeignKey(a => a.QAId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<QAAnswer>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Skill>()
                 .HasMany(s => s.Users)

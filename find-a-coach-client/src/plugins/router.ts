@@ -22,6 +22,7 @@ import EditAboutMe from '../pages/my-profile/edit-about-me/EditAboutMe.vue'
 import ActivitiesPage from '../pages/my-profile/activities-page/ActivitiesPage.vue'
 import EventPage from '../pages/my-profile/activities-page/event-page/EventPage.vue'
 import QuestionAnswerPage from '../pages/my-profile/activities-page/qa-page/QAPage.vue'
+import QAAnswersPage from '@/pages/my-profile/activities-page/qa-page/qa-answers-page/QAAnswersPage.vue'
 import SurveyPage from '../pages/my-profile/activities-page/survey-page/SurveyPage.vue'
 import PostPage from '../pages/my-profile/activities-page/post-page/PostPage.vue'
 import AddActivity from '../pages/my-profile/activities-page/add-activity/AddActivity.vue'
@@ -89,6 +90,7 @@ const router = createRouter({
     { path: '/my-profile/add-activity', component: AddActivity, meta: { requiresAuth: true } },
     { path: '/my-profile/activities/event/:id', component: EventPage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/activities/qa/:id', component: QuestionAnswerPage, meta: { requiresAuth: true }, props: true },
+    { path: '/my-profile/activities/qa/:id/answers', component: QAAnswersPage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/activities/survey/:id', component: SurveyPage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/activities/post/:id', component: PostPage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/experience', component: ExperiencePage, meta: { requiresAuth: true } },

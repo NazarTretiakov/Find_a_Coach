@@ -34,7 +34,22 @@
       </span>
     </div>
 
-    <send-answer-button></send-answer-button>
+    <transition name="smooth-fade">
+      <span v-if="isErrorWhileLeavingAnswer && numberOfSignsEntered > 1000" class="error-message">
+        The max number of signs that can be entered is 1000.
+      </span>
+      <span v-else-if="isErrorWhileLeavingAnswer && numberOfSignsEntered == 0" class="error-message">
+        The answer cannot be empty.
+      </span>
+    </transition>
+
+    <transition name="smooth-fade">
+      <span v-if="isSuccessWhileLeavingAnswer" class="success-message">
+        Your answer has been added.
+      </span>
+    </transition>
+
+    <send-answer-button @click="leaveQAAnswer"></send-answer-button>
     
     <h2 class="qa-comments-header">Comments</h2>
 
@@ -112,6 +127,7 @@ import useRelativeDate from "@/composables/forum/useRelativeDate"
 import useCreateComment from "@/composables/forum/useCreateComment"
 import useDeleteComment from "@/composables/forum/useDeleteComment"
 import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged"
+import useLeaveQAAnswer from '@/composables/forum/useLeaveQAAnswer'
 
 export default defineComponent({
   props: {
@@ -130,15 +146,17 @@ export default defineComponent({
     const router = useRouter()
     const qa = ref<QA>({} as QA)
     const isLoading = ref(true)
-    const valueOfTextArea = ref<string>('')
-    const maxNumberOfSigns = 400
     const inputFieldAddCommentContent = ref<string>('')
     const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
     let page = 1
     const pageSize = 3
 
+    const valueOfTextArea = ref<string>('')
+    const maxNumberOfSigns = 1000
     const numberOfSignsEntered = computed(() => valueOfTextArea.value.length)
     const isLimitExceeded = computed(() => numberOfSignsEntered.value > maxNumberOfSigns)
+    const isErrorWhileLeavingAnswer = ref<boolean>(false)
+    const isSuccessWhileLeavingAnswer = ref<boolean>(false)
 
     onMounted(async () => {
       const startTime = performance.now()
@@ -167,6 +185,41 @@ export default defineComponent({
 
     const formatDate = (date: string) => {
       return useRelativeDate(date)
+    }
+
+    const leaveQAAnswer = async() => {
+      if (numberOfSignsEntered.value == 0) {
+        isErrorWhileLeavingAnswer.value = true
+
+        setTimeout(() => {
+          isErrorWhileLeavingAnswer.value = false
+        }, 5000)
+
+        return
+      }
+      if (numberOfSignsEntered.value > maxNumberOfSigns) {
+        isErrorWhileLeavingAnswer.value = true
+
+        setTimeout(() => {
+          isErrorWhileLeavingAnswer.value = false
+        }, 5000)
+
+        return
+      }
+      
+      const result = await useLeaveQAAnswer(authenticationStore.userId, qa.value.id, valueOfTextArea.value)
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      } else if ('isSuccessful' in result && result.isSuccessful) {
+        isSuccessWhileLeavingAnswer.value = true
+        valueOfTextArea.value = ''
+
+        setTimeout(() => {
+          isSuccessWhileLeavingAnswer.value = false
+        }, 5000)
+      }
     }
 
     const toggleLike = async () => {
@@ -251,7 +304,7 @@ export default defineComponent({
       }
     }
 
-    return { qa, valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, isLoading, toggleLike, toggleSave , inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible }
+    return { qa, valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, leaveQAAnswer, isErrorWhileLeavingAnswer, isSuccessWhileLeavingAnswer, isLoading, toggleLike, toggleSave , inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible }
   }
 });
 </script>
@@ -629,5 +682,51 @@ export default defineComponent({
       }
     }
   }
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin: 4px 0 20px 0;
+  display: block;
+
+  @media (max-width: $breakpoint) {
+    font-size: 12px;
+  }
+}
+.success-message {
+  color: green;
+  font-size: 14px;
+  margin: 4px 0 20px 0;
+  display: block;
+
+  @media (max-width: $breakpoint) {
+    font-size: 12px;
+  }
+}
+
+.smooth-fade-enter-active,
+.smooth-fade-leave-active {
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    margin 0.5s ease,
+    height 0.5s ease;
+}
+
+.smooth-fade-enter-from,
+.smooth-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+  margin-top: -10px;
+  height: 0;
+}
+
+.smooth-fade-enter-to,
+.smooth-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 6px;
+  height: auto;
 }
 </style>

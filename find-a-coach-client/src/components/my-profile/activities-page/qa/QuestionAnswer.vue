@@ -21,7 +21,7 @@
 
     <p class="qa-description">{{ qa.description }}</p>
 
-    <show-answers-button></show-answers-button>
+    <show-answers-button @click="openAnswersPage(qa)"></show-answers-button>
     
     <h2 class="qa-comments-header">Comments</h2>
 
@@ -122,15 +122,10 @@ export default defineComponent({
     const router = useRouter()
     const qa = ref<QA>({} as QA)
     const isLoading = ref(true)
-    const valueOfTextArea = ref<string>('')
-    const maxNumberOfSigns = 400
     const inputFieldAddCommentContent = ref<string>('')
     const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
     let page = 1
     const pageSize = 3
-
-    const numberOfSignsEntered = computed(() => valueOfTextArea.value.length)
-    const isLimitExceeded = computed(() => numberOfSignsEntered.value > maxNumberOfSigns)
 
     onMounted(async () => {
       const startTime = performance.now()
@@ -159,6 +154,13 @@ export default defineComponent({
 
     const formatDate = (date: string) => {
       return useRelativeDate(date)
+    }
+
+    const openAnswersPage = (qa: QA) => {
+      router.push({
+        path: `/my-profile/activities/qa/${qa.id}/answers`,
+        params: { id: qa.id }
+      })
     }
 
     const toggleLike = async () => {
@@ -254,7 +256,7 @@ export default defineComponent({
       router.push('/my-profile/activities')
     }
 
-    return { qa, valueOfTextArea, numberOfSignsEntered, isLimitExceeded, maxNumberOfSigns, isLoading, toggleLike, toggleSave , inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible, deleteActivity }
+    return { qa, openAnswersPage, isLoading, toggleLike, toggleSave , inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible, deleteActivity }
   }
 });
 </script>
