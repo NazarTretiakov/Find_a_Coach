@@ -4,7 +4,7 @@
 
     <ul class="page-sections">
       <li class="page-sections_left-side">
-        <question-answer :id="id"></question-answer>
+        <search-person-panel-applications :id="id" :panelId="panelId"></search-person-panel-applications>
       </li>
       <li class="page-sections_right-side">
         <recommended-people></recommended-people>
@@ -18,11 +18,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import ProfileStickyHeader from '../../../../components/my-profile/ProfileStickyHeader.vue'
-import QuestionAnswer from '../../../../components/my-profile/activities-page/qa/QuestionAnswer.vue'
+import ProfileStickyHeader from '@/components/my-profile/ProfileStickyHeader.vue'
+import SearchPersonPanelApplications from '@/components/my-profile/activities-page/event/SearchPersonPanelApplications.vue'
 
-import RecommendedPeople from '../../../../components/my-profile/RecommendedPeople.vue'
-import TheFooter from '../../../../components/TheFooter.vue'
+import RecommendedPeople from '@/components/my-profile/RecommendedPeople.vue'
+import TheFooter from '@/components/TheFooter.vue'
 
 
 export default defineComponent({
@@ -30,11 +30,15 @@ export default defineComponent({
     id: {
       type: String,
       required: true
+    },
+    panelId: {
+      type: String,
+      required: true
     }
   },
   components: {
     ProfileStickyHeader,
-    QuestionAnswer,
+    SearchPersonPanelApplications,
     RecommendedPeople,
     TheFooter
   }
@@ -42,7 +46,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@use '../../../../assets/styles/config' as *;
+@use '@/assets/styles/config' as *;
 
 .header {
   z-index: 1;

@@ -14,8 +14,10 @@ namespace FindACoach.API.Controllers.Forum
         private readonly ICommentsRemoverService _commentsRemoverService;
         private readonly IQAAnswersCreatorService _QAAnswersCreatorService;
         private readonly IQAAnswersGetterService _QAAnswersGetterService;
+        private readonly IEventApplicationsCreatorService _eventApplicationsCreatorService;
+        private readonly IEventApplicationsGetterService _eventApplicationsGetterService;
 
-        public ActivityController(IActivitiesGetterService activitiesGetterService, IToggleLikeService toggleLikeService, IToggleSaveService toggleSaveService, ICommentsAdderService commentsAdderService, ICommentsGetterService commentsGetterService, ICommentsRemoverService commentsRemoverService, IQAAnswersCreatorService qAAnswersCreatorService, IQAAnswersGetterService qAAnswersGetterService)
+        public ActivityController(IActivitiesGetterService activitiesGetterService, IToggleLikeService toggleLikeService, IToggleSaveService toggleSaveService, ICommentsAdderService commentsAdderService, ICommentsGetterService commentsGetterService, ICommentsRemoverService commentsRemoverService, IQAAnswersCreatorService qAAnswersCreatorService, IQAAnswersGetterService qAAnswersGetterService, IEventApplicationsCreatorService eventApplicationsCreatorService, IEventApplicationsGetterService eventApplicationsGetterService)
         {
             _activitiesGetterService = activitiesGetterService;
             _toggleLikeService = toggleLikeService;
@@ -25,6 +27,8 @@ namespace FindACoach.API.Controllers.Forum
             _commentsRemoverService = commentsRemoverService;
             _QAAnswersCreatorService = qAAnswersCreatorService;
             _QAAnswersGetterService = qAAnswersGetterService;
+            _eventApplicationsCreatorService = eventApplicationsCreatorService;
+            _eventApplicationsGetterService = eventApplicationsGetterService;
         }
 
         [HttpGet("get")]
@@ -89,6 +93,22 @@ namespace FindACoach.API.Controllers.Forum
             var QAAnswers = await _QAAnswersGetterService.GetQAAnswers(QAId);
 
             return Ok(QAAnswers);
+        }
+
+        [HttpPost("apply-on-event")]
+        public async Task<IActionResult> ApplyOnEvent(ApplyOnEventDTO dto)
+        {
+            await _eventApplicationsCreatorService.ApplyOnEvent(dto);
+
+            return Ok();
+        }
+
+        [HttpGet("get-applications")]
+        public async Task<ActionResult<EventApplicationToResponse>> GetApplications([FromQuery] string searchPersonPanelId)
+        {
+            var applications = await _eventApplicationsGetterService.GetPanelApplications(searchPersonPanelId);
+
+            return Ok(applications);
         }
     }
 }

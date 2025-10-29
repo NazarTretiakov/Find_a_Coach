@@ -43,7 +43,13 @@
 
       <p :class="!isPositionPanelOpened[index] ? 'event-position-description' : 'event-position-opened-description'">{{ panel.description }}</p>
 
-      <apply-on-event-button :class="!isPositionPanelOpened[index] ? 'event-position-button' : 'event-position-opened-button'" />
+      <apply-on-event-button @click="applyOnEvent(panel.id, index)" :class="!isPositionPanelOpened[index] ? 'event-position-button' : 'event-position-opened-button'" />    
+
+      <transition name="smooth-fade">
+        <span v-if="successMessages[index]" class="success-message">
+          Application on event has been sent.
+        </span>
+      </transition>
     </div>
 
     <span class="event-date-of-beginning">Date of beginning: {{ formatDate(event.beginningDate) }}</span>
@@ -131,6 +137,7 @@ import useToggleSaveOfActivity from "@/composables/forum/useToggleSaveOfActivity
 import useCreateComment from "@/composables/forum/useCreateComment";
 import useDeleteComment from "@/composables/forum/useDeleteComment";
 import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged";
+import useApplyOnEvent from '@/composables/forum/useApplyOnEvent'
 
 export default defineComponent({
   props: {
@@ -155,6 +162,7 @@ export default defineComponent({
     const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
     let page = 1
     const pageSize = 3
+    const successMessages = ref<boolean[]>([])
 
     onMounted(async () => {
       const startTime = performance.now()
@@ -190,6 +198,25 @@ export default defineComponent({
     const triggerPositionPanelOpening = (positionId: number) => {
       isPositionPanelOpened.value[positionId] = !isPositionPanelOpened.value[positionId]
     }
+
+    const applyOnEvent = async (searchPersonPanelId: string, index: number) => {
+      if (!searchPersonPanelId) return;
+
+      const result = await useApplyOnEvent(searchPersonPanelId, authenticationStore.userId);
+
+      if ("isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage);
+        return;
+      }
+
+      if ("isSuccessful" in result && result.isSuccessful) {
+        successMessages.value[index] = true;
+
+        setTimeout(() => {
+          successMessages.value[index] = false;
+        }, 5000);
+      }
+    };
 
     const toggleLike = async () => {
       const result = await useToggleLikeOfActivity(event.value.id, authenticationStore.userId)
@@ -272,7 +299,7 @@ export default defineComponent({
       }
     }
 
-    return { event, formatDate, isPositionPanelOpened, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, isLoading }
+    return { event, formatDate, isPositionPanelOpened, applyOnEvent, successMessages, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, isLoading }
   }
 });
 </script>
@@ -784,5 +811,40 @@ export default defineComponent({
       }
     }
   }
+}
+.success-message {
+  color: green;
+  font-size: 14px;
+  margin: 4px 0 20px 0;
+  display: block;
+
+  @media (max-width: $breakpoint) {
+    font-size: 12px;
+  }
+}
+
+.smooth-fade-enter-active,
+.smooth-fade-leave-active {
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    margin 0.5s ease,
+    height 0.5s ease;
+}
+
+.smooth-fade-enter-from,
+.smooth-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+  margin-top: -10px;
+  height: 0;
+}
+
+.smooth-fade-enter-to,
+.smooth-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 6px;
+  height: auto;
 }
 </style>

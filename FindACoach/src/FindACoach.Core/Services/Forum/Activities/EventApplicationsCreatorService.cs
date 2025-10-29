@@ -7,17 +7,18 @@ using System.Security.Claims;
 
 namespace FindACoach.Core.Services.Forum.Activities
 {
-    public class QAAnswersCreatorService: IQAAnswersCreatorService
+    public class EventApplicationsCreatorService: IEventApplicationsCreatorService
     {
-        private readonly IQAAnswersRepository _QAAnswersRepository;
+        private readonly IEventApplicationsRepository _eventApplicationsRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public QAAnswersCreatorService(IQAAnswersRepository QAAnswersRepository, IHttpContextAccessor httpContextAccessor)
+        public EventApplicationsCreatorService(IEventApplicationsRepository eventApplicationsRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _QAAnswersRepository = QAAnswersRepository;
+            _eventApplicationsRepository = eventApplicationsRepository;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task LeaveQAAnswer(LeaveQAAnswerDTO dto)
+
+        public async Task ApplyOnEvent(ApplyOnEventDTO dto)
         {
             var principal = _httpContextAccessor.HttpContext?.User;
             if (principal == null)
@@ -30,21 +31,20 @@ namespace FindACoach.Core.Services.Forum.Activities
             {
                 throw new UnauthorizedAccessException("Cannot resolve user id from claims");
             }
-            if (activeUserId != dto.CreatorId)
+            if (activeUserId != dto.UserId)
             {
-                throw new UnauthorizedAccessException("You can't add answer's on QA for another users.");
+                throw new UnauthorizedAccessException("You can't apply on event as an another user.");
             }
 
-            QAAnswer answer = new QAAnswer()
+            EventApplication application = new EventApplication()
             {
                 Id = Guid.NewGuid(),
-                UserId = Guid.Parse(dto.CreatorId),
-                QAId = Guid.Parse(dto.QAId),
-                Content = dto.Content,
+                SearchPersonPanelId = Guid.Parse(dto.SearchPersonPanelId),
+                UserId = Guid.Parse(dto.UserId),
                 DateOfCreation = DateTime.Now
             };
 
-            await _QAAnswersRepository.Add(answer);
+            await _eventApplicationsRepository.Add(application);
         }
     }
 }

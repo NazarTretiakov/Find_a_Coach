@@ -26,6 +26,7 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<SearchPersonPanel> SearchPeoplePanels { get; set; }
         public DbSet<SurveyOption> SurveyOptions { get; set; }
         public DbSet<QAAnswer> QAAnswers { get; set; }
+        public DbSet<EventApplication> EventApplications { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Save> Saves { get; set; }
@@ -56,6 +57,7 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<SearchPersonPanel>().ToTable("SearchPeoplePanels");
             builder.Entity<SurveyOption>().ToTable("SurveyOptions");
             builder.Entity<QAAnswer>().ToTable("QAAnswers");
+            builder.Entity<EventApplication>().ToTable("EventApplications");
             builder.Entity<Skill>().ToTable("Skills");
             builder.Entity<Like>().ToTable("Likes");
             builder.Entity<Save>().ToTable("Saves");
@@ -146,6 +148,18 @@ namespace FindACoach.Infrastructure.DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<QAAnswer>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<EventApplication>()
+                .HasOne(a => a.SearchPersonPanel)
+                .WithMany()
+                .HasForeignKey(a => a.SearchPersonPanelId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<EventApplication>()
                 .HasOne(a => a.User)
                 .WithMany()
                 .HasForeignKey(a => a.UserId)

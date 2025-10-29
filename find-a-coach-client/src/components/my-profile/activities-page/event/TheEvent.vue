@@ -43,7 +43,7 @@
 
       <p :class="!isPositionPanelOpened[index] ? 'event-position-description' : 'event-position-opened-description'">{{ panel.description }}</p>
 
-      <show-applications-button :class="!isPositionPanelOpened[index] ? 'event-position-button' : 'event-position-opened-button'" />
+      <show-applications-button @click="showApplications(panel.id)" :class="!isPositionPanelOpened[index] ? 'event-position-button' : 'event-position-opened-button'" />
     </div>
 
     <span class="event-date-of-beginning">Date of beginning: {{ formatToReadableDate(event.beginningDate) }}</span>
@@ -189,6 +189,7 @@ export default defineComponent({
     })
 
     const formatRelativeDate = (date: string) => {
+      console.log(`relative date input: ${date}`)
       return useRelativeDate(date)
     }
 
@@ -198,6 +199,12 @@ export default defineComponent({
 
     const triggerPositionPanelOpening = (positionId: number) => {
       isPositionPanelOpened.value[positionId] = !isPositionPanelOpened.value[positionId]
+    }
+
+    const showApplications = (panelId: string) => {
+      router.push({
+        path: `/my-profile/activities/event/${props.id}/applications/${panelId}`
+      })
     }
 
     const toggleLike = async () => {
@@ -292,7 +299,7 @@ export default defineComponent({
       router.push('/my-profile/activities')
     }
 
-    return { event, formatRelativeDate, formatToReadableDate, isPositionPanelOpened, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, deleteActivity, isLoading }
+    return { event, formatRelativeDate, formatToReadableDate, isPositionPanelOpened, triggerPositionPanelOpening, showApplications, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, deleteActivity, isLoading }
   }
 });
 </script>
@@ -308,7 +315,7 @@ export default defineComponent({
 
   @media (max-width: $breakpoint) {
     margin: 50px 10px 100px 10px;
-    padding: 0 30px 30px 30px;
+    padding: 0 30px;
   }
 
   &-header {

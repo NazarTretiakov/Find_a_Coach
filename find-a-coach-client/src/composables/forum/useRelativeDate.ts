@@ -1,7 +1,16 @@
 export default function useRelativeDate(dateStr: string | Date): string {
   const now = new Date()
-  const pubDate = typeof dateStr === "string" ? new Date(dateStr) : dateStr
-console.log(pubDate)
+  let pubDate: Date
+
+  if (typeof dateStr === "string") {
+    const fixedDateStr = dateStr.replace(/(\.\d{3})\d+/, "$1")
+    pubDate = new Date(fixedDateStr)
+  } else {
+    pubDate = dateStr
+  }
+
+  if (isNaN(pubDate.getTime())) return "Invalid date"
+
   const diffMs = now.getTime() - pubDate.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 

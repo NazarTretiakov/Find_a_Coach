@@ -22,14 +22,7 @@ namespace FindACoach.Infrastructure.Repositories
         {
             _db.QAAnswers.Add(QAAnswer);
 
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch(Exception e)
-            {
-
-            }
+            await _db.SaveChangesAsync();
         }
 
         public Task<List<QAAnswerToResponse>> GetQAAnswers(string QAId)
@@ -48,6 +41,7 @@ namespace FindACoach.Infrastructure.Repositories
                     DateOfCreation = a.DateOfCreation,
                     CreatorProfileImagePath = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}"
                 })
+                .OrderByDescending(a => a.DateOfCreation)
                 .ToListAsync();
 
             return QAAnswers;

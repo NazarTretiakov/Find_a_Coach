@@ -130,7 +130,7 @@ export default defineComponent({
 
   @media (max-width: $breakpoint) {
     margin: 50px 10px 100px 10px;
-    padding: 0 30px;
+    padding: 0 30px 30px 30px;
   }
 
   &-header {

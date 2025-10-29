@@ -52,6 +52,7 @@ import InvitationsPage from '../pages/network/invitations-page/InvitationsPage.v
 import InvitationPage from '../pages/network/invitations-page/invitation-page/InvitationPage.vue'
 import ForumPage from '../pages/forum/ForumPage.vue'
 import Event from '../pages/forum/event-page/EventPage.vue'
+import SearchPersonPanelApplicationsPage from '../pages/my-profile/activities-page/event-page/search-person-panel-applications-page/SearchPersonPanelApplicationsPage.vue'
 import QuestionAnswer from '../pages/forum/qa-page/QAPage.vue'
 import Survey from '../pages/forum/survey-page/SurveyPage.vue'
 import Post from '../pages/forum/post-page/PostPage.vue'
@@ -89,6 +90,7 @@ const router = createRouter({
     { path: '/my-profile/activities', component: ActivitiesPage, meta: { requiresAuth: true } },
     { path: '/my-profile/add-activity', component: AddActivity, meta: { requiresAuth: true } },
     { path: '/my-profile/activities/event/:id', component: EventPage, meta: { requiresAuth: true }, props: true },
+    { path: '/my-profile/activities/event/:id/applications/:panelId', component: SearchPersonPanelApplicationsPage, meta: { requiresAuth: true }, props: true},
     { path: '/my-profile/activities/qa/:id', component: QuestionAnswerPage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/activities/qa/:id/answers', component: QAAnswersPage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/activities/survey/:id', component: SurveyPage, meta: { requiresAuth: true }, props: true },

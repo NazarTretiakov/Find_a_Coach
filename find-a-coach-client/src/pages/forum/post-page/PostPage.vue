@@ -1,16 +1,18 @@
 <template> 
-  <basic-sticky-header class="header"></basic-sticky-header>
+  <div class="layout">
+    <basic-sticky-header class="header"></basic-sticky-header>
 
-  <ul class="page-sections">
-    <li class="page-sections_left-side">
-      <the-post :id="id"></the-post>
-    </li>
-    <li class="page-sections_right-side">
-      <recommended-people></recommended-people>
-    </li>
-  </ul>
+    <ul class="page-sections">
+      <li class="page-sections_left-side">
+        <the-post :id="id"></the-post>
+      </li>
+      <li class="page-sections_right-side">
+        <recommended-people></recommended-people>
+      </li>
+    </ul>
 
-  <the-footer></the-footer>
+    <the-footer class="footer"></the-footer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -43,7 +45,7 @@ export default defineComponent({
 @use '@/assets/styles/config' as *;
 
 .header {
-  z-index: 2;
+  z-index: 1;
   position: sticky;
   top: 0;
 }
@@ -52,6 +54,7 @@ export default defineComponent({
   display: flex;
   list-style: none;
   padding: 0;
+  flex: 1;
 
   &_left-side {
     width: 80%;
@@ -69,9 +72,17 @@ export default defineComponent({
     > * {
       position: sticky;
       top: 100px;
-      z-index: 1;
+      z-index: 0;
       margin-bottom: 100px;
     }
   }
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.footer {
+  margin-top: auto;
 }
 </style>
