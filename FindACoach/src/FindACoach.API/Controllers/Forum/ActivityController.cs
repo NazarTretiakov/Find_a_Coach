@@ -1,4 +1,5 @@
-﻿using FindACoach.Core.DTO.Forum;
+﻿using FindACoach.Core.Domain.Entities.Activity;
+using FindACoach.Core.DTO.Forum;
 using FindACoach.Core.ServiceContracts.Forum.Activities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,8 +17,10 @@ namespace FindACoach.API.Controllers.Forum
         private readonly IQAAnswersGetterService _QAAnswersGetterService;
         private readonly IEventApplicationsCreatorService _eventApplicationsCreatorService;
         private readonly IEventApplicationsGetterService _eventApplicationsGetterService;
+        private readonly IVotesCreatorService _votesCreatorService;
+        private readonly IVotesGetterService _votesGetterService;
 
-        public ActivityController(IActivitiesGetterService activitiesGetterService, IToggleLikeService toggleLikeService, IToggleSaveService toggleSaveService, ICommentsAdderService commentsAdderService, ICommentsGetterService commentsGetterService, ICommentsRemoverService commentsRemoverService, IQAAnswersCreatorService qAAnswersCreatorService, IQAAnswersGetterService qAAnswersGetterService, IEventApplicationsCreatorService eventApplicationsCreatorService, IEventApplicationsGetterService eventApplicationsGetterService)
+        public ActivityController(IActivitiesGetterService activitiesGetterService, IToggleLikeService toggleLikeService, IToggleSaveService toggleSaveService, ICommentsAdderService commentsAdderService, ICommentsGetterService commentsGetterService, ICommentsRemoverService commentsRemoverService, IQAAnswersCreatorService qAAnswersCreatorService, IQAAnswersGetterService qAAnswersGetterService, IEventApplicationsCreatorService eventApplicationsCreatorService, IEventApplicationsGetterService eventApplicationsGetterService, IVotesCreatorService votesCreatorService, IVotesGetterService votesGetterService)
         {
             _activitiesGetterService = activitiesGetterService;
             _toggleLikeService = toggleLikeService;
@@ -29,6 +32,8 @@ namespace FindACoach.API.Controllers.Forum
             _QAAnswersGetterService = qAAnswersGetterService;
             _eventApplicationsCreatorService = eventApplicationsCreatorService;
             _eventApplicationsGetterService = eventApplicationsGetterService;
+            _votesCreatorService = votesCreatorService;
+            _votesGetterService = votesGetterService;
         }
 
         [HttpGet("get")]
@@ -109,6 +114,22 @@ namespace FindACoach.API.Controllers.Forum
             var applications = await _eventApplicationsGetterService.GetPanelApplications(searchPersonPanelId);
 
             return Ok(applications);
+        }
+
+        [HttpGet("get-survey-votes")]
+        public async Task<List<Vote>> GetSurveyVotes([FromQuery] string surveyId)
+        {
+            List<Vote> votes = await _votesGetterService.GetSurveyVotes(surveyId);
+
+            return votes;
+        }
+
+        [HttpPost("vote-in-survey")]
+        public async Task<List<Vote>> VoteInSurvey([FromBody] VoteInSurveyDTO dto)
+        {
+            List<Vote> votes = await _votesCreatorService.VoteInSurvey(dto.OptionId);
+
+            return votes;
         }
     }
 }

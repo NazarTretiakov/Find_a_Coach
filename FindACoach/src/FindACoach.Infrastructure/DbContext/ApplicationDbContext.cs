@@ -25,6 +25,7 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<SearchPersonPanel> SearchPeoplePanels { get; set; }
         public DbSet<SurveyOption> SurveyOptions { get; set; }
+        public DbSet<Vote> Votes { get; set; }
         public DbSet<QAAnswer> QAAnswers { get; set; }
         public DbSet<EventApplication> EventApplications { get; set; }
         public DbSet<Skill> Skills { get; set; }
@@ -56,6 +57,7 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Subject>().ToTable("Subjects");
             builder.Entity<SearchPersonPanel>().ToTable("SearchPeoplePanels");
             builder.Entity<SurveyOption>().ToTable("SurveyOptions");
+            builder.Entity<Vote>().ToTable("Votes");
             builder.Entity<QAAnswer>().ToTable("QAAnswers");
             builder.Entity<EventApplication>().ToTable("EventApplications");
             builder.Entity<Skill>().ToTable("Skills");
@@ -140,6 +142,18 @@ namespace FindACoach.Infrastructure.DbContext
                 .WithMany(s => s.Options)
                 .HasForeignKey(o => o.SurveyId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Vote>()
+                .HasOne(v => v.SurveyOption)
+                .WithMany(o => o.Votes)
+                .HasForeignKey(v => v.SurveyOptionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Vote>()
+                .HasOne(v => v.User)
+                .WithMany()
+                .HasForeignKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<QAAnswer>()
                 .HasOne(a => a.QA)

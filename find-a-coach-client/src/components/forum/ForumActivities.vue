@@ -1,4 +1,4 @@
-<template>  
+<template>
   <div class="activities">
     <ul class="activities-items">
       <router-link v-for="(activity, index) in activities" :key="activity.id" :class="index != activities.length - 1 ? 'activities-items_activity-link' : 'activities-items_activity-link-last'" :to="`/my-profile/activities/${activity.activityType.toLowerCase()}/${activity.id}`">

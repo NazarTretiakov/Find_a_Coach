@@ -3,20 +3,23 @@
   "WorkspaceRootPath": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\repositories\\eventapplicationsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\eventapplicationsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/FindACoach/True/SqlTable/dbo.Votes.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\forum\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\forum\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\forum\\activities\\eventapplicationsgetterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\forum\\activities\\eventapplicationsgetterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\forum\\activities\\votescreatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\forum\\activities\\votescreatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\forum\\activities\\eventapplicationscreatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\forum\\activities\\eventapplicationscreatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.core\\services\\forum\\activities\\votesgetterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{950EC083-B3F0-46E5-B2C7-56D5BB89D69B}|src\\FindACoach.Core\\FindACoach.Core.csproj|solutionrelative:src\\findacoach.core\\services\\forum\\activities\\votesgetterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\repositories\\votesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\votesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +29,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
@@ -36,7 +39,7 @@
               "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\Forum\\ActivityController.cs",
               "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\Forum\\ActivityController.cs",
               "RelativeToolTip": "src\\FindACoach.API\\Controllers\\Forum\\ActivityController.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAIwCMAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAAAIEAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-27T07:31:30.239Z",
               "IsPinned": true,
@@ -52,41 +55,51 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "dbo.Votes [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/FindACoach/True/SqlTable/dbo.Votes.sql",
+              "ToolTip": "dbo.Votes [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-10-30T09:06:41.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "EventApplicationsCreatorService.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsCreatorService.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsCreatorService.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsCreatorService.cs",
-              "RelativeToolTip": "src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsCreatorService.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAWwBwAAABXAAAAAAAAAA==",
+              "Title": "VotesGetterService.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesGetterService.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesGetterService.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesGetterService.cs",
+              "RelativeToolTip": "src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesGetterService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-28T08:47:45.704Z",
+              "WhenOpened": "2025-10-30T08:08:26.291Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "EventApplicationsGetterService.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsGetterService.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsGetterService.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsGetterService.cs",
-              "RelativeToolTip": "src\\FindACoach.Core\\Services\\Forum\\Activities\\EventApplicationsGetterService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA5AAAAAAAAAA==",
+              "Title": "VotesCreatorService.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesCreatorService.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesCreatorService.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesCreatorService.cs",
+              "RelativeToolTip": "src\\FindACoach.Core\\Services\\Forum\\Activities\\VotesCreatorService.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwCgAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-28T08:58:54.762Z",
+              "WhenOpened": "2025-10-30T08:05:04.429Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "EventApplicationsRepository.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\EventApplicationsRepository.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\EventApplicationsRepository.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\EventApplicationsRepository.cs",
-              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\EventApplicationsRepository.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAQwCEAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "VotesRepository.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\VotesRepository.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\VotesRepository.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\VotesRepository.cs",
+              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\VotesRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-28T09:07:47.192Z",
+              "WhenOpened": "2025-10-30T08:08:38.481Z",
               "EditorCaption": ""
             }
           ]

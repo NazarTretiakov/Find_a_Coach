@@ -13,5 +13,7 @@ namespace FindACoach.Core.Domain.Entities.Activity
 
         public Guid SurveyId { get; set; }
         public Survey Survey { get; set; }
+
+        public List<Vote> Votes { get; set; } = new List<Vote>();
     }
 }

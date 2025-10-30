@@ -27,19 +27,19 @@
       <div v-for="(option, index) in survey.options" :key="index" class="survey-options-survey-option">
         <div class="survey-options-survey-option-incription">
           <span class="survey-options-survey-option-incription-name">{{ option.inscription }}</span>
-          <span v-if="selectedAnswer !== null" class="survey-options-survey-option-incription-percent-of-votes">
+          <span v-if="isUserAlreadyVoted" class="survey-options-survey-option-incription-percent-of-votes">
             {{ getPercentage(answers[index].votes).toFixed(1) }}%
           </span>
         </div>
 
         <v-progress-linear
-          :model-value="selectedAnswer !== null ? getPercentage(answers[index].votes) : 0"
-          :color="selectedAnswer !== null ? '#234CA2' : 'grey'"
+          :model-value="isUserAlreadyVoted ? getPercentage(answers[index].votes) : 0"
+          :color="isUserAlreadyVoted ? '#234CA2' : 'grey'"
           bg-color="grey"
           height="16"
           rounded
-          @click="vote(index)"
-          :class="selectedAnswer !== null ? 'survey-options-survey-option-progress-bar-selected' : 'survey-options-survey-option-progress-bar'"
+          @click="vote(option.id)"
+          :class="isUserAlreadyVoted ? 'survey-options-survey-option-progress-bar-selected' : 'survey-options-survey-option-progress-bar'"
         ></v-progress-linear>
       </div>
     </div>
@@ -122,9 +122,12 @@ import useRelativeDate from "@/composables/forum/useRelativeDate"
 import useCreateComment from "@/composables/forum/useCreateComment"
 import useDeleteComment from "@/composables/forum/useDeleteComment"
 import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged"
+import useGetSurveyVotes from '@/composables/forum/useGetSurveyVotes'
+import useVoteInSurvey from '@/composables/forum/useVoteInSurvey'
 import useDeleteActivity from "@/composables/my-profile/activities/useDeleteActivity"
 import type { Answer } from "@/types/survey/Answer"
 import type { Survey } from "@/types/forum/Survey"
+import { Vote } from "@/types/survey/Vote"
 
 export default defineComponent({
   props: {
@@ -142,12 +145,12 @@ export default defineComponent({
     const router = useRouter()
     const isLoading = ref(true)
     const survey = ref<Survey>({} as Survey)
-    const selectedAnswer = ref<string | null>(null)
-    const answers = ref<Answer[]>([
-      { text: "Answer 1", votes: 43 },
-      { text: "Some great second answer", votes: 15 },
-      { text: "Third answer that also exists", votes: 20 },
-    ])
+    const votes = ref<Vote[]>([] as Vote[])
+    const answers = ref<Answer[]>([] as Answer[])
+
+    const isUserAlreadyVoted = computed(() => {
+      return votes.value.some(vote => vote.userId === authenticationStore.userId)
+    })
     const inputFieldAddCommentContent = ref<string>('')
     const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
     let page = 1
@@ -158,10 +161,19 @@ export default defineComponent({
 
       const result = await useGetSurvey(props.id)
 
-      if ("isSuccessful" in result && !result.isSuccessful) {
+      const votesResult = await useGetSurveyVotes(props.id)
+
+      if ("isSuccessful" in result && !result.isSuccessful || "isSuccessful" in votesResult && !votesResult.isSuccessful ) {
         router.push("/error-page")
       } else {
         survey.value = result as Survey
+        votes.value = votesResult as Vote[]
+
+        answers.value = survey.value.options.map(option => ({
+          text: option.inscription,
+          votes: votes.value.filter(v => v.surveyOptionId === option.id).length
+        }));
+
         if (authenticationStore.userId != survey.value.userId) {
           router.push(`/forum/survey/${survey.value.id}`)
         }
@@ -274,11 +286,24 @@ export default defineComponent({
       router.push('/my-profile/activities')
     }
 
-    const vote = (index: number) => {
-      if (selectedAnswer.value === null) {
-        selectedAnswer.value = index.toString();
-        answers.value[index].votes++;
+    const vote = async (optionId: string) => {
+      if (isUserAlreadyVoted.value) return;
+
+      console.log("Voting for option with id: ", optionId)
+
+      const votesResult = await useVoteInSurvey(optionId);
+
+      if ("isSuccessful" in votesResult && !votesResult.isSuccessful) {
+        console.error(votesResult.errorMessage);
+        return;
       }
+
+      votes.value = votesResult as Vote[];
+
+      answers.value = survey.value.options.map(option => ({
+        text: option.inscription,
+        votes: votes.value.filter(v => v.surveyOptionId === option.id).length
+      }));
     };
 
     const totalVotes = computed(() =>
@@ -289,7 +314,7 @@ export default defineComponent({
       return totalVotes.value > 0 ? (votes / totalVotes.value) * 100 : 0;
     };
     
-    return { survey, isLoading, toggleLike, toggleSave , vote, answers, selectedAnswer, getPercentage, inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible, deleteActivity }
+    return { survey, isLoading, toggleLike, toggleSave , vote, answers, isUserAlreadyVoted, getPercentage, inputFieldAddCommentContent, activeUserEmail, createComment, formatDate, deleteComment, loadMoreComments, isLoadMoreCommentsButtonVisible, deleteActivity }
   },
 })
 </script>
