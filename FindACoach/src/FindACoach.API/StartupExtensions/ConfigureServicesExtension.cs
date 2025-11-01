@@ -13,6 +13,7 @@ using FindACoach.Core.ServiceContracts.MyProfile.Languages;
 using FindACoach.Core.ServiceContracts.MyProfile.Projects;
 using FindACoach.Core.ServiceContracts.MyProfile.Recommendations;
 using FindACoach.Core.ServiceContracts.MyProfile.Skills;
+using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Core.Services;
 using FindACoach.Core.Services.Authentication;
 using FindACoach.Core.Services.CompleteProfileWindow;
@@ -24,6 +25,7 @@ using FindACoach.Core.Services.MyProfile.Experience;
 using FindACoach.Core.Services.MyProfile.Languages;
 using FindACoach.Core.Services.MyProfile.Projects;
 using FindACoach.Core.Services.MyProfile.Recommendations;
+using FindACoach.Core.Services.Network;
 using FindACoach.Infrastructure.DbContext;
 using FindACoach.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -103,6 +105,11 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IEventApplicationsGetterService, EventApplicationsGetterService>();
             services.AddScoped<IVotesCreatorService, VotesCreatorService>();
             services.AddScoped<IVotesGetterService, VotesGetterService>();
+            services.AddScoped<IConnectionsGetterService, ConnectionsGetterService>();
+            services.AddScoped<IConnectionRequestSenderService, ConnectionRequestSenderService>();
+            services.AddScoped<IAcceptConnectionRequestService, AcceptConnectionRequestService>();
+            services.AddScoped<IDeclineConnectionRequestService, DeclineConnectionRequestService>();
+            services.AddScoped<IIsUsersConnectedService, IsUsersConnectedService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IPositionsRepository, PositionsRepository>();
@@ -119,6 +126,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IQAAnswersRepository, QAAnswersRepository>();
             services.AddScoped<IEventApplicationsRepository, EventApplicationsRepository>();
             services.AddScoped<IVotesRepository, VotesRepository>();
+            services.AddScoped<IConnectionsRepository, ConnectionsRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

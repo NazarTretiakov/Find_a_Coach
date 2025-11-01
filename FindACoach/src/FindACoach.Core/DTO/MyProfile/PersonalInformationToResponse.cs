@@ -9,5 +9,7 @@
         public string Headline { get; set; }
         public string Location { get; set; }
         public int ConnectionsAmount { get; set; }
+        public bool IsConnected { get; set; }
+        public string? ConnectionStatus{ get; set; }
     }
 }

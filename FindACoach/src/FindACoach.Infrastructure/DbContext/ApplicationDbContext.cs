@@ -1,5 +1,6 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.Entities.Activity;
+using FindACoach.Core.Domain.Entities.Network;
 using FindACoach.Core.Domain.Entities.User;
 using FindACoach.Core.Domain.IdentityEntities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

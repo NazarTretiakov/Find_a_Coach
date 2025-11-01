@@ -6,6 +6,8 @@ interface PersonalInformation {
   headline: string;
   location: string;
   connectionsAmount: number;
+  isConnected: boolean;
+  connectionStatus: string;
 }
 
 export type { PersonalInformation };

@@ -2,16 +2,19 @@
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.MyProfile;
+using FindACoach.Core.DTO.Network;
+using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
+using System.Security.Claims;
 
 namespace FindACoach.Infrastructure.Repositories
 {
@@ -21,13 +24,17 @@ namespace FindACoach.Infrastructure.Repositories
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IIsUsersConnectedService _isUsersConnectedService;
 
-        public UsersRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, UserManager<User> userManager)
+        public UsersRepository(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IIsUsersConnectedService isUsersConnectedService)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
             _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
+            _isUsersConnectedService = isUsersConnectedService;
         }
 
         public async Task ChangeCompleteProfileWindowState(string userId, bool isVisible, string title)
@@ -130,19 +137,48 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<PersonalInformationToResponse> GetPersonalInformation(string userId)
         {
-            User activeUser = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            User user = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+            var principal = _httpContextAccessor.HttpContext?.User;
+            if (principal == null)
+            {
+                throw new UnauthorizedAccessException("User is not authenticated");
+            }
+
+            string? activeUserId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (activeUserId == null)
+            {
+                throw new UnauthorizedAccessException("Cannot resolve user id from claims");
+            }
+
+            IsUsersConnectedInfoToResponse isUsersConnectedInfo;
+
+            if (userId == activeUserId)
+            {
+                isUsersConnectedInfo = new IsUsersConnectedInfoToResponse()
+                {
+                    IsUsersConnected = false,
+                    Status = null
+                };
+            }
+            else
+            {
+                isUsersConnectedInfo = await _isUsersConnectedService.IsUsersConnected(userId, activeUserId);
+            }
 
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
             PersonalInformationToResponse personalInformation = new PersonalInformationToResponse()
             {
-                ProfileImageUrl = $"{serverUrl}/Images/UserProfiles/{activeUser.ImagePath}",
-                FirstName = activeUser.FirstName,
-                LastName = activeUser.LastName,
-                PrimaryOccupation = activeUser.PrimaryOccupation,
-                Headline = activeUser.Headline,
-                Location = activeUser.Location,
-                ConnectionsAmount = activeUser.Connections.Count()
+                ProfileImageUrl = $"{serverUrl}/Images/UserProfiles/{user.ImagePath}",
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PrimaryOccupation = user.PrimaryOccupation,
+                Headline = user.Headline,
+                Location = user.Location,
+                ConnectionsAmount = user.Connections.Where(c => c.Status == Core.Enums.ConnectionStatus.Accepted).Count(),
+                IsConnected = isUsersConnectedInfo.IsUsersConnected,
+                ConnectionStatus = isUsersConnectedInfo.Status
             };
 
             return personalInformation;
