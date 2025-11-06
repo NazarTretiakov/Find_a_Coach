@@ -35,8 +35,7 @@
               <img src="@/assets/images/icons/pending-icon.svg" alt="Pending connection" class="personal-information-items_left-side-items_buttons-pending-icon">
               <span class="personal-information-items_left-side-items_buttons-pending-inscription">Pending</span>
             </button>
-            <button v-else-if="personalInformation.connectionStatus === 'Accepted'" class="personal-information-items_left-side-items_buttons-remove-connection">
-              <img src="@/assets/images/icons/remove-connection-icon.svg" alt="Remove connection" class="personal-information-items_left-side-items_buttons-remove-connection-icon">
+            <button @click="removeConnection" v-else-if="personalInformation.connectionStatus === 'Accepted'" class="personal-information-items_left-side-items_buttons-remove-connection">
               <span class="personal-information-items_left-side-items_buttons-pending-inscription">Remove connection</span>
             </button>
             <router-link :to="{ path: '/user-profile/leave-recommendation', query: { id: id, name: personalInformation.firstName }}" class="personal-information-items_left-side-items_buttons-leave-review-link">
@@ -61,6 +60,8 @@
 import { defineComponent, ref, onMounted } from "vue"
 import type { PersonalInformation } from "@/types/my-profile/personal-information/PersonalInformation"
 import useGetPersonalInformation from "../../composables/my-profile/personal-information/useGetPersonalInformation"
+import useRemoveConnection from "../../composables/network/useRemoveConnection"
+import { useAuthenticationStore } from "@/stores/authentication"
 import { useRouter } from "vue-router"
 
 export default defineComponent({
@@ -72,6 +73,7 @@ export default defineComponent({
   },
   setup(props) {
     const personalInformation = ref<PersonalInformation | null>(null)
+    const authenticationStore = useAuthenticationStore()
     const router = useRouter()
 
     onMounted(async () => {
@@ -86,7 +88,18 @@ export default defineComponent({
       }
     })
 
-    return { personalInformation }
+    const removeConnection = async () => {
+      const isSuccessful = await useRemoveConnection(authenticationStore.userId, props.id)
+
+      if (isSuccessful) {
+        if (personalInformation.value) {
+          personalInformation.value.connectionStatus = null
+          personalInformation.value.isConnected = false
+        }
+      }
+    }
+
+    return { personalInformation, removeConnection }
   },
 })
 </script>

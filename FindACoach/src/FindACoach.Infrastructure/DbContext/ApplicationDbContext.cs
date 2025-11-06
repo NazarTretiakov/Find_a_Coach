@@ -33,6 +33,7 @@ namespace FindACoach.Infrastructure.DbContext
         public DbSet<Like> Likes { get; set; }
         public DbSet<Save> Saves { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public ApplicationDbContext(DbContextOptions options): base(options) {  }
 
@@ -49,6 +50,7 @@ namespace FindACoach.Infrastructure.DbContext
             builder.Entity<Certification>().ToTable("Certifications");
             builder.Entity<Language>().ToTable("Languages");
             builder.Entity<Recommendation>().ToTable("Recommendations");
+            builder.Entity<Notification>().ToTable("Notifications");
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>().ToTable("Activities");
             builder.Entity<Event>().ToTable("Events");
@@ -119,6 +121,11 @@ namespace FindACoach.Infrastructure.DbContext
                 .HasOne(r => r.RecommendedUser)
                 .WithMany(u => u.RecommendationsReceived)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Notification>()
+                .HasOne(n => n.User)
+                .WithMany(u => u.Notifications)
+                .HasForeignKey(n => n.UserId);
 
             builder.Entity<Core.Domain.Entities.Activity.Activity>()
                .HasOne(a => a.User)

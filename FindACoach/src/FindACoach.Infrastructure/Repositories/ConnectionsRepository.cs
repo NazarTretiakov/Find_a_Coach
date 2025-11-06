@@ -1,8 +1,11 @@
 ﻿using FindACoach.Core.Domain.Entities.Network;
+using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Network;
 using FindACoach.Core.Enums;
+using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Infrastructure.DbContext;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -10,19 +13,25 @@ namespace FindACoach.Infrastructure.Repositories
 {
     public class ConnectionsRepository: IConnectionsRepository
     {
-
         private readonly ApplicationDbContext _db;
         private readonly IConfiguration _configuration;
+        private readonly INotificationsAdderService _notificationsAdderService;
+        private readonly UserManager<User> _userManager;
 
-        public ConnectionsRepository(ApplicationDbContext db, IConfiguration configuration)
+        public ConnectionsRepository(ApplicationDbContext db, IConfiguration configuration, INotificationsAdderService notificationsAdderService, UserManager<User> userManager)
         {
             _db = db;
             _configuration = configuration;
+            _notificationsAdderService = notificationsAdderService;
+            _userManager = userManager;
         }
 
         public async Task AcceptConnectionRequest(string connectionId)
         {
-            var connection = await _db.Connections.FirstOrDefaultAsync(c => c.Id == Guid.Parse(connectionId));
+            var connection = await _db.Connections
+                .Where(c => c.Id == Guid.Parse(connectionId))
+                .Include(c => c.ConnectedUser)
+                .FirstOrDefaultAsync();
 
             if (connection == null)
             {
@@ -32,7 +41,10 @@ namespace FindACoach.Infrastructure.Repositories
             connection.Status = ConnectionStatus.Accepted;
             await _db.SaveChangesAsync();
 
-            // TODO: Send notification to the user which was sending request about acceptance
+            await _notificationsAdderService.AddNotification(connection.UserId.ToString(),
+                $"Your connection request to {connection.ConnectedUser.FirstName} has been accepted.",
+                connection.Id.ToString(),
+                NotificationType.ConnectionRequestAcceptance);
         }
 
         public async Task AddConnectionRequest(ConnectionRequestDTO dto)
@@ -55,6 +67,13 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.Connections.AddAsync(connection);
 
             await _db.SaveChangesAsync();
+
+            User userWhichWantsToConnect = await _userManager.FindByIdAsync(connection.UserId.ToString());
+
+            await _notificationsAdderService.AddNotification(connection.ConnectedUserId.ToString(),
+                $"You have unread connection request from {userWhichWantsToConnect.FirstName}.",
+                connection.Id.ToString(),
+                NotificationType.ConnectionRequest);
         }
 
         public async Task DeclineConnectionRequest(string connectionId)
@@ -69,7 +88,10 @@ namespace FindACoach.Infrastructure.Repositories
             connection.Status = ConnectionStatus.Rejected;
             await _db.SaveChangesAsync();
 
-            // TODO: Send notification to the user which was sending request about rejection
+            await _notificationsAdderService.AddNotification(connection.UserId.ToString(), 
+                $"Your connection request to {connection.ConnectedUser.FirstName} has been declined.",
+                connection.Id.ToString(), 
+                NotificationType.ConnectionRequestRejection);
         }
 
         public async Task<ConnectionRequestToResponse> GetConnection(string connectionId)
@@ -86,7 +108,8 @@ namespace FindACoach.Infrastructure.Repositories
                     UserLastName = c.User.LastName,
                     UserImagePath = $"{serverUrl}/Images/UserProfiles/{c.User.ImagePath}",
                     Message = c.Message,
-                    DateOfCreation = c.DateOfCreation
+                    DateOfCreation = c.DateOfCreation,
+                    Status = c.Status.ToString()
                 })
                 .FirstOrDefaultAsync();
 
@@ -118,6 +141,25 @@ namespace FindACoach.Infrastructure.Repositories
             }
 
             return isUsersConnectedInfo;
+        }
+
+        public async Task RemoveConnection(RemoveConnectionDTO dto)
+        {
+            var connection = await _db.Connections.FirstOrDefaultAsync(c => c.UserId == Guid.Parse(dto.UserId) && c.ConnectedUserId == Guid.Parse(dto.ConnectedUserId) ||
+                                                            c.UserId == Guid.Parse(dto.ConnectedUserId) && c.ConnectedUserId == Guid.Parse(dto.UserId));
+
+
+            _db.Connections.Remove(connection);
+
+
+            List<Notification> notificationAboutConnection = await _db.Notifications
+                .Where(n => n.NotifiedObjectId == connection.Id)
+                .ToListAsync();
+
+            _db.Notifications.RemoveRange(notificationAboutConnection);
+
+
+            await _db.SaveChangesAsync();
         }
     }
 }

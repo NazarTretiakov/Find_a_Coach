@@ -41,5 +41,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// </summary>
         /// <returns></returns>
         Task DeclineConnectionRequest(string connectionId);
+
+        /// <summary>
+        /// Removes connection from the system.
+        /// </summary>
+        /// <param name="dto">Data Transfer Object with connection information to remove.</param>
+        /// <returns></returns>
+        Task RemoveConnection(RemoveConnectionDTO dto);
     }
 }

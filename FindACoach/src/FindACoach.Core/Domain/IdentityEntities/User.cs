@@ -44,6 +44,8 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         public string? AboutMe { get; set; } = string.Empty;
 
+        public bool HasUnreadNotifications { get; set; }
+
         public ICollection<Website> Websites { get; set; } = new List<Website>();
 
         public ICollection<Connection> Connections { get; set; } = new List<Connection>();
@@ -61,6 +63,8 @@ namespace FindACoach.Core.Domain.IdentityEntities
         public ICollection<Recommendation> RecommendationsReceived { get; set; } = new List<Recommendation>();
 
         public ICollection<Recommendation> RecommendationsGiven { get; set; } = new List<Recommendation>();
+
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
         public ICollection<Entities.Activity.Activity> Activities { get; set; } = new List<Entities.Activity.Activity>();
 

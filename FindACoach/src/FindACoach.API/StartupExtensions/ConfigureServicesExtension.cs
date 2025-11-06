@@ -109,7 +109,10 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IConnectionRequestSenderService, ConnectionRequestSenderService>();
             services.AddScoped<IAcceptConnectionRequestService, AcceptConnectionRequestService>();
             services.AddScoped<IDeclineConnectionRequestService, DeclineConnectionRequestService>();
+            services.AddScoped<IConnectionsRemoverService, ConnectionsRemoverService>();
             services.AddScoped<IIsUsersConnectedService, IsUsersConnectedService>();
+            services.AddScoped<INotificationsAdderService, NotificationsAdderService>();
+            services.AddScoped<INotificationsGetterService, NotificationsGetterService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IPositionsRepository, PositionsRepository>();
@@ -127,6 +130,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IEventApplicationsRepository, EventApplicationsRepository>();
             services.AddScoped<IVotesRepository, VotesRepository>();
             services.AddScoped<IConnectionsRepository, ConnectionsRepository>();
+            services.AddScoped<INotificationsRepository, NotificationsRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

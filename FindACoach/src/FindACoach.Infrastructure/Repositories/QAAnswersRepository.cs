@@ -1,6 +1,8 @@
 ﻿using FindACoach.Core.Domain.Entities.Activity;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Forum;
+using FindACoach.Core.Enums;
+using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,20 +11,34 @@ namespace FindACoach.Infrastructure.Repositories
 {
     public class QAAnswersRepository : IQAAnswersRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _db;
+        private readonly IConfiguration _configuration;
+        private readonly INotificationsAdderService _notificationsAdderService;
 
-        public QAAnswersRepository(ApplicationDbContext db, IConfiguration configuration)
+        public QAAnswersRepository(ApplicationDbContext db, IConfiguration configuration, INotificationsAdderService notificationsAdderService)
         {
             _db = db;
             _configuration = configuration;
+            _notificationsAdderService = notificationsAdderService;
         }
 
         public async Task Add(QAAnswer QAAnswer)
         {
-            _db.QAAnswers.Add(QAAnswer);
+            await _db.QAAnswers.AddAsync(QAAnswer);
 
             await _db.SaveChangesAsync();
+
+            QAAnswer = await _db.QAAnswers
+                .Where(a => a.Id == QAAnswer.Id)
+                .Include(a => a.QA)
+                .Include(a => a.User)
+                .FirstAsync();
+
+            await _notificationsAdderService.AddNotification(
+                QAAnswer.QA.UserId.ToString(),
+                $"{QAAnswer.User.FirstName} added an answer on your QA.",
+                QAAnswer.Id.ToString(),
+                NotificationType.QAAnswer);
         }
 
         public Task<List<QAAnswerToResponse>> GetQAAnswers(string QAId)

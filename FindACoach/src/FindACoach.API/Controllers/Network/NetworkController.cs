@@ -11,14 +11,18 @@ namespace FindACoach.API.Controllers.Network
         private readonly IConnectionsGetterService _connectionsGetterService;
         private readonly IAcceptConnectionRequestService _acceptConnectionRequestService;
         private readonly IDeclineConnectionRequestService _declineConnectionRequestService;
+        private readonly INotificationsGetterService _notificationsGetterService;
+        private readonly IConnectionsRemoverService _connectionsRemoverService;
 
-        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService)
+        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService, INotificationsGetterService notificationsGetterService, IConnectionsRemoverService connectionsRemoverService)
         {
             _isUsersConnectedService = isUsersConnectedService;
             _connectionRequestSenderService = connectionRequestSenderService;
             _connectionsGetterService = connectionsGetterService;
             _acceptConnectionRequestService = acceptConnectionRequestService;
             _declineConnectionRequestService = declineConnectionRequestService;
+            _notificationsGetterService = notificationsGetterService;
+            _connectionsRemoverService = connectionsRemoverService;
         }
 
         [HttpGet("is-users-connected")]
@@ -37,12 +41,12 @@ namespace FindACoach.API.Controllers.Network
             return Ok();
         }
 
-        [HttpPost("get-connection-request")]
-        public async Task<ActionResult<ConnectionRequestToResponse>> GetConnectionRequest([FromBody] ConnectionRequestIdDTO dto)
+        [HttpGet("get-connection-request")]
+        public async Task<ActionResult<ConnectionRequestToResponse>> GetConnectionRequest([FromQuery] ConnectionRequestIdDTO dto)
         {
-            await _connectionsGetterService.Get(dto);
+            ConnectionRequestToResponse connectionRequest = await _connectionsGetterService.Get(dto);
 
-            return Ok();
+            return Ok(connectionRequest);
         }
 
         [HttpPost("accept-connection-request")]
@@ -56,6 +60,22 @@ namespace FindACoach.API.Controllers.Network
         public async Task<IActionResult> DeclineConnectionRequest([FromBody] ConnectionRequestIdDTO dto)
         {
             await _declineConnectionRequestService.DeclineConnectionRequest(dto);
+            return Ok();
+        }
+
+        [HttpGet("get-notifications")]
+        public async Task<ActionResult<List<NotificationToResponse>>> GetNotifications(string userId, int page, int pageSize)
+        {
+            var notifications = await _notificationsGetterService.GetAllUserNotifications(userId, page, pageSize);
+
+            return Ok(notifications);
+        }
+
+        [HttpPost("remove-connection")]
+        public async Task<ActionResult<List<NotificationToResponse>>> RemoveConnection([FromBody] RemoveConnectionDTO dto)
+        {
+            await _connectionsRemoverService.RemoveConnection(dto);
+
             return Ok();
         }
     }

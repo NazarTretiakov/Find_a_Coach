@@ -7,7 +7,7 @@ interface PersonalInformation {
   location: string;
   connectionsAmount: number;
   isConnected: boolean;
-  connectionStatus: string;
+  connectionStatus: string | null;
 }
 
 export type { PersonalInformation };

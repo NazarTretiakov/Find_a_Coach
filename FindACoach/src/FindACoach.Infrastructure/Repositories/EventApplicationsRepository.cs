@@ -1,6 +1,9 @@
 ﻿using FindACoach.Core.Domain.Entities.Activity;
+using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Forum;
+using FindACoach.Core.Enums;
+using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,13 +12,15 @@ namespace FindACoach.Infrastructure.Repositories
 {
     public class EventApplicationsRepository : IEventApplicationsRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _db;
+        private readonly IConfiguration _configuration;
+        private readonly INotificationsAdderService _notificationsAdderService;
 
-        public EventApplicationsRepository(ApplicationDbContext db, IConfiguration configuration)
+        public EventApplicationsRepository(ApplicationDbContext db, IConfiguration configuration, INotificationsAdderService notificationsAdderService)
         {
             _db = db;
             _configuration = configuration;
+            _notificationsAdderService = notificationsAdderService;
         }
 
         public async Task Add(EventApplication application)
@@ -25,9 +30,21 @@ namespace FindACoach.Infrastructure.Repositories
                 return;
             }
 
-            _db.EventApplications.Add(application);
+            await _db.EventApplications.AddAsync(application);
 
             await _db.SaveChangesAsync();
+
+            application = await _db.EventApplications
+                .Where(a => a.Id == application.Id)
+                .Include(a => a.SearchPersonPanel)
+                .ThenInclude(spp => spp.Event)
+                .Include(a => a.User)
+                .FirstAsync();
+
+            await _notificationsAdderService.AddNotification(application.SearchPersonPanel.Event.UserId.ToString(),
+                $"{application.User.FirstName} has applied on your event.",
+                application.Id.ToString(),
+                NotificationType.EventApplication);
         }
 
         public Task<List<EventApplicationToResponse>> GetApplications(string searchPersonPanelId)

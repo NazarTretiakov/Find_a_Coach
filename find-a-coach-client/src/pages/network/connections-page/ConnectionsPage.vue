@@ -23,7 +23,7 @@ import BasicHeader from '../../../components/BasicHeader.vue'
 import SearchPanel from '../../../components/SearchPanel.vue'
 import PeopleCards from '../../../components/network/connections-page/PeopleCards.vue'
 import NetworkOverview from '../../../components/network/NetworkOverview.vue'
-import TheInvitations from '../../../components/network/TheInvitations.vue'
+import TheInvitations from '../../../components/network/TheNotifications.vue'
 
 import TheFooter from '../../../components/TheFooter.vue'
 

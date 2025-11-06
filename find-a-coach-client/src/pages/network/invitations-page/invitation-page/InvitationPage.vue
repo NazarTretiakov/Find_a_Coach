@@ -4,7 +4,7 @@
 
     <ul class="page-sections">
       <li class="page-sections_left-side">
-        <the-invitation></the-invitation>
+        <the-invitation :id="id"></the-invitation>
       </li>
       <li class="page-sections_right-side">
       </li>
@@ -23,6 +23,12 @@ import TheFooter from '../../../../components/TheFooter.vue'
 
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     BasicStickyHeader,
     TheInvitation,

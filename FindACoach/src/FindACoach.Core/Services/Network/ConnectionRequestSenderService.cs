@@ -25,8 +25,6 @@ namespace FindACoach.Core.Services.Network
             }
 
             await _connectionsRepository.AddConnectionRequest(dto);
-
-            // TODO: Implement notification logic here (send in-app notification (also email if users picked that option in settings))
         }
     }
 }

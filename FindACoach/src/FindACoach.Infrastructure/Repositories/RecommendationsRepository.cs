@@ -3,6 +3,7 @@ using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.MyProfile.Languages;
 using FindACoach.Core.DTO.MyProfile.Recommendations;
 using FindACoach.Core.Enums;
+using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,11 +14,13 @@ namespace FindACoach.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _db;
         private readonly IConfiguration _configuration;
+        private readonly INotificationsAdderService _notificationsAdderService;
 
-        public RecommendationsRepository(ApplicationDbContext db, IConfiguration configuration)
+        public RecommendationsRepository(ApplicationDbContext db, IConfiguration configuration, INotificationsAdderService notificationsAdderService)
         {
             _db = db;
             _configuration = configuration;
+            _notificationsAdderService = notificationsAdderService;
         }
 
         public async Task AddRecommendation(string userId, AddRecommendationDTO dto)
@@ -43,14 +46,17 @@ namespace FindACoach.Infrastructure.Repositories
 
             await _db.AddAsync(recommendation);
 
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch(Exception e)
-            {
+            await _db.SaveChangesAsync();
 
-            }
+            recommendation = await _db.Recommendations
+                .Where(r => r.Id == recommendation.Id)
+                .Include(r => r.RecommenderUser)
+                .FirstAsync();
+
+            await _notificationsAdderService.AddNotification(recommendation.RecommendedUserId.ToString(),
+                $"You have received a new recommendation from {recommendation.RecommenderUser.FirstName}.",
+                recommendation.Id.ToString(),
+                NotificationType.Recommendation);
         }
 
         public async Task DeleteRecommendation(string userId, string recommendationId)

@@ -1,17 +1,19 @@
 <template>
-  <div class="header">
-    <basic-header></basic-header>
+  <div class="layout">
+    <div class="header">
+      <basic-header></basic-header>
+    </div>
+
+    <ul class="profile-sections">
+      <li class="profile-sections_left-side">
+        <the-invitations></the-invitations>
+      </li>
+      <li class="profile-sections_right-side">
+      </li>
+    </ul>
+
+    <the-footer class="footer"></the-footer>
   </div>
-
-  <ul class="profile-sections">
-    <li class="profile-sections_left-side">
-      <the-invitations></the-invitations>
-    </li>
-    <li class="profile-sections_right-side">
-    </li>
-  </ul>
-
-  <the-footer></the-footer>
 </template>
 
 <script lang="ts">
@@ -34,7 +36,7 @@ export default defineComponent({
 @use '../../../assets/styles/config' as *;
 
 .header {
-  z-index: 2;
+  z-index: 1;
   position: sticky;
   top: 0;
 }
@@ -44,6 +46,7 @@ export default defineComponent({
   flex-direction: row;
   list-style: none;
   padding: 0;
+  flex: 1;
 
   @media (max-width: $breakpoint) {
     flex-direction: column;
@@ -62,5 +65,13 @@ export default defineComponent({
       display: none;
     }
   }
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.footer {
+  margin-top: auto;
 }
 </style>
