@@ -1,8 +1,10 @@
 ﻿using FindACoach.Core.Domain.Entities.Network;
+using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Network;
 using FindACoach.Core.Enums;
 using FindACoach.Infrastructure.DbContext;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -12,18 +14,31 @@ namespace FindACoach.Infrastructure.Repositories
     {
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<User> _userManager;
 
-        public NotificationsRepository(ApplicationDbContext db, IConfiguration configuration)
+        public NotificationsRepository(ApplicationDbContext db, IConfiguration configuration, UserManager<User> usermanager)
         {
             _db = db;
             _configuration = configuration;
+            _userManager = usermanager;
         }
 
         public async Task Add(Notification notification)
         {
             await _db.Notifications.AddAsync(notification);
 
+            User user = await _userManager.Users.FirstAsync(u => u.Id == notification.UserId);
+
+            user.HasUnreadNotifications = true;
+
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckUserUnreadNotifications(string userId)
+        {
+            User user = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
+
+            return user.HasUnreadNotifications;
         }
 
         public async Task<List<NotificationToResponse>> GetAllUserNotifications(string userId, int page, int pageSize)
@@ -149,6 +164,13 @@ namespace FindACoach.Infrastructure.Repositories
                     }
                 }
             }
+
+
+            User user = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
+
+            user.HasUnreadNotifications = false;
+
+            await _db.SaveChangesAsync();
 
             return notifications;
         }

@@ -176,7 +176,7 @@ namespace FindACoach.Infrastructure.Repositories
                 PrimaryOccupation = user.PrimaryOccupation,
                 Headline = user.Headline,
                 Location = user.Location,
-                ConnectionsAmount = user.Connections.Where(c => c.Status == Core.Enums.ConnectionStatus.Accepted).Count(),
+                ConnectionsAmount = _db.Connections.Where(c => c.UserId == Guid.Parse(userId) || c.ConnectedUserId == Guid.Parse(userId)).Count(),
                 IsConnected = isUsersConnectedInfo.IsUsersConnected,
                 ConnectionStatus = isUsersConnectedInfo.Status
             };

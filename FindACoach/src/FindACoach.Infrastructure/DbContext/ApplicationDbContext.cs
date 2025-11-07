@@ -77,7 +77,7 @@ namespace FindACoach.Infrastructure.DbContext
 
             builder.Entity<Connection>()
                 .HasOne(c => c.User)
-                .WithMany(u => u.Connections)
+                .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 

@@ -17,8 +17,9 @@
       <li v-if="isAuthenticated" class="header-buttons_network">
         <router-link to="/network" class="header-buttons_network-link">
           <div class="header-buttons_network-container">
-            <img class="header-buttons_network-container-icon" src="../assets/images/icons/network-icon.svg" alt="Network icon">
-            <span class="header-buttons_network-container-incription">Network</span>
+            <img v-if="!isUserHasUnreadNotifications" class="header-buttons_network-container-icon" src="../assets/images/icons/network-icon.svg" alt="Network icon">
+            <img v-else class="header-buttons_network-container-icon" src="../assets/images/icons/notification-active-icon.svg" alt="Network icon with unread notifications">
+            <span :class="isUserHasUnreadNotifications ? 'header-buttons_network-container-incription-active' : 'header-buttons_network-container-incription'">Network</span>
           </div>
         </router-link>
       </li>
@@ -66,6 +67,8 @@ import FullLogo from './FullLogo.vue'
 import RegisterButton from './RegisterButton.vue'
 import LoginButton from './LoginButton.vue'
 
+import useCheckUserUnreadNotifications from '@/composables/network/useCheckUserUnreadNotifications'
+
 export default defineComponent({
   components: { 
     FullLogo,
@@ -78,7 +81,7 @@ export default defineComponent({
     const BREAKPOINT = 768
     const showMobileMenu = ref<boolean>(false)
     const isMenuButtonActive = ref<boolean>(false)
-
+    const isUserHasUnreadNotifications = ref<boolean>(false)
 
     const toggleMobileMenu = () => {
       showMobileMenu.value = !showMobileMenu.value
@@ -92,16 +95,31 @@ export default defineComponent({
       }
     }
 
+    const checkIfUserHasUnreadNotifications = async () => {
+      const result = await useCheckUserUnreadNotifications(authenticationStore.userId)
+
+      console.log(result)
+
+      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          return
+        }
+      } else if (typeof result === 'boolean') {
+        isUserHasUnreadNotifications.value = result as boolean
+        console.log('Has unread notifications:', isUserHasUnreadNotifications.value)
+      }
+    }
+
 
     onMounted(() => {
       window.addEventListener('resize', handleResize)
+
+      if (authenticationStore.isAuthenticated) {
+        checkIfUserHasUnreadNotifications()
+      }
     })
 
-    onUnmounted(() => {
-      window.removeEventListener('resize', handleResize)
-    })
-
-    return { isAuthenticated, showMobileMenu, isMenuButtonActive, toggleMobileMenu  }
+    return { isAuthenticated, showMobileMenu, isMenuButtonActive, toggleMobileMenu, isUserHasUnreadNotifications }
   }
 })
 </script>
@@ -182,6 +200,12 @@ export default defineComponent({
         &-incription {
           font-size: 14px;
           margin-top: 4px;
+
+          &-active {
+            text-decoration: underline;
+            font-size: 14px;
+            margin-top: 4px;
+          }
         }
       }
       &-link {
@@ -231,6 +255,12 @@ export default defineComponent({
         &-incription {
           font-size: 12px;
           margin-top: 4px;
+
+          &-active {
+            text-decoration: underline;
+            font-size: 12px;
+            margin-top: 4px;
+          }
         }
       }
       &-link {

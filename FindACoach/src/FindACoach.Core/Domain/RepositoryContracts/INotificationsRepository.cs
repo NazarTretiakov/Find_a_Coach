@@ -21,5 +21,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="notification">Notification object that will be added.</param>
         /// <returns></returns>
         Task Add(Notification notification);
+
+        /// <summary>
+        /// Checks if the user with the specified Id has unread notifications.
+        /// </summary>
+        /// <param name="userId">The Id of the user to check for unread notifications.</param>
+        /// <returns>True if user has unread notifications, otherwise false.</returns>
+        Task<bool> CheckUserUnreadNotifications(string userId);
     }
 }

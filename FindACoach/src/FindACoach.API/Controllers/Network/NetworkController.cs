@@ -13,8 +13,9 @@ namespace FindACoach.API.Controllers.Network
         private readonly IDeclineConnectionRequestService _declineConnectionRequestService;
         private readonly INotificationsGetterService _notificationsGetterService;
         private readonly IConnectionsRemoverService _connectionsRemoverService;
+        private readonly ICheckUnreadNotificationsService _checkUnreadNotificationsService;
 
-        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService, INotificationsGetterService notificationsGetterService, IConnectionsRemoverService connectionsRemoverService)
+        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService, INotificationsGetterService notificationsGetterService, IConnectionsRemoverService connectionsRemoverService, ICheckUnreadNotificationsService checkUnreadNotificationsService)
         {
             _isUsersConnectedService = isUsersConnectedService;
             _connectionRequestSenderService = connectionRequestSenderService;
@@ -23,6 +24,7 @@ namespace FindACoach.API.Controllers.Network
             _declineConnectionRequestService = declineConnectionRequestService;
             _notificationsGetterService = notificationsGetterService;
             _connectionsRemoverService = connectionsRemoverService;
+            _checkUnreadNotificationsService = checkUnreadNotificationsService;
         }
 
         [HttpGet("is-users-connected")]
@@ -77,6 +79,14 @@ namespace FindACoach.API.Controllers.Network
             await _connectionsRemoverService.RemoveConnection(dto);
 
             return Ok();
+        }
+
+        [HttpPost("is-user-has-unread-notifications")]
+        public async Task<ActionResult<List<NotificationToResponse>>> IsUserHasUnreadNotifications([FromBody] string userId)
+        {
+            bool isUserHasUnreadNotifications = await _checkUnreadNotificationsService.CheckUserUnreadNotifications(userId);
+
+            return Ok(new { isUserHasUnreadNotifications });
         }
     }
 }

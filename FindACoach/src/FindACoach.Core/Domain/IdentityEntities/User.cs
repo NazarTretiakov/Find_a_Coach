@@ -48,8 +48,6 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         public ICollection<Website> Websites { get; set; } = new List<Website>();
 
-        public ICollection<Connection> Connections { get; set; } = new List<Connection>();
-
         public ICollection<Position> Positions { get; set; } = new List<Position>();
 
         public ICollection<School> Schools { get; set; } = new List<School>();
