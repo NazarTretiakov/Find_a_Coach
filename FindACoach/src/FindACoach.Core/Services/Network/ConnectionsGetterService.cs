@@ -17,5 +17,10 @@ namespace FindACoach.Core.Services.Network
         {
             return await _connectionsRepository.GetConnection(dto.ConnectionId);
         }
+
+        public async Task<List<ConnectionToResponse>> GetAllUserConnections(string userId, int page, int pageSize)
+        {
+            return await _connectionsRepository.GetAllUserConnections(userId, page, pageSize);
+        }
     }
 }

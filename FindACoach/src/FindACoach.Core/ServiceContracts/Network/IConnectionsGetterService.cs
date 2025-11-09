@@ -12,5 +12,12 @@ namespace FindACoach.Core.ServiceContracts.Network
         /// </summary>
         /// <returns></returns>
         Task<ConnectionRequestToResponse> Get(ConnectionRequestIdDTO dto);
+
+        /// <summary>
+        /// Retrives all user connections from system.
+        /// </summary>
+        /// <param name="userId">User id which connections will be retrieved.</param>
+        /// <returns></returns>
+        Task<List<ConnectionToResponse>> GetAllUserConnections(string userId, int page, int pageSize);
     }
 }

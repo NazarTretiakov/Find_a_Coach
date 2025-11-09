@@ -94,6 +94,54 @@ namespace FindACoach.Infrastructure.Repositories
                 NotificationType.ConnectionRequestRejection);
         }
 
+        public async Task<List<ConnectionToResponse>> GetAllUserConnections(string userId, int page, int pageSize)
+        {
+            var connections = await _db.Connections
+                .Where(c => c.UserId == Guid.Parse(userId) || c.ConnectedUserId == Guid.Parse(userId))
+                .OrderByDescending(n => n.DateOfCreation)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Include(c => c.User)
+                .Include(c => c.ConnectedUser)
+                .ToListAsync();
+
+            var connectionsToResponse = new List<ConnectionToResponse>();
+
+            var serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            foreach (var connection in connections)
+            {
+                if (connection.Status == ConnectionStatus.Rejected || connection.Status == ConnectionStatus.Pending)
+                {
+                    continue;
+                }
+                if (connection.UserId == Guid.Parse(userId))
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = connection.ConnectedUserId,
+                        FirstName = connection.ConnectedUser.FirstName,
+                        LastName = connection.ConnectedUser.LastName,
+                        Headline = connection.ConnectedUser.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{connection.ConnectedUser.ImagePath}",
+                    });
+                }
+                else if (connection.ConnectedUserId  == Guid.Parse(userId))
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = connection.UserId,
+                        FirstName = connection.User.FirstName,
+                        LastName = connection.User.LastName,
+                        Headline = connection.User.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{connection.User.ImagePath}",
+                    });
+                }
+            }
+
+            return connectionsToResponse;
+        }
+
         public async Task<ConnectionRequestToResponse> GetConnection(string connectionId)
         {
             var serverUrl = _configuration.GetValue<string>("ServerUrl");
@@ -114,6 +162,28 @@ namespace FindACoach.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
 
             return connection;
+        }
+
+        public async Task<NetworkOverviewInfoToResponse> GetNetworkOverview(string userId)
+        {
+            var userConnections = await _db.Connections
+                .Where(c => c.UserId == Guid.Parse(userId) || c.ConnectedUserId == Guid.Parse(userId))
+                .Include(c => c.User)
+                .Include(c => c.ConnectedUser)
+                .ToListAsync();
+
+            var connectionRequestsSent = await _db.Connections
+                .Where(c => c.UserId == Guid.Parse(userId) && c.Status == ConnectionStatus.Pending)
+                .ToListAsync();
+                
+
+            NetworkOverviewInfoToResponse networkOverview = new NetworkOverviewInfoToResponse()
+            {
+                NumberOfConnections = userConnections.Count,
+                NumberOfConnectionRequestsSent = connectionRequestsSent.Count
+            };
+
+            return networkOverview;
         }
 
         public async Task<IsUsersConnectedInfoToResponse> IsUsersConnected(string userId, string connectedUserId)

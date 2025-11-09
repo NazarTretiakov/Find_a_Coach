@@ -118,7 +118,7 @@ const router = createRouter({
     { path: '/my-profile/settings/privacy', component: PrivacySettingsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/settings/security', component: SecuritySettingsPage, meta: { requiresAuth: true } },
     { path: '/network', component: NetworkPage, meta: { requiresAuth: true } },
-    { path: '/network/connections', component: ConnectionsPage, meta: { requiresAuth: true } },
+    { path: '/network/connections/:id', component: ConnectionsPage, meta: { requiresAuth: true }, props: true },
     { path: '/network/notifications', component: InvitationsPage, meta: { requiresAuth: true } },
     { path: '/network/notifications/connection-request/:id', component: InvitationPage, meta: { requiresAuth: true }, props: true },
     { path: '/forum', component: ForumPage, meta: { requiresAuth: true } },

@@ -23,6 +23,13 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         Task<ConnectionRequestToResponse> GetConnection(string connectionId);
 
         /// <summary>
+        /// Retrives all user connections from system.
+        /// </summary>
+        /// <param name="userId">User id which connections will be retrieved.</param>
+        /// <returns></returns>
+        Task<List<ConnectionToResponse>> GetAllUserConnections(string userId, int page, int pageSize);
+
+        /// <summary>
         /// Adds a connection request based on the provided DTO.
         /// </summary>
         /// <returns></returns>
@@ -48,5 +55,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="dto">Data Transfer Object with connection information to remove.</param>
         /// <returns></returns>
         Task RemoveConnection(RemoveConnectionDTO dto);
+
+        /// <summary>
+        /// Retrieves the information about network overview of user.
+        /// </summary>
+        /// <param name="userId">User id which information about network will be retrieved.</param>
+        /// <returns></returns>
+        Task<NetworkOverviewInfoToResponse> GetNetworkOverview(string userId);
     }
 }

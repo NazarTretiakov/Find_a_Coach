@@ -14,8 +14,9 @@ namespace FindACoach.API.Controllers.Network
         private readonly INotificationsGetterService _notificationsGetterService;
         private readonly IConnectionsRemoverService _connectionsRemoverService;
         private readonly ICheckUnreadNotificationsService _checkUnreadNotificationsService;
+        private readonly INetworkOverviewGetterService _networkOverviewGetterService;
 
-        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService, INotificationsGetterService notificationsGetterService, IConnectionsRemoverService connectionsRemoverService, ICheckUnreadNotificationsService checkUnreadNotificationsService)
+        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService, INotificationsGetterService notificationsGetterService, IConnectionsRemoverService connectionsRemoverService, ICheckUnreadNotificationsService checkUnreadNotificationsService, INetworkOverviewGetterService networkOverviewGetterService)
         {
             _isUsersConnectedService = isUsersConnectedService;
             _connectionRequestSenderService = connectionRequestSenderService;
@@ -25,6 +26,7 @@ namespace FindACoach.API.Controllers.Network
             _notificationsGetterService = notificationsGetterService;
             _connectionsRemoverService = connectionsRemoverService;
             _checkUnreadNotificationsService = checkUnreadNotificationsService;
+            _networkOverviewGetterService = networkOverviewGetterService;
         }
 
         [HttpGet("is-users-connected")]
@@ -87,6 +89,22 @@ namespace FindACoach.API.Controllers.Network
             bool isUserHasUnreadNotifications = await _checkUnreadNotificationsService.CheckUserUnreadNotifications(userId);
 
             return Ok(new { isUserHasUnreadNotifications });
+        }
+
+        [HttpGet("get-network-overview")]
+        public async Task<ActionResult<NetworkOverviewInfoToResponse>> GetNetworkOverview([FromQuery] string userId)
+        {
+            var networkOverview = await _networkOverviewGetterService.GetNetworkOverview(userId);
+
+            return Ok(networkOverview);
+        }
+
+        [HttpGet("get-connections")]
+        public async Task<ActionResult<List<ConnectionToResponse>>> GetConnections([FromQuery] string userId, int page, int pageSize)
+        {
+            var connections = await _connectionsGetterService.GetAllUserConnections(userId, page, pageSize);
+
+            return Ok(connections);
         }
     }
 }
