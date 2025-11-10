@@ -63,7 +63,7 @@ export default defineComponent({
       const connectionsFetched = result as Connection[]
 
       if (connectionsFetched.length < pageSize) {
-        isMoreConnectionsLeft.value = true
+        isMoreConnectionsLeft.value = false
       }
 
       connections.value.push(...connectionsFetched)

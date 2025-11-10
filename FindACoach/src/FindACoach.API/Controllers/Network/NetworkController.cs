@@ -1,4 +1,5 @@
-﻿using FindACoach.Core.DTO.Network;
+﻿using FindACoach.Core.DTO.MyProfile.Activities;
+using FindACoach.Core.DTO.Network;
 using FindACoach.Core.ServiceContracts.Network;
 using Microsoft.AspNetCore.Mvc;
 
@@ -100,11 +101,27 @@ namespace FindACoach.API.Controllers.Network
         }
 
         [HttpGet("get-connections")]
-        public async Task<ActionResult<List<ConnectionToResponse>>> GetConnections([FromQuery] string userId, int page, int pageSize)
+        public async Task<ActionResult<List<ConnectionToResponse>>> GetConnections(string userId, int page, int pageSize)
         {
             var connections = await _connectionsGetterService.GetAllUserConnections(userId, page, pageSize);
 
             return Ok(connections);
+        }
+
+        [HttpGet("get-recommended-connections")]
+        public async Task<ActionResult<List<ConnectionToResponse>>> GetRecommendedConnections(string userId, int page = 1, int pageSize = 7)
+        {
+            var recommendedConnections = await _connectionsGetterService.GetRecommendedConnections(userId, page, pageSize);
+
+            return Ok(recommendedConnections);
+        }
+
+        [HttpGet("get-filtered-connections")]
+        public async Task<ActionResult<List<ConnectionToResponse>>> GetFilteredConnections(string userId, string searchString, int page = 1, int pageSize = 7)
+        {
+            var filteredConnections = await _connectionsGetterService.GetFilteredConnections(userId, searchString, page, pageSize);
+
+            return Ok(filteredConnections);
         }
     }
 }

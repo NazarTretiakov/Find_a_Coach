@@ -1,27 +1,113 @@
 <template>
   <div class="network">
     <div class="network-people-cards">
-      <h1 class="network-people-cards-header">People you may know based on your activity</h1>
+      <h1 class="network-people-cards-header">Recommended connections</h1>
       <ul class="network-people-cards-items">
-        <router-link v-for="n in 20" :key="n" to="/user-profile" class="network-people-cards-items_person-link">
+        <router-link v-for="connection in connections" :key="connection.connectedUserId" :to="`/user-profile/${connection.connectedUserId}`" class="network-people-cards-items_person-link">
           <li class="network-people-cards-items_person">
-            <img class="network-people-cards-items_person-image" src="../../assets/images/icons/user-icon.jpg" alt="User profile image">
+            <img class="network-people-cards-items_person-image" :src="connection.imagePath" alt="User profile image" />
             <div class="network-people-cards-items_person-info">
-              <h3 class="network-people-cards-items_person-info-name">Grzegorz Kwiatkowski</h3>
-              <p class="network-people-cards-items_person-info-paragraph">Pracownik działu technicznego firmy The Best Storage w Gdańsku</p>
+              <h3 class="network-people-cards-items_person-info-name">{{ connection.firstName }} {{ connection.lastName }}</h3>
+              <p class="network-people-cards-items_person-info-paragraph">{{ connection.headline }}</p>
             </div>
           </li>
         </router-link>
       </ul>
-    </div>
-    <div class="network-load-more">
-      <span class="network-load-more-inscription">Load more</span>
+      <div v-if="isLoading" class="notifications-cards-items_loading">
+        <v-progress-circular class="notifications-cards-items_loading-spinner-item" indeterminate color="#1b3b80" size="35" width="4"></v-progress-circular>
+      </div>
+      <div class="notifications-cards-items_load-more" v-if="isMoreConnectionsLeft && !isLoading">
+        <span @click="loadConnections" class="notifications-cards-items_load-more-inscription">Load more</span>
+      </div>
     </div>
   </div>
 </template>
 
+<script lang="ts">
+import { defineComponent, ref, watch, onMounted } from "vue"
+import { useRouter } from "vue-router"
+import { useAuthenticationStore } from "@/stores/authentication"
+import useGetRecommendedConnections from "@/composables/network/useGetRecommendedConnections"
+import useGetFilteredConnections from "@/composables/network/useGetFilteredConnections"
+import type { Connection } from "@/types/network/Connection"
+
+export default defineComponent({
+  props: {
+    searchString: {
+      type: String,
+      required: false,
+      default: "",
+    },
+  },
+  setup(props) {
+    const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
+    const isLoading = ref(false)
+    const connections = ref<Connection[]>([])
+    const page = ref(1)
+    const pageSize = 7
+    const isMoreConnectionsLeft = ref(true)
+
+    async function loadConnections() {
+      if (isLoading.value) return
+      isLoading.value = true
+      const result = await useGetRecommendedConnections(authenticationStore.userId, page.value, pageSize)
+      if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
+        router.push("/error-page")
+        return
+      }
+      const fetched = result as Connection[]
+      if (fetched.length < pageSize) {
+        isMoreConnectionsLeft.value = false
+      }
+      connections.value.push(...fetched)
+      page.value++
+      isLoading.value = false
+    }
+
+    async function loadFilteredConnections() {
+      if (isLoading.value) return
+      isLoading.value = true
+      const result = await useGetFilteredConnections(authenticationStore.userId, props.searchString, page.value, pageSize)
+      if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
+        router.push("/error-page")
+        return
+      }
+      const fetched = result as Connection[]
+      if (fetched.length < pageSize) {
+        isMoreConnectionsLeft.value = false
+      }
+      connections.value.push(...fetched)
+      page.value++
+      isLoading.value = false
+    }
+
+    async function refreshConnections() {
+      connections.value = []
+      page.value = 1
+      isMoreConnectionsLeft.value = true
+      if (props.searchString.trim() === "") {
+        await loadConnections()
+      } else {
+        await loadFilteredConnections()
+      }
+    }
+
+    watch(() => props.searchString, async () => {
+      await refreshConnections()
+    })
+
+    onMounted(async () => {
+      await loadConnections()
+    })
+
+    return { isLoading, connections, isMoreConnectionsLeft, loadConnections, loadFilteredConnections }
+  },
+})
+</script>
+
 <style lang="scss" scoped>
-@use '../../assets/styles/config' as *;
+@use '@/assets/styles/config' as *;
 
 .network-people-cards {
   margin: 50px 0 30px 100px;
@@ -30,7 +116,7 @@
   border-radius: 20px;
 
   @media (max-width: $breakpoint) {
-    margin: 30px 10px 30px 10px;
+    margin: 30px 10px;
     padding: 30px;
   }
 
@@ -71,11 +157,11 @@
 
       &-image {
         width: 50px;
-        margin: -6px 10px 0 0;
-
-        @media (max-width: $breakpoint) {
-          width: 40px;
-        }
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: 10px;
+        border: 1px solid #000000;
       }
 
       &-info {
@@ -100,43 +186,41 @@
           }
         }
       }
+
       &-link {
-        color: #000000;
+        color: #000;
         text-decoration: none;
       }
     }
   }
 }
-.network-load-more {
-  margin: 0 0 100px 100px; 
+
+.notifications-cards-items_load-more {
+  font-size: 14px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  border: 2px $grayBorderColor solid;
-  border-radius: 20px;
-  height: 50px;
-  transition: background-color 0.3s ease;
+  align-content: center;
+  margin: 40px 0 0 0;
 
   @media (max-width: $breakpoint) {
-    margin: 0 10px 100px 10px;
-  }
-
-  &:hover {
-    cursor: pointer;
-    background-color: #ececec;
-  }
-
-  &-link {
-    color: #000000;
-    text-decoration: none;
+    font-size: 12px;
+    margin: 30px 0 0 0;
   }
 
   &-inscription {
-    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
 
-    @media (max-width: $breakpoint) {
-      font-size: 12px;
+    &:hover {
+      text-decoration: underline;
     }
   }
+}
+
+.notifications-cards-items_loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
 }
 </style>

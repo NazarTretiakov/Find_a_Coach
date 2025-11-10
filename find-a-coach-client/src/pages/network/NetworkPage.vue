@@ -1,12 +1,12 @@
 <template>
   <div class="header">
     <basic-header></basic-header>
-    <search-panel></search-panel>
+    <search-panel @search="handleSearch"></search-panel>
   </div>
 
   <ul class="profile-sections">
     <li class="profile-sections_left-side">
-      <people-cards></people-cards>
+      <people-cards :search-string="searchString"></people-cards>
     </li>
     <li class="profile-sections_right-side">
       <network-overview></network-overview>
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import BasicHeader from '../../components/BasicHeader.vue'
 import SearchPanel from '../../components/SearchPanel.vue'
@@ -36,6 +36,16 @@ export default defineComponent({
     NetworkOverview,
     TheInvitations,
     TheFooter
+  },
+  setup() {
+    const searchString = ref('')
+
+    const handleSearch = (text: string) => {
+      searchString.value = text
+      console.log(searchString.value)
+    }
+
+    return { searchString, handleSearch }
   }
 })
 </script>

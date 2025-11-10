@@ -164,6 +164,59 @@ namespace FindACoach.Infrastructure.Repositories
             return connection;
         }
 
+        public async Task<List<ConnectionToResponse>> GetFilteredConnections(string userId, string searchString, int page, int pageSize)
+        {
+            var loweredSearch = $"%{searchString.ToLower()}%";
+
+            var connections = await _db.Connections
+                .Include(c => c.User)
+                .Include(c => c.ConnectedUser)
+                .Where(c =>
+                    EF.Functions.Like((c.User.FirstName + " " + c.User.LastName).ToLower(), loweredSearch) ||
+                    EF.Functions.Like((c.ConnectedUser.FirstName + " " + c.ConnectedUser.LastName).ToLower(), loweredSearch)
+                )
+                .OrderByDescending(n => n.DateOfCreation)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var connectionsToResponse = new List<ConnectionToResponse>();
+
+            var serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            foreach (var connection in connections)
+            {
+                if (connection.Status == ConnectionStatus.Rejected || connection.Status == ConnectionStatus.Pending)
+                {
+                    continue;
+                }
+                if (connection.UserId == Guid.Parse(userId))
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = connection.ConnectedUserId,
+                        FirstName = connection.ConnectedUser.FirstName,
+                        LastName = connection.ConnectedUser.LastName,
+                        Headline = connection.ConnectedUser.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{connection.ConnectedUser.ImagePath}",
+                    });
+                }
+                else if (connection.ConnectedUserId == Guid.Parse(userId))
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = connection.UserId,
+                        FirstName = connection.User.FirstName,
+                        LastName = connection.User.LastName,
+                        Headline = connection.User.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{connection.User.ImagePath}",
+                    });
+                }
+            }
+
+            return connectionsToResponse;
+        }
+
         public async Task<NetworkOverviewInfoToResponse> GetNetworkOverview(string userId)
         {
             var userConnections = await _db.Connections
@@ -184,6 +237,67 @@ namespace FindACoach.Infrastructure.Repositories
             };
 
             return networkOverview;
+        }
+
+        public async Task<List<ConnectionToResponse>> GetRecommendedConnections(string userId, int page, int pageSize)
+        {
+            User activeUser = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Include(u => u.Skills)
+                .FirstAsync();
+
+            var locationPart = activeUser.Location.Split(',')[0].Trim().ToLower();
+            var skillTitles = activeUser.Skills.Select(s => s.Title.ToLower()).ToList();
+
+            var connections = await _db.Connections
+                .Include(c => c.User)
+                    .ThenInclude(u => u.Skills)
+                .Include(c => c.ConnectedUser)
+                    .ThenInclude(cu => cu.Skills)
+                .Where(c => EF.Functions.Like(c.User.Location.ToLower(), $"%{locationPart}%") ||
+                            EF.Functions.Like(c.ConnectedUser.Location.ToLower(), $"%{locationPart}%") ||
+                            c.User.Skills.Any(s => skillTitles.Contains(s.Title.ToLower())) ||
+                            c.ConnectedUser.Skills.Any(s => skillTitles.Contains(s.Title.ToLower())))
+                .OrderByDescending(n => n.DateOfCreation)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var connectionsToResponse = new List<ConnectionToResponse>();
+
+            var serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            foreach (var connection in connections)
+            {
+                if (connection.Status == ConnectionStatus.Rejected || connection.Status == ConnectionStatus.Pending)
+                {
+                    continue;
+                }
+                if (connection.UserId == Guid.Parse(userId))
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = connection.ConnectedUserId,
+                        FirstName = connection.ConnectedUser.FirstName,
+                        LastName = connection.ConnectedUser.LastName,
+                        Headline = connection.ConnectedUser.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{connection.ConnectedUser.ImagePath}",
+                    });
+                }
+                else if (connection.ConnectedUserId == Guid.Parse(userId))
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = connection.UserId,
+                        FirstName = connection.User.FirstName,
+                        LastName = connection.User.LastName,
+                        Headline = connection.User.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{connection.User.ImagePath}",
+                    });
+                }
+            }
+
+            return connectionsToResponse;
         }
 
         public async Task<IsUsersConnectedInfoToResponse> IsUsersConnected(string userId, string connectedUserId)

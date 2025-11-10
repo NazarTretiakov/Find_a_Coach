@@ -6,7 +6,7 @@
 
     <ul class="profile-sections">
       <li class="profile-sections_left-side">
-        <people-cards :id="id" :search-string="searchString"></people-cards>
+        <people-cards :id="id"></people-cards>
       </li>
       <li class="profile-sections_right-side">
         <the-invitations class="profile-sections_right-side-invitations"></the-invitations>
