@@ -2,6 +2,7 @@
 using FindACoach.Core.Domain.Entities.Activity;
 using FindACoach.Core.Domain.Entities.Network;
 using FindACoach.Core.Domain.Entities.User;
+using FindACoach.Core.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -45,6 +46,8 @@ namespace FindACoach.Core.Domain.IdentityEntities
         public string? AboutMe { get; set; } = string.Empty;
 
         public bool HasUnreadNotifications { get; set; }
+
+        public ContactInfomationVisibility ContactInformationVisibility { get; set; }
 
         public ICollection<Website> Websites { get; set; } = new List<Website>();
 

@@ -20,7 +20,7 @@
             <router-link :to="`/user-profile/${id}/contact-information`" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link>
           </li>
           <li class="personal-information-items_left-side-items_connections">
-            <router-link to="/network/connections" class="personal-information-items_left-side-items_connections-link">{{ personalInformation.connectionsAmount }} connections</router-link>
+            <router-link :to="`/user-profile/${id}/${firstNameOfUser}/connections`" class="personal-information-items_left-side-items_connections-link">{{ personalInformation.connectionsAmount }} connections</router-link>
           </li>
           <li class="personal-information-items_left-side-items_buttons">
             <router-link v-if="!personalInformation.isConnected && personalInformation.connectionStatus == null" :to="{ path: '/user-profile/send-connection-request', query: { id: id, name: personalInformation.firstName }}" class="personal-information-items_left-side-items_buttons-leave-review-link">
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue"
+import { defineComponent, ref, onMounted, computed } from "vue"
 import type { PersonalInformation } from "@/types/my-profile/personal-information/PersonalInformation"
 import useGetPersonalInformation from "../../composables/my-profile/personal-information/useGetPersonalInformation"
 import useRemoveConnection from "../../composables/network/useRemoveConnection"
@@ -75,6 +75,7 @@ export default defineComponent({
     const personalInformation = ref<PersonalInformation | null>(null)
     const authenticationStore = useAuthenticationStore()
     const router = useRouter()
+    const firstNameOfUser = computed(() => personalInformation.value?.firstName)
 
     onMounted(async () => {
       const result = await useGetPersonalInformation(props.id)
@@ -99,7 +100,7 @@ export default defineComponent({
       }
     }
 
-    return { personalInformation, removeConnection }
+    return { personalInformation, removeConnection, firstNameOfUser }
   },
 })
 </script>

@@ -12,6 +12,7 @@ using FindACoach.Core.ServiceContracts.MyProfile.Experience;
 using FindACoach.Core.ServiceContracts.MyProfile.Languages;
 using FindACoach.Core.ServiceContracts.MyProfile.Projects;
 using FindACoach.Core.ServiceContracts.MyProfile.Recommendations;
+using FindACoach.Core.ServiceContracts.MyProfile.Settings;
 using FindACoach.Core.ServiceContracts.MyProfile.Skills;
 using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Core.Services;
@@ -25,6 +26,7 @@ using FindACoach.Core.Services.MyProfile.Experience;
 using FindACoach.Core.Services.MyProfile.Languages;
 using FindACoach.Core.Services.MyProfile.Projects;
 using FindACoach.Core.Services.MyProfile.Recommendations;
+using FindACoach.Core.Services.MyProfile.Settings;
 using FindACoach.Core.Services.Network;
 using FindACoach.Infrastructure.DbContext;
 using FindACoach.Infrastructure.Repositories;
@@ -91,6 +93,9 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IRecommendationsAdderService, RecommendationsAdderService>();
             services.AddScoped<IRecommendationsGetterService, RecommendationsGetterService>();
             services.AddScoped<IRecommendationsRemoverService, RecommendationsRemoverService>();
+            services.AddScoped<IProfileImageGetterService, ProfileImageGetterService>();
+            services.AddScoped<IContactInformationVisibilityGetterService, ContactInformaitonVisibilityGetterService>();
+            services.AddScoped<IContactInformationVisibilityEditorService, ContactInformationVisibilityEditorService>();
             services.AddScoped<IAddActivityService, AddActivityService>();
             services.AddScoped<IActivitiesGetterService, ActivitiesGetterService>();
             services.AddScoped<IToggleLikeService, ToggleLikeService>();
@@ -115,6 +120,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<INotificationsGetterService, NotificationsGetterService>();
             services.AddScoped<ICheckUnreadNotificationsService, CheckUnreadNotificationsService>();
             services.AddScoped<INetworkOverviewGetterService, NetworkOverviewGetterService>();
+            services.AddScoped<IUsersGetterService, UsersGetterService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IPositionsRepository, PositionsRepository>();

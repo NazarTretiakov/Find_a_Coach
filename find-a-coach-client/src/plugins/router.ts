@@ -58,6 +58,7 @@ import Survey from '../pages/forum/survey-page/SurveyPage.vue'
 import Post from '../pages/forum/post-page/PostPage.vue'
 import UserProfilePage from '../pages/user-profile/UserProfilePage.vue'
 import ConnectPage from '../pages/user-profile/connect-page/ConnectPage.vue'
+import UserConnectionsPage from '../pages/user-profile/connections-page/ConnectionsPage.vue'
 import UserLeaveReviewPage from '../pages/user-profile/leave-recommendation-page/LeaveRecommendationPage.vue'
 import UserContactInformation from '../pages/user-profile/contact-information-page/ContactInformationPage.vue'
 import UserProfileActivities from '../pages/user-profile/activities-page/ActivitiesPage.vue'
@@ -113,8 +114,7 @@ const router = createRouter({
     { path: '/my-profile/add-language', component: AddLanguage, meta: { requiresAuth: true } },
     { path: '/my-profile/edit-language/:id', component: EditLanguage, meta: { requiresAuth: true }, props: true },
     { path: '/my-profile/recommendations', component: RecommendationsPage, meta: { requiresAuth: true } }, 
-    { path: '/my-profile/settings', redirect: "/my-profile/settings/notifications", meta: { requiresAuth: true } },
-    { path: '/my-profile/settings/notifications', component: NotificationsSettingsPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/settings', redirect: "/my-profile/settings/privacy", meta: { requiresAuth: true } },
     { path: '/my-profile/settings/privacy', component: PrivacySettingsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/settings/security', component: SecuritySettingsPage, meta: { requiresAuth: true } },
     { path: '/network', component: NetworkPage, meta: { requiresAuth: true } },
@@ -130,6 +130,7 @@ const router = createRouter({
     { path: '/user-profile/send-connection-request', component: ConnectPage, meta: { requiresAuth: true }, props: route => ({ id: route.query.id, name: route.query.name }) },
     { path: '/user-profile/leave-recommendation', component: UserLeaveReviewPage, meta: { requiresAuth: true }, props: route => ({ id: route.query.id, name: route.query.name }) },
     { path: '/user-profile/:id/contact-information', component: UserContactInformation, meta: { requiresAuth: true }, props: true },
+    { path: '/user-profile/:id/:name/connections', component: UserConnectionsPage, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/:id/activities', component: UserProfileActivities, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/:id/experience', component: UserProfileExperience, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/:id/education', component: UserProfileEducation, meta: { requiresAuth: true }, props: true },

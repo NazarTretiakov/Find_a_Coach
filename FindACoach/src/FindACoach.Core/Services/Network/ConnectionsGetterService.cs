@@ -22,15 +22,5 @@ namespace FindACoach.Core.Services.Network
         {
             return await _connectionsRepository.GetAllUserConnections(userId, page, pageSize);
         }
-
-        public async Task<List<ConnectionToResponse>> GetFilteredConnections(string userId, string searchString, int page, int pageSize)
-        {
-            return await _connectionsRepository.GetFilteredConnections(userId, searchString, page, pageSize);
-        }
-
-        public async Task<List<ConnectionToResponse>> GetRecommendedConnections(string userId, int page, int pageSize)
-        {
-            return await _connectionsRepository.GetRecommendedConnections(userId, page, pageSize);
-        }
     }
 }

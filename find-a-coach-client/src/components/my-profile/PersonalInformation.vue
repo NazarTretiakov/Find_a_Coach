@@ -20,7 +20,7 @@
             <router-link to="/my-profile/contact-information" class="personal-information-items_left-side-items_location-contact-information">Contact information</router-link>
           </li>
           <li class="personal-information-items_left-side-items_connections">
-            <router-link to="/network/connections" class="personal-information-items_left-side-items_connections-link">{{ personalInformation.connectionsAmount }} connections</router-link>
+            <router-link :to="`/network/connections/${userId}`" class="personal-information-items_left-side-items_connections-link">{{ personalInformation.connectionsAmount }} connections</router-link>
           </li>
           <li class="personal-information-items_left-side-items_button">
             <router-link to="/my-profile/add-profile-section">
@@ -56,6 +56,7 @@ export default defineComponent({
     const personalInformation = ref<PersonalInformation | null>(null)
     const authenticationStore = useAuthenticationStore()
     const router = useRouter()
+    const userId = authenticationStore.userId;
 
     onMounted(async () => {
       const result = await useGetPersonalInformation(authenticationStore.userId)
@@ -69,7 +70,7 @@ export default defineComponent({
       }
     })
 
-    return { personalInformation }
+    return { personalInformation, userId }
   },
 })
 </script>

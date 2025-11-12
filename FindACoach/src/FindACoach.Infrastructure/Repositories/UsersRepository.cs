@@ -2,7 +2,9 @@
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.MyProfile;
+using FindACoach.Core.DTO.MyProfile.Settings;
 using FindACoach.Core.DTO.Network;
+using FindACoach.Core.Enums;
 using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;
@@ -335,6 +337,133 @@ namespace FindACoach.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
 
             return contactInformation;
+        }
+
+        public async Task<ProfileImagePathToResponse> GetProfileImagePath(string userId)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            return await _db.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Select(u => new ProfileImagePathToResponse()
+                {
+                    ProfileImagePath = $"{serverUrl}/Images/UserProfiles/{u.ImagePath}"
+                })
+                .FirstAsync();
+        }
+
+        public async Task<ContactInformationVisibilityToResponse> GetContactInformationVisibility(string userId)
+        {
+            return await _db.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Select(u => new ContactInformationVisibilityToResponse()
+                {
+                    ContactInformationVisibilityType = u.ContactInformationVisibility.ToString()
+                })
+                .FirstAsync();
+        }
+
+        public async Task<ContactInformationVisibilityToResponse> EditContactInformationVisibility(string userId, string contactInformationVisibilityType)
+        {
+            var user = await _db.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .FirstAsync();
+            
+            user.ContactInformationVisibility = Enum.Parse<ContactInfomationVisibility>(contactInformationVisibilityType);
+
+            await _db.SaveChangesAsync();
+
+            return new ContactInformationVisibilityToResponse() 
+            { 
+                ContactInformationVisibilityType = contactInformationVisibilityType
+            };
+        }
+
+        public async Task<List<ConnectionToResponse>> GetFilteredUsers(string searchString, int page, int pageSize)
+        {
+            var loweredSearch = $"%{searchString.ToLower()}%";
+
+            var users = await _db.Users
+                .Where(u =>
+                    EF.Functions.Like((u.FirstName + " " + u.LastName).ToLower(), loweredSearch)
+                )
+                .OrderByDescending(u => u.FirstName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var connectionsToResponse = new List<ConnectionToResponse>();
+
+            var serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var principal = _httpContextAccessor.HttpContext?.User;
+            if (principal == null)
+            {
+                throw new UnauthorizedAccessException("User is not authenticated");
+            }
+
+            string? activeUserId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (activeUserId == null)
+            {
+                throw new UnauthorizedAccessException("Cannot resolve user id from claims");
+            }
+
+            foreach (var user in users)
+            {
+                if (user.Id != Guid.Parse(activeUserId))
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Headline = user.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{user.ImagePath}",
+                    });
+                }
+            }
+
+            return connectionsToResponse;
+        }
+
+        public async Task<List<ConnectionToResponse>> GetRecommendedUsers(string userId, int page, int pageSize)
+        {
+            User activeUser = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Include(u => u.Skills)
+                .FirstAsync();
+
+            var locationPart = activeUser.Location.Split(',')[0].Trim().ToLower();
+            var skillTitles = activeUser.Skills.Select(s => s.Title.ToLower()).ToList();
+
+            var users = await _db.Users
+                .Where(u => EF.Functions.Like(u.Location.ToLower(), $"%{locationPart}%") ||
+                            u.Skills.Any(s => skillTitles.Contains(s.Title.ToLower())))
+                .OrderByDescending(u => u.FirstName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var connectionsToResponse = new List<ConnectionToResponse>();
+
+            var serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            foreach (var user in users)
+            {
+                if (user.Id != activeUser.Id)
+                {
+                    connectionsToResponse.Add(new ConnectionToResponse()
+                    {
+                        ConnectedUserId = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Headline = user.Headline,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{user.ImagePath}",
+                    });
+                }
+            }
+
+            return connectionsToResponse;
         }
     }   
 }

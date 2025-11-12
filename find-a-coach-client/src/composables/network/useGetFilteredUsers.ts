@@ -5,11 +5,11 @@ import type { Connection } from '@/types/network/Connection'
 
 const API_URL = config.apiBaseUrl + '/Network'
 
-export default async function useGetRecommendedConnections(userId: string, page: number, pageSize: number): Promise<Result | Connection[]> {
+export default async function useGetFilteredUsers(userId: string, searchString: string, page: number, pageSize: number): Promise<Result | Connection[]> {
   try {
     const token = await useEnsureValidToken()
 
-    const response = await fetch(`${API_URL}/get-recommended-connections?userId=${userId}&page=${page}&pageSize=${pageSize}`, {
+    const response = await fetch(`${API_URL}/get-filtered-users?userId=${userId}&searchString=${searchString}&page=${page}&pageSize=${pageSize}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -20,7 +20,7 @@ export default async function useGetRecommendedConnections(userId: string, page:
       const responseData = await response.json()
       return {
         isSuccessful: false,
-        errorMessage: responseData.errorMessage || 'Unexpected error occurred while getting recommended connections.',
+        errorMessage: responseData.errorMessage || 'Unexpected error occurred while getting filtered connections.',
       }
     }
 

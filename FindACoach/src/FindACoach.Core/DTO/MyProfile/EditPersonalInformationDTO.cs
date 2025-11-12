@@ -36,7 +36,6 @@ namespace FindACoach.Core.DTO.MyProfile
     public class WebsiteDTO
     {
         [Required(ErrorMessage = "Website URL is required.")]
-        [Url(ErrorMessage = "Invalid website URL format.")]
         public string Url { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Website type is required.")]

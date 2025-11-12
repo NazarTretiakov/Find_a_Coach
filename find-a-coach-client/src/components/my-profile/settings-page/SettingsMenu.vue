@@ -1,15 +1,9 @@
 <template>
-  <div class="settings-menu">
+  <div v-if="!isLoading" class="settings-menu">
     <ul class="settings-menu-items">
       <li class="settings-menu-items_header">
-        <img class="settings-menu-items_header-user-profile-photo" src="../../../assets/images/icons/user-icon.jpg" alt="User profile image">
+        <img v-if="profileImagePath" :src="profileImagePath" alt="User profile image" class="settings-menu-items_header-user-profile-photo"/>
         <h1 class="settings-menu-items_header-inscription">Settings</h1>
-      </li>
-      <li class="settings-menu-items_notifications">
-        <router-link to="/my-profile/settings/notifications" class="settings-menu-items_notifications-link">
-          <img class="settings-menu-items_notifications-icon" src="../../../assets/images/icons/notifications-icon.svg" alt="Notifications icon" >
-          <span :class="activePage == 'notifications' ? 'settings-menu-items_notifications-inscription-active' : 'settings-menu-items_notifications-inscription'">Notifications</span>
-        </router-link>  
       </li>
       <li class="settings-menu-items_privacy">
         <router-link to="/my-profile/settings/privacy" class="settings-menu-items_privacy-link" >
@@ -28,7 +22,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+
+import { useRouter } from 'vue-router'
+import useGetProfileImagePath from '@/composables/my-profile/settings/useGetProfileImage'
 
 export default defineComponent({
   props: {
@@ -36,7 +33,39 @@ export default defineComponent({
       type: String, 
       required: true
     }
-  }
+  },
+  setup() {
+    const profileImagePath = ref<string>()
+    const router = useRouter()
+    const isLoading = ref<boolean>(true)
+
+    onMounted(async () => {
+      const startTime = performance.now()
+
+      const result = await useGetProfileImagePath()
+
+      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        profileImagePath.value = result as string
+        const elapsed = performance.now() - startTime
+        const remaining = 500 - elapsed
+        console.log(result)
+
+        if (remaining > 0) {
+          setTimeout(() => {
+            isLoading.value = false
+          }, remaining)
+        } else {
+          isLoading.value = false
+        }
+      }
+    })
+
+    return { profileImagePath, isLoading }
+  },
 })
 </script>
 
@@ -75,6 +104,8 @@ export default defineComponent({
       &-user-profile-photo {
         width: 50px;
         margin-right: 14px;
+        border-radius: 50%;
+        border: 1px solid #000000;
       }
       &-inscription {
         font-size: 20px;

@@ -16,8 +16,9 @@ namespace FindACoach.API.Controllers.Network
         private readonly IConnectionsRemoverService _connectionsRemoverService;
         private readonly ICheckUnreadNotificationsService _checkUnreadNotificationsService;
         private readonly INetworkOverviewGetterService _networkOverviewGetterService;
+        private readonly IUsersGetterService _usersGetterService;
 
-        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService, INotificationsGetterService notificationsGetterService, IConnectionsRemoverService connectionsRemoverService, ICheckUnreadNotificationsService checkUnreadNotificationsService, INetworkOverviewGetterService networkOverviewGetterService)
+        public NetworkController(IIsUsersConnectedService isUsersConnectedService, IConnectionRequestSenderService connectionRequestSenderService, IConnectionsGetterService connectionsGetterService, IAcceptConnectionRequestService acceptConnectionRequestService, IDeclineConnectionRequestService declineConnectionRequestService, INotificationsGetterService notificationsGetterService, IConnectionsRemoverService connectionsRemoverService, ICheckUnreadNotificationsService checkUnreadNotificationsService, INetworkOverviewGetterService networkOverviewGetterService, IUsersGetterService usersGetterService)
         {
             _isUsersConnectedService = isUsersConnectedService;
             _connectionRequestSenderService = connectionRequestSenderService;
@@ -28,6 +29,7 @@ namespace FindACoach.API.Controllers.Network
             _connectionsRemoverService = connectionsRemoverService;
             _checkUnreadNotificationsService = checkUnreadNotificationsService;
             _networkOverviewGetterService = networkOverviewGetterService;
+            _usersGetterService = usersGetterService;
         }
 
         [HttpGet("is-users-connected")]
@@ -108,20 +110,20 @@ namespace FindACoach.API.Controllers.Network
             return Ok(connections);
         }
 
-        [HttpGet("get-recommended-connections")]
-        public async Task<ActionResult<List<ConnectionToResponse>>> GetRecommendedConnections(string userId, int page = 1, int pageSize = 7)
+        [HttpGet("get-recommended-users")]
+        public async Task<ActionResult<List<ConnectionToResponse>>> GetRecommendedUsers(string userId, int page = 1, int pageSize = 7)
         {
-            var recommendedConnections = await _connectionsGetterService.GetRecommendedConnections(userId, page, pageSize);
+            var recommendedUsers = await _usersGetterService.GetRecommendedUsers(userId, page, pageSize);
 
-            return Ok(recommendedConnections);
+            return Ok(recommendedUsers);
         }
 
-        [HttpGet("get-filtered-connections")]
-        public async Task<ActionResult<List<ConnectionToResponse>>> GetFilteredConnections(string userId, string searchString, int page = 1, int pageSize = 7)
+        [HttpGet("get-filtered-users")]
+        public async Task<ActionResult<List<ConnectionToResponse>>> GetFilteredUsers(string searchString, int page = 1, int pageSize = 7)
         {
-            var filteredConnections = await _connectionsGetterService.GetFilteredConnections(userId, searchString, page, pageSize);
+            var filteredUsers = await _usersGetterService.GetFilteredUsers(searchString, page, pageSize);
 
-            return Ok(filteredConnections);
+            return Ok(filteredUsers);
         }
     }
 }

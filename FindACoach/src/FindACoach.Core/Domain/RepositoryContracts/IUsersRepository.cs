@@ -1,4 +1,6 @@
 ﻿using FindACoach.Core.DTO.MyProfile;
+using FindACoach.Core.DTO.MyProfile.Settings;
+using FindACoach.Core.DTO.Network;
 
 namespace FindACoach.Core.Domain.RepositoryContracts
 {
@@ -72,5 +74,38 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// </summary>
         /// <returns>IsProfileSectionsFilledToResponse object with info about if the each section is filled or not.</returns>
         Task<IsProfileSectionsCompletedToResponse> IsProfileSectionsCompleted(string activeUserId);
+
+        /// <summary>
+        /// Retrieves profile image path of currect working user.
+        /// </summary>
+        /// <returns>ProfileImagePathToResponse object with info about profile image path of currect working user.</returns>
+        Task<ProfileImagePathToResponse> GetProfileImagePath(string userId);
+
+        /// <summary>
+        /// Retrieves contact information visibility of current working user.
+        /// </summary>
+        /// <returns></returns>
+        Task<ContactInformationVisibilityToResponse> GetContactInformationVisibility(string userId);
+
+        /// <summary>
+        /// Edits contact information visibility of user.
+        /// </summary>
+        /// <param name="contactInformationVisibilityType">Contact information visibility type which will be settled.</param>
+        /// <returns></returns>
+        Task<ContactInformationVisibilityToResponse> EditContactInformationVisibility(string userId, string contactInformationVisibilityType);
+        
+        /// <summary>
+        /// Retrieves filtered users.
+        /// </summary>
+        /// <param name="searchString">Search string to filter the users..</param>
+        /// <returns></returns>
+        Task<List<ConnectionToResponse>> GetFilteredUsers(string searchString, int page, int pageSize);
+
+        /// <summary>
+        /// Retrieves recommended users for user.
+        /// </summary>
+        /// <param name="userId">User id which recommended users will be retrieved.</param>
+        /// <returns></returns>
+        Task<List<ConnectionToResponse>> GetRecommendedUsers(string userId, int page, int pageSize);
     }
 }

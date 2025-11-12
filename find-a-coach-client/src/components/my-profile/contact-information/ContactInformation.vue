@@ -25,7 +25,7 @@
 
     <ul class="contact-information-websites-items">
       <li v-for="(website, index) in contactInformation.websites" :key="index" class="contact-information-websites-items_website">
-        <a :href="website.url" target="_blank" rel="noopener noreferrer" class="contact-information-websites-items_website-url">{{ website.url }}</a>
+        <a :href="formatWebsiteUrl(website.url)" target="_blank" rel="noopener noreferrer" class="contact-information-websites-items_website-url">{{ website.url }}</a>
         <span class="contact-information-websites-items_website-type">({{ website.type }})</span>
       </li>
     </ul>
@@ -75,9 +75,16 @@ export default defineComponent({
       }
     }
 
+    const formatWebsiteUrl = (url: string) => {
+      if (!/^https?:\/\//i.test(url)) {
+        return 'https://' + url
+      }
+      return url
+    }
+
     onMounted(() => loadContactInformation())
 
-    return { contactInformation, isLoading }
+    return { contactInformation, isLoading, formatWebsiteUrl }
   }
 })
 </script>

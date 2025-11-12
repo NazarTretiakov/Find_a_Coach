@@ -1,7 +1,8 @@
 <template>
   <div class="network">
     <div class="network-people-cards">
-      <h1 class="network-people-cards-header">Recommended connections</h1>
+      <h1 v-if="searchString.trim() != ''" class="network-people-cards-header">Search result</h1>
+      <h1 v-else class="network-people-cards-header">Recommended connections</h1>
       <ul class="network-people-cards-items">
         <router-link v-for="connection in connections" :key="connection.connectedUserId" :to="`/user-profile/${connection.connectedUserId}`" class="network-people-cards-items_person-link">
           <li class="network-people-cards-items_person">
@@ -27,8 +28,8 @@
 import { defineComponent, ref, watch, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useAuthenticationStore } from "@/stores/authentication"
-import useGetRecommendedConnections from "@/composables/network/useGetRecommendedConnections"
-import useGetFilteredConnections from "@/composables/network/useGetFilteredConnections"
+import useGetRecommendedUsers from "@/composables/network/useGetRecommendedUsers"
+import useGetFilteredUsers from "@/composables/network/useGetFilteredUsers"
 import type { Connection } from "@/types/network/Connection"
 
 export default defineComponent({
@@ -51,7 +52,7 @@ export default defineComponent({
     async function loadConnections() {
       if (isLoading.value) return
       isLoading.value = true
-      const result = await useGetRecommendedConnections(authenticationStore.userId, page.value, pageSize)
+      const result = await useGetRecommendedUsers(authenticationStore.userId, page.value, pageSize)
       if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
         router.push("/error-page")
         return
@@ -68,7 +69,7 @@ export default defineComponent({
     async function loadFilteredConnections() {
       if (isLoading.value) return
       isLoading.value = true
-      const result = await useGetFilteredConnections(authenticationStore.userId, props.searchString, page.value, pageSize)
+      const result = await useGetFilteredUsers(authenticationStore.userId, props.searchString, page.value, pageSize)
       if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
         router.push("/error-page")
         return

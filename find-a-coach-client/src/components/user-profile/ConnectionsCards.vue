@@ -1,8 +1,7 @@
 <template>
   <div class="network">
     <div class="network-people-cards">
-      <h1 class="network-people-cards-header">My connections</h1>
-
+      <h1 class="network-people-cards-header">Connections of {{ name }}</h1>
       <ul class="network-people-cards-items">
         <router-link v-for="connection in connections" :key="connection.connectedUserId" :to="`/user-profile/${connection.connectedUserId}`" class="network-people-cards-items_person-link">
           <li class="network-people-cards-items_person">
@@ -14,11 +13,9 @@
           </li>
         </router-link>
       </ul>
-      
       <div v-if="isLoading" class="notifications-cards-items_loading">
         <v-progress-circular class="notifications-cards-items_loading-spinner-item" indeterminate color="#1b3b80" size="35" width="4"></v-progress-circular>
       </div>
-
       <div class="notifications-cards-items_load-more" v-if="isMoreConnectionsLeft && !isLoading">
         <span @click="loadConnections" class="notifications-cards-items_load-more-inscription">Load more</span>
       </div>
@@ -26,43 +23,44 @@
   </div>
 </template>
 
-
 <script lang="ts">
-import { defineComponent, ref, onMounted, computed } from "vue"
+import { defineComponent, ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
-import { useAuthenticationStore } from "@/stores/authentication"
 import useGetConnections from "@/composables/network/useGetConnections"
 import type { Connection } from "@/types/network/Connection"
 
 export default defineComponent({
-  setup() {
+  props: {
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+  },
+  setup(props) {
     const router = useRouter()
-    const authenticationStore = useAuthenticationStore()
-
-    const isLoading = ref<boolean>(false)
+    const isLoading = ref(false)
     const connections = ref<Connection[]>([])
-    const page = ref<number>(1)
+    const page = ref(1)
     const pageSize = 7
-    const isMoreConnectionsLeft = ref<boolean>(true)
+    const isMoreConnectionsLeft = ref(true)
 
     async function loadConnections() {
       if (isLoading.value) return
       isLoading.value = true
-
-      const result = await useGetConnections(authenticationStore.userId, page.value, pageSize)
-
-      if ("isSuccessful" in result && !result.isSuccessful) {
+      const result = await useGetConnections(props.id, page.value, pageSize)
+      if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
         router.push("/error-page")
         return
       }
-
-      const connectionsFetched = result as Connection[]
-
-      if (connectionsFetched.length < pageSize) {
+      const fetched = result as Connection[]
+      if (fetched.length < pageSize) {
         isMoreConnectionsLeft.value = false
       }
-
-      connections.value.push(...connectionsFetched)
+      connections.value.push(...fetched)
       page.value++
       isLoading.value = false
     }
@@ -71,18 +69,13 @@ export default defineComponent({
       await loadConnections()
     })
 
-    return {
-      isLoading,
-      connections,
-      isMoreConnectionsLeft,
-      loadConnections,
-    }
+    return { isLoading, connections, isMoreConnectionsLeft, loadConnections }
   },
 })
 </script>
 
 <style lang="scss" scoped>
-@use '../../../assets/styles/config' as *;
+@use '@/assets/styles/config' as *;
 
 .network-people-cards {
   margin: 50px 0 30px 100px;
