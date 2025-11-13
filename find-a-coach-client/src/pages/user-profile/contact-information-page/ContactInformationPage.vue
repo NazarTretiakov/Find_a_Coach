@@ -39,6 +39,7 @@ export default defineComponent({
 
 .page-content {
   flex: 1;
+  min-height: 500px;
 }
 
 .page-footer {

@@ -6,12 +6,12 @@ using System.Security.Claims;
 
 namespace FindACoach.Core.Services.MyProfile.Settings
 {
-    public class ContactInformaitonVisibilityGetterService : IContactInformationVisibilityGetterService
+    public class ContactInformationVisibilityGetterService : IContactInformationVisibilityGetterService
     {
         private readonly IUsersRepository _usersRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ContactInformaitonVisibilityGetterService(IUsersRepository usersRepository, IHttpContextAccessor httpContextAccessor)
+        public ContactInformationVisibilityGetterService(IUsersRepository usersRepository, IHttpContextAccessor httpContextAccessor)
         {
             _usersRepository = usersRepository;
             _httpContextAccessor = httpContextAccessor;
@@ -32,6 +32,11 @@ namespace FindACoach.Core.Services.MyProfile.Settings
             }
 
             return await _usersRepository.GetContactInformationVisibility(activeUserId);
+        }
+
+        public async Task<ContactInformationVisibilityToResponse> Get(string userId)
+        {
+            return await _usersRepository.GetContactInformationVisibility(userId);
         }
     }
 }

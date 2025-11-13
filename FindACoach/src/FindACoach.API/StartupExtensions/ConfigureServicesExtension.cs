@@ -94,7 +94,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<IRecommendationsGetterService, RecommendationsGetterService>();
             services.AddScoped<IRecommendationsRemoverService, RecommendationsRemoverService>();
             services.AddScoped<IProfileImageGetterService, ProfileImageGetterService>();
-            services.AddScoped<IContactInformationVisibilityGetterService, ContactInformaitonVisibilityGetterService>();
+            services.AddScoped<IContactInformationVisibilityGetterService, ContactInformationVisibilityGetterService>();
             services.AddScoped<IContactInformationVisibilityEditorService, ContactInformationVisibilityEditorService>();
             services.AddScoped<IAddActivityService, AddActivityService>();
             services.AddScoped<IActivitiesGetterService, ActivitiesGetterService>();

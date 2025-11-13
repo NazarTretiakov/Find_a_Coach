@@ -1,7 +1,7 @@
 <template>
   <loading-square v-if="isLoading"></loading-square>
 
-  <div class="contact-information" v-else>
+  <div class="contact-information" v-else-if="isContactInformationVisible">
     <h1 class="contact-information-header">Contact information</h1>
 
     <div class="contact-information-email">
@@ -30,6 +30,10 @@
       </li>
     </ul>
   </div>
+  <div v-else class="contact-information-invisible">
+    <img class="contact-information-invisible-icon" src="../../../assets/images/icons/privacy-icon.svg" alt="Privacy icon">
+    <span class="contact-information-invisible-inscription">The contact information is not visible due to the user's privacy settings.</span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -40,6 +44,9 @@ import LoadingSquare from '@/components/LoadingSquare.vue'
 import { useRouter } from 'vue-router'
 import { ContactInformation } from '@/types/my-profile/contact-information/ContactInformation'
 import useGetContactInformation from '@/composables/my-profile/contact-information/useGetContactInformation'
+import useGetContactInformationVisibility from '@/composables/my-profile/contact-information/useGetContactInformationVisibility'
+import useCheckIfUsersConnected from '@/composables/network/useCheckIfUsersConnected'
+import { useAuthenticationStore } from '@/stores/authentication'
 
 export default defineComponent({
   props: {
@@ -53,11 +60,69 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const contactInformation = ref<ContactInformation>({} as ContactInformation)
     const isLoading = ref<boolean>(true)
+    const isUsersConnected = ref<boolean>(false)
+    const contactInformationVisibility = ref<string>('')
+    const isContactInformationVisible = ref<boolean>(true)
+
+    async function loadContactInformationVisibility() {
+      const result = await useGetContactInformationVisibility(props.id)
+
+      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        contactInformationVisibility.value = result as string
+      }
+    }
+
+    async function checkIfUsersConnected() {
+      const result = await useCheckIfUsersConnected(authenticationStore.userId, props.id)
+
+      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+        if (!result.isSuccessful) {
+          router.push('/error-page')
+        }
+      } else {
+        isUsersConnected.value = result as boolean
+      }
+    }
 
     async function loadContactInformation() {
       const startTime = performance.now()
+
+      await loadContactInformationVisibility()
+      if (contactInformationVisibility.value == 'NoOne') {
+        isContactInformationVisible.value = false
+
+        const elapsed = performance.now() - startTime
+        const remaining = 500 - elapsed
+        if (remaining > 0) {
+          setTimeout(() => (isLoading.value = false), remaining)
+        } else {
+          isLoading.value = false
+        }
+
+        return
+      }
+
+      await checkIfUsersConnected()
+      if (contactInformationVisibility.value == 'Network' && !isUsersConnected.value) {
+        isContactInformationVisible.value = false
+
+        const elapsed = performance.now() - startTime
+        const remaining = 500 - elapsed
+        if (remaining > 0) {
+          setTimeout(() => (isLoading.value = false), remaining)
+        } else {
+          isLoading.value = false
+        }
+
+        return
+      }
 
       const result = await useGetContactInformation(props.id)
 
@@ -88,7 +153,7 @@ export default defineComponent({
 
     onMounted(() => loadContactInformation())
 
-    return { contactInformation, isLoading, formatWebsiteUrl }
+    return { contactInformation, isLoading, formatWebsiteUrl, isContactInformationVisible }
   }
 })
 </script>
@@ -232,6 +297,29 @@ export default defineComponent({
           color: $grayBorderColor;
           margin-left: 10px;
         }
+      }
+    }
+  }
+
+  &-invisible {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &-icon {
+      width: 50px;
+
+      @media (max-width: $breakpoint) {
+        width: 40px;
+      }
+    }
+    &-inscription {
+      margin-top: 20px;
+      font-size: 16px;
+
+      @media (max-width: $breakpoint) {
+        font-size: 14px;
       }
     }
   }

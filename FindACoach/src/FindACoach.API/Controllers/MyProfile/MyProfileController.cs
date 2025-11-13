@@ -1,7 +1,9 @@
 ﻿using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.DTO.MyProfile.Activities;
+using FindACoach.Core.DTO.MyProfile.Settings;
 using FindACoach.Core.ServiceContracts.Forum.Activities;
 using FindACoach.Core.ServiceContracts.MyProfile;
+using FindACoach.Core.ServiceContracts.MyProfile.Settings;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -17,8 +19,9 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IGetAboutMeService _getAboutMeService;
         private readonly IActivitiesGetterService _activitiesGetterService;
         private readonly IIsProfileSectionsCompletedService _isProfileSectionsCompletedService;
+        private readonly IContactInformationVisibilityGetterService _contactInformationVisibilityGetterService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IContactInformationGetterService contactInformationGetterService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService, IIsProfileSectionsCompletedService isProfileSectionsCompletedService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IContactInformationGetterService contactInformationGetterService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService, IIsProfileSectionsCompletedService isProfileSectionsCompletedService, IContactInformationVisibilityGetterService contactInformationVisibilityGetterService)
         {
             _editPersonalInformationService = editPersonalInformationService;
             _getPersonalInformationService = getPersonalInformationService;
@@ -28,6 +31,7 @@ namespace FindACoach.API.Controllers.MyProfile
             _editAboutMeService = editAboutMeService;
             _activitiesGetterService = activitiesGetterService;
             _isProfileSectionsCompletedService = isProfileSectionsCompletedService;
+            _contactInformationVisibilityGetterService = contactInformationVisibilityGetterService;
         }
 
         [HttpPost("edit-personal-information")]
@@ -128,6 +132,16 @@ namespace FindACoach.API.Controllers.MyProfile
             var isProfileSectionsCompletedInfo = await _isProfileSectionsCompletedService.IsProfileSectionsCompleted(userId);
 
             return Ok(isProfileSectionsCompletedInfo);
+        }
+
+
+
+        [HttpGet("get-users-contact-information-visibility")]
+        public async Task<ActionResult<ContactInformationVisibilityToResponse>> GetUsersContactInformationVisibility([FromQuery] string userId)
+        {
+            var contactInformationVisibility = await _contactInformationVisibilityGetterService.Get(userId);
+
+            return Ok(contactInformationVisibility);
         }
     }
 }

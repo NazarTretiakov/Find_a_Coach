@@ -12,5 +12,12 @@ namespace FindACoach.Core.ServiceContracts.MyProfile.Settings
         /// </summary>
         /// <returns></returns>
         Task<ContactInformationVisibilityToResponse> Get();
+
+
+        /// <summary>
+        /// Retrieves contact information visibility of user with specified userId.
+        /// </summary>
+        /// <returns></returns>
+        Task<ContactInformationVisibilityToResponse> Get(string userId);
     }
 }

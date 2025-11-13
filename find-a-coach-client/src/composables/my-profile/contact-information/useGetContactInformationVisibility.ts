@@ -1,0 +1,34 @@
+import { Result } from "@/types/Result"
+import useEnsureValidToken from '@/composables/authentication/useEnsureValidToken'
+import { config } from '@/config'
+
+const API_URL = config.apiBaseUrl + '/MyProfile'
+
+export default async function useGetContactInformationVisibility(userId: string): Promise<Result | string> {
+  try {
+    const token = await useEnsureValidToken()
+
+    const response = await fetch(`${API_URL}/get-users-contact-information-visibility?userId=${userId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    if (!response.ok) {
+      const responseData = await response.json()
+      return {
+        isSuccessful: false,
+        errorMessage: responseData.errorMessage || 'Unexpected error occurred while getting contact information visibility.',
+      }
+    }
+
+    const data = await response.json()
+    return data.contactInformationVisibilityType
+  } catch (error) {
+    return {
+      isSuccessful: false,
+      errorMessage: (error as Error).message,
+    }
+  }
+}
