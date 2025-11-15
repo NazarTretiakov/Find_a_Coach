@@ -1,4 +1,5 @@
-﻿using FindACoach.Core.DTO.MyProfile;
+﻿using FindACoach.Core.Domain.IdentityEntities;
+using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.DTO.MyProfile.Activities;
 using FindACoach.Core.DTO.MyProfile.Settings;
 using FindACoach.Core.ServiceContracts.Forum.Activities;
@@ -133,8 +134,6 @@ namespace FindACoach.API.Controllers.MyProfile
 
             return Ok(isProfileSectionsCompletedInfo);
         }
-
-
 
         [HttpGet("get-users-contact-information-visibility")]
         public async Task<ActionResult<ContactInformationVisibilityToResponse>> GetUsersContactInformationVisibility([FromQuery] string userId)

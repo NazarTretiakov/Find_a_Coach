@@ -120,6 +120,8 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<INotificationsGetterService, NotificationsGetterService>();
             services.AddScoped<ICheckUnreadNotificationsService, CheckUnreadNotificationsService>();
             services.AddScoped<INetworkOverviewGetterService, NetworkOverviewGetterService>();
+            services.AddScoped<ISecuritySettingsGetterService, SecuritySettingsGetterService>();
+            services.AddScoped<ISecuritySettingsEditorService, SecuritySettingsEditorService>();
             services.AddScoped<IUsersGetterService, UsersGetterService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();

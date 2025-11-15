@@ -9,12 +9,16 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IProfileImageGetterService _profileImageGetterService;
         private readonly IContactInformationVisibilityGetterService _contactInformationVisibilityGetterService;
         private readonly IContactInformationVisibilityEditorService _contactInformationVisibilityEditorService;
+        private readonly ISecuritySettingsGetterService _securitySettingsGetterService;
+        private readonly ISecuritySettingsEditorService _securitySettingsEditorService;
 
-        public SettingsController(IProfileImageGetterService profileImageGetterService, IContactInformationVisibilityGetterService contactInformationVisibilityGetterService, IContactInformationVisibilityEditorService contactInformationVisibilityEditorService)
+        public SettingsController(IProfileImageGetterService profileImageGetterService, IContactInformationVisibilityGetterService contactInformationVisibilityGetterService, IContactInformationVisibilityEditorService contactInformationVisibilityEditorService, ISecuritySettingsGetterService securitySettingsGetterService, ISecuritySettingsEditorService securitySettingsEditorService)
         {
             _profileImageGetterService = profileImageGetterService;
             _contactInformationVisibilityGetterService = contactInformationVisibilityGetterService;
             _contactInformationVisibilityEditorService = contactInformationVisibilityEditorService;
+            _securitySettingsGetterService = securitySettingsGetterService;
+            _securitySettingsEditorService = securitySettingsEditorService;
         }
 
         [HttpGet("get-profile-image")]
@@ -39,6 +43,30 @@ namespace FindACoach.API.Controllers.MyProfile
             var contactInformationVisibility = await _contactInformationVisibilityEditorService.Edit(dto.ContactInformationVisibilityType);
 
             return Ok(contactInformationVisibility);
+        }
+
+        [HttpGet("is-user-has-login-notification-enabled")]
+        public async Task<ActionResult<IsLoginNotificationEnabledDTO>> IsUserHasLoginNotificationEnabled()
+        {
+            var isLoginNotificationEnabledInfo = await _securitySettingsGetterService.GetIsLoginNotificationEnabled();
+
+            return Ok(isLoginNotificationEnabledInfo);
+        }
+
+        [HttpPost("edit-user-login-notification-enabled")]
+        public async Task<ActionResult<IsLoginNotificationEnabledDTO>> EditUserLoginNotificationEnabled(IsLoginNotificationEnabledDTO dto)
+        {
+            var isLoginNotificationEnabledInfo = await _securitySettingsEditorService.EditIsLoginNotificationEnabled(dto);
+
+            return Ok(isLoginNotificationEnabledInfo);
+        }
+
+        [HttpPost("edit-security-settings")]
+        public async Task<ActionResult<IsLoginNotificationEnabledDTO>> EditSecuritySettings(EditSecuritySettingsDTO dto)
+        {
+            var isLoginNotificationEnabledInfo = await _securitySettingsEditorService.EditSecuritySettings(dto);
+
+            return Ok(isLoginNotificationEnabledInfo);
         }
     }
 }

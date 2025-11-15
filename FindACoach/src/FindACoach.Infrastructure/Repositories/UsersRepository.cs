@@ -465,5 +465,67 @@ namespace FindACoach.Infrastructure.Repositories
 
             return connectionsToResponse;
         }
+
+        public async Task<IsLoginNotificationEnabledDTO> GetIsLoginNotificationEnabled(string userId)
+        {
+            User activeUser = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Include(u => u.Skills)
+                .FirstAsync();
+
+            return new IsLoginNotificationEnabledDTO 
+            {  
+                IsLoginNotificationEnabled = activeUser.IsLoginNotificationEnabled 
+            };
+        }
+
+        public async Task<IsLoginNotificationEnabledDTO> EditIsLoginNotificationEnabled(string userId, IsLoginNotificationEnabledDTO dto)
+        {
+            User activeUser = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Include(u => u.Skills)
+                .FirstAsync();
+
+            activeUser.IsLoginNotificationEnabled = dto.IsLoginNotificationEnabled;
+
+            await _db.SaveChangesAsync();
+
+            return new IsLoginNotificationEnabledDTO
+            {
+                IsLoginNotificationEnabled = activeUser.IsLoginNotificationEnabled
+            };
+        }
+
+        public async Task<IsLoginNotificationEnabledDTO> EditSecuritySettings(string userId, EditSecuritySettingsDTO dto)
+        {
+            User activeUser = await _userManager.Users
+                .Where(u => u.Id == Guid.Parse(userId))
+                .Include(u => u.Skills)
+                .FirstAsync();
+
+            activeUser.IsLoginNotificationEnabled = dto.IsLoginNotificationEnabled;
+
+            var isOldPasswordCorrect = await _userManager.CheckPasswordAsync(activeUser, dto.OldPassword);
+
+            if (!isOldPasswordCorrect)
+            {
+                throw new UnauthorizedAccessException("Old password is incorrect.");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(activeUser, dto.OldPassword, dto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new ApplicationException($"Password change failed: {errors}");
+            }
+
+            await _db.SaveChangesAsync();
+
+            return new IsLoginNotificationEnabledDTO
+            {
+                IsLoginNotificationEnabled = activeUser.IsLoginNotificationEnabled
+            };
+        }
     }   
 }

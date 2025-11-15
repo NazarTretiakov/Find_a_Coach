@@ -12,12 +12,6 @@ using System.Text;
 
 namespace FindACoach.API.Controllers
 {
-    //TODO: think of the design of the pages, exacly about headers in the pages (in one pages header should be sticky with search panel, in other header should be sticky but without search panel, and in other pages header shouldn't be sticky and has to have only full logo in itself). Think about that thing properly    
-
-    //TODO: change the search panel style, should be more contrast, because as it now, it can't be seen while presentating it on the projector
-    //TODO: change the style of login and registration form, the border (shadow) can't be seen while presentating it on the projector
-    //TODO: change the style of footer, the border (shadow) can't be seen while presentating it on the projector
-
     [AllowAnonymous]
     public class AuthenticationController : CustomControllerBase
     {
@@ -195,6 +189,10 @@ namespace FindACoach.API.Controllers
                 user.RefreshToken = authenticationResponse.RefreshToken;
                 user.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationDateTime;
                 await _userManager.UpdateAsync(user);
+                if (user.IsLoginNotificationEnabled)
+                {
+                    await SendLoginNotificationEmail(user);
+                }
 
                 return Ok(authenticationResponse);
             }
@@ -338,6 +336,18 @@ namespace FindACoach.API.Controllers
                 "", resetPasswordUrl);
 
             await _emailService.SendEmailAsync(user.Email, "Reset your password in Find a Coach", confirmEmailTemplate);
+        }
+
+        private async Task SendLoginNotificationEmail(User user)
+        {
+            var templatePath = Path.Combine(_hostEnvironment.ContentRootPath, "..", "FindACoach.Core", "EmailTemplates", "LoginNotificationTemplate.html");
+            var loginNotificationTemplate = await System.IO.File.ReadAllTextAsync(templatePath);
+
+            string clientUrl = _configuration.GetValue<string>("ClientUrl");
+
+            loginNotificationTemplate = loginNotificationTemplate.Replace("@clientUrl", clientUrl);
+
+            await _emailService.SendEmailAsync(user.Email, "New login to your Find a Coach account", loginNotificationTemplate);
         }
     }
 }

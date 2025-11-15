@@ -107,5 +107,25 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="userId">User id which recommended users will be retrieved.</param>
         /// <returns></returns>
         Task<List<ConnectionToResponse>> GetRecommendedUsers(string userId, int page, int pageSize);
+
+        /// <summary>
+        /// Represents the service for retrieving information about condition of enabling of login notifications of current working user.
+        /// </summary>
+        /// <returns></returns>
+        Task<IsLoginNotificationEnabledDTO> GetIsLoginNotificationEnabled(string userId);
+
+        /// <summary>
+        /// Edits condition of enabling login notification of current working user.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task<IsLoginNotificationEnabledDTO> EditIsLoginNotificationEnabled(string userId, IsLoginNotificationEnabledDTO dto);
+
+        /// <summary>
+        /// Edits security settings (IsLoginNotificationEnabled property and changes password) of current working user.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task<IsLoginNotificationEnabledDTO> EditSecuritySettings(string userId, EditSecuritySettingsDTO dto);
     }
 }
