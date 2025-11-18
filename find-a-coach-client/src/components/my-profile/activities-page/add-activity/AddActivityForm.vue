@@ -34,7 +34,7 @@
       </li>
 
       <li :class="formData.activityType !== 'event' && formData.activityType !== 'survey' ? 'create-activity-items_description-input-without-border-bottom' : 'create-activity-items_description-input'">
-        <text-input-area v-model="formData.description" label="Description" name="description" :max-number-of-signs="200" />
+        <text-input-area v-model="formData.description" label="Description" name="description" :max-number-of-signs="2000" />
         <span v-if="getError('description')" class="error-message">{{ getError('description') }}</span>
       </li>
 
@@ -78,7 +78,7 @@
               {{ getError(`panelsForSearchPeople[${index}].payment`) }}
             </span>
 
-            <text-input-area v-model="panel.description" class="create-activity-items_panels-items_panel-description" label="Description" :name="'description-' + index" :max-number-of-signs="200" />
+            <text-input-area v-model="panel.description" class="create-activity-items_panels-items_panel-description" label="Description" :name="'description-' + index" :max-number-of-signs="500" />
             <span v-if="getError(`panelsForSearchPeople[${index}].description`)" class="error-message">
               {{ getError(`panelsForSearchPeople[${index}].description`) }}
             </span>

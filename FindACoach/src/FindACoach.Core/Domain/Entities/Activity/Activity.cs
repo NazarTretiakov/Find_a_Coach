@@ -15,7 +15,7 @@ namespace FindACoach.Core.Domain.Entities.Activity
         [StringLength(400)]
         public string? ImagePath { get; set; } = string.Empty;
 
-        [StringLength(200)]
+        [StringLength(2000)]
         public string? Description { get; set; } = string.Empty;
 
         [Required]

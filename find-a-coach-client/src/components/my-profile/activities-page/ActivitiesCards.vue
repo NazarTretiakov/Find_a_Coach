@@ -33,7 +33,7 @@
           <span class="activities-items_activity-subjects">{{ activity.subjects.join(', ') }}</span>
           <span class="activities-items_activity-special-phrase">{{ activitiesInscriptions[index] }}</span>
           <img v-if="activity.imagePath" class="activities-items_activity-image" :src="activity.imagePath" alt="Image of the activity">
-          <p class="activities-items_activity-description"  v-else>{{ activity.description }}</p>
+          <p class="activities-items_activity-description"  v-else>{{ trimmDescription(activity.description) }}</p>
         </li>
       </router-link>
     </ul>
@@ -95,6 +95,12 @@ export default defineComponent({
         return useRelativeDate(pubDate)
       })
     })
+
+    const trimmDescription = (description: string) => {
+      return description?.length > 400
+        ? description.substring(0, 400) + '...'
+        : description
+    }
 
     async function loadActivities() {
       if (isLoading.value) return
@@ -160,6 +166,7 @@ export default defineComponent({
       activities, 
       activitiesInscriptions, 
       formattedDates, 
+      trimmDescription,
       isMoreActivitiesLeft, 
       loadActivities,
       loadFilteredActivities,

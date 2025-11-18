@@ -16,7 +16,7 @@ namespace FindACoach.Core.Domain.Entities.Activity
         [StringLength(20)]
         public string? Payment { get; set; } = string.Empty;
 
-        [StringLength(200)]
+        [StringLength(500)]
         public string? Description { get; set; } = string.Empty;
 
         public Guid EventId { get; set; }

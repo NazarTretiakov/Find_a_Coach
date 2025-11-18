@@ -152,7 +152,7 @@ export default defineComponent({
       return votes.value.some(vote => vote.userId === authenticationStore.userId)
     })
     const inputFieldAddCommentContent = ref<string>('')
-    const isLoadMoreCommentsButtonVisible = ref<boolean>(true)
+    const isLoadMoreCommentsButtonVisible = ref<boolean>(false)
     let page = 1
     const pageSize = 3
 
@@ -177,6 +177,7 @@ export default defineComponent({
         if (authenticationStore.userId != survey.value.userId) {
           router.push(`/forum/survey/${survey.value.id}`)
         }
+        isLoadMoreCommentsButtonVisible.value = survey.value.comments.length == pageSize
         console.log("Loaded survey: ", survey.value)
       }
 
@@ -424,6 +425,7 @@ export default defineComponent({
   &-description {
     font-size: 14px;
     margin-top: 20px;
+    white-space: pre-wrap;
 
     @media (max-width: $breakpoint) {
       font-size: 12px;

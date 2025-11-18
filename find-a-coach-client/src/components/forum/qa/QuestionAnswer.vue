@@ -414,6 +414,7 @@ export default defineComponent({
   &-description {
     font-size: 14px;
     margin-top: 20px;
+    white-space: pre-wrap;
 
     @media (max-width: $breakpoint) {
       font-size: 12px;

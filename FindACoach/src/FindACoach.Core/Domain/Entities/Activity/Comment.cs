@@ -14,7 +14,7 @@ namespace FindACoach.Core.Domain.Entities.Activity
         public Activity? Activity { get; set; }
 
 
-        [StringLength(400, MinimumLength = 3)]
+        [StringLength(500, MinimumLength = 3)]
         [Required]
         public string Content { get; set; }
 

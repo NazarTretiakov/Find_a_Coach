@@ -15,7 +15,7 @@ namespace FindACoach.Core.DTO.MyProfile.Activities
 
         public IFormFile? Image { get; set; }
 
-        [StringLength(200, MinimumLength = 3)]
+        [StringLength(2000, MinimumLength = 3)]
         public string Description { get; set; }
 
         public List<SubjectDTO>? Subjects{ get; set; } = new List<SubjectDTO>();

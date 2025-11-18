@@ -5,28 +5,29 @@
     </div>
 
     <ul class="people-section_people-list">
-      <li class="people-section_people-person" v-for="n in 10" :key="n">
+      <li class="people-section_people-person" v-for="(connection, index) in connections" :key="connection.connectedUserId">
         <ul class="people-section_people-person-items">
           <li class="people-section_people-person-items_image">
-            <router-link to="/user-profile" class="people-section_people-person-link">
-              <img class="people-section_people-person-items_image-element" src="../../assets/images/icons/user-icon.jpg" alt="User profile image" />
+            <router-link :to="`/user-profile/${connection.connectedUserId}`" class="people-section_people-person-link">
+              <img class="people-section_people-person-items_image-element" :src="connection.imagePath" alt="User profile image" />
             </router-link>
           </li>
+
           <li class="people-section_people-person-items_info">
-            <router-link to="/user-profile" class="people-section_people-person-link">
-              <h2 class="people-section_people-person-items_info-name">Grzegorz Kwiatkowski</h2>
+            <router-link :to="`/user-profile/${connection.connectedUserId}`" class="people-section_people-person-link">
+              <h2 class="people-section_people-person-items_info-name">{{ connection.firstName }} {{ connection.lastName }}</h2>
             </router-link>
-            <p class="people-section_people-person-items_info-incription">Menedżer do spraw sprzedaży w firmie...</p>
-            <connect-button class="people-section_people-person-items_info-connect-button" />
+            <p class="people-section_people-person-items_info-incription">{{ connection.headline }}</p>
           </li>
         </ul>
-        <div v-if="n != 10" class="people-section_people-person-divider" />
+
+        <div v-if="index !== connections.length - 1" class="people-section_people-person-divider" />
         <div v-else class="people-section_people-person-divider-last" />
       </li>
     </ul>
 
     <div class="people-section_footer-wrapper">
-      <router-link to="/path-to-recommended-people-show-all" class="people-section_people-show-all-link">
+      <router-link to="/network" class="people-section_people-show-all-link">
         <div class="people-section_people-show-all">
           <span class="people-section_people-show-all-element">Show all</span>
         </div>
@@ -35,15 +36,40 @@
   </div>
 </template>
 
-
 <script lang="ts">
-import { defineComponent } from 'vue'
-import ConnectButton from './ConnectButton.vue'
+import { defineComponent, ref, onMounted, watch } from 'vue'
+
+import { useRouter } from "vue-router"
+import { useAuthenticationStore } from "@/stores/authentication"
+import type { Connection } from "@/types/network/Connection"
+import useGetRecommendedUsers from "@/composables/network/useGetRecommendedUsers"
 
 export default defineComponent({
-  components: {
-    ConnectButton
-  }
+  setup() {
+    const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
+    const isLoading = ref(false)
+    const connections = ref<Connection[]>([])
+
+    async function loadConnections() {
+      if (isLoading.value) return
+      isLoading.value = true
+      const result = await useGetRecommendedUsers(authenticationStore.userId, 1, 7)
+      if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
+        router.push("/error-page")
+        return
+      }
+      const fetched = result as Connection[]
+      connections.value.push(...fetched)
+      isLoading.value = false
+    }
+
+    onMounted(async () => {
+      await loadConnections()
+    })
+
+    return { isLoading, connections, loadConnections }
+  },
 })
 </script>
 
@@ -60,6 +86,7 @@ export default defineComponent({
   flex-direction: column;
   overflow: hidden;
   padding: 0;
+  width: 363px;
 
   &_header-wrapper {
     padding: 30px 50px 0 50px;
@@ -95,6 +122,8 @@ export default defineComponent({
         &-element {
           width: 40px;
           margin: 14px 10px 0 0;
+          border-radius: 50%;
+          border: 1px solid #000000;
         }
       }
 

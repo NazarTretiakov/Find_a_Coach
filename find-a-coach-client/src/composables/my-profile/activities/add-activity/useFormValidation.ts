@@ -23,7 +23,7 @@ export default function useValidationOfActivityForm(formData: Form): ValidationE
     errors.push({ fieldName: 'description', errorMessage: 'Description is required.' })
   }
   if (!isValidDescription(formData.description)) {
-    errors.push({ fieldName: 'description', errorMessage: 'Panel description must not be longer than 200 characters.' })
+    errors.push({ fieldName: 'description', errorMessage: 'Panel description must not be longer than 2000 characters.' })
   }
 
   for (let i = 0; i < formData.subjects.length; i++) {
@@ -60,8 +60,8 @@ export default function useValidationOfActivityForm(formData: Form): ValidationE
       errors.push({ fieldName: `panelsForSearchPeople[${i}].payment`, errorMessage: 'Too many characters entered in payment field.' })
     }
 
-    if (!isValidDescription(panel.description)) {
-      errors.push({ fieldName: `panelsForSearchPeople[${i}].description`, errorMessage: 'Panel description must not be longer than 200 characters.' })
+    if (!isValidPanelDescription(panel.description)) {
+      errors.push({ fieldName: `panelsForSearchPeople[${i}].description`, errorMessage: 'Panel description must not be longer than 500 characters.' })
     }
   }
 
@@ -83,7 +83,10 @@ function isValidActivityType(type: string): boolean {
 }
 
 function isValidDescription(desc: string): boolean {
-  return desc.length <= 200
+  return desc.length <= 2000
+}
+function isValidPanelDescription(desc: string): boolean {
+  return desc.length <= 500
 }
 
 function isValidSubject(subject: string): boolean {
