@@ -41,7 +41,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task ChangeCompleteProfileWindowState(string userId, bool isVisible, string title)
         {
-            User activeUser = await _db.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            User activeUser = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
 
             activeUser.IsCompleteProfileWindowVisible = isVisible;
             activeUser.CompleteProfileWindowTitle = title;
@@ -51,7 +51,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task EditPersonalInformation(string userId, EditPersonalInformationDTO dto)
         {
-            User activeUser = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            User activeUser = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
 
             if (activeUser == null)
             {
@@ -121,7 +121,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<CompleteProfileWindowStateDTO> GetCompleteProfileWindowState(string userId)
         {
-            User activeUser = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            User activeUser = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
 
             if (activeUser == null)
             {
@@ -139,7 +139,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<PersonalInformationToResponse> GetPersonalInformation(string userId)
         {
-            User user = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            User user = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
 
             var principal = _httpContextAccessor.HttpContext?.User;
             if (principal == null)
@@ -188,7 +188,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<PersonalAndContactInformationToResponse> GetPersonalAndContactInformation(string userId)
         {
-            var activeUser = await _db.Users.Where(u => u.Id == Guid.Parse(userId))
+            var activeUser = await _userManager.Users.Where(u => u.Id == Guid.Parse(userId))
                                             .Select(u => new User
                                             {
                                                 Id = u.Id,
@@ -232,13 +232,13 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<AboutMeDTO> GetAboutMe(string userId)
         {
-            User user =  await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            User user =  await _userManager.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
             return new AboutMeDTO() { AboutMe = user.AboutMe };
         }
 
         public async Task EditAboutMe(string userId, AboutMeDTO dto)
         {
-            User user = await _db.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            User user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId));
 
             user.AboutMe = dto.AboutMe;
 
@@ -322,7 +322,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<ContactInformationToResponse> GetContactInformation(string userId)
         {
-            var contactInformation = await _db.Users
+            var contactInformation = await _userManager.Users
                 .Where(u => u.Id == Guid.Parse(userId))
                 .Select(u => new ContactInformationToResponse()
                 {
@@ -343,7 +343,7 @@ namespace FindACoach.Infrastructure.Repositories
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
-            return await _db.Users
+            return await _userManager.Users
                 .Where(u => u.Id == Guid.Parse(userId))
                 .Select(u => new ProfileImagePathToResponse()
                 {
@@ -354,7 +354,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<ContactInformationVisibilityToResponse> GetContactInformationVisibility(string userId)
         {
-            return await _db.Users
+            return await _userManager.Users
                 .Where(u => u.Id == Guid.Parse(userId))
                 .Select(u => new ContactInformationVisibilityToResponse()
                 {
@@ -365,7 +365,7 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<ContactInformationVisibilityToResponse> EditContactInformationVisibility(string userId, string contactInformationVisibilityType)
         {
-            var user = await _db.Users
+            var user = await _userManager.Users
                 .Where(u => u.Id == Guid.Parse(userId))
                 .FirstAsync();
             
@@ -383,7 +383,7 @@ namespace FindACoach.Infrastructure.Repositories
         {
             var loweredSearch = $"%{searchString.ToLower()}%";
 
-            var users = await _db.Users
+            var users = await _userManager.Users
                 .Where(u =>
                     EF.Functions.Like((u.FirstName + " " + u.LastName).ToLower(), loweredSearch)
                 )
@@ -436,7 +436,7 @@ namespace FindACoach.Infrastructure.Repositories
             var locationPart = activeUser.Location.Split(',')[0].Trim().ToLower();
             var skillTitles = activeUser.Skills.Select(s => s.Title.ToLower()).ToList();
 
-            var users = await _db.Users
+            var users = await _userManager.Users
                 .Where(u => EF.Functions.Like(u.Location.ToLower(), $"%{locationPart}%") ||
                             u.Skills.Any(s => skillTitles.Contains(s.Title.ToLower())))
                 .OrderByDescending(u => u.FirstName)

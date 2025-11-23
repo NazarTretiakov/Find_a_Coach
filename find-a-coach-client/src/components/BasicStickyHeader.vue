@@ -14,7 +14,6 @@ export default defineComponent({
   }
 })
 </script>
-    BasicHeader
 
 <style lang='scss' scoped>
 @use '../assets/styles/config' as *;

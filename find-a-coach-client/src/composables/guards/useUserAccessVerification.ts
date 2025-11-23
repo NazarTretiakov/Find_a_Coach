@@ -15,6 +15,11 @@ export default function useUserAccessVerification(to: RouteLocationNormalized, f
         next('/error-page')
         return
       }
+      if (authenticationStore.role === 'Admin' && to.meta.requiredRole != 'Admin') {
+        next('/admin')
+      }
+    } else if (authenticationStore.role === 'Admin') {
+      next('/admin')
     }
   }
     

@@ -5,7 +5,7 @@ let refreshInProgress: Promise<string | null> | null = null
 export default async function useEnsureValidToken(): Promise<string | null> {
   const authenticationStore = useAuthenticationStore()
   const now = new Date()
-
+  
   if (refreshInProgress) {
     return await refreshInProgress
   }

@@ -33,7 +33,7 @@ export default defineComponent({
     const email = route.query.email as string
     const role = route.query.role as string
     const token = route.query.token as string
-    const tokenExpiration = new Date(route.query.tokenExpiration as string)
+    const tokenExpiration = new Date(route.query.expiration as string)
     const refreshToken = route.query.refreshToken as string
     const refreshTokenExpiration = new Date(route.query.refreshTokenExpiration as string)
     

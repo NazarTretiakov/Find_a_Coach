@@ -13,6 +13,7 @@ import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import useChangeCompleteProfileWindowTitle from '../composables/my-profile/complete-profile-window/useChangeCompleteProfileWindowTitle'
 import useChangeCompleteProfileWindowVisibility from '../composables/my-profile/complete-profile-window/useChangeCompleteProfileWindowVisibility'
+import { useAuthenticationStore } from '@/stores/authentication'
 
 import CompleteProfileWindow from '../components/homepage/CompleteProfileWindow.vue'
 import ReceiveReminderWindow from '../components/homepage/ReceiveReminderWindow.vue'
@@ -33,10 +34,15 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
 
     const completeProfileWindowTitle = ref(route.query.completeProfileWindowTitle)
     const isCompleteProfileWindowVisible = ref<boolean>(route.query.isCompleteProfileWindowVisible === 'true' && completeProfileWindowTitle.value != null)
     const isReceiveReminderWindowVisible = ref<boolean>(false)
+
+    if (authenticationStore.role === 'Admin') {
+      router.push('/admin')
+    }
     
     const onCompleteProfile = async () => {
       await useChangeCompleteProfileWindowTitle()

@@ -70,6 +70,8 @@ import UserProfileSkills from '../pages/user-profile/skills-page/SkillsPage.vue'
 import UserProfileLanguages from '../pages/user-profile/languages-page/LanguagesPage.vue'
 import UserProfileRecommendations from '../pages/user-profile/recommendations-page/RecommendationsPage.vue'
 import AdminPanel from '../pages/AdminPanel.vue'
+import ManageActivitiesPage from '../pages/admin-panel/ManageActivitiesPage.vue'
+import ManageUsersPage from '../pages/admin-panel/ManageUsersPage.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
 
 const router = createRouter({
@@ -81,7 +83,7 @@ const router = createRouter({
     { path: '/login', component: LoginPage, meta: { requiresAuth: false }, beforeEnter: useUnauthenticatedUserAccessVerification },
     { path: '/reset-password', component: ResetPassword, meta: { requiresAuth: false }, beforeEnter: useValidationOfResetPasswordParams },
     { path: '/register', component: RegistrationPage, meta: { requiresAuth: false }, beforeEnter: useUnauthenticatedUserAccessVerification },
-    { path: '/register/confirm-email', component: ConfirmEmail, meta: { requiresAuthT: false }, beforeEnter: useValidationOfConfirmEmailParams },
+    { path: '/register/confirm-email', component: ConfirmEmail, meta: { requiresAuth: false }, beforeEnter: useValidationOfConfirmEmailParams },
     { path: '/register/email-confirmed', component: EmailConfirmed, meta: { requiresAuth: false }, beforeEnter: useValidationOfEmailConfirmedParams },
     { path: '/search', component: SearchPage, meta: { requiresAuth: true } },
     { path: '/my-profile', component: MyProfilePage, meta: { requiresAuth: true } },
@@ -140,6 +142,8 @@ const router = createRouter({
     { path: '/user-profile/:id/languages', component: UserProfileLanguages, meta: { requiresAuth: true }, props: true },
     { path: '/user-profile/:id/recommendations', component: UserProfileRecommendations, meta: { requiresAuth: true }, props: true },
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
+    { path: '/admin/manage-activities', component: ManageActivitiesPage, meta: {requiresAuth: true, requiredRole: 'Admin' } },
+    { path: '/admin/manage-users', component: ManageUsersPage, meta: {requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
   ],
   scrollBehavior(to, from, savedPosition) {

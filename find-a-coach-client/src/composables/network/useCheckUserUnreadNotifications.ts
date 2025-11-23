@@ -7,7 +7,7 @@ const API_URL = config.apiBaseUrl + '/Network'
 export default async function useCheckUserUnreadNotifications(userId: string): Promise<Result | boolean> {
   try {
     const token = await useEnsureValidToken()
-
+    console.log(token)
     const response = await fetch(`${API_URL}/is-user-has-unread-notifications`, {
       method: 'POST',
       headers: {
