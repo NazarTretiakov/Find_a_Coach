@@ -2,6 +2,7 @@
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.ServiceContracts;
+using FindACoach.Core.ServiceContracts.Admin;
 using FindACoach.Core.ServiceContracts.Authentication;
 using FindACoach.Core.ServiceContracts.CompleteProfileWindow;
 using FindACoach.Core.ServiceContracts.Forum.Activities;
@@ -16,6 +17,7 @@ using FindACoach.Core.ServiceContracts.MyProfile.Settings;
 using FindACoach.Core.ServiceContracts.MyProfile.Skills;
 using FindACoach.Core.ServiceContracts.Network;
 using FindACoach.Core.Services;
+using FindACoach.Core.Services.Admin;
 using FindACoach.Core.Services.Authentication;
 using FindACoach.Core.Services.CompleteProfileWindow;
 using FindACoach.Core.Services.Forum.Activities;
@@ -123,6 +125,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<ISecuritySettingsGetterService, SecuritySettingsGetterService>();
             services.AddScoped<ISecuritySettingsEditorService, SecuritySettingsEditorService>();
             services.AddScoped<IUsersGetterService, UsersGetterService>();
+            services.AddScoped<IToggleBlockOfUserService, ToggleBlockOfUserService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IPositionsRepository, PositionsRepository>();

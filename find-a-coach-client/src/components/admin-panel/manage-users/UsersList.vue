@@ -1,54 +1,136 @@
 <template>
   <div class="users">
     <ul class="users-list">
-      <li class="users-list_user">
-        <img class="users-list_user-profile-image" src="@/assets/images/icons/user-icon.jpg" alt="User profile image">
-        <span class="users-list_user-email">some_email@gmail.com</span>
-        <span class="users-list_user-name">FirstName LastName</span>
-        <block-button class="users-list_user-button"></block-button>
+      <li v-for="user in users" :key="user.userId" class="users-list_user">
+        <img class="users-list_user-profile-image" :src="user.imagePath || '@/assets/images/icons/user-icon.jpg'" alt="User profile image">
+        <span class="users-list_user-email">{{ user.email }}</span>
+        <span class="users-list_user-name">{{ user.firstName }} {{ user.lastName }}</span>
+        <block-button v-if="!user.isBlocked" class="users-list_user-button" @click.stop="toggleBlock(user)" />
+        <unblock-button v-else class="users-list_user-button" @click.stop="toggleBlock(user)" />
       </li>
-      <li class="users-list_user">
-        <img class="users-list_user-profile-image" src="@/assets/images/icons/user-icon.jpg" alt="User profile image">
-        <span class="users-list_user-email">some_email@gmail.com</span>
-        <span class="users-list_user-name">FirstName LastName</span>
-        <unblock-button class="users-list_user-button"></unblock-button>
+
+      <li v-if="isLoading" class="users-list_loading"><loading-square /></li>
+
+      <li v-if="isMoreUsersLeft && !isLoading" class="users-list_load-more" @click="loadUsers">
+        <span class="users-list_load-more-inscription">Load more</span>
       </li>
-      <li class="users-list_user">
-        <img class="users-list_user-profile-image" src="@/assets/images/icons/user-icon.jpg" alt="User profile image">
-        <span class="users-list_user-email">some_email@gmail.com</span>
-        <span class="users-list_user-name">FirstName LastName</span>
-        <block-button class="users-list_user-button"></block-button>
-      </li>
-      <li class="users-list_load-more"><span class="users-list_load-more-inscription">Load more</span></li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, watch } from "vue"
+import { defineComponent, ref, onMounted, watch } from "vue"
 
 import LoadingSquare from '@/components/LoadingSquare.vue'
 import BlockButton from "./BlockButton.vue"
 import UnblockButton from "./UnblockButton.vue"
 
+import useGetAllUsers from "@/composables/admin-panel/useGetAllUsers"
+import useGetFilteredUsers from "@/composables/admin-panel/useGetFilteredUsers"
+import useToggleBlockOfUser from '@/composables/admin-panel/useToggleBlockOfUser'
+import type { User } from "@/types/admin-panel/User"
+
 export default defineComponent({
   props: {
-    searchString: { 
-      type: String, 
-      required: false, 
-      default: '' 
-    }
+    searchString: {
+      type: String,
+      required: false,
+      default: "",
+    },
   },
-  components: { 
+  components: {
     LoadingSquare,
     BlockButton,
-    UnblockButton
+    UnblockButton,
   },
-  setup(props) {
 
-  }
+  setup(props) {
+    const users = ref<User[]>([])
+    const page = ref(1)
+    const pageSize = 10
+    const isMoreUsersLeft = ref(true)
+    const isLoading = ref(false)
+
+    async function loadUsers() {
+      if (isLoading.value) return
+      isLoading.value = true
+
+      const result = await useGetAllUsers(page.value, pageSize)
+      if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        isLoading.value = false
+        return
+      }
+
+      const fetched = result as User[]
+      if (fetched.length < pageSize) {
+        isMoreUsersLeft.value = false
+      }
+
+      users.value.push(...fetched)
+      page.value++
+      isLoading.value = false
+    }
+
+    async function loadFilteredUsers() {
+      if (isLoading.value) return
+      isLoading.value = true
+
+      const result = await useGetFilteredUsers(props.searchString, page.value, pageSize)
+      if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        isLoading.value = false
+        return
+      }
+
+      const fetched = result as User[]
+      if (fetched.length < pageSize) {
+        isMoreUsersLeft.value = false
+      }
+
+      users.value.push(...fetched)
+      page.value++
+      isLoading.value = false
+    }
+
+    async function refreshUsers() {
+      users.value = []
+      page.value = 1
+      isMoreUsersLeft.value = true
+
+      if (props.searchString.trim() === "") await loadUsers()
+      else await loadFilteredUsers()
+    }
+
+    watch(() => props.searchString, async () => {
+      await refreshUsers()
+    })
+
+    onMounted(async () => {
+      await loadUsers()
+    })
+
+    async function toggleBlock(user: User) {
+      const result = await useToggleBlockOfUser(user.userId)
+      if (typeof result === "object" && "isSuccessful" in result && !result.isSuccessful) {
+        console.error(result.errorMessage)
+        return
+      }
+      user.isBlocked = result as boolean
+    }
+
+    return {
+      users,
+      isLoading,
+      isMoreUsersLeft,
+      loadUsers,
+      loadFilteredUsers,
+      toggleBlock,
+    }
+  },
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '@/assets/styles/config' as *;
@@ -78,7 +160,9 @@ export default defineComponent({
       }
 
       &-profile-image {
-        width: 40px;      
+        width: 40px;
+        border-radius: 50%;
+        border: 1px solid #000000;
         
         @media (max-width: $breakpoint) {
           width: 30px;

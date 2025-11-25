@@ -49,6 +49,8 @@ namespace FindACoach.Core.Domain.IdentityEntities
 
         public bool IsLoginNotificationEnabled { get; set; }
 
+        public bool IsBlocked { get; set; }
+
         public ContactInfomationVisibility ContactInformationVisibility { get; set; }
 
         public ICollection<Website> Websites { get; set; } = new List<Website>();

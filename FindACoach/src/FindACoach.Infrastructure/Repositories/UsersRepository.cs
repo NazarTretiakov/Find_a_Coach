@@ -1,6 +1,7 @@
 ﻿using FindACoach.Core.Domain.Entities;
 using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
+using FindACoach.Core.DTO.Admin;
 using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.DTO.MyProfile.Settings;
 using FindACoach.Core.DTO.Network;
@@ -415,6 +416,7 @@ namespace FindACoach.Infrastructure.Repositories
                     connectionsToResponse.Add(new ConnectionToResponse()
                     {
                         ConnectedUserId = user.Id,
+                        Email = user.Email,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Headline = user.Headline,
@@ -526,6 +528,50 @@ namespace FindACoach.Infrastructure.Repositories
             {
                 IsLoginNotificationEnabled = activeUser.IsLoginNotificationEnabled
             };
+        }
+
+        public async Task<List<UserToResponse>> GetAllUsers(int page, int pageSize)
+        {
+            var users = await _userManager.Users
+                .OrderByDescending(u => u.Email)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var usersToResponse = new List<UserToResponse>();
+
+            var serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var admins = await _userManager.GetUsersInRoleAsync(UserRoleOptions.Admin.ToString());
+
+            foreach (var user in users)
+            {
+                if (!admins.Any(a => a.Id == user.Id))
+                {
+                    usersToResponse.Add(new UserToResponse()
+                    {
+                        UserId = user.Id,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        ImagePath = $"{serverUrl}/Images/UserProfiles/{user.ImagePath}",
+                        IsBlocked = user.IsBlocked
+                    });
+                }
+            }
+
+            return usersToResponse;
+        }
+
+        public async Task<bool> ToggleBlock(string userId)
+        {
+            User user = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
+
+            user.IsBlocked = !user.IsBlocked;
+
+            await _db.SaveChangesAsync();
+
+            return user.IsBlocked;
         }
     }   
 }

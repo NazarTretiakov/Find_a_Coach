@@ -1,4 +1,5 @@
-﻿using FindACoach.Core.DTO.MyProfile;
+﻿using FindACoach.Core.DTO.Admin;
+using FindACoach.Core.DTO.MyProfile;
 using FindACoach.Core.DTO.MyProfile.Settings;
 using FindACoach.Core.DTO.Network;
 
@@ -109,6 +110,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         Task<List<ConnectionToResponse>> GetRecommendedUsers(string userId, int page, int pageSize);
 
         /// <summary>
+        /// Retrieves all users.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<UserToResponse>> GetAllUsers(int page, int pageSize);
+
+        /// <summary>
         /// Represents the service for retrieving information about condition of enabling of login notifications of current working user.
         /// </summary>
         /// <returns></returns>
@@ -127,5 +134,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="dto"></param>
         /// <returns></returns>
         Task<IsLoginNotificationEnabledDTO> EditSecuritySettings(string userId, EditSecuritySettingsDTO dto);
+
+        /// <summary>
+        /// Toggles block of user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<bool> ToggleBlock(string userId);
     }
 }

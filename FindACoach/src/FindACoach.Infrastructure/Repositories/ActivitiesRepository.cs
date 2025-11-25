@@ -4,6 +4,7 @@ using FindACoach.Core.Domain.IdentityEntities;
 using FindACoach.Core.Domain.RepositoryContracts;
 using FindACoach.Core.DTO.Forum;
 using FindACoach.Core.DTO.MyProfile.Activities;
+using FindACoach.Core.Enums;
 using FindACoach.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -211,11 +212,13 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .FirstOrDefaultAsync(c => c.Activity.Id == Guid.Parse(activityId));
 
+            var admins = await _userManager.GetUsersInRoleAsync(UserRoleOptions.Admin.ToString());
+
             if (informationToDeleteActivity == null)
             {
                 throw new ArgumentNullException("Activity id is incorrect.");
             }
-            if (informationToDeleteActivity.UserId != Guid.Parse(userId))
+            if (informationToDeleteActivity.UserId != Guid.Parse(userId) && !admins.Any(a => a.Id == Guid.Parse(userId)))
             {
                 throw new ArgumentException("Only creator of the activity can delete it.");
             }
@@ -629,6 +632,36 @@ namespace FindACoach.Infrastructure.Repositories
             }
 
             return uniqueFileName;
+        }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetAllActivities(int page, int pageSize)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var userActivities = await _db.Activities
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new ActivityForActivitiesListToResponse
+                {
+                    Id = a.Id,
+                    ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                    FirstNameOfCreator = a.User.FirstName,
+                    LastNameOfCreator = a.User.LastName,
+                    PublicationDate = a.CreatedAt,
+                    Title = a.Title,
+                    Subjects = a.Subjects.Select(s => s.Title).ToList(),
+                    ImagePath = string.IsNullOrEmpty(a.ImagePath) ? null : $"{serverUrl}/Images/Activities/{a.ImagePath}",
+                    Description = a.Description,
+                    ActivityType = a is Event ? "Event" :
+                                   a is Survey ? "Survey" :
+                                   a is QA ? "QA" :
+                                   a is Post ? "Post" :
+                                   "Unknown"
+                })
+                .ToListAsync();
+
+            return userActivities;
         }
     }
 }

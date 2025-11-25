@@ -1,4 +1,5 @@
 ﻿using FindACoach.Core.Domain.RepositoryContracts;
+using FindACoach.Core.DTO.Admin;
 using FindACoach.Core.DTO.Network;
 using FindACoach.Core.ServiceContracts.Network;
 
@@ -11,6 +12,11 @@ namespace FindACoach.Core.Services.Network
         public UsersGetterService(IUsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
+        }
+
+        public async Task<List<UserToResponse>> GetAllUsers(int page, int pageSize)
+        {
+            return await _usersRepository.GetAllUsers(page, pageSize);
         }
 
         public async Task<List<ConnectionToResponse>> GetFilteredUsers(string searchString, int page, int pageSize)

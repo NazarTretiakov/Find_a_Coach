@@ -180,6 +180,11 @@ namespace FindACoach.API.Controllers
                 return BadRequest(new { errorMessage = "You need to confirm your email before logging in." });
             }
 
+            if (user.IsBlocked == true)
+            {
+                return BadRequest(new { errorMessage = "Your account has been blocked." });
+            }
+
             var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)

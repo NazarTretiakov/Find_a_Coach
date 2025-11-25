@@ -32,7 +32,7 @@
 import { defineComponent, ref, computed, onMounted, watch } from "vue"
 
 import LoadingSquare from '@/components/LoadingSquare.vue'
-import useGetRecommendedActivities from '@/composables/forum/useGetRecommendedActivities'  //TODO: get all activities instead of recommended activities
+import useGetAllActivities from '@/composables/admin-panel/useGetAllActivities'
 import useGetFilteredActivities from '@/composables/forum/useGetFilteredActivities'
 import { useRouter } from "vue-router"
 import { useAuthenticationStore } from "@/stores/authentication"
@@ -91,7 +91,7 @@ export default defineComponent({
       if (isLoading.value) return
       isLoading.value = true
 
-      const result = await useGetRecommendedActivities(authenticationStore.userId, page.value, pageSize)
+      const result = await useGetAllActivities(page.value, pageSize)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
         router.push('/error-page')
@@ -150,8 +150,6 @@ export default defineComponent({
         console.error(result.errorMessage)
         return
       }
-
-      router.push('/my-profile/activities')
     }
 
     onMounted(() => {

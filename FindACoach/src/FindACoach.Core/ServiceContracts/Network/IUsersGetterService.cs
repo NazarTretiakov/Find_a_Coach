@@ -1,4 +1,5 @@
-﻿using FindACoach.Core.DTO.Network;
+﻿using FindACoach.Core.DTO.Admin;
+using FindACoach.Core.DTO.Network;
 
 namespace FindACoach.Core.ServiceContracts.Network
 {
@@ -20,5 +21,11 @@ namespace FindACoach.Core.ServiceContracts.Network
         /// <param name="userId">User id which recommended users will be retrieved.</param>
         /// <returns></returns>
         Task<List<ConnectionToResponse>> GetRecommendedUsers(string userId, int page, int pageSize);
+
+        /// <summary>
+        /// Retrieves all users.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<UserToResponse>> GetAllUsers(int page, int pageSize);
     }
 }

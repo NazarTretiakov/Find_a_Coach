@@ -53,5 +53,10 @@ namespace FindACoach.Core.Services.Forum.Activities
         {
             return await _activitiesRepository.GetLastTwoActivities(userId);
         }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetAllActivities(int page, int pageSize)
+        {
+            return await _activitiesRepository.GetAllActivities(page, pageSize);
+        }
     }
 }
