@@ -141,5 +141,12 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<bool> ToggleBlock(string userId);
+
+        /// <summary>
+        /// Checks if the user blocked.
+        /// </summary>
+        /// <param name="userId">User id which will be checked.</param>
+        /// <returns></returns>
+        Task<bool> IsUserBlocked(string userId);
     }
 }

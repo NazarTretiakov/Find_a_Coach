@@ -573,5 +573,12 @@ namespace FindACoach.Infrastructure.Repositories
 
             return user.IsBlocked;
         }
+
+        public async Task<bool> IsUserBlocked(string userId)
+        {
+            User user = await _userManager.Users.FirstAsync(u => u.Id == Guid.Parse(userId));
+
+            return user.IsBlocked;
+        }
     }   
 }

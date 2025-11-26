@@ -21,8 +21,9 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IActivitiesGetterService _activitiesGetterService;
         private readonly IIsProfileSectionsCompletedService _isProfileSectionsCompletedService;
         private readonly IContactInformationVisibilityGetterService _contactInformationVisibilityGetterService;
+        private readonly IIsUserBlockedCheckerService _isUserBlockedCheckerService;
 
-        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IContactInformationGetterService contactInformationGetterService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService, IIsProfileSectionsCompletedService isProfileSectionsCompletedService, IContactInformationVisibilityGetterService contactInformationVisibilityGetterService)
+        public MyProfileController(IEditPersonalInformationService editPersonalInformationService, IGetPersonalInformationService getPersonalInformationService, IGetPersonalAndContactInformationService getPersonalAndContactInformationService, IContactInformationGetterService contactInformationGetterService, IGetAboutMeService getAboutMeService, IEditAboutMeService editAboutMeService, IActivitiesGetterService activitiesGetterService, IIsProfileSectionsCompletedService isProfileSectionsCompletedService, IContactInformationVisibilityGetterService contactInformationVisibilityGetterService, IIsUserBlockedCheckerService isUserBlockedCheckerService)
         {
             _editPersonalInformationService = editPersonalInformationService;
             _getPersonalInformationService = getPersonalInformationService;
@@ -33,6 +34,7 @@ namespace FindACoach.API.Controllers.MyProfile
             _activitiesGetterService = activitiesGetterService;
             _isProfileSectionsCompletedService = isProfileSectionsCompletedService;
             _contactInformationVisibilityGetterService = contactInformationVisibilityGetterService;
+            _isUserBlockedCheckerService = isUserBlockedCheckerService;
         }
 
         [HttpPost("edit-personal-information")]
@@ -141,6 +143,14 @@ namespace FindACoach.API.Controllers.MyProfile
             var contactInformationVisibility = await _contactInformationVisibilityGetterService.Get(userId);
 
             return Ok(contactInformationVisibility);
+        }
+
+        [HttpGet("is-user-blocked")]
+        public async Task<ActionResult<bool>> GetIsUserBlocked(string userId)
+        {
+            var isUserBlocked = await _isUserBlockedCheckerService.IsUserBlocked(userId);
+
+            return Ok(isUserBlocked);
         }
     }
 }

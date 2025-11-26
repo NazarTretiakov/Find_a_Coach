@@ -126,6 +126,7 @@ namespace FindACoach.API.StartupExtensions
             services.AddScoped<ISecuritySettingsEditorService, SecuritySettingsEditorService>();
             services.AddScoped<IUsersGetterService, UsersGetterService>();
             services.AddScoped<IToggleBlockOfUserService, ToggleBlockOfUserService>();
+            services.AddScoped<IIsUserBlockedCheckerService, IsUserBlockedCheckerService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IPositionsRepository, PositionsRepository>();

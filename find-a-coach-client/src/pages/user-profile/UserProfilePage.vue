@@ -3,6 +3,10 @@
     <basic-sticky-header class="header"></basic-sticky-header>
 
     <loading-square v-if="isLoading"></loading-square>
+    <div v-else-if="isUserBlocked" class="blocked-state">
+      <img class="blocked-state-image" src="@/assets/images/icons/blocked-icon.svg" alt="User blocked icon">
+      <span class="blocked-state-inscription">This user has been blocked</span>
+    </div>
     <ul v-else class="profile-sections">
       <li class="profile-sections_left-side">
         <personal-information :id="id"></personal-information>
@@ -47,6 +51,7 @@ import { useRouter } from 'vue-router'
 import { useAuthenticationStore } from '@/stores/authentication'
 import useIsProfileSectionsCompleted from '@/composables/my-profile/useIsProfileSectionsCompleted'
 import { IsProfileSectionsCompleted } from '@/types/my-profile/IsProfileSectionsCompleted'
+import useCheckIfUserBlocked from '@/composables/my-profile/useCheckIfUserBlocked'
 
 export default defineComponent({
   props: {
@@ -73,9 +78,10 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter()
+    const authenticationStore = useAuthenticationStore()
     const isProfileSectionsCompleted = ref<IsProfileSectionsCompleted>({} as IsProfileSectionsCompleted)
     const isLoading = ref<boolean>(true)
-    const authenticationStore = useAuthenticationStore()
+    const isUserBlocked = ref<boolean>(false)
 
     async function loadIsProfileSectionsCompletedInfo() {
       const startTime = performance.now()
@@ -85,6 +91,7 @@ export default defineComponent({
       }
 
       const result = await useIsProfileSectionsCompleted(props.id)
+      const resultIsUserBlocked = await useCheckIfUserBlocked(props.id)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
         if (!result.isSuccessful) {
@@ -93,6 +100,15 @@ export default defineComponent({
         }
       } else {
         isProfileSectionsCompleted.value = result as IsProfileSectionsCompleted
+      }
+
+      if (typeof resultIsUserBlocked === 'object' && 'isSuccessful' in resultIsUserBlocked) {
+        if (!resultIsUserBlocked.isSuccessful) {
+          router.push('/error-page')
+          return
+        }
+      } else {
+        isUserBlocked.value = resultIsUserBlocked as boolean
       }
 
       const elapsed = performance.now() - startTime
@@ -106,7 +122,7 @@ export default defineComponent({
 
     onMounted(() => loadIsProfileSectionsCompletedInfo())
 
-    return { isProfileSectionsCompleted, isLoading }
+    return { isProfileSectionsCompleted, isLoading, isUserBlocked }
   }
 })
 </script>
@@ -116,6 +132,30 @@ export default defineComponent({
 
 .header {
   z-index: 1;
+}
+
+.blocked-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+
+  &-image {
+    width: 100px;
+    margin-bottom: 10px;
+
+    @media (max-width: $breakpoint) {
+      width: 80px;
+    }
+  }
+  &-inscription {
+    font-size: 16px;
+
+    @media (max-width: $breakpoint) {
+      font-size: 14px;
+    }
+  }
 }
 
 .profile-sections {
