@@ -263,7 +263,7 @@ namespace FindACoach.Infrastructure.Repositories
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
             var userActivities = await _db.Activities
-                .Where(a => a.UserId == Guid.Parse(userId))
+                .Where(a => a.UserId == Guid.Parse(userId) && !a.User.IsBlocked)
                 .Where(predicate)
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip((page - 1) * pageSize)
@@ -309,8 +309,8 @@ namespace FindACoach.Infrastructure.Repositories
                 throw new UnauthorizedAccessException("User with supplied id donesn't exist.");
             }
 
-            var userActivities = await _db.Activities
-                .Where(a => 
+            var recommendedActivities = await _db.Activities
+                .Where(a => (
                     a.Title.ToLower().Contains(user.PrimaryOccupation.ToLower()) ||
                     a.Subjects.Any(s => s.Title.ToLower().Contains(user.PrimaryOccupation.ToLower())) ||
                     a.Description.ToLower().Contains(user.PrimaryOccupation.ToLower()) ||
@@ -319,7 +319,9 @@ namespace FindACoach.Infrastructure.Repositories
                         .Any(skillTitle => a.Title.ToLower().Contains(skillTitle.ToLower())) ||
                     user.Skills
                         .Select(skill => skill.Title)
-                        .Any(skillTitle => a.Subjects.Any(s => s.Title.ToLower().Contains(skillTitle.ToLower())))
+                        .Any(skillTitle => a.Subjects.Any(s => s.Title.ToLower().Contains(skillTitle.ToLower()))) ) &&
+                   !a.User.IsBlocked &&
+                   a.UserId != Guid.Parse(userId)
                 )
                 .OrderByDescending(a => a.Likes.Count)
                 .OrderByDescending(a => a.CreatedAt)
@@ -344,7 +346,38 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            return userActivities;
+            if (recommendedActivities.Count < 6)
+            {
+                var recommendedIds = recommendedActivities.Select(u => u.Id).ToList();
+
+                var activities = await _db.Activities
+                    .Where(a => !recommendedIds.Contains(a.Id) && !a.User.IsBlocked && a.UserId != Guid.Parse(userId))
+                    .OrderByDescending(a => a.Likes.Count)
+                    .OrderByDescending(a => a.CreatedAt)
+                    .Take(6 - recommendedActivities.Count)
+                    .Select(a => new ActivityForActivitiesListToResponse
+                    {
+                        Id = a.Id,
+                        ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{a.User.ImagePath}",
+                        FirstNameOfCreator = a.User.FirstName,
+                        LastNameOfCreator = a.User.LastName,
+                        PublicationDate = a.CreatedAt,
+                        Title = a.Title,
+                        Subjects = a.Subjects.Select(s => s.Title).ToList(),
+                        ImagePath = string.IsNullOrEmpty(a.ImagePath) ? null : $"{serverUrl}/Images/Activities/{a.ImagePath}",
+                        Description = a.Description,
+                        ActivityType = a is Event ? "Event" :
+                                       a is Survey ? "Survey" :
+                                       a is QA ? "QA" :
+                                       a is Post ? "Post" :
+                                       "Unknown"
+                    })
+                    .ToListAsync();
+
+                recommendedActivities.AddRange(activities);
+            }
+
+            return recommendedActivities;
         }
 
         public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
@@ -434,7 +467,7 @@ namespace FindACoach.Infrastructure.Repositories
                                                                       NumberOfLikes = e.Likes.Count,
                                                                       IsSaved = isActivitySavedByActiveUser,
                                                                       Comments = e.Comments
-                                                                        .Where(c => c.ActivityId == e.Id)
+                                                                        .Where(c => c.ActivityId == e.Id && !c.User.IsBlocked)
                                                                         .OrderByDescending(c => c.DateOfCreation)
                                                                         .Take(3)
                                                                         .Select(c => new CommentToResponse()
@@ -478,7 +511,7 @@ namespace FindACoach.Infrastructure.Repositories
                                                                            NumberOfLikes = s.Likes.Count,
                                                                            IsSaved = isActivitySavedByActiveUser,
                                                                            Comments = s.Comments
-                                                                            .Where(c => c.ActivityId == s.Id)
+                                                                            .Where(c => c.ActivityId == s.Id && !s.User.IsBlocked)
                                                                             .OrderByDescending(c => c.DateOfCreation)
                                                                             .Take(3)
                                                                             .Select(c => new CommentToResponse()
@@ -516,7 +549,7 @@ namespace FindACoach.Infrastructure.Repositories
                                                               NumberOfLikes = qa.Likes.Count,
                                                               IsSaved = isActivitySavedByActiveUser,
                                                               Comments = qa.Comments
-                                                                 .Where(c => c.ActivityId == qa.Id)
+                                                                 .Where(c => c.ActivityId == qa.Id && !qa.User.IsBlocked)
                                                                  .OrderByDescending(c => c.DateOfCreation)
                                                                  .Take(3)
                                                                  .Select(c => new CommentToResponse()
@@ -554,7 +587,7 @@ namespace FindACoach.Infrastructure.Repositories
                                               NumberOfLikes = p.Likes.Count,
                                               IsSaved = isActivitySavedByActiveUser,
                                               Comments = p.Comments
-                                                .Where(c => c.ActivityId == p.Id)
+                                                .Where(c => c.ActivityId == p.Id && !c.User.IsBlocked)
                                                 .OrderByDescending(c => c.DateOfCreation)
                                                 .Take(3)
                                                 .Select(c => new CommentToResponse()

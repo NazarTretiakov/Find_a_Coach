@@ -1,19 +1,21 @@
 <template> 
-  <div class="header">
-    <basic-header></basic-header>
-    <search-panel @search="handleSearch"></search-panel>
+  <div class="layout">
+    <div class="header">
+      <basic-header></basic-header>
+      <search-panel @search="handleSearch"></search-panel>
+    </div>
+
+    <ul class="forum-sections">
+      <li class="forum-sections_left-side">
+        <forum-cards :search-string="searchString"></forum-cards>
+      </li>
+      <li class="forum-sections_right-side">
+        <recommended-people></recommended-people>
+      </li>
+    </ul>
+
+    <the-footer class="footer"></the-footer>
   </div>
-
-  <ul class="forum-sections">
-    <li class="forum-sections_left-side">
-      <forum-cards :search-string="searchString"></forum-cards>
-    </li>
-    <li class="forum-sections_right-side">
-      <recommended-people></recommended-people>
-    </li>
-  </ul>
-
-  <the-footer></the-footer>
 </template>
 
 <script lang="ts">
@@ -82,5 +84,15 @@ export default defineComponent({
       margin-bottom: 100px;
     }
   }
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  margin-top: auto;
 }
 </style>

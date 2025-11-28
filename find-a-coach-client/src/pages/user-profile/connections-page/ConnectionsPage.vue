@@ -1,18 +1,20 @@
 <template>
-  <div class="header">
-    <basic-header></basic-header>
+  <div class="layout">
+    <div class="header">
+      <basic-header></basic-header>
+    </div>
+
+    <ul class="profile-sections">
+      <li class="profile-sections_left-side">
+        <connections-cards :id="id" :name="name"></connections-cards>
+      </li>
+      <li class="profile-sections_right-side">
+        <recommended-people></recommended-people>
+      </li>
+    </ul>
+
+    <the-footer class="footer"></the-footer>
   </div>
-
-  <ul class="profile-sections">
-    <li class="profile-sections_left-side">
-      <connections-cards :id="id" :name="name"></connections-cards>
-    </li>
-    <li class="profile-sections_right-side">
-      <recommended-people></recommended-people>
-    </li>
-  </ul>
-
-  <the-footer></the-footer>
 </template>
 
 <script lang="ts">
@@ -81,9 +83,11 @@ export default defineComponent({
     }
   }
   &_right-side {
+    margin-bottom: 100px;
 
     @media (max-width: $breakpoint) {
       order: 1;
+      display: none;
     }
 
     &-invitations {
@@ -97,5 +101,14 @@ export default defineComponent({
       }
     }
   }
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.footer {
+  margin-top: auto;
 }
 </style>

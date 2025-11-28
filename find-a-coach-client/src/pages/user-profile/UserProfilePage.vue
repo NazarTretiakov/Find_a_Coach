@@ -10,14 +10,14 @@
     <ul v-else class="profile-sections">
       <li class="profile-sections_left-side">
         <personal-information :id="id"></personal-information>
-        <about-me :id="id"></about-me>
-        <activities-section :id="id"></activities-section>
-        <experience-section :id="id"></experience-section>
-        <education-section :id="id"></education-section>
-        <projects-section :id="id"></projects-section>
-        <certifications-section :id="id"></certifications-section>
-        <skills-section :id="id"></skills-section>
-        <languages-section :id="id"></languages-section>
+        <about-me :id="id" v-if="isProfileSectionsCompleted.isDescription"></about-me>
+        <activities-section :id="id" v-if="isProfileSectionsCompleted.isActivities"></activities-section>
+        <experience-section :id="id" v-if="isProfileSectionsCompleted.isExperience"></experience-section>
+        <education-section :id="id" v-if="isProfileSectionsCompleted.isEducation"></education-section>
+        <projects-section :id="id" v-if="isProfileSectionsCompleted.isProjects"></projects-section>
+        <certifications-section :id="id" v-if="isProfileSectionsCompleted.isCertifications"></certifications-section>
+        <skills-section :id="id" v-if="isProfileSectionsCompleted.isSkills"></skills-section>
+        <languages-section :id="id" v-if="isProfileSectionsCompleted.isLanguages"></languages-section>
         <recommendations-section :id="id"></recommendations-section>
       </li>
       <li class="profile-sections_right-side">

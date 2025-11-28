@@ -24,6 +24,10 @@
         <li v-if="isLoading" class="notifications-cards-items_loading">
           <v-progress-circular class="notifications-cards-items_loading-spinner-item" indeterminate color="#1b3b80" size="35" width="4"></v-progress-circular>
         </li>
+        <li v-if="notifications.length == 0" class="notifications-cards-items_empty-state">
+          <img class="notifications-cards-items_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+          <span class="notifications-cards-items_empty-state-inscription">You have no notifications.</span>
+        </li>
       </ul>
     </div>
   </div>
@@ -195,6 +199,32 @@ export default defineComponent({
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+
+      &_empty-state {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        &-icon {
+          width: 50px;
+          margin-bottom: 14px;
+
+          @media (max-width: $breakpoint) {
+            width: 40px;
+            margin-bottom: 10px;
+          }
+        }
+        &-inscription {
+          font-size: 14px;
+          margin-bottom: 30px;
+
+          @media (max-width: $breakpoint) {
+            margin-bottom: 20px;
+            font-size: 12px;
+          }
+        }
       }
 
       &_load-more {

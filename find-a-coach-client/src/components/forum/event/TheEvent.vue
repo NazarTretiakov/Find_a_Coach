@@ -10,7 +10,7 @@
         </router-link>  
       </li>
       <li class="event-header_publication-time">
-        <span class="event-header_publication-time-element">{{ formatDate(event.createdAt) }}</span>
+        <span class="event-header_publication-time-element">{{ formatToRelativeDate(event.createdAt) }}</span>
       </li>
     </ul>
 
@@ -131,13 +131,14 @@ import { useAuthenticationStore } from '@/stores/authentication'
 import useGetEvent from '@/composables/forum/useGetEvent'
 import { useRouter } from "vue-router";
 import { Event } from "@/types/forum/Event";
-import useRelativeDate from "@/composables/forum/useRelativeDate"
 import useToggleLikeOfActivity from "@/composables/forum/useToggleLikeOfActivity";
 import useToggleSaveOfActivity from "@/composables/forum/useToggleSaveOfActivity";
 import useCreateComment from "@/composables/forum/useCreateComment";
 import useDeleteComment from "@/composables/forum/useDeleteComment";
 import useGetCommentsPaged from "@/composables/forum/useGetCommentsPaged";
 import useApplyOnEvent from '@/composables/forum/useApplyOnEvent'
+import useFormatToReadableDate from "@/composables/useFormatToReadableDate";
+import useRelativeDate from "@/composables/forum/useRelativeDate";
 
 export default defineComponent({
   props: {
@@ -192,6 +193,16 @@ export default defineComponent({
     })
 
     const formatDate = (date: string) => {
+      const formattedDate = new Date(date).toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
+      return formattedDate
+    }
+
+    const formatToRelativeDate = (date: string) => {
       return useRelativeDate(date)
     }
 
@@ -299,7 +310,7 @@ export default defineComponent({
       }
     }
 
-    return { event, formatDate, isPositionPanelOpened, applyOnEvent, successMessages, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, isLoading }
+    return { event, formatDate, isPositionPanelOpened, applyOnEvent, successMessages, triggerPositionPanelOpening, toggleLike, toggleSave, inputFieldAddCommentContent, createComment, activeUserEmail, deleteComment, isLoadMoreCommentsButtonVisible, loadMoreComments, formatToRelativeDate, isLoading }
   }
 });
 </script>

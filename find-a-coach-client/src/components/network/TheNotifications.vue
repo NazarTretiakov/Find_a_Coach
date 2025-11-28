@@ -5,7 +5,7 @@
       <router-link to="/network/notifications" class="notifications_header-see-all-button">See all</router-link>
     </div>
 
-    <ul :class="['notifications_list', { 'notifications_list-loading': isLoading }]">
+    <ul :class="['notifications_list', { 'notifications_list-loading': isLoading || notifications.length == 0 }]">
       <li class="notifications_list_item" v-for="(notification, index) in notifications" :key="notification.notificationId">
         <router-link :to="relatedObjectLink(notification)" class="notifications_list_item-content">
           <img class="notifications_list_item-content-user-image" :src="notification.relatedUserImagePath" alt="User profile image" />
@@ -16,6 +16,10 @@
       </li>
       <li v-if="isLoading" class="notifications_list_loading">
         <v-progress-circular class="notifications_list_loading-spinner-item" indeterminate color="#1b3b80" size="35" width="4"></v-progress-circular>
+      </li>
+      <li v-if="notifications.length == 0" class="notifications_list_empty-state">
+        <img class="notifications_list_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+        <span class="notifications_list_empty-state-inscription">You have no notifications.</span>
       </li>
     </ul>
 
@@ -207,6 +211,31 @@ export default defineComponent({
         margin: 40px 0 50px 0;
       }
     }
+
+    &_empty-state {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &-icon {
+        width: 50px;
+        margin-bottom: 14px;
+
+        @media (max-width: $breakpoint) {
+          width: 40px;
+          margin-bottom: 10px;
+        }
+      }
+      &-inscription {
+        font-size: 14px;
+
+        @media (max-width: $breakpoint) {
+          margin-bottom: 30px;
+          font-size: 12px;
+        }
+      }
+    }
   }
 
   &_footer-wrapper {
@@ -237,6 +266,10 @@ export default defineComponent({
 
         .notifications_show-all-element {
           font-size: 14px;
+
+          @media (max-width: $breakpoint) {
+            font-size: 12px;
+          }
         }
       }
     }

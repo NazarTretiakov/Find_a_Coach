@@ -438,19 +438,36 @@ namespace FindACoach.Infrastructure.Repositories
             var locationPart = activeUser.Location.Split(',')[0].Trim().ToLower();
             var skillTitles = activeUser.Skills.Select(s => s.Title.ToLower()).ToList();
 
-            var users = await _userManager.Users
-                .Where(u => EF.Functions.Like(u.Location.ToLower(), $"%{locationPart}%") ||
-                            u.Skills.Any(s => skillTitles.Contains(s.Title.ToLower())))
+            var recommendedUsers = await _userManager.Users
+                .Where(u => (EF.Functions.Like(u.Location.ToLower(), $"%{locationPart}%") ||
+                            u.Skills.Any(s => skillTitles.Contains(s.Title.ToLower()))) &&
+                            u.Id != activeUser.Id)
                 .OrderByDescending(u => u.FirstName)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
+            if (recommendedUsers.Count < 6)
+            {
+                var admins = await _userManager.GetUsersInRoleAsync(UserRoleOptions.Admin.ToString());
+
+                var recommendedIds = recommendedUsers.Select(u => u.Id).ToList();
+                var adminIds = admins.Select(a => a.Id).ToList();
+
+                var users = await _userManager.Users
+                    .Where(u => !recommendedIds.Contains(u.Id) && !adminIds.Contains(u.Id) && !u.IsBlocked && u.Id != activeUser.Id)
+                    .OrderByDescending(u => u.FirstName)
+                    .Take(6 - recommendedUsers.Count)
+                    .ToListAsync();
+
+                recommendedUsers.AddRange(users);
+            }
+
             var connectionsToResponse = new List<ConnectionToResponse>();
 
             var serverUrl = _configuration.GetValue<string>("ServerUrl");
 
-            foreach (var user in users)
+            foreach (var user in recommendedUsers)
             {
                 if (user.Id != activeUser.Id)
                 {

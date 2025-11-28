@@ -19,6 +19,11 @@
         <v-progress-circular class="notifications-cards-items_loading-spinner-item" indeterminate color="#1b3b80" size="35" width="4"></v-progress-circular>
       </div>
 
+      <div v-if="!isLoading && connections.length == 0" class="notifications-cards-items_empty-state">
+        <img class="notifications-cards-items_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+        <span class="notifications-cards-items_empty-state-inscription">You have no connections yet. Visit the Network page to start connecting with others.</span>
+      </div>
+
       <div class="notifications-cards-items_load-more" v-if="isMoreConnectionsLeft && !isLoading">
         <span @click="loadConnections" class="notifications-cards-items_load-more-inscription">Load more</span>
       </div>
@@ -28,7 +33,7 @@
 
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, computed } from "vue"
+import { defineComponent, ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useAuthenticationStore } from "@/stores/authentication"
 import useGetConnections from "@/composables/network/useGetConnections"
@@ -197,5 +202,31 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   margin-top: 30px;
+}
+
+.notifications-cards-items_empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &-icon {
+    width: 50px;
+    margin-bottom: 14px;
+
+    @media (max-width: $breakpoint) {
+      width: 40px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &-inscription {
+    font-size: 14px;
+
+    @media (max-width: $breakpoint) {
+      margin-bottom: 30px;
+      font-size: 12px;
+    }
+  }
 }
 </style>
