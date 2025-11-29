@@ -77,13 +77,17 @@
         <button v-if="activeUserEmail == comment.userEmail" @click="deleteComment(comment.commentId)" class="post-comments_comment-delete-button">Delete comment</button>
         <div v-if="index !== post.comments.length - 1" class="post-comments_comment-divider"></div>
       </li>
+      <li v-if="!isLoading && post.comments.length == 0" class="post-comments_empty-state">
+        <img class="post-comments_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+        <span class="post-comments_empty-state-inscription">No comments have been added. You can be first.</span>
+      </li>
       <li class="post-comments_load-more-comments-button" v-if="isLoadMoreCommentsButtonVisible" @click="loadMoreComments">Load more comments..</li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from "vue"
+import { defineComponent, ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import LoadingSquare from "@/components/LoadingSquare.vue"
 
@@ -537,6 +541,31 @@ export default defineComponent({
         margin-bottom: 24px;
       }
     }
+    &_empty-state {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &-icon {
+        width: 50px;
+        margin-bottom: 14px;
+
+        @media (max-width: $breakpoint) {
+          width: 40px;
+          margin-bottom: 10px;
+        }
+      }
+      &-inscription {
+        font-size: 14px;
+
+        @media (max-width: $breakpoint) {
+          margin-bottom: 30px;
+          font-size: 12px;
+        }
+      }
+    }
+
     &_load-more-comments-button {
       font-size: 14px;
       display: flex;

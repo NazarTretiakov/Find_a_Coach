@@ -47,6 +47,11 @@
         </li>
       </router-link>
     </ul>
+    
+    <div v-if="!isLoading && eventApplications.length == 0" class="event-applications-cards-items_empty-state">
+      <img class="event-applications-cards-items_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+      <span class="event-applications-cards-items_empty-state-inscription">That search person panel has no applications yet.</span>
+    </div>
   </div>
 </template>
 
@@ -384,6 +389,32 @@ export default defineComponent({
         &-link {
           color: #000000;
           text-decoration: none;
+        }
+      }
+
+      &_empty-state {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        &-icon {
+          width: 50px;
+          margin-bottom: 14px;
+
+          @media (max-width: $breakpoint) {
+            width: 40px;
+            margin-bottom: 10px;
+          }
+        }
+
+        &-inscription {
+          font-size: 14px;
+
+          @media (max-width: $breakpoint) {
+            margin-bottom: 30px;
+            font-size: 12px;
+          }
         }
       }
     }

@@ -165,7 +165,11 @@ namespace FindACoach.Infrastructure.Repositories
             certification.IssueDate = dto.IssueDate;
             certification.CredentialId = dto.CredentialId;
             certification.CredentialUrl = dto.CredentialUrl;
-            certification.ImagePath = await ChangeCertificationImage(certification, dto.Image);
+
+            if (dto.Image != null && dto.Image.Length != 0)
+            {
+                certification.ImagePath = await ChangeCertificationImage(certification, dto.Image);
+            }
 
             foreach (var certificationSkill in certification.Skills.ToList())
             {

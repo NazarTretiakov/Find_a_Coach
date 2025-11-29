@@ -1,19 +1,21 @@
 <template>
-  <div class="header">
-    <profile-header></profile-header>
-    <search-panel @search="handleSearch"></search-panel>
+  <div class="layout">
+    <div class="header">
+      <profile-header></profile-header>
+      <search-panel @search="handleSearch"></search-panel>
+    </div>
+
+    <ul class="activities-sections">
+      <li class="activities-sections_left-side">
+        <activities-cards :search-string="searchString"></activities-cards>
+      </li>
+      <li class="activities-sections_right-side">
+        <recommended-people></recommended-people>
+      </li>
+    </ul>
+
+    <the-footer class="footer"></the-footer>
   </div>
-
-  <ul class="activities-sections">
-    <li class="activities-sections_left-side">
-      <activities-cards :search-string="searchString"></activities-cards>
-    </li>
-    <li class="activities-sections_right-side">
-      <recommended-people></recommended-people>
-    </li>
-  </ul>
-
-  <the-footer></the-footer>
 </template>
 
 <script lang="ts">
@@ -80,5 +82,15 @@ export default defineComponent({
       margin-bottom: 100px;
     }
   }
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  margin-top: auto;
 }
 </style>

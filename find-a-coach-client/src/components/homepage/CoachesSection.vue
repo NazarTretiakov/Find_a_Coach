@@ -7,7 +7,7 @@
             <h1 class="coaches-section-items_description-items_caption-element">Experience <br/>the Power of Coaching</h1>
           </li>
           <li class="coaches-section-items_description-items_paragraph">
-            <p class="coaches-section-items_description-items_paragraph-element">Looking to grow your skills and expand your knowledge? <br/>You’re in the right place! <br/><br/>Connect with experienced coaches who can guide you in the subject you’re passionate about — or find like-minded individuals who are learning the same thing. <br/><br/>Whether you need expert guidance or a study companion, this is the place to build meaningful connections and support your educational journey.</p>
+            <p class="coaches-section-items_description-items_paragraph-element">Looking to grow your skills and expand your knowledge? <br/>You’re in the right place! <br/><br/>Connect with experienced coaches who can guide you in the subject you’re passionate about - or find like-minded individuals who are learning the same thing. <br/><br/>Whether you need expert guidance or a study companion, this is the place to build meaningful connections and support your educational journey.</p>
           </li>
           <li class="coaches-section-items_description-items_button">
             <coaches-button></coaches-button>

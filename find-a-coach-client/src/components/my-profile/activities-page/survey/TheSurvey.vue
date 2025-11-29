@@ -100,6 +100,10 @@
         <button v-if="activeUserEmail == comment.userEmail" @click="deleteComment(comment.commentId)" class="survey-comments_comment-delete-button">Delete comment</button>
         <div v-if="index !== survey.comments.length - 1" class="survey-comments_comment-divider"></div>
       </li>
+      <li v-if="!isLoading && survey.comments.length == 0" class="survey-comments_empty-state">
+        <img class="survey-comments_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+        <span class="survey-comments_empty-state-inscription">No comments have been added. You can be first.</span>
+      </li>
       <li class="survey-comments_load-more-comments-button" v-if="isLoadMoreCommentsButtonVisible" @click="loadMoreComments">Load more comments..</li>
     </ul>
 
@@ -661,6 +665,29 @@ export default defineComponent({
         border-bottom: 1px solid $grayBorderColor;
         height: 24px;
         margin-bottom: 24px;
+      }
+    }
+    &_empty-state {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &-icon {
+        width: 50px;
+        margin-bottom: 14px;
+
+        @media (max-width: $breakpoint) {
+          width: 40px;
+          margin-bottom: 10px;
+        }
+      }
+      &-inscription {
+        font-size: 14px;
+
+        @media (max-width: $breakpoint) {
+          font-size: 12px;
+        }
       }
     }
 

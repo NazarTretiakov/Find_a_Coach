@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ path: '/search', query: { searchItemsTypes: ['user']} }" class="button-link">
+  <router-link :to="{ path: '/network' }" class="button-link">
     <button class="button">Find a Coach</button>
   </router-link>
 </template>

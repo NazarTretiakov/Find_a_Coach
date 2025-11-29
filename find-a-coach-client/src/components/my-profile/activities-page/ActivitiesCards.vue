@@ -38,6 +38,11 @@
       </router-link>
     </ul>
 
+    <div v-if="!isLoading && activities.length == 0" class="activities-items_empty-state">
+      <img class="activities-items_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+      <span class="activities-items_empty-state-inscription">No activities have been found.</span>
+    </div>
+
     <div class="activities-load-more-activities" v-if="isMoreActivitiesLeft" @click="loadActivities">
       <button class="activities-load-more-activities-inscription">Load more activities</button>
     </div>
@@ -367,6 +372,31 @@ export default defineComponent({
 
         @media (max-width: $breakpoint) {
           margin-top: 20px;
+        }
+      }
+    }
+    &_empty-state {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 50px;
+
+      &-icon {
+        width: 50px;
+        margin-bottom: 14px;
+
+        @media (max-width: $breakpoint) {
+          width: 40px;
+          margin-bottom: 10px;
+        }
+      }
+      &-inscription {
+        font-size: 14px;
+
+        @media (max-width: $breakpoint) {
+          margin-bottom: 30px;
+          font-size: 12px;
         }
       }
     }

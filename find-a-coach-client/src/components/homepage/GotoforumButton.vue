@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ path: '/search', query: { searchItemsTypes: ['post', 'event']} }" class="button-link">
+  <router-link :to="{ path: '/forum' }" class="button-link">
     <button class="button">Go to Forum</button>
   </router-link>
 </template>

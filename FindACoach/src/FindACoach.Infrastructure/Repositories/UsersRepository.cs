@@ -59,16 +59,27 @@ namespace FindACoach.Infrastructure.Repositories
                 throw new UnauthorizedAccessException("User with supplied id donesn't exist.");
             }
 
-            activeUser.FirstName = dto.Firstname;
-            activeUser.LastName = dto.Lastname;
-            activeUser.ImagePath = await ChangeProfileImage(activeUser, dto.ProfileImage);
-            activeUser.PrimaryOccupation = dto.PrimaryOccupation;
-            activeUser.Headline = dto.Headline;
-            activeUser.Location = dto.Location;
-            activeUser.Phone = dto.Phone;
+            if (dto.ProfileImage == null && activeUser.ImagePath != null)
+            {
+                activeUser.FirstName = dto.Firstname;
+                activeUser.LastName = dto.Lastname;
+                activeUser.PrimaryOccupation = dto.PrimaryOccupation;
+                activeUser.Headline = dto.Headline;
+                activeUser.Location = dto.Location;
+                activeUser.Phone = dto.Phone;
+            }
+            else
+            {
+                activeUser.FirstName = dto.Firstname;
+                activeUser.LastName = dto.Lastname;
+                activeUser.ImagePath = await ChangeProfileImage(activeUser, dto.ProfileImage);
+                activeUser.PrimaryOccupation = dto.PrimaryOccupation;
+                activeUser.Headline = dto.Headline;
+                activeUser.Location = dto.Location;
+                activeUser.Phone = dto.Phone;
+            }
 
-
-            _db.Websites.RemoveRange(_db.Websites.Where(w => w.UserId == activeUser.Id));
+           _db.Websites.RemoveRange(_db.Websites.Where(w => w.UserId == activeUser.Id));
 
             foreach (WebsiteDTO website in dto.Websites)
             {
@@ -179,7 +190,7 @@ namespace FindACoach.Infrastructure.Repositories
                 PrimaryOccupation = user.PrimaryOccupation,
                 Headline = user.Headline,
                 Location = user.Location,
-                ConnectionsAmount = _db.Connections.Where(c => c.UserId == Guid.Parse(userId) || c.ConnectedUserId == Guid.Parse(userId)).Count(),
+                ConnectionsAmount = _db.Connections.Where(c => (c.UserId == Guid.Parse(userId) || c.ConnectedUserId == Guid.Parse(userId)) && c.Status == ConnectionStatus.Accepted).Count(),
                 IsConnected = isUsersConnectedInfo.IsUsersConnected,
                 ConnectionStatus = isUsersConnectedInfo.Status
             };

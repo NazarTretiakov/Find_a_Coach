@@ -44,6 +44,11 @@
         <div v-if="index !== answers.length - 1" class="qa-answers_answer-divider"></div>
       </li>
     </ul>
+    
+    <div v-if="!isLoading && answers.length == 0" class="qa-answers_empty-state">
+      <img class="qa-answers_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
+      <span class="qa-answers_empty-state-inscription">This QA has no answers yet.</span>
+    </div>
   </div>
 </template>
 
@@ -332,6 +337,31 @@ export default defineComponent({
         border-bottom: 1px solid $grayBorderColor;
         height: 24px;
         margin-bottom: 24px;
+      }
+    }
+    &_empty-state {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &-icon {
+        width: 50px;
+        margin-bottom: 14px;
+
+        @media (max-width: $breakpoint) {
+          width: 40px;
+          margin-bottom: 10px;
+        }
+      }
+
+      &-inscription {
+        font-size: 14px;
+
+        @media (max-width: $breakpoint) {
+          margin-bottom: 30px;
+          font-size: 12px;
+        }
       }
     }
   }

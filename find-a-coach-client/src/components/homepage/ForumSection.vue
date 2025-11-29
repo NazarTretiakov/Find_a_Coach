@@ -10,7 +10,7 @@
             <h1 class="forum-section-items_description-items_caption-element">The Forum: Learn, Share, Connect</h1>
           </li>
           <li class="forum-section-items_description-items_paragraph">
-            <p class="forum-section-items_description-items_paragraph-element">Take your experience further by joining our community forum. Here, you can post questions, share events, exchange resources, or start conversations related to your studies. <br/>It’s a space designed for collaboration — where you can meet new people, find learning partners, and grow together through active communication and shared goals. <br/><br/>If you want to share your study progress, post news about interesting events, or simply need advice, the forum is a great place for all of that!</p>
+            <p class="forum-section-items_description-items_paragraph-element">Take your experience further by joining our community forum. Here, you can post questions, share events, exchange resources, or start conversations related to your studies. <br/>It’s a space designed for collaboration - where you can meet new people, find learning partners, and grow together through active communication and shared goals. <br/><br/>If you want to share your study progress, post news about interesting events, or simply need advice, the forum is a great place for all of that!</p>
           </li>
           <li class="forum-section-items_description-items_button">
             <forum-button></forum-button>
