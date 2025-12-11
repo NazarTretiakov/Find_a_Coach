@@ -179,7 +179,10 @@ namespace FindACoach.Infrastructure.Repositories
 
             NetworkOverviewInfoToResponse networkOverview = new NetworkOverviewInfoToResponse()
             {
-                NumberOfConnections = userConnections.Count,
+                NumberOfConnections = userConnections
+                    .Where(c => c.Status == ConnectionStatus.Accepted)
+                    .ToList()
+                    .Count,
                 NumberOfConnectionRequestsSent = connectionRequestsSent.Count
             };
 

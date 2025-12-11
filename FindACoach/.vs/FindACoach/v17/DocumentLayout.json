@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\repositories\\certificationsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\certificationsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.infrastructure\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{84D8E31B-9459-4EDC-9B62-0C230E4B3933}|src\\FindACoach.Infrastructure\\FindACoach.Infrastructure.csproj|solutionrelative:src\\findacoach.infrastructure\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,27 +27,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CertificationsRepository.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\CertificationsRepository.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\CertificationsRepository.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\CertificationsRepository.cs",
-              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\CertificationsRepository.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAjwIkAAAAIAAAAAAAAAA==",
+              "Title": "MyProfileController.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "RelativeToolTip": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T07:52:40.269Z",
+              "WhenOpened": "2025-12-11T10:32:43.855Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UsersRepository.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
-              "RelativeToolTip": "src\\FindACoach.Infrastructure\\Repositories\\UsersRepository.cs",
-              "ViewState": "AgIAADMAAAAAAAAAAAAYwFAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-29T07:52:42.888Z"
             }
           ]
         }

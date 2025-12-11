@@ -107,7 +107,7 @@
           </li>
           <li class="event-comments_comment-header_right-side">
             <span class="event-comments_comment-header_right-side-time-of-publication">
-              {{ formatDate(comment.dateOfCreation) }}
+              {{ formatToRelativeDate(comment.dateOfCreation) }}
             </span>
           </li>
         </ul>

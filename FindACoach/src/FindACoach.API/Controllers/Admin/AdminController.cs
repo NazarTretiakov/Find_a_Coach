@@ -3,10 +3,12 @@ using FindACoach.Core.DTO.MyProfile.Activities;
 using FindACoach.Core.ServiceContracts.Admin;
 using FindACoach.Core.ServiceContracts.Forum.Activities;
 using FindACoach.Core.ServiceContracts.Network;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindACoach.API.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController: CustomControllerBase
     {
         private readonly IUsersGetterService _usersGetterService;
