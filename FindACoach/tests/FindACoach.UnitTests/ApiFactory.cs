@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace IntegrationTests
+namespace FindACoach.UnitTests
 {
     public class ApiFactory: WebApplicationFactory<Program>
     {

@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Security.Claims;
 
-namespace IntegrationTests
+namespace FindACoach.UnitTests
 {
-    public class ProjectsControllerTest
+    public class ProjectsControllerTests
     {
         private readonly Mock<IProjectsAdderService> _projectsAdderServiceMocked;
         private readonly Mock<IProjectsGetterService> _projectsGetterServiceMocked;
         private readonly Mock<IProjectsEditorService> _projectsEditorServiceMocked;
         private readonly Mock<IProjectsRemoverService> _projectsRemoverServiceMocked;
 
-        public ProjectsControllerTest()
+        public ProjectsControllerTests()
         {
             _projectsAdderServiceMocked = new Mock<IProjectsAdderService>();
             _projectsGetterServiceMocked = new Mock<IProjectsGetterService>();

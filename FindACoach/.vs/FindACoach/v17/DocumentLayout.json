@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{045FF46E-285F-4D16-9B4F-FA69C7AD6491}|src\\FindACoach.API\\FindACoach.API.csproj|solutionrelative:src\\findacoach.api\\controllers\\myprofile\\myprofilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{50146069-B573-4C3C-9A59-7548D66D6659}|tests\\FindACoach.IntegrationTests\\FindACoach.IntegrationTests.csproj|d:\\studying\\projekt in\u017Cynierski\\findacoach\\tests\\findacoach.integrationtests\\admincontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50146069-B573-4C3C-9A59-7548D66D6659}|tests\\FindACoach.IntegrationTests\\FindACoach.IntegrationTests.csproj|solutionrelative:tests\\findacoach.integrationtests\\admincontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,14 +27,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "MyProfileController.cs",
-              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "RelativeDocumentMoniker": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "RelativeToolTip": "src\\FindACoach.API\\Controllers\\MyProfile\\MyProfileController.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Title": "AdminControllerTests.cs",
+              "DocumentMoniker": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\tests\\FindACoach.IntegrationTests\\AdminControllerTests.cs",
+              "RelativeDocumentMoniker": "tests\\FindACoach.IntegrationTests\\AdminControllerTests.cs",
+              "ToolTip": "D:\\Studying\\Projekt In\u017Cynierski\\FindACoach\\tests\\FindACoach.IntegrationTests\\AdminControllerTests.cs",
+              "RelativeToolTip": "tests\\FindACoach.IntegrationTests\\AdminControllerTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-11T10:32:43.855Z",
+              "WhenOpened": "2025-12-11T20:27:18.119Z",
               "EditorCaption": ""
             }
           ]

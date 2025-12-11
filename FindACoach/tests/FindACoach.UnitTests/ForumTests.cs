@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Security.Claims;
 
-namespace UnitTests
+namespace FindACoach.UnitTests
 {
     public class ForumTests
     {

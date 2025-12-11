@@ -3,7 +3,7 @@ using FindACoach.Core.DTO.Network;
 using FindACoach.Core.Services.Network;
 using Moq;
 
-namespace UnitTests
+namespace FindACoach.UnitTests
 {
     public class NetworkTests
     {
