@@ -9,16 +9,16 @@
     </div>
     <ul v-else class="profile-sections">
       <li class="profile-sections_left-side">
-        <personal-information :id="id"></personal-information>
-        <about-me :id="id" v-if="isProfileSectionsCompleted.isDescription"></about-me>
-        <activities-section :id="id" v-if="isProfileSectionsCompleted.isActivities"></activities-section>
-        <experience-section :id="id" v-if="isProfileSectionsCompleted.isExperience"></experience-section>
-        <education-section :id="id" v-if="isProfileSectionsCompleted.isEducation"></education-section>
-        <projects-section :id="id" v-if="isProfileSectionsCompleted.isProjects"></projects-section>
-        <certifications-section :id="id" v-if="isProfileSectionsCompleted.isCertifications"></certifications-section>
-        <skills-section :id="id" v-if="isProfileSectionsCompleted.isSkills"></skills-section>
-        <languages-section :id="id" v-if="isProfileSectionsCompleted.isLanguages"></languages-section>
-        <recommendations-section :id="id"></recommendations-section>
+        <personal-information :id="id" :key="id"></personal-information>
+        <about-me :id="id" :key="id" v-if="isProfileSectionsCompleted.isDescription"></about-me>
+        <activities-section :id="id" :key="id" v-if="isProfileSectionsCompleted.isActivities"></activities-section>
+        <experience-section :id="id" :key="id" v-if="isProfileSectionsCompleted.isExperience"></experience-section>
+        <education-section :id="id" :key="id" v-if="isProfileSectionsCompleted.isEducation"></education-section>
+        <projects-section :id="id" :key="id" v-if="isProfileSectionsCompleted.isProjects"></projects-section>
+        <certifications-section :id="id" :key="id" v-if="isProfileSectionsCompleted.isCertifications"></certifications-section>
+        <skills-section :id="id" :key="id" v-if="isProfileSectionsCompleted.isSkills"></skills-section>
+        <languages-section :id="id" :key="id" v-if="isProfileSectionsCompleted.isLanguages"></languages-section>
+        <recommendations-section :id="id" :key="id"></recommendations-section>
       </li>
       <li class="profile-sections_right-side">
         <recommended-people></recommended-people>
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, watch } from 'vue'
 
 import BasicStickyHeader from '../../components/BasicStickyHeader.vue'
 import PersonalInformation from '../../components/user-profile/PersonalInformation.vue'
@@ -83,15 +83,18 @@ export default defineComponent({
     const isLoading = ref<boolean>(true)
     const isUserBlocked = ref<boolean>(false)
 
-    async function loadIsProfileSectionsCompletedInfo() {
+    async function loadIsProfileSectionsCompletedInfo(userId: string) {
+      isLoading.value = true
+      
       const startTime = performance.now()
 
-      if (props.id === authenticationStore.userId) {
+      if (userId === authenticationStore.userId) {
         router.push('/my-profile')
+        return
       }
 
-      const result = await useIsProfileSectionsCompleted(props.id)
-      const resultIsUserBlocked = await useCheckIfUserBlocked(props.id)
+      const result = await useIsProfileSectionsCompleted(userId)
+      const resultIsUserBlocked = await useCheckIfUserBlocked(userId)
 
       if (typeof result === 'object' && 'isSuccessful' in result) {
         if (!result.isSuccessful) {
@@ -120,7 +123,18 @@ export default defineComponent({
       }
     }
 
-    onMounted(() => loadIsProfileSectionsCompletedInfo())
+    onMounted(() => {
+      loadIsProfileSectionsCompletedInfo(props.id)
+    })
+
+    watch(
+      () => props.id,
+      async (newId, oldId) => {
+        if (newId === oldId) return
+        console.log('User ID changed:', { from: oldId, to: newId })
+        await loadIsProfileSectionsCompletedInfo(newId)
+      }
+    )
 
     return { isProfileSectionsCompleted, isLoading, isUserBlocked }
   }

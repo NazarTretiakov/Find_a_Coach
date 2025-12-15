@@ -363,10 +363,10 @@ export default defineComponent({
           }
 
           &-remove-button {
-            margin-top: 16px;
+            margin-top: 14px;
 
             @media (max-width: $breakpoint) {
-              margin-top: 14px;
+              margin-top: 10px;
             }
           }
         }

@@ -1,5 +1,5 @@
 <template>
-  <div class="education-section">
+  <div class="education-section" v-if="schools.length > 0">
     <ul class="education-section-items">
       <li class="education-section-items_header">
         <ul class="education-section-items_header-items">
@@ -34,30 +34,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import TheSkills from './TheSkills.vue'
-import { School } from '@/types/my-profile/education/School'
-import useGetLastTwoSchools from '@/composables/my-profile/education/useGetLastTwoSchools'
+import { defineComponent, ref, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import TheSkills from "./TheSkills.vue"
+import type { School } from "@/types/my-profile/education/School"
+import useGetLastTwoSchools from "@/composables/my-profile/education/useGetLastTwoSchools"
 
 export default defineComponent({
   props: {
     id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   components: { TheSkills },
   setup(props) {
     const router = useRouter()
     const schools = ref<School[]>([])
 
-    async function loadSchools() {
-      const result = await useGetLastTwoSchools(props.id)
+    const loadSchools = async (userId: string) => {
+      schools.value = []
 
-      if (typeof result === 'object' && 'isSuccessful' in result) {
+      const result = await useGetLastTwoSchools(userId)
+
+      if (typeof result === "object" && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
           return
         }
       } else {
@@ -66,16 +68,23 @@ export default defineComponent({
     }
 
     function formatDate(date: string | null): string {
-      if (!date) return ''
-      
-      const formattedDate = new Date(date).toLocaleDateString("en-US", {
+      if (!date) return ""
+      return new Date(date).toLocaleDateString("en-US", {
         year: "numeric"
-      });
-
-      return formattedDate
+      })
     }
 
-    onMounted(() => loadSchools())
+    onMounted(() => {
+      loadSchools(props.id)
+    })
+
+    watch(
+      () => props.id,
+      (newId, oldId) => {
+        if (newId === oldId) return
+        loadSchools(newId)
+      }
+    )
 
     return { schools, formatDate }
   }

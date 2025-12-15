@@ -85,20 +85,41 @@ export default function useValidationOfAddCertificationForm(formData: Certificat
   }
 
   if (formData.skills.length > 0) {
-    formData.skills.forEach((skill, index) => {
-      if (!skill || skill.trim() === '') {
-        errors.push({
-          fieldName: `skills[${index}]`,
-          errorMessage: `Skill #${index + 1} cannot be empty.`
-        })
-      } else if (skill.length > 50) {
-        errors.push({
-          fieldName: `skills[${index}]`,
-          errorMessage: `Skill #${index + 1} cannot exceed 50 characters.`
-        })
-      }
-    })
-  }
+  const seenSkills = new Map<string, number>()
+
+  formData.skills.forEach((skill, index) => {
+    const trimmed = skill?.trim()
+
+    if (!trimmed) {
+      errors.push({
+        fieldName: `skills[${index}]`,
+        errorMessage: `Skill #${index + 1} cannot be empty.`
+      })
+      return
+    }
+
+    if (trimmed.length > 50) {
+      errors.push({
+        fieldName: `skills[${index}]`,
+        errorMessage: `Skill #${index + 1} cannot exceed 50 characters.`
+      })
+      return
+    }
+
+    const normalized = trimmed.toLowerCase()
+
+    if (seenSkills.has(normalized)) {
+      const firstIndex = seenSkills.get(normalized)!
+
+      errors.push({
+        fieldName: `skills[${index}]`,
+        errorMessage: `Skills cannot duplicate. Skill #${index + 1} duplicates skill #${firstIndex + 1}.`
+      })
+    } else {
+      seenSkills.set(normalized, index)
+    }
+  })
+}
 
   return errors
 }

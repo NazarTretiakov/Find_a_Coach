@@ -1,5 +1,5 @@
 <template>
-  <div class="certifications-section">
+  <div class="certifications-section" v-if="certifications.length > 0">
     <ul class="certifications-section-items">
       <li class="certifications-section-items_header">
         <ul class="certifications-section-items_header-items">
@@ -54,30 +54,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import TheSkills from './TheSkills.vue'
-import { Certification } from '@/types/my-profile/certifications/Certification'
-import useGetLastTwoCertifications from '@/composables/my-profile/certifications/useGetLastTwoCertifications'
+import { defineComponent, ref, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import TheSkills from "./TheSkills.vue"
+import type { Certification } from "@/types/my-profile/certifications/Certification"
+import useGetLastTwoCertifications from "@/composables/my-profile/certifications/useGetLastTwoCertifications"
 
 export default defineComponent({
   props: {
     id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   components: { TheSkills },
   setup(props) {
     const router = useRouter()
     const certifications = ref<Certification[]>([])
 
-    async function loadCertifications() {
-      const result = await useGetLastTwoCertifications(props.id)
+    const loadCertifications = async (userId: string) => {
+      certifications.value = []
 
-      if (typeof result === 'object' && 'isSuccessful' in result) {
+      const result = await useGetLastTwoCertifications(userId)
+
+      if (typeof result === "object" && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
           return
         }
       } else {
@@ -86,15 +88,24 @@ export default defineComponent({
     }
 
     function formatDate(date: string | null): string {
-      if (!date) return ''
-      const formattedDate = new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short'
+      if (!date) return ""
+      return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short"
       })
-      return formattedDate
     }
 
-    onMounted(() => loadCertifications())
+    onMounted(() => {
+      loadCertifications(props.id)
+    })
+
+    watch(
+      () => props.id,
+      (newId, oldId) => {
+        if (newId === oldId) return
+        loadCertifications(newId)
+      }
+    )
 
     return { certifications, formatDate }
   }

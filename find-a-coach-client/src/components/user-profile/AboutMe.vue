@@ -1,5 +1,5 @@
 <template>
-  <div class="about-me">
+  <div class="about-me" v-if="aboutMe">
     <ul class="about-me-header">
       <li class="about-me-header-title">
         <h1 class="about-me-header-title-element">About me</h1>
@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from "vue"
-import useGetAboutMe from '../../composables/my-profile/about-me/useGetAboutMe'
+import { defineComponent, ref, computed, onMounted, watch } from "vue"
+import useGetAboutMe from "../../composables/my-profile/about-me/useGetAboutMe"
 import { useRouter } from "vue-router"
 
 export default defineComponent({
@@ -26,12 +26,16 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const aboutMe = ref<string>('')
+    const aboutMe = ref<string>("")
     const router = useRouter()
+
     const isFullTextVisible = ref(false)
     const maxLength = 200
 
-    const isTruncated = computed(() => !isFullTextVisible.value && (aboutMe.value.length > maxLength))
+    const isTruncated = computed(
+      () => !isFullTextVisible.value && aboutMe.value.length > maxLength
+    )
+
     const displayText = computed(() => {
       if (isFullTextVisible.value || aboutMe.value.length <= maxLength) {
         return aboutMe.value
@@ -43,19 +47,39 @@ export default defineComponent({
       isFullTextVisible.value = true
     }
 
-    onMounted(async () => {
-      const result = await useGetAboutMe(props.id)
+    const loadAboutMe = async (userId: string) => {
+      aboutMe.value = ""
+      isFullTextVisible.value = false
 
-      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+      const result = await useGetAboutMe(userId)
+
+      if (typeof result === "object" && result !== null && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
         }
       } else {
         aboutMe.value = result as string
       }
+    }
+
+    onMounted(async () => {
+      await loadAboutMe(props.id)
     })
 
-    return { aboutMe, displayText, isTruncated, showFullText }
+    watch(
+      () => props.id,
+      async (newId, oldId) => {
+        if (newId === oldId) return
+        await loadAboutMe(newId)
+      }
+    )
+
+    return {
+      aboutMe,
+      displayText,
+      isTruncated,
+      showFullText
+    }
   },
 })
 </script>

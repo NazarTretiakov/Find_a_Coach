@@ -40,10 +40,15 @@ export default function useValidationOfActivityForm(formData: Form): ValidationE
     }
 
     if (panel.preferredSkills) {
-      let skills: string[] = panel.preferredSkills.split(',')
+      const rawSkills = panel.preferredSkills.split(',')
 
-      for (let j = 0; j < skills.length; j++) {
-        if (skills[j].length > 30) {
+      const normalizedSkills = rawSkills
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+        .map(s => s.toLowerCase())
+
+      for (let j = 0; j < rawSkills.length; j++) {
+        if (rawSkills[j].trim().length > 30) {
           errors.push({
             fieldName: `panelsForSearchPeople[${i}].preferredSkills`,
             errorMessage: `Skill #${j + 1} is too long. Maximum length is 30 characters.`
@@ -51,10 +56,22 @@ export default function useValidationOfActivityForm(formData: Form): ValidationE
         }
       }
 
-      if (skills.length > 5) {
-        errors.push({ fieldName: `panelsForSearchPeople[${i}].preferredSkills`, errorMessage: 'Maximum 5 preferred skills allowed.' })
+      if (normalizedSkills.length > 5) {
+        errors.push({
+          fieldName: `panelsForSearchPeople[${i}].preferredSkills`,
+          errorMessage: 'Maximum 5 preferred skills allowed.'
+        })
+      }
+
+      const uniqueSkills = new Set(normalizedSkills)
+      if (uniqueSkills.size !== normalizedSkills.length) {
+        errors.push({
+          fieldName: `panelsForSearchPeople[${i}].preferredSkills`,
+          errorMessage: 'Preferred skills must be unique within the same panel.'
+        })
       }
     }
+
 
     if (!isValidPayment(panel.payment)) {
       errors.push({ fieldName: `panelsForSearchPeople[${i}].payment`, errorMessage: 'Too many characters entered in payment field.' })

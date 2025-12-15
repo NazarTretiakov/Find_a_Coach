@@ -8,13 +8,13 @@
       <li class="people-section_people-person" v-for="(connection, index) in connections" :key="connection.connectedUserId">
         <ul class="people-section_people-person-items">
           <li class="people-section_people-person-items_image">
-            <router-link :to="`/user-profile/${connection.connectedUserId}`" class="people-section_people-person-link">
+            <router-link :to="`/user-profile/${connection.connectedUserId}`" :key="connection.connectedUserId" class="people-section_people-person-link">
               <img class="people-section_people-person-items_image-element" :src="connection.imagePath" alt="User profile image" />
             </router-link>
           </li>
 
           <li class="people-section_people-person-items_info">
-            <router-link :to="`/user-profile/${connection.connectedUserId}`" class="people-section_people-person-link">
+            <router-link :to="`/user-profile/${connection.connectedUserId}`" :key="connection.connectedUserId" class="people-section_people-person-link">
               <h2 class="people-section_people-person-items_info-name">{{ connection.firstName }} {{ connection.lastName }}</h2>
             </router-link>
             <p class="people-section_people-person-items_info-incription">{{ connection.headline }}</p>

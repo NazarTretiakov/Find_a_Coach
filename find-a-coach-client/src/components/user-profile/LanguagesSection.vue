@@ -1,5 +1,5 @@
 <template>
-  <div class="languages-section">
+  <div class="languages-section" v-if="languages.length > 0">
     <ul class="languages-section-items">
       <li class="languages-section-items_header">
         <ul class="languages-section-items_header-items">
@@ -26,28 +26,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import type { Language } from '@/types/my-profile/languages/Language'
-import useGetTwoLanguages from '@/composables/my-profile/languages/useGetLastTwoLanguages'
-import useConvertLanguageProficiency from '@/composables/my-profile/languages/useConvertLanguageProficiency'
+import { defineComponent, ref, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import type { Language } from "@/types/my-profile/languages/Language"
+import useGetTwoLanguages from "@/composables/my-profile/languages/useGetLastTwoLanguages"
+import useConvertLanguageProficiency from "@/composables/my-profile/languages/useConvertLanguageProficiency"
 
 export default defineComponent({
   props: {
     id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   setup(props) {
     const router = useRouter()
     const languages = ref<Language[]>([])
 
-    async function loadLanguages() {
-      const result = await useGetTwoLanguages(props.id)
-      if (typeof result === 'object' && 'isSuccessful' in result) {
+    const loadLanguages = async (userId: string) => {
+      languages.value = []
+
+      const result = await useGetTwoLanguages(userId)
+      if (typeof result === "object" && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
           return
         }
       } else {
@@ -59,11 +61,21 @@ export default defineComponent({
       return useConvertLanguageProficiency(proficiency)
     }
 
-    onMounted(() => loadLanguages())
+    onMounted(() => loadLanguages(props.id))
+
+    watch(
+      () => props.id,
+      (newId, oldId) => {
+        if (newId === oldId) return
+        loadLanguages(newId)
+      }
+    )
+
     return { languages, mapProficiency }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

@@ -1,5 +1,5 @@
 <template>
-  <div class="recommendations-section">
+  <div class="recommendations-section" v-if="receivedRecommendations.length > 0 || givenRecommendations.length > 0">
     <ul class="recommendations-section-items">
       <li class="recommendations-section-items_header">
         <h1 class="recommendations-section-items_header-element">Recommendations</h1>
@@ -48,76 +48,96 @@
 
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import type { Recommendation } from '@/types/my-profile/recommendations/Recommendation'
-import useGetLastTwoRecommendations from '@/composables/my-profile/recommendations/useGetLastTwoRecommendations'
+import { defineComponent, ref, computed, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import type { Recommendation } from "@/types/my-profile/recommendations/Recommendation"
+import useGetLastTwoRecommendations from "@/composables/my-profile/recommendations/useGetLastTwoRecommendations"
 
 export default defineComponent({
   props: {
     id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   setup(props) {
     const router = useRouter()
 
     const receivedRecommendations = ref<Recommendation[]>([])
     const givenRecommendations = ref<Recommendation[]>([])
-    const isReceivedRecommendationsVisible = ref<boolean>(true)
-    const isGivenRecommendationsVisible = ref<boolean>(false)
+    const isReceivedRecommendationsVisible = ref(true)
+    const isGivenRecommendationsVisible = ref(false)
 
-    const toggleRecommendationType = (type: 'received' | 'given') => {
-      if (type === 'received') {
-        isReceivedRecommendationsVisible.value = true
-        isGivenRecommendationsVisible.value = false
-      } else {
-        isReceivedRecommendationsVisible.value = false
-        isGivenRecommendationsVisible.value = true
-      }
+    const toggleRecommendationType = (type: "received" | "given") => {
+      isReceivedRecommendationsVisible.value = type === "received"
+      isGivenRecommendationsVisible.value = type === "given"
     }
 
     const visibleRecommendations = computed(() =>
-      isReceivedRecommendationsVisible.value ? receivedRecommendations.value : givenRecommendations.value
+      isReceivedRecommendationsVisible.value
+        ? receivedRecommendations.value
+        : givenRecommendations.value
     )
 
-    async function loadRecommendations() {
+    const loadRecommendations = async (userId: string) => {
+      receivedRecommendations.value = []
+      givenRecommendations.value = []
+
       try {
-        const result = await useGetLastTwoRecommendations(props.id)
-        if (typeof result === 'object' && 'isSuccessful' in result) {
+        const result = await useGetLastTwoRecommendations(userId)
+
+        if (typeof result === "object" && "isSuccessful" in result) {
           if (!result.isSuccessful) {
-            router.push('/error-page')
+            router.push("/error-page")
             return
           }
         } else {
           const recommendations = result as Recommendation[]
-          receivedRecommendations.value = recommendations.filter(r => r.recommendedUserId === props.id)
-          givenRecommendations.value = recommendations.filter(r => r.recommenderUserId === props.id)
+          receivedRecommendations.value = recommendations.filter(
+            r => r.recommendedUserId === userId
+          )
+          givenRecommendations.value = recommendations.filter(
+            r => r.recommenderUserId === userId
+          )
         }
-      } catch (error) {
-        console.error('Error loading recommendations:', error)
-        router.push('/error-page')
+      } catch {
+        router.push("/error-page")
       }
     }
 
     function formatDate(date: string | null): string {
-      if (!date) return ''
-      return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+      if (!date) return ""
+      return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short"
+      })
     }
 
-    onMounted(() => loadRecommendations())
+    onMounted(() => {
+      loadRecommendations(props.id)
+    })
+
+    watch(
+      () => props.id,
+      (newId, oldId) => {
+        if (newId === oldId) return
+        loadRecommendations(newId)
+      }
+    )
 
     return {
       isReceivedRecommendationsVisible,
       isGivenRecommendationsVisible,
       toggleRecommendationType,
       visibleRecommendations,
-      formatDate
+      formatDate,
+      receivedRecommendations,
+      givenRecommendations
     }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

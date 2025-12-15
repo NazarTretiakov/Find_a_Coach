@@ -30,6 +30,7 @@
 <script lang="ts">
 import { defineComponent, computed, type PropType } from 'vue'
 import type { ActivityCard } from '@/types/my-profile/activities/ActivityCard'
+import useRelativeDate from '@/composables/forum/useRelativeDate'
 
 export default defineComponent({
   name: 'ActivityCard',
@@ -43,15 +44,7 @@ export default defineComponent({
     const pubDate = computed(() => new Date(props.activity.publicationDate))
     
     const formattedDate = computed(() => {
-      const now = new Date()
-      const diffMs = now.getTime() - pubDate.value.getTime()
-      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-      
-      if (diffDays < 7) return diffDays === 0 ? 'Today' : `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
-      const diffWeeks = Math.floor(diffDays / 7)
-      if (diffWeeks < 4) return `${diffWeeks} week${diffWeeks > 1 ? 's' : ''} ago`
-      const diffMonths = Math.floor(diffDays / 30)
-      return `${diffMonths} month${diffMonths > 1 ? 's' : ''} ago`
+      return useRelativeDate(pubDate.value)
     })
     
     const trimmedDescription = computed(() => {

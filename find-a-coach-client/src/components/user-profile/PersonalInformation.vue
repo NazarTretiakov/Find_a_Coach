@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, computed } from "vue"
+import { defineComponent, ref, onMounted, computed, watch } from "vue"
 import type { PersonalInformation } from "@/types/my-profile/personal-information/PersonalInformation"
 import useGetPersonalInformation from "../../composables/my-profile/personal-information/useGetPersonalInformation"
 import useRemoveConnection from "../../composables/network/useRemoveConnection"
@@ -77,17 +77,31 @@ export default defineComponent({
     const router = useRouter()
     const firstNameOfUser = computed(() => personalInformation.value?.firstName)
 
-    onMounted(async () => {
-      const result = await useGetPersonalInformation(props.id)
+    const loadPersonalInformation = async (userId: string) => {
+      personalInformation.value = null
+
+      const result = await useGetPersonalInformation(userId)
 
       if ("isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push("/error-page")  // TODO: redirect there to "unauthorized" page
+          router.push("/error-page")
         }
       } else {
         personalInformation.value = result
       }
+    }
+
+    onMounted(async () => {
+      await loadPersonalInformation(props.id)
     })
+
+    watch(
+      () => props.id,
+      async (newId, oldId) => {
+        if (newId === oldId) return
+        await loadPersonalInformation(newId)
+      }
+    )
 
     const removeConnection = async () => {
       const isSuccessful = await useRemoveConnection(authenticationStore.userId, props.id)

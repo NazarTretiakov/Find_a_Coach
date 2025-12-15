@@ -1,5 +1,5 @@
 <template>
-  <div class="projects-section">
+  <div class="projects-section" v-if="projects.length > 0">
     <ul class="projects-section-items">
       <li class="projects-section-items_header">
         <ul class="projects-section-items_header-items">
@@ -61,59 +61,79 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import TheSkills from './TheSkills.vue'
-import type { Project } from '@/types/my-profile/projects/Project'
-import useGetLastTwoProjects from '@/composables/my-profile/projects/useGetLastTwoProjects'
+import { defineComponent, ref, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import TheSkills from "./TheSkills.vue"
+import type { Project } from "@/types/my-profile/projects/Project"
+import useGetLastTwoProjects from "@/composables/my-profile/projects/useGetLastTwoProjects"
 
 export default defineComponent({
   props: {
     id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   components: { TheSkills },
   setup(props) {
     const router = useRouter()
     const projects = ref<Project[]>([])
 
-    async function loadProjects() {
-      const result = await useGetLastTwoProjects(props.id)
+    const loadProjects = async (userId: string) => {
+      projects.value = []
 
-      if (typeof result === 'object' && 'isSuccessful' in result) {
+      const result = await useGetLastTwoProjects(userId)
+
+      if (typeof result === "object" && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
           return
         }
       } else {
         projects.value = result as Project[]
-        console.log('Loaded projects:', projects.value)
       }
     }
 
     function formatDate(date: Date | string | null): string {
-      if (!date) return ''
-      return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+      if (!date) return ""
+      return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short"
+      })
     }
 
     function getReadableRelatedTo(value: string): string {
       switch (value) {
-        case 'Job': return 'Job-related project'
-        case 'Education': return 'Education-related project'
-        case 'Event': return 'Event project'
-        case 'Other': return 'Other project'
-        default: return value
+        case "Job":
+          return "Job-related project"
+        case "Education":
+          return "Education-related project"
+        case "Event":
+          return "Event project"
+        case "Other":
+          return "Other project"
+        default:
+          return value
       }
     }
 
-    onMounted(() => loadProjects())
+    onMounted(() => {
+      loadProjects(props.id)
+    })
+
+    watch(
+      () => props.id,
+      (newId, oldId) => {
+        if (newId === oldId) return
+        loadProjects(newId)
+      }
+    )
 
     return { projects, formatDate, getReadableRelatedTo }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

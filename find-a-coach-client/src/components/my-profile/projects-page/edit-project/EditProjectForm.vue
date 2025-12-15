@@ -67,6 +67,7 @@
               :name="'skill-name-' + index"
               type="text"
             />
+            <span v-if="getError(`skillTitles[${index}]`)" class="error-message">{{ getError(`skillTitles[${index}]`) }}</span>
             <remove-button @click="removeSkill(index)" class="edit-project-items_skills-items_skill-remove-button"></remove-button>
           </li>
         </ul>
@@ -91,6 +92,7 @@
               :name="'person-name-' + index"
               type="text"
             />
+            <span v-if="getError(`participants[${index}]`)" class="error-message">{{ getError(`participants[${index}]`) }}</span>
             <remove-button @click="removePerson(index)" class="edit-project-items_people-items_person-remove-button"></remove-button>
           </li>
         </ul>
@@ -353,11 +355,16 @@ export default defineComponent({
 
           &-name {
             margin-top: 20px;
-            margin-bottom: 16px;
 
             @media (max-width: $breakpoint) {
               margin-top: 14px;
-              margin-bottom: 14px;
+            }
+          }
+          &-remove-button {
+            margin-top: 14px;
+
+            @media (max-width: $breakpoint) {
+              margin-top: 10px;
             }
           }
         }
@@ -411,11 +418,17 @@ export default defineComponent({
 
           &-name {
             margin-top: 20px;
-            margin-bottom: 16px;
 
             @media (max-width: $breakpoint) {
               margin-top: 14px;
-              margin-bottom: 14px;
+            }
+          }
+
+          &-remove-button {
+            margin-top: 14px;
+
+            @media (max-width: $breakpoint) {
+              margin-top: 10px;
             }
           }
         }
@@ -429,6 +442,17 @@ export default defineComponent({
     &_save-button {
       margin: 70px 0 100px 0;
     }
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+
+  @media (max-width: $breakpoint) {
+    font-size: 12px;
   }
 }
 </style>

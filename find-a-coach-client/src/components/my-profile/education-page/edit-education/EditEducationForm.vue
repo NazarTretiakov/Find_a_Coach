@@ -56,6 +56,7 @@
               :name="'skill-name-' + index"
               type="text"
             />
+            <span v-if="getError(`skills[${index}]`)" class="error-message">{{ getError(`skills[${index}]`) }}</span>
             <remove-button @click="removeSkill(index)" class="edit-education-items_skills-items_skill-remove-button"></remove-button>
           </li>
         </ul>
@@ -326,11 +327,17 @@ export default defineComponent({
 
           &-name {
             margin-top: 20px;
-            margin-bottom: 16px;
 
             @media (max-width: $breakpoint) {
               margin-top: 14px;
-              margin-bottom: 14px;
+            }
+          }
+
+          &-remove-button {
+            margin-top: 14px;
+
+            @media (max-width: $breakpoint) {
+              margin-top: 10px;
             }
           }
         }

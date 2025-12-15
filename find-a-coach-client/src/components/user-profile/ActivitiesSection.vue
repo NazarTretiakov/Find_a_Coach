@@ -1,5 +1,5 @@
 <template>
-  <div class="activities-section">
+  <div class="activities-section" v-if="activityCards.length > 0">
     <ul class="activities-section-items">
       <li class="activities-section-items_header">
         <ul class="activities-section-items_header-items">
@@ -25,13 +25,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-
-import EventCard from './ActivityCard.vue';
-
-import { useRouter } from 'vue-router'
-import useGetActivityCards from '@/composables/my-profile/activities/useGetActivityCards'
-import type { ActivityCard } from '@/types/my-profile/activities/ActivityCard'
+import { defineComponent, ref, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import EventCard from "./ActivityCard.vue"
+import useGetActivityCards from "@/composables/my-profile/activities/useGetActivityCards"
+import type { ActivityCard } from "@/types/my-profile/activities/ActivityCard"
 
 export default defineComponent({
   props: {
@@ -47,22 +45,37 @@ export default defineComponent({
     const activityCards = ref<ActivityCard[]>([])
     const router = useRouter()
 
-    onMounted(async () => {
-      const result = await useGetActivityCards(props.id)
+    const loadActivityCards = async (userId: string) => {
+      activityCards.value = []
 
-      if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
+      const result = await useGetActivityCards(userId)
+
+      if (typeof result === "object" && result !== null && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
         }
       } else {
         activityCards.value = result
       }
+    }
+
+    onMounted(async () => {
+      await loadActivityCards(props.id)
     })
+
+    watch(
+      () => props.id,
+      async (newId, oldId) => {
+        if (newId === oldId) return
+        await loadActivityCards(newId)
+      }
+    )
 
     return { activityCards }
   }
 })
 </script>
+
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;
 

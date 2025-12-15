@@ -69,21 +69,33 @@ export default function useValidationOfAddPositionForm(formData: PositionForm): 
     })
   }
 
-  if (formData.skills.length > 0) {
-    formData.skills.forEach((skill, index) => {
-      if (!skill || skill.trim() === '') {
-        errors.push({
-          fieldName: `skills[${index}]`,
-          errorMessage: `Skill #${index + 1} cannot be empty.`
-        })
-      } else if (skill.length > 50) {
-        errors.push({
-          fieldName: `skills[${index}]`,
-          errorMessage: `Skill #${index + 1} cannot exceed 50 characters.`
-        })
-      }
-    })
-  }
+  const normalizedSkills = formData.skills.map(skill => skill.trim().toLowerCase())
+
+  formData.skills.forEach((skill, index) => {
+    if (!skill || skill.trim() === '') {
+      errors.push({
+        fieldName: `skills[${index}]`,
+        errorMessage: `Skill #${index + 1} cannot be empty.`
+      })
+      return
+    }
+
+    if (skill.length > 50) {
+      errors.push({
+        fieldName: `skills[${index}]`,
+        errorMessage: `Skill #${index + 1} cannot exceed 50 characters.`
+      })
+      return
+    }
+
+    const firstIndex = normalizedSkills.indexOf(skill.trim().toLowerCase())
+    if (firstIndex !== index) {
+      errors.push({
+        fieldName: `skills[${index}]`,
+        errorMessage: `Skills cannot duplicate. Skill #${index + 1} duplicates skill #${firstIndex + 1}.`
+      })
+    }
+  })
 
   return errors
 }

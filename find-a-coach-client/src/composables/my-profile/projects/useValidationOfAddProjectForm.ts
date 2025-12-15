@@ -62,21 +62,33 @@ export default function useValidationOfAddProjectForm(formData: ProjectForm): Va
     })
   }
 
-  if (formData.skillTitles.length > 0) {
-    formData.skillTitles.forEach((skill, index) => {
-      if (!skill || skill.trim() === '') {
-        errors.push({
-          fieldName: `skillTitles[${index}]`,
-          errorMessage: `Skill #${index + 1} cannot be empty.`
-        })
-      } else if (skill.length > 50) {
-        errors.push({
-          fieldName: `skillTitles[${index}]`,
-          errorMessage: `Skill #${index + 1} cannot exceed 50 characters.`
-        })
-      }
-    })
-  }
+  const normalizedSkills = formData.skillTitles.map(skill => skill.trim().toLowerCase())
+
+  formData.skillTitles.forEach((skill, index) => {
+    if (!skill || skill.trim() === '') {
+      errors.push({
+        fieldName: `skillTitles[${index}]`,
+        errorMessage: `Skill #${index + 1} cannot be empty.`
+      })
+      return
+    }
+
+    if (skill.length > 50) {
+      errors.push({
+        fieldName: `skillTitles[${index}]`,
+        errorMessage: `Skill #${index + 1} cannot exceed 50 characters.`
+      })
+      return
+    }
+
+    const firstIndex = normalizedSkills.indexOf(skill.trim().toLowerCase())
+    if (firstIndex !== index) {
+      errors.push({
+        fieldName: `skillTitles[${index}]`,
+        errorMessage: `Skills cannot duplicate. Skill #${index + 1} duplicates skill #${firstIndex + 1}.`
+      })
+    }
+  })
 
   if (formData.participants.length > 0) {
     formData.participants.forEach((person, index) => {

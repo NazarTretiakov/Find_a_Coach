@@ -1,5 +1,5 @@
 <template>
-  <div class="experience-section">
+  <div class="experience-section" v-if="positions.length > 0">
     <ul class="experience-section-items">
 
       <li class="experience-section-items_header">
@@ -58,34 +58,34 @@
 
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-
-import TheSkills from './TheSkills.vue'
-
-import { useRouter } from 'vue-router'
-import { Position } from '@/types/my-profile/experience/Position'
-import useFormatToReadableDate from '@/composables/useFormatToReadableDate'
-import useConvertEmploymentTypeToReadable from '@/composables/my-profile/experience/useConvertEmploymentTypeToReadable'
-import useGetLastTwoPositions from '@/composables/my-profile/experience/useGetLastTwoPositions'
+import { defineComponent, ref, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import TheSkills from "./TheSkills.vue"
+import type { Position } from "@/types/my-profile/experience/Position"
+import useFormatToReadableDate from "@/composables/useFormatToReadableDate"
+import useConvertEmploymentTypeToReadable from "@/composables/my-profile/experience/useConvertEmploymentTypeToReadable"
+import useGetLastTwoPositions from "@/composables/my-profile/experience/useGetLastTwoPositions"
 
 export default defineComponent({
   props: {
     id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   components: { TheSkills },
   setup(props) {
     const router = useRouter()
     const positions = ref<Position[]>([])
 
-    async function loadPositions() {
-      const result = await useGetLastTwoPositions(props.id)
+    const loadPositions = async (userId: string) => {
+      positions.value = []
 
-      if (typeof result === 'object' && 'isSuccessful' in result) {
+      const result = await useGetLastTwoPositions(userId)
+
+      if (typeof result === "object" && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
           return
         }
       } else {
@@ -98,11 +98,15 @@ export default defineComponent({
     }
 
     function formatDate(date: Date | string | null): string {
-      return useFormatToReadableDate(date?.toString() || '')
+      return useFormatToReadableDate(date?.toString() || "")
     }
 
-    function getDuration(start: Date | string | null, end: Date | string | null, isCurrent: boolean): string {
-      if (!start) return ''
+    function getDuration(
+      start: Date | string | null,
+      end: Date | string | null,
+      isCurrent: boolean
+    ): string {
+      if (!start) return ""
       const startDate = new Date(start)
       const endDate = isCurrent ? new Date() : end ? new Date(end) : new Date()
       const diff = endDate.getTime() - startDate.getTime()
@@ -114,10 +118,20 @@ export default defineComponent({
       if (years > 0 && remainingMonths > 0) return `${years} yr ${remainingMonths} mon`
       if (years > 0) return `${years} yr`
       if (remainingMonths > 0) return `${remainingMonths} mon`
-      return 'Less than 1 mon'
+      return "Less than 1 mon"
     }
 
-    onMounted(() => loadPositions())
+    onMounted(() => {
+      loadPositions(props.id)
+    })
+
+    watch(
+      () => props.id,
+      (newId, oldId) => {
+        if (newId === oldId) return
+        loadPositions(newId)
+      }
+    )
 
     return {
       positions,
@@ -128,6 +142,7 @@ export default defineComponent({
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;

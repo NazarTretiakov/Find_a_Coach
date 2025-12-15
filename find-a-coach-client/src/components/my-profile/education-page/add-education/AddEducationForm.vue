@@ -316,11 +316,17 @@ export default defineComponent({
 
           &-name {
             margin-top: 20px;
-            margin-bottom: 16px;
 
             @media (max-width: $breakpoint) {
               margin-top: 14px;
-              margin-bottom: 14px;
+            }
+          }
+
+          &-remove-button {
+            margin-top: 14px;
+
+            @media (max-width: $breakpoint) {
+              margin-top: 10px;
             }
           }
         }

@@ -1,5 +1,5 @@
 <template>
-  <div class="skills-section">
+  <div class="skills-section" v-if="skills.length > 0">
     <ul class="skills-section-items">
       <li class="skills-section-items_header">
         <ul class="skills-section-items_header-items">
@@ -35,57 +35,69 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import type { Skill } from '@/types/my-profile/skills/Skill'
-import useGetTwoSkillsWithMostUsages from '@/composables/my-profile/skills/useGetLastTwoSkillsWithMostUsages'
+import { defineComponent, ref, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
+import type { Skill } from "@/types/my-profile/skills/Skill"
+import useGetTwoSkillsWithMostUsages from "@/composables/my-profile/skills/useGetLastTwoSkillsWithMostUsages"
 
 export default defineComponent({
   props: {
     id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   setup(props) {
     const router = useRouter()
     const skills = ref<Skill[]>([])
 
-    async function loadSkills() {
-      const result = await useGetTwoSkillsWithMostUsages(props.id)
+    const loadSkills = async (userId: string) => {
+      skills.value = []
 
-      if (typeof result === 'object' && 'isSuccessful' in result) {
+      const result = await useGetTwoSkillsWithMostUsages(userId)
+
+      if (typeof result === "object" && "isSuccessful" in result) {
         if (!result.isSuccessful) {
-          router.push('/error-page')
+          router.push("/error-page")
           return
         }
       } else {
         skills.value = result as Skill[]
-        console.log('Loaded skills:', skills.value)
       }
     }
 
     function getUsageIcon(type: string): string {
       switch (type) {
-        case 'Project':
-          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
-        case 'Company':
-          return new URL('@/assets/images/icons/job-icon.svg', import.meta.url).href
-        case 'Certification':
-          return new URL('@/assets/images/icons/certification-icon.svg', import.meta.url).href
-        case 'School':
-          return new URL('@/assets/images/icons/education-icon.svg', import.meta.url).href
+        case "Project":
+          return new URL("@/assets/images/icons/project-icon.svg", import.meta.url).href
+        case "Company":
+          return new URL("@/assets/images/icons/job-icon.svg", import.meta.url).href
+        case "Certification":
+          return new URL("@/assets/images/icons/certification-icon.svg", import.meta.url).href
+        case "School":
+          return new URL("@/assets/images/icons/education-icon.svg", import.meta.url).href
         default:
-          return new URL('@/assets/images/icons/project-icon.svg', import.meta.url).href
+          return new URL("@/assets/images/icons/project-icon.svg", import.meta.url).href
       }
     }
 
-    onMounted(() => loadSkills())
+    onMounted(() => {
+      loadSkills(props.id)
+    })
+
+    watch(
+      () => props.id,
+      (newId, oldId) => {
+        if (newId === oldId) return
+        loadSkills(newId)
+      }
+    )
 
     return { skills, getUsageIcon }
   }
 })
 </script>
+
 
 <style lang="scss" scoped>
 @use '../../assets/styles/config' as *;
