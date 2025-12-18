@@ -8,9 +8,6 @@
       </li>
       <li class="footer-items_info">
         <ul class="footer-items_info-items">
-          <li class="footer-items_info-items_about-us">
-            <router-link class="footer-items_info-items_about-us-link" to="/home/about-us">About us</router-link>
-          </li>
           <li class="footer-items_info-items_find-us-on">
             <span class="footer-items_info-items_find-us-on-element">Find us on:</span>
           </li>
@@ -63,24 +60,6 @@
         list-style: none;
         margin: 0;
         padding: 0;
-
-        &_about-us {
-          margin-bottom: 20px;
-
-          &-link {
-            font-size: 14px;
-            color: $linkColor;
-            text-decoration: none;
-
-            @media (max-width: $breakpoint) {
-              font-size: 12px;
-            }
-
-            &:hover {
-              text-decoration: underline;
-            }
-          }
-        }
 
         &_find-us-on {
           margin-bottom: 10px;

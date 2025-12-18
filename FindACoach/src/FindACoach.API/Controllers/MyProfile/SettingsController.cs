@@ -1,4 +1,6 @@
-﻿using FindACoach.Core.DTO.MyProfile.Settings;
+﻿using FindACoach.Core.DTO.MyProfile.Activities;
+using FindACoach.Core.DTO.MyProfile.Settings;
+using FindACoach.Core.ServiceContracts.Forum.Activities;
 using FindACoach.Core.ServiceContracts.MyProfile.Settings;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +13,16 @@ namespace FindACoach.API.Controllers.MyProfile
         private readonly IContactInformationVisibilityEditorService _contactInformationVisibilityEditorService;
         private readonly ISecuritySettingsGetterService _securitySettingsGetterService;
         private readonly ISecuritySettingsEditorService _securitySettingsEditorService;
+        private readonly IActivitiesGetterService _activitiesGetterService;
 
-        public SettingsController(IProfileImageGetterService profileImageGetterService, IContactInformationVisibilityGetterService contactInformationVisibilityGetterService, IContactInformationVisibilityEditorService contactInformationVisibilityEditorService, ISecuritySettingsGetterService securitySettingsGetterService, ISecuritySettingsEditorService securitySettingsEditorService)
+        public SettingsController(IProfileImageGetterService profileImageGetterService, IContactInformationVisibilityGetterService contactInformationVisibilityGetterService, IContactInformationVisibilityEditorService contactInformationVisibilityEditorService, ISecuritySettingsGetterService securitySettingsGetterService, ISecuritySettingsEditorService securitySettingsEditorService, IActivitiesGetterService activitiesGetterService)
         {
             _profileImageGetterService = profileImageGetterService;
             _contactInformationVisibilityGetterService = contactInformationVisibilityGetterService;
             _contactInformationVisibilityEditorService = contactInformationVisibilityEditorService;
             _securitySettingsGetterService = securitySettingsGetterService;
             _securitySettingsEditorService = securitySettingsEditorService;
+            _activitiesGetterService = activitiesGetterService;
         }
 
         [HttpGet("get-profile-image")]
@@ -67,6 +71,14 @@ namespace FindACoach.API.Controllers.MyProfile
             var isLoginNotificationEnabledInfo = await _securitySettingsEditorService.EditSecuritySettings(dto);
 
             return Ok(isLoginNotificationEnabledInfo);
+        }
+
+        [HttpGet("get-saved-activities")]
+        public async Task<ActionResult<ActivityForActivitiesListToResponse>> GetSavedActivities(string userId, int page = 1, int pageSize = 7)
+        {
+            List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetSavedActivitiesPaged(userId, page, pageSize);
+
+            return Ok(activities);
         }
     }
 }

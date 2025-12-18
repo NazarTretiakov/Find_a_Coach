@@ -43,7 +43,7 @@ import LanguagesPage from '../pages/my-profile/languages-page/LanguagesPage.vue'
 import AddLanguage from '../pages/my-profile/languages-page/add-language/AddLanguage.vue'
 import RecommendationsPage from '../pages/my-profile/recommendations-page/RecommendationsPage.vue'
 import EditLanguage from '../pages/my-profile/languages-page/edit-language/EditLanguage.vue'
-import NotificationsSettingsPage from '../pages/my-profile/settings-page/notifications-page/NotificationsSettingsPage.vue'
+import SavedActivitiesPage from '../pages/my-profile/settings-page/saved-activities-page/SavedActivitiesPage.vue'
 import PrivacySettingsPage from '../pages/my-profile/settings-page/privacy-page/PrivacySettingsPage.vue'
 import SecuritySettingsPage from '../pages/my-profile/settings-page/security-page/SecuritySettingsPage.vue'
 import NetworkPage from '../pages/network/NetworkPage.vue'
@@ -119,6 +119,7 @@ const router = createRouter({
     { path: '/my-profile/settings', redirect: "/my-profile/settings/privacy", meta: { requiresAuth: true } },
     { path: '/my-profile/settings/privacy', component: PrivacySettingsPage, meta: { requiresAuth: true } },
     { path: '/my-profile/settings/security', component: SecuritySettingsPage, meta: { requiresAuth: true } },
+    { path: '/my-profile/settings/saved-activities', component: SavedActivitiesPage, meta: { requiresAuth: true } },
     { path: '/network', component: NetworkPage, meta: { requiresAuth: true } },
     { path: '/network/connections/:id', component: ConnectionsPage, meta: { requiresAuth: true }, props: true },
     { path: '/network/notifications', component: InvitationsPage, meta: { requiresAuth: true } },

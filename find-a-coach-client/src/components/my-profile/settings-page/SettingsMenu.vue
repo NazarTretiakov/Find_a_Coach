@@ -17,6 +17,12 @@
           <span :class="activePage == 'security' ? 'settings-menu-items_security-inscription-active' : 'settings-menu-items_security-inscription'">Security</span>
         </router-link>
       </li>
+      <li class="settings-menu-items_saved-activities">
+        <router-link to="/my-profile/settings/saved-activities" class="settings-menu-items_saved-activities-link" >
+          <img class="settings-menu-items_saved-activities-icon" src="../../../assets/images/icons/save-icon.svg" alt="Save icon">
+          <span class="settings-menu-items_saved-activities-inscription">Saved activities</span>
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>
@@ -112,7 +118,7 @@ export default defineComponent({
       }
     }
 
-    &_notifications {
+    &_saved-activities {
       display: flex;
       align-items: center;
       margin-bottom: 20px;

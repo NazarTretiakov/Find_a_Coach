@@ -66,5 +66,14 @@ namespace FindACoach.Core.ServiceContracts.Forum.Activities
         /// <param name="id">Id of activity which will be retrieved.</param>
         /// <returns>ActivityToResponse object with data of activity.</returns>
         Task<ActivityToResponse> GetActivity(string id);
+
+        /// <summary>
+        /// Retrieves all saved activities of user.
+        /// </summary>
+        /// <param name="userId">User id which saved activities will be retrieved.</param>
+        /// <param name="page">Number of page that will be loaded</param>
+        /// <param name="pageSize">Size of page which will be loaded.</param>
+        /// <returns>ActivityForActivitiesListToResponse</returns>
+        Task<List<ActivityForActivitiesListToResponse>> GetSavedActivitiesPaged(string userId, int page, int pageSize);
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
+using System;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
@@ -382,7 +383,6 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
         {
-
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
             var userActivities = await _db.Activities
@@ -695,6 +695,40 @@ namespace FindACoach.Infrastructure.Repositories
                 .ToListAsync();
 
             return userActivities;
+        }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetSavedActivitiesPaged(string userId, int page, int pageSize)
+        {
+            string serverUrl = _configuration.GetValue<string>("ServerUrl");
+            var userGuid = Guid.Parse(userId);
+
+            var result = await _db.Saves
+                .Where(s => s.UserId == userGuid && !s.Activity.User.IsBlocked)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(s => new ActivityForActivitiesListToResponse
+                {
+                    Id = s.Activity.Id,
+                    ImagePathOfCreator = $"{serverUrl}/Images/UserProfiles/{s.Activity.User.ImagePath}",
+                    FirstNameOfCreator = s.Activity.User.FirstName,
+                    LastNameOfCreator = s.Activity.User.LastName,
+                    PublicationDate = s.Activity.CreatedAt,
+                    Title = s.Activity.Title,
+                    Subjects = s.Activity.Subjects.Select(sub => sub.Title).ToList(),
+                    ImagePath = string.IsNullOrEmpty(s.Activity.ImagePath)
+                        ? null
+                        : $"{serverUrl}/Images/Activities/{s.Activity.ImagePath}",
+                    Description = s.Activity.Description,
+                    ActivityType =
+                        s.Activity is Event ? "Event" :
+                        s.Activity is Survey ? "Survey" :
+                        s.Activity is QA ? "QA" :
+                        s.Activity is Post ? "Post" :
+                        "Unknown"
+                })
+                .ToListAsync();
+
+            return result;
         }
     }
 }

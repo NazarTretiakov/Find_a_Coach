@@ -58,5 +58,10 @@ namespace FindACoach.Core.Services.Forum.Activities
         {
             return await _activitiesRepository.GetAllActivities(page, pageSize);
         }
+
+        public async Task<List<ActivityForActivitiesListToResponse>> GetSavedActivitiesPaged(string userId, int page, int pageSize)
+        {
+            return await _activitiesRepository.GetSavedActivitiesPaged(userId, page, pageSize);
+        }
     }
 }
