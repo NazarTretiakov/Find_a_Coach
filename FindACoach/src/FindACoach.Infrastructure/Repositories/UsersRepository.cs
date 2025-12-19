@@ -452,7 +452,8 @@ namespace FindACoach.Infrastructure.Repositories
             var recommendedUsers = await _userManager.Users
                 .Where(u => (EF.Functions.Like(u.Location.ToLower(), $"%{locationPart}%") ||
                             u.Skills.Any(s => skillTitles.Contains(s.Title.ToLower()))) &&
-                            u.Id != activeUser.Id)
+                            u.Id != activeUser.Id && 
+                            !u.IsBlocked)
                 .OrderByDescending(u => u.FirstName)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

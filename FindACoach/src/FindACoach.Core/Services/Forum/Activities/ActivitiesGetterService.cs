@@ -23,9 +23,8 @@ namespace FindACoach.Core.Services.Forum.Activities
         {
             return await _activitiesRepository.GetFilteredActivitiesPaged(userId, 
                 page, 
-                pageSize, 
-                a => a.Title.ToLower().Contains(searchString.ToLower()) ||
-                     a.Subjects.Any(s => s.Title.ToLower().Contains(searchString.ToLower()))
+                pageSize,
+                searchString
             );
         }
 
@@ -39,8 +38,7 @@ namespace FindACoach.Core.Services.Forum.Activities
             return await _activitiesRepository.GetFilteredRecommendedActivitiesPaged(
                 page,
                 pageSize,
-                a => a.Title.ToLower().Contains(searchString.ToLower()) ||
-                     a.Subjects.Any(s => s.Title.ToLower().Contains(searchString.ToLower()))
+                searchString
             );
         }
 

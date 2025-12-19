@@ -266,13 +266,29 @@ namespace FindACoach.Infrastructure.Repositories
             return activitiesPagedToResponse;
         }
 
-        public async Task<ActivitiesPagedToResponse> GetFilteredActivitiesPaged(string userId, int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
+        public async Task<ActivitiesPagedToResponse> GetFilteredActivitiesPaged(string userId, int page, int pageSize, string searchString)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
+            var lowerSearch = searchString.ToLower();
+
             var userActivities = await _db.Activities
                 .Where(a => a.UserId == Guid.Parse(userId) && !a.User.IsBlocked)
-                .Where(predicate)
+                .Where(a =>
+                    a.Title.ToLower().Contains(lowerSearch) ||
+                    a.Subjects.Any(s => s.Title.ToLower().Contains(lowerSearch)) ||
+                    _db.Activities
+                        .OfType<Event>()
+                        .Where(e => e.Id == a.Id)
+                        .Any(e =>
+                            e.SearchPersonPanels.Any(p =>
+                                p.PositionName.ToLower().Contains(lowerSearch) ||
+                                p.PreferredSkills.Any(ps =>
+                                    ps.Title.ToLower().Contains(lowerSearch)
+                                )
+                            )
+                        )
+                )
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -285,13 +301,16 @@ namespace FindACoach.Infrastructure.Repositories
                     PublicationDate = a.CreatedAt,
                     Title = a.Title,
                     Subjects = a.Subjects.Select(s => s.Title).ToList(),
-                    ImagePath = string.IsNullOrEmpty(a.ImagePath) ? null : $"{serverUrl}/Images/Activities/{a.ImagePath}",
+                    ImagePath = string.IsNullOrEmpty(a.ImagePath)
+                        ? null
+                        : $"{serverUrl}/Images/Activities/{a.ImagePath}",
                     Description = a.Description,
-                    ActivityType = a is Event ? "Event" :
-                                   a is Survey ? "Survey" :
-                                   a is QA ? "QA" :
-                                   a is Post ? "Post" :
-                                   "Unknown"
+                    ActivityType =
+                        a is Event ? "Event" :
+                        a is Survey ? "Survey" :
+                        a is QA ? "QA" :
+                        a is Post ? "Post" :
+                        "Unknown"
                 })
                 .ToListAsync();
 
@@ -299,7 +318,21 @@ namespace FindACoach.Infrastructure.Repositories
             activitiesPagedToResponse.Activities = userActivities;
             activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Activities
                 .Where(a => a.UserId == Guid.Parse(userId) && !a.User.IsBlocked)
-                .Where(predicate)
+                .Where(a =>
+                    a.Title.ToLower().Contains(lowerSearch) ||
+                    a.Subjects.Any(s => s.Title.ToLower().Contains(lowerSearch)) ||
+                    _db.Activities
+                        .OfType<Event>()
+                        .Where(e => e.Id == a.Id)
+                        .Any(e =>
+                            e.SearchPersonPanels.Any(p =>
+                                p.PositionName.ToLower().Contains(lowerSearch) ||
+                                p.PreferredSkills.Any(ps =>
+                                    ps.Title.ToLower().Contains(lowerSearch)
+                                )
+                            )
+                        )
+                )
                 .Skip(page * pageSize)
                 .Any();
 
@@ -415,12 +448,28 @@ namespace FindACoach.Infrastructure.Repositories
             return activitiesPagedToResponse;
         }
 
-        public async Task<ActivitiesPagedToResponse> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
+        public async Task<ActivitiesPagedToResponse> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, string searchString)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
+            string lowerSearch = searchString.ToLower();
+
             var userActivities = await _db.Activities
-                .Where(predicate)
+                .Where(a =>
+                    a.Title.ToLower().Contains(lowerSearch) ||
+                    a.Subjects.Any(s => s.Title.ToLower().Contains(lowerSearch)) ||
+                    _db.Activities
+                        .OfType<Event>()
+                        .Where(e => e.Id == a.Id)
+                        .Any(e =>
+                            e.SearchPersonPanels.Any(p =>
+                                p.PositionName.ToLower().Contains(lowerSearch) ||
+                                p.PreferredSkills.Any(ps =>
+                                    ps.Title.ToLower().Contains(lowerSearch)
+                                )
+                            )
+                        )
+                )
                 .OrderByDescending(a => a.Likes.Count)
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip((page - 1) * pageSize)
@@ -447,7 +496,21 @@ namespace FindACoach.Infrastructure.Repositories
             var activitiesPagedToResponse = new ActivitiesPagedToResponse();
             activitiesPagedToResponse.Activities = userActivities;
             activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Activities
-                .Where(predicate)
+                .Where(a =>
+                    a.Title.ToLower().Contains(lowerSearch) ||
+                    a.Subjects.Any(s => s.Title.ToLower().Contains(lowerSearch)) ||
+                    _db.Activities
+                        .OfType<Event>()
+                        .Where(e => e.Id == a.Id)
+                        .Any(e =>
+                            e.SearchPersonPanels.Any(p =>
+                                p.PositionName.ToLower().Contains(lowerSearch) ||
+                                p.PreferredSkills.Any(ps =>
+                                    ps.Title.ToLower().Contains(lowerSearch)
+                                )
+                            )
+                        )
+                )
                 .Skip(page * pageSize)
                 .Any();
 
