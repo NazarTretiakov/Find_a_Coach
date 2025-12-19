@@ -16,5 +16,6 @@
         public int NumberOfLikes { get; set; }
         public bool IsSaved { get; set; }
         public List<CommentToResponse> Comments { get; set; } = new List<CommentToResponse>();
+        public bool IsMoreCommentsLeft { get; set; }
     }
 }

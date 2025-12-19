@@ -67,9 +67,11 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<List<CommentToResponse>> GetCommentsPaged(string activityId, int page, int pageSize)
+        public async Task<CommentsToResponse> GetCommentsPaged(string activityId, int page, int pageSize)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
+
+            var commentsToResponse = new CommentsToResponse();
 
             var activityComments = await _db.Comments
                 .Where(c => c.ActivityId == Guid.Parse(activityId))
@@ -90,7 +92,13 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            return activityComments;
+            commentsToResponse.Comments = activityComments;
+            commentsToResponse.IsMoreCommentsLeft = await _db.Comments
+                .Where(c => c.ActivityId == Guid.Parse(activityId))
+                .Skip((page + 1) * pageSize)
+                .AnyAsync();
+
+            return commentsToResponse;
         }
     }
 }

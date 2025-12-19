@@ -47,7 +47,7 @@ namespace FindACoach.API.Controllers.Admin
         }
 
         [HttpGet("get-all-activities")]
-        public async Task<ActionResult<List<ActivityForActivitiesListToResponse>>> GetAllActivities(int page, int pageSize)
+        public async Task<ActionResult<ActivitiesPagedToResponse>> GetAllActivities(int page, int pageSize)
         {
             var activities = await _activitiesGetterService.GetAllActivities(page, pageSize);
 

@@ -69,11 +69,11 @@ namespace FindACoach.API.Controllers.Forum
         }
 
         [HttpGet("get-comments")]
-        public async Task<ActionResult<List<CommentToResponse>>> GetComments(string activityId, int page = 1, int pageSize = 3)
+        public async Task<ActionResult<CommentsToResponse>> GetComments(string activityId, int page = 1, int pageSize = 3)
         {
-            List<CommentToResponse> comments = await _commentsGetterService.GetCommentsPaged(activityId, page, pageSize);
+            CommentsToResponse commentsToResponse = await _commentsGetterService.GetCommentsPaged(activityId, page, pageSize);
 
-            return Ok(comments);
+            return Ok(commentsToResponse);
         }
 
         [HttpPost("delete-comment")]

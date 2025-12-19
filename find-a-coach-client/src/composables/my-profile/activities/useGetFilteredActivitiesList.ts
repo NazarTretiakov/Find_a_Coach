@@ -1,11 +1,11 @@
 import { Result } from "@/types/Result"
-import type { ActivityOfActivitiesList } from "@/types/my-profile/activities/ActivityOfActivitiesList"
+import { ActivitiesPaged } from '@/types/my-profile/activities/ActivitiesPaged'
 import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 import { config } from '@/config'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetFilteredActivitiesList(userId: string, searchString: string, page: number, pageSize: number, ): Promise<Result | ActivityOfActivitiesList[]> {
+export default async function useGetFilteredActivitiesList(userId: string, searchString: string, page: number, pageSize: number, ): Promise<Result | ActivitiesPaged> {
   try {
     const token = await useEnsureValidToken()
 
@@ -26,7 +26,7 @@ export default async function useGetFilteredActivitiesList(userId: string, searc
       }
     }
 
-    const data: ActivityOfActivitiesList[] = await response.json()
+    const data: ActivitiesPaged = await response.json()
     
     return data
   } catch (error) {

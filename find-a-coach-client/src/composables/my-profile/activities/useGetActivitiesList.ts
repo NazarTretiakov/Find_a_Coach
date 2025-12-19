@@ -1,11 +1,11 @@
 import { Result } from "@/types/Result"
 import useEnsureValidToken from '../../authentication/useEnsureValidToken'
 import { config } from '@/config'
-import { ActivityOfActivitiesList } from "@/types/my-profile/activities/ActivityOfActivitiesList"
+import { ActivitiesPaged } from '@/types/my-profile/activities/ActivitiesPaged'
 
 const API_URL = config.apiBaseUrl + '/MyProfile'
 
-export default async function useGetActivityCards(userId: string, page: number, pageSize: number): Promise<Result | ActivityOfActivitiesList[]> {
+export default async function useGetActivityCards(userId: string, page: number, pageSize: number): Promise<Result | ActivitiesPaged> {
   try {
     const token = await useEnsureValidToken()
 
@@ -24,7 +24,7 @@ export default async function useGetActivityCards(userId: string, page: number, 
       }
     }
 
-    const data: ActivityOfActivitiesList[] = await response.json()
+    const data: ActivitiesPaged= await response.json()
     return data
   } catch (error) {
     return {

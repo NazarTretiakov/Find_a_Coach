@@ -15,6 +15,6 @@ namespace FindACoach.Core.ServiceContracts.Forum.Activities
         /// <param name="page">Number of page that will be loaded</param>
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <returns></returns>
-        Task<List<CommentToResponse>> GetCommentsPaged(string activityId, int page, int pageSize);
+        Task<CommentsToResponse> GetCommentsPaged(string activityId, int page, int pageSize);
     }
 }

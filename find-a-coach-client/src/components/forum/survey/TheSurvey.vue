@@ -176,7 +176,7 @@ export default defineComponent({
         if (authenticationStore.userId == survey.value.userId) {
           router.push(`/my-profile/activities/survey/${survey.value.id}`)
         }
-        isLoadMoreCommentsButtonVisible.value = survey.value.comments.length == pageSize
+        isLoadMoreCommentsButtonVisible.value = survey.value.isMoreCommentsLeft
         console.log("Loaded survey: ", survey.value)
       }
 
@@ -267,10 +267,10 @@ export default defineComponent({
           return
         }
       } else {
-        if (result.length < pageSize) {
+        if (result.isMoreCommentsLeft === false) {
           isLoadMoreCommentsButtonVisible.value = false
         }
-        survey.value.comments.push(...result)
+        survey.value.comments.push(...result.comments)
         page++
       }
     }

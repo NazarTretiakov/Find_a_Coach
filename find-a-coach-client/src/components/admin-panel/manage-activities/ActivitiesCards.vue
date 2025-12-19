@@ -98,11 +98,11 @@ export default defineComponent({
         return
       }
 
-      if (result.length < pageSize) {
+      if (result.isMoreActivitiesLeft === false) {
         isMoreActivitiesLeft.value = false
       }
 
-      activities.value.push(...result)
+      activities.value.push(...result.activities)
       page.value++
       isLoading.value = false
     }
@@ -118,11 +118,11 @@ export default defineComponent({
         return
       }
 
-      if (result.length < pageSize) {
+      if (result.isMoreActivitiesLeft === false) {
         isMoreActivitiesLeft.value = false
       }
 
-      activities.value.push(...result)
+      activities.value.push(...result.activities)
       page.value++
       isLoading.value = false
     }
@@ -150,6 +150,7 @@ export default defineComponent({
         console.error(result.errorMessage)
         return
       }
+      activities.value = activities.value.filter(activity => activity.id !== activityId)
     }
 
     onMounted(() => {

@@ -49,15 +49,19 @@ namespace FindACoach.UnitTests
             var repositoryMocked = new Mock<IActivitiesRepository>();
 
             repositoryMocked.Setup(r => r.GetRecommendedActivitiesPaged(userId, page, pageSize))
-                            .ReturnsAsync(expectedActivities);
+                            .ReturnsAsync(new ActivitiesPagedToResponse()
+                            {
+                                Activities = expectedActivities,
+                                IsMoreActivitiesLeft = false
+                            });
 
             var activitiesGetterService = new ActivitiesGetterService(repositoryMocked.Object);
 
             var result = await activitiesGetterService.GetRecommendedActivitiesPaged(userId, page, pageSize);
 
             Assert.NotNull(result);
-            Assert.Equal(expectedActivities.Count, result.Count);
-            Assert.Equal(expectedActivities, result);
+            Assert.Equal(expectedActivities.Count, result.Activities.Count);
+            Assert.Equal(expectedActivities, result.Activities);
         }
 
         [Fact]

@@ -14,7 +14,8 @@ interface Activity {
   isLiked: boolean;
   numberOfLikes: number;
   isSaved: boolean;
-  comments: Comment[]
+  comments: Comment[];
+  isMoreCommentsLeft: boolean;
 }
 
 export type { Activity }

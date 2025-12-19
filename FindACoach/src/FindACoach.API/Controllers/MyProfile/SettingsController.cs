@@ -74,9 +74,9 @@ namespace FindACoach.API.Controllers.MyProfile
         }
 
         [HttpGet("get-saved-activities")]
-        public async Task<ActionResult<ActivityForActivitiesListToResponse>> GetSavedActivities(string userId, int page = 1, int pageSize = 7)
+        public async Task<ActionResult<ActivitiesPagedToResponse>> GetSavedActivities(string userId, int page = 1, int pageSize = 7)
         {
-            List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetSavedActivitiesPaged(userId, page, pageSize);
+            ActivitiesPagedToResponse activities = await _activitiesGetterService.GetSavedActivitiesPaged(userId, page, pageSize);
 
             return Ok(activities);
         }

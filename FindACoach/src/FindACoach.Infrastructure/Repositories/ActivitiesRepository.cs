@@ -228,7 +228,7 @@ namespace FindACoach.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<List<ActivityForActivitiesListToResponse>> GetActivitiesPaged(string userId, int page, int pageSize)
+        public async Task<ActivitiesPagedToResponse> GetActivitiesPaged(string userId, int page, int pageSize)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
@@ -256,10 +256,17 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            return userActivities;
+            var activitiesPagedToResponse = new ActivitiesPagedToResponse();
+            activitiesPagedToResponse.Activities = userActivities;
+            activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Activities
+                .Where(a => a.UserId == Guid.Parse(userId))
+                .Skip(page * pageSize)
+                .Any();
+
+            return activitiesPagedToResponse;
         }
 
-        public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredActivitiesPaged(string userId, int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
+        public async Task<ActivitiesPagedToResponse> GetFilteredActivitiesPaged(string userId, int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
@@ -288,10 +295,18 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            return userActivities;
+            var activitiesPagedToResponse = new ActivitiesPagedToResponse();
+            activitiesPagedToResponse.Activities = userActivities;
+            activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Activities
+                .Where(a => a.UserId == Guid.Parse(userId) && !a.User.IsBlocked)
+                .Where(predicate)
+                .Skip(page * pageSize)
+                .Any();
+
+            return activitiesPagedToResponse;
         }
 
-        public async Task<List<ActivityForActivitiesListToResponse>> GetRecommendedActivitiesPaged(string userId, int page, int pageSize)
+        public async Task<ActivitiesPagedToResponse> GetRecommendedActivitiesPaged(string userId, int page, int pageSize)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
@@ -347,6 +362,25 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
+            var activitiesPagedToResponse = new ActivitiesPagedToResponse();
+            activitiesPagedToResponse.Activities = recommendedActivities;
+            activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Activities
+                .Where(a => (
+                    a.Title.ToLower().Contains(user.PrimaryOccupation.ToLower()) ||
+                    a.Subjects.Any(s => s.Title.ToLower().Contains(user.PrimaryOccupation.ToLower())) ||
+                    a.Description.ToLower().Contains(user.PrimaryOccupation.ToLower()) ||
+                    user.Skills
+                        .Select(skill => skill.Title)
+                        .Any(skillTitle => a.Title.ToLower().Contains(skillTitle.ToLower())) ||
+                    user.Skills
+                        .Select(skill => skill.Title)
+                        .Any(skillTitle => a.Subjects.Any(s => s.Title.ToLower().Contains(skillTitle.ToLower())))) &&
+                   !a.User.IsBlocked &&
+                   a.UserId != Guid.Parse(userId)
+                )
+                .Skip(page * pageSize)
+                .Any();
+
             if (recommendedActivities.Count < 6)
             {
                 var recommendedIds = recommendedActivities.Select(u => u.Id).ToList();
@@ -378,10 +412,10 @@ namespace FindACoach.Infrastructure.Repositories
                 recommendedActivities.AddRange(activities);
             }
 
-            return recommendedActivities;
+            return activitiesPagedToResponse;
         }
 
-        public async Task<List<ActivityForActivitiesListToResponse>> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
+        public async Task<ActivitiesPagedToResponse> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Core.Domain.Entities.Activity.Activity, bool>> predicate)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
@@ -410,7 +444,14 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            return userActivities;
+            var activitiesPagedToResponse = new ActivitiesPagedToResponse();
+            activitiesPagedToResponse.Activities = userActivities;
+            activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Activities
+                .Where(predicate)
+                .Skip(page * pageSize)
+                .Any();
+
+            return activitiesPagedToResponse;
         }
 
         public async Task<ActivityToResponse> GetActivity(string id)
@@ -481,7 +522,8 @@ namespace FindACoach.Infrastructure.Repositories
                                                                             UserImagePath = $"{serverUrl}/Images/UserProfiles/{c.User.ImagePath}",
                                                                             DateOfCreation = c.DateOfCreation,
                                                                             Content = c.Content
-                                                                        }).ToList()
+                                                                        }).ToList(),
+                                                                      IsMoreCommentsLeft = e.Comments.Count(c => c.ActivityId == e.Id) > 3
                                                                   })
                                                                   .FirstOrDefaultAsync(e => e.Id == guidIdOfActivity);
 
@@ -667,7 +709,7 @@ namespace FindACoach.Infrastructure.Repositories
             return uniqueFileName;
         }
 
-        public async Task<List<ActivityForActivitiesListToResponse>> GetAllActivities(int page, int pageSize)
+        public async Task<ActivitiesPagedToResponse> GetAllActivities(int page, int pageSize)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
 
@@ -694,10 +736,16 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            return userActivities;
+            var activitiesPagedToResponse = new ActivitiesPagedToResponse();
+            activitiesPagedToResponse.Activities = userActivities;
+            activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Activities
+                .Skip(page * pageSize)
+                .Any();
+
+            return activitiesPagedToResponse;
         }
 
-        public async Task<List<ActivityForActivitiesListToResponse>> GetSavedActivitiesPaged(string userId, int page, int pageSize)
+        public async Task<ActivitiesPagedToResponse> GetSavedActivitiesPaged(string userId, int page, int pageSize)
         {
             string serverUrl = _configuration.GetValue<string>("ServerUrl");
             var userGuid = Guid.Parse(userId);
@@ -728,7 +776,14 @@ namespace FindACoach.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            return result;
+            var activitiesPagedToResponse = new ActivitiesPagedToResponse();
+            activitiesPagedToResponse.Activities = result;
+            activitiesPagedToResponse.IsMoreActivitiesLeft = _db.Saves
+                .Where(s => s.UserId == userGuid && !s.Activity.User.IsBlocked)
+                .Skip(page * pageSize)
+                .Any();
+
+            return activitiesPagedToResponse;
         }
     }
 }

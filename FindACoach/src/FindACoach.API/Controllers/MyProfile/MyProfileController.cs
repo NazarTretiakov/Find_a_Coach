@@ -114,17 +114,17 @@ namespace FindACoach.API.Controllers.MyProfile
         }
 
         [HttpGet("get-activities-list")]
-        public async Task<ActionResult<List<ActivityForActivitiesListToResponse>>> GetActivitiesList(string userId, int page = 1, int pageSize = 7)
+        public async Task<ActionResult<ActivitiesPagedToResponse>> GetActivitiesList(string userId, int page = 1, int pageSize = 7)
         {
-            List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetActivitiesPaged(userId, page, pageSize);
+            ActivitiesPagedToResponse activities = await _activitiesGetterService.GetActivitiesPaged(userId, page, pageSize);
 
             return Ok(activities);
         }
 
         [HttpGet("get-filtered-activities-list")]
-        public async Task<ActionResult<List<ActivityForActivitiesListToResponse>>> GetFilteredActivitiesList(string userId, string searchString, int page = 1, int pageSize = 7)
+        public async Task<ActionResult<ActivitiesPagedToResponse>> GetFilteredActivitiesList(string userId, string searchString, int page = 1, int pageSize = 7)
         {
-            List<ActivityForActivitiesListToResponse> activities = await _activitiesGetterService.GetFilteredActivitiesPaged(userId, page, pageSize, searchString);
+            ActivitiesPagedToResponse activities = await _activitiesGetterService.GetFilteredActivitiesPaged(userId, page, pageSize, searchString);
 
             return Ok(activities);
         }

@@ -56,7 +56,7 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="page">Number of page that will be loaded</param>
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
-        Task<List<ActivityForActivitiesListToResponse>> GetActivitiesPaged(string userId, int page, int pageSize);
+        Task<ActivitiesPagedToResponse> GetActivitiesPaged(string userId, int page, int pageSize);
 
         /// <summary>
         /// Retrieves all activities.
@@ -64,7 +64,7 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="page">Number of page that will be loaded</param>
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
-        Task<List<ActivityForActivitiesListToResponse>> GetAllActivities(int page, int pageSize);
+        Task<ActivitiesPagedToResponse> GetAllActivities(int page, int pageSize);
 
         /// <summary>
         /// Retrieves all activities of user.
@@ -74,7 +74,7 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <param name="predicate">LINQ expression to filter activities that will be retrieved.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
-        Task<List<ActivityForActivitiesListToResponse>> GetFilteredActivitiesPaged(string userId, int page, int pageSize, Expression<Func<Activity, bool>> predicate);
+        Task<ActivitiesPagedToResponse> GetFilteredActivitiesPaged(string userId, int page, int pageSize, Expression<Func<Activity, bool>> predicate);
 
         /// <summary>
         /// Retrieves all saved activities of user.
@@ -83,7 +83,7 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="page">Number of page that will be loaded</param>
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
-        Task<List<ActivityForActivitiesListToResponse>> GetSavedActivitiesPaged(string userId, int page, int pageSize);
+        Task<ActivitiesPagedToResponse> GetSavedActivitiesPaged(string userId, int page, int pageSize);
 
         /// <summary>
         /// Retrieves all activities of user.
@@ -92,7 +92,7 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="page">Number of page that will be loaded</param>
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
-        Task<List<ActivityForActivitiesListToResponse>> GetRecommendedActivitiesPaged(string userId, int page, int pageSize);
+        Task<ActivitiesPagedToResponse> GetRecommendedActivitiesPaged(string userId, int page, int pageSize);
 
         /// <summary>
         /// Retrieves all activities of user.
@@ -101,7 +101,7 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// <param name="pageSize">Size of page which will be loaded.</param>
         /// <param name="predicate">LINQ expression to filter activities that will be retrieved.</param>
         /// <returns>ActivityForActivitiesListToResponse</returns>
-        Task<List<ActivityForActivitiesListToResponse>> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Activity, bool>> predicate);
+        Task<ActivitiesPagedToResponse> GetFilteredRecommendedActivitiesPaged(int page, int pageSize, Expression<Func<Activity, bool>> predicate);
 
         /// <summary>
         /// Retrieves activity by id.

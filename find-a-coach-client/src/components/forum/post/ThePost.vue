@@ -134,7 +134,7 @@ export default defineComponent({
         if (authenticationStore.userId == post.value.userId) {
           router.push(`/my-profile/activities/post/${post.value.id}`)
         }
-        isLoadMoreCommentsButtonVisible.value = post.value.comments.length == pageSize
+        isLoadMoreCommentsButtonVisible.value = post.value.isMoreCommentsLeft
         console.log("Loaded post: ", post.value)
       }
 
@@ -225,10 +225,10 @@ export default defineComponent({
           return
         }
       } else {
-        if (result.length < pageSize) {
+        if (result.isMoreCommentsLeft === false) {
           isLoadMoreCommentsButtonVisible.value = false
         }
-        post.value.comments.push(...result)
+        post.value.comments.push(...result.comments)
         page++
       }
     }

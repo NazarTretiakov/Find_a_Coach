@@ -105,9 +105,9 @@ namespace FindACoach.IntegrationTests
             var response = await client.GetAsync("api/admin/get-all-activities?page=1&pageSize=10");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var activities = await response.Content.ReadFromJsonAsync<List<ActivityForActivitiesListToResponse>>();
-            Assert.NotNull(activities);
-            Assert.Equal(2, activities.Count);
+            var activitiesPaged = await response.Content.ReadFromJsonAsync<ActivitiesPagedToResponse>();
+            Assert.NotNull(activitiesPaged);
+            Assert.Equal(2, activitiesPaged.Activities.Count);
         }
 
         [Fact]

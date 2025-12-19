@@ -182,7 +182,7 @@ export default defineComponent({
         if (authenticationStore.userId == event.value.userId) {
           router.push(`/my-profile/activities/event/${event.value.id}`)
         }
-        isLoadMoreCommentsButtonVisible.value = event.value.comments.length == pageSize
+        isLoadMoreCommentsButtonVisible.value = event.value.isMoreCommentsLeft
         console.log(event.value)
       }
 
@@ -305,10 +305,11 @@ export default defineComponent({
           return
         }
       } else {
-        if (result.length < pageSize) {
+        if (result.isMoreCommentsLeft === false) {
           isLoadMoreCommentsButtonVisible.value = false
         }
-        event.value.comments.push(...result)
+        console.log(result) 
+        event.value.comments.push(...result.comments)
         page++
       }
     }

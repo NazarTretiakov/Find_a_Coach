@@ -111,11 +111,11 @@ export default defineComponent({
         return
       }
 
-      if (result.length < pageSize) {
+      if (result.isMoreActivitiesLeft === false) {
         isMoreActivitiesLeft.value = false
       }
 
-      activities.value.push(...result)
+      activities.value.push(...result.activities)
       page.value++
       isLoading.value = false
     }
@@ -131,11 +131,11 @@ export default defineComponent({
         return
       }
 
-      if (result.length < pageSize) {
+      if (result.isMoreActivitiesLeft === false) {
         isMoreActivitiesLeft.value = false
       }
 
-      activities.value.push(...result)
+      activities.value.push(...result.activities)
       page.value++
       isLoading.value = false
     }

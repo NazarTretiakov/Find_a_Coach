@@ -13,7 +13,7 @@ namespace FindACoach.Core.Services.Forum.Activities
             _commentsRepository = commentsRepository;
         }
 
-        public async Task<List<CommentToResponse>> GetCommentsPaged(string activityId, int page, int pageSize)
+        public async Task<CommentsToResponse> GetCommentsPaged(string activityId, int page, int pageSize)
         {
             return await _commentsRepository.GetCommentsPaged(activityId, page, pageSize);
         }

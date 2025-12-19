@@ -143,7 +143,7 @@ export default defineComponent({
         if (authenticationStore.userId != qa.value.userId) {
           router.push(`/forum/qa/${qa.value.id}`)
         }
-        isLoadMoreCommentsButtonVisible.value = qa.value.comments.length == pageSize
+        isLoadMoreCommentsButtonVisible.value = qa.value.isMoreCommentsLeft
         console.log("Loaded qa: ", qa.value)
       }
 
@@ -241,10 +241,10 @@ export default defineComponent({
           return
         }
       } else {
-        if (result.length < pageSize) {
+        if (result.isMoreCommentsLeft === false) {
           isLoadMoreCommentsButtonVisible.value = false
         }
-        qa.value.comments.push(...result)
+        qa.value.comments.push(...result.comments)
         page++
       }
     }

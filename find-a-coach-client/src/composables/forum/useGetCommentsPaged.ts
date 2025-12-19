@@ -1,11 +1,11 @@
 import { Result } from "@/types/Result"
 import useEnsureValidToken from '../authentication/useEnsureValidToken'
 import { config } from '@/config'
-import { Comment } from "@/types/forum/Comment"
+import { CommentsInfo } from "@/types/forum/CommentsInfo"
 
 const API_URL = config.apiBaseUrl + '/Activity'
 
-export default async function useGetCommentsPaged(activityId: string, page: number, pageSize: number): Promise<Result | Comment[]> {
+export default async function useGetCommentsPaged(activityId: string, page: number, pageSize: number): Promise<Result | CommentsInfo> {
   try {
     const token = await useEnsureValidToken()
 
@@ -24,7 +24,8 @@ export default async function useGetCommentsPaged(activityId: string, page: numb
       }
     }
 
-    const data: Comment[] = await response.json()
+    const data: CommentsInfo = await response.json()
+
     return data
   } catch (error) {
     return {
