@@ -46,7 +46,7 @@ export default async function useEnsureValidToken(): Promise<string | null> {
       else {
         authenticationStore.clearAllFieldsInStore()
         authenticationStore.clearAuthenticationStateFromLocalStore()
-        window.location.href = '/login'
+        window.location.href = '/session-has-expired'
         return null
       }
     }

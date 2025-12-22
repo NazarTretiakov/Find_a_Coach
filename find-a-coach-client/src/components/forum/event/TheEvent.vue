@@ -855,7 +855,7 @@ export default defineComponent({
 .success-message {
   color: green;
   font-size: 14px;
-  margin: 4px 0 20px 0;
+  margin: 14px 0 0 0;
   display: block;
 
   @media (max-width: $breakpoint) {

@@ -84,14 +84,14 @@ namespace FindACoach.Infrastructure.Repositories
             {
                 throw new ArgumentException("Connection not found.");
             }
+            var notifications = await _db.Notifications
+                .Where(n => n.NotifiedObjectId == Guid.Parse(connectionId))
+                .ToListAsync();
 
-            connection.Status = ConnectionStatus.Rejected;
+            _db.Notifications.RemoveRange(notifications);
+            _db.Connections.Remove(connection);
+
             await _db.SaveChangesAsync();
-
-            await _notificationsAdderService.AddNotification(connection.UserId.ToString(), 
-                $"Your connection request to {connection.ConnectedUser.FirstName} has been declined.",
-                connection.Id.ToString(), 
-                NotificationType.ConnectionRequestRejection);
         }
 
         public async Task<List<ConnectionToResponse>> GetAllUserConnections(string userId, int page, int pageSize)

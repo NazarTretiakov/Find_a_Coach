@@ -73,6 +73,7 @@ import AdminPanel from '../pages/AdminPanel.vue'
 import ManageActivitiesPage from '../pages/admin-panel/ManageActivitiesPage.vue'
 import ManageUsersPage from '../pages/admin-panel/ManageUsersPage.vue'
 import ErrorPage from '../pages/ErrorPage.vue'
+import YourSessionHasExpired from '../pages/YourSessionHasExpired.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -145,7 +146,8 @@ const router = createRouter({
     { path: '/admin', component: AdminPanel, meta: { requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/admin/manage-activities', component: ManageActivitiesPage, meta: {requiresAuth: true, requiredRole: 'Admin' } },
     { path: '/admin/manage-users', component: ManageUsersPage, meta: {requiresAuth: true, requiredRole: 'Admin' } },
-    { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } }
+    { path: '/error-page', component: ErrorPage, meta: { requiresAuth: false } },
+    { path: '/session-has-expired', component: YourSessionHasExpired, meta: { requiresAuth: false } },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

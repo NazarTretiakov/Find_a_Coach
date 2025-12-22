@@ -3,12 +3,6 @@
     <ul class="skills-header">
       <li class="skills-header_inscription"><h1 class="skills-header_inscription-element">Skills</h1></li>
       <li class="skills-header_add-button">
-        <router-link to="/my-profile/add-skill" class="skills-header_add-button-link">
-          <button class="skills-header_add-button-element">
-            <svg class="skills-header_add-button-element-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="skills-header_add-button-element-inscription">Add</span>
-          </button>
-        </router-link>
       </li>
     </ul>
 

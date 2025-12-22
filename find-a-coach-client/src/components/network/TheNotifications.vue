@@ -17,7 +17,7 @@
       <li v-if="isLoading" class="notifications_list_loading">
         <v-progress-circular class="notifications_list_loading-spinner-item" indeterminate color="#1b3b80" size="35" width="4"></v-progress-circular>
       </li>
-      <li v-if="notifications.length == 0" class="notifications_list_empty-state">
+      <li v-if="!isLoading &&notifications.length == 0" class="notifications_list_empty-state">
         <img class="notifications_list_empty-state-icon" src="@/assets/images/icons/empty-state-icon.svg" alt="Empty state icon">
         <span class="notifications_list_empty-state-inscription">You have no notifications.</span>
       </li>
