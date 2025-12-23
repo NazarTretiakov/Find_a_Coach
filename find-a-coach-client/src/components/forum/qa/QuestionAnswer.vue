@@ -175,7 +175,6 @@ export default defineComponent({
           router.push(`/my-profile/activities/qa/${qa.value.id}`)
         }
         isLoadMoreCommentsButtonVisible.value = qa.value.isMoreCommentsLeft
-        console.log("Loaded qa: ", qa.value)
       }
 
       const elapsed = performance.now() - startTime
@@ -214,7 +213,6 @@ export default defineComponent({
       const result = await useLeaveQAAnswer(authenticationStore.userId, qa.value.id, valueOfTextArea.value)
 
       if ("isSuccessful" in result && !result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       } else if ('isSuccessful' in result && result.isSuccessful) {
         isSuccessWhileLeavingAnswer.value = true
@@ -230,7 +228,6 @@ export default defineComponent({
       const result = await useToggleLikeOfActivity(qa.value.id, authenticationStore.userId)
 
       if ("isSuccessful" in result && !result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 
@@ -245,7 +242,6 @@ export default defineComponent({
       const result = await useToggleSaveOfActivity(qa.value.id, authenticationStore.userId)
 
       if ("isSuccessful" in result && !result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 
@@ -258,12 +254,10 @@ export default defineComponent({
       const result = await useCreateComment(qa.value.id, authenticationStore.userId, inputFieldAddCommentContent.value)
     
       if ("isSuccessful" in result && !result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 
       if ("commentId" in result) {
-        console.log("Created comment: ", result)
         inputFieldAddCommentContent.value = ''
 
         qa.value.comments.unshift({
@@ -284,7 +278,6 @@ export default defineComponent({
       const result = await useDeleteComment(commentId, authenticationStore.userId)
     
       if (!result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 

@@ -64,7 +64,6 @@ export default {
           errorMessage: responseData.errorMessage || 'Unexpected error occured while logging in.',
         }
       }
-      console.log(responseData)
 
       authenticationStore.writeAllFieldsInStore(responseData.email, responseData.role, responseData.token, new Date(responseData.expiration), responseData.refreshToken, new Date(responseData.refreshTokenExpirationDateTime))
       authenticationStore.saveAuthenticationStateInLocalStore()

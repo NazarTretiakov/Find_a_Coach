@@ -66,7 +66,6 @@ export default defineComponent({
         }
       } else {
         skills.value = result as Skill[]
-        console.log('Loaded skills:', skills.value)
       }
     }
 

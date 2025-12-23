@@ -183,7 +183,6 @@ export default defineComponent({
           router.push(`/my-profile/activities/event/${event.value.id}`)
         }
         isLoadMoreCommentsButtonVisible.value = event.value.isMoreCommentsLeft
-        console.log(event.value)
       }
 
       const elapsed = performance.now() - startTime
@@ -268,7 +267,6 @@ export default defineComponent({
       }
 
       if ("commentId" in result) {
-        console.log("Created comment: ", result)
         inputFieldAddCommentContent.value = ''
 
         event.value.comments.unshift({
@@ -307,8 +305,7 @@ export default defineComponent({
       } else {
         if (result.isMoreCommentsLeft === false) {
           isLoadMoreCommentsButtonVisible.value = false
-        }
-        console.log(result) 
+        } 
         event.value.comments.push(...result.comments)
         page++
       }

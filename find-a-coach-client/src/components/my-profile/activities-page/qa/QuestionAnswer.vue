@@ -144,7 +144,6 @@ export default defineComponent({
           router.push(`/forum/qa/${qa.value.id}`)
         }
         isLoadMoreCommentsButtonVisible.value = qa.value.isMoreCommentsLeft
-        console.log("Loaded qa: ", qa.value)
       }
 
       const elapsed = performance.now() - startTime
@@ -204,7 +203,6 @@ export default defineComponent({
       }
 
       if ("commentId" in result) {
-        console.log("Created comment: ", result)
         inputFieldAddCommentContent.value = ''
 
         qa.value.comments.unshift({

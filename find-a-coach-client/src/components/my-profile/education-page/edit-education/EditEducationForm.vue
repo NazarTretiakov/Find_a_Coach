@@ -132,7 +132,6 @@ export default defineComponent({
       const startTime = performance.now()
 
       const result = await useGetEducation(id)
-      console.log(result)
 
       if ("isSuccessful" in result) {
         if (!result.isSuccessful) {

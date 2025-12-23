@@ -40,7 +40,6 @@ export default defineComponent({
 
     const handleSearch = (text: string) => {
       searchString.value = text
-      console.log(searchString.value)
     }
 
     return { searchString, handleSearch }

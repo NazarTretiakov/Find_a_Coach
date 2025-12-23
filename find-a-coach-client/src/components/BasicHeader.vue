@@ -98,15 +98,12 @@ export default defineComponent({
     const checkIfUserHasUnreadNotifications = async () => {
       const result = await useCheckUserUnreadNotifications(authenticationStore.userId)
 
-      console.log(result)
-
       if (typeof result === 'object' && result !== null && 'isSuccessful' in result) {
         if (!result.isSuccessful) {
           return
         }
       } else if (typeof result === 'boolean') {
         isUserHasUnreadNotifications.value = result as boolean
-        console.log('Has unread notifications:', isUserHasUnreadNotifications.value)
       }
     }
 

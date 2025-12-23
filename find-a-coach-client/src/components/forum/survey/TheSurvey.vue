@@ -177,7 +177,6 @@ export default defineComponent({
           router.push(`/my-profile/activities/survey/${survey.value.id}`)
         }
         isLoadMoreCommentsButtonVisible.value = survey.value.isMoreCommentsLeft
-        console.log("Loaded survey: ", survey.value)
       }
 
       const elapsed = performance.now() - startTime
@@ -230,7 +229,6 @@ export default defineComponent({
       }
 
       if ("commentId" in result) {
-        console.log("Created comment: ", result)
         inputFieldAddCommentContent.value = ''
 
         survey.value.comments.unshift({
@@ -277,8 +275,6 @@ export default defineComponent({
 
     const vote = async (optionId: string) => {
       if (isUserAlreadyVoted.value) return;
-
-      console.log("Voting for option with id: ", optionId)
 
       const votesResult = await useVoteInSurvey(optionId);
 

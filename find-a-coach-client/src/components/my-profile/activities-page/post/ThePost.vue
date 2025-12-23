@@ -140,7 +140,6 @@ export default defineComponent({
           router.push(`/my-profile/activities/post/${post.value.id}`)
         }
         isLoadMoreCommentsButtonVisible.value = post.value.isMoreCommentsLeft
-        console.log("Loaded post: ", post.value)
       }
 
       const elapsed = performance.now() - startTime
@@ -193,7 +192,6 @@ export default defineComponent({
       }
 
       if ("commentId" in result) {
-        console.log("Created comment: ", result)
         inputFieldAddCommentContent.value = ''
 
         post.value.comments.unshift({

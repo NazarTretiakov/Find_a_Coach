@@ -11,8 +11,6 @@ export default async function useEditIsUserHasLoginNotificationEnabled(isLoginNo
     const bodyData = {
       isLoginNotificationEnabled
     }
-    
-    console.log(bodyData)
 
     const response = await fetch(`${API_URL}/edit-user-login-notification-enabled`, {
       method: 'POST',

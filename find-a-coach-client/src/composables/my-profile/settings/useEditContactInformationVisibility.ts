@@ -11,8 +11,6 @@ export default async function useEditProject(contactInformationVisibilityType: s
     const bodyData = {
       contactInformationVisibilityType
     }
-    
-    console.log(bodyData)
 
     const response = await fetch(`${API_URL}/edit-contact-information-visibility`, {
       method: 'POST',

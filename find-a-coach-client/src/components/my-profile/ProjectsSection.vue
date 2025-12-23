@@ -99,7 +99,6 @@ export default defineComponent({
         }
       } else {
         projects.value = result as Project[]
-        console.log('Loaded projects:', projects.value)
       }
     }
 

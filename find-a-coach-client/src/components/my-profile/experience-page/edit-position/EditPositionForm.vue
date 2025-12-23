@@ -140,7 +140,6 @@ export default defineComponent({
           return
         }
       } else {
-        console.log(result)
 
         let employmentType = ''
 

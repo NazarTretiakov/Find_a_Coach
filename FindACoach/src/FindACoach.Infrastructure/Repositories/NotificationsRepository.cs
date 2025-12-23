@@ -85,21 +85,21 @@ namespace FindACoach.Infrastructure.Repositories
                 }
                 else if (notification.Type == NotificationType.ConnectionRequestAcceptance.ToString() || notification.Type == NotificationType.ConnectionRequestRejection.ToString())
                 {
-                    var connection = await _db.Connections
-                        .Where(c => c.Id == notification.NotifiedObjectId)
-                        .Select(c => new
+                    var connectedUser = await _userManager.Users
+                        .Where(u => u.Id == notification.NotifiedObjectId)
+                        .Select(u => new
                         {
-                            RelatedUserFirstName = c.ConnectedUser.FirstName,
-                            RelatedUserLastName = c.ConnectedUser.LastName,
-                            RelatedUserImagePath = c.ConnectedUser.ImagePath,
+                            RelatedUserFirstName = u.FirstName,
+                            RelatedUserLastName = u.LastName,
+                            RelatedUserImagePath = u.ImagePath,
                         })
                         .FirstOrDefaultAsync();
-                    if (connection != null)
+                    if (connectedUser != null)
                     {
-                        notification.RelatedUserFirstName = connection.RelatedUserFirstName;
-                        notification.RelatedUserLastName = connection.RelatedUserLastName;
+                        notification.RelatedUserFirstName = connectedUser.RelatedUserFirstName;
+                        notification.RelatedUserLastName = connectedUser.RelatedUserLastName;
                         var serverUrl = _configuration.GetValue<string>("ServerUrl");
-                        notification.RelatedUserImagePath = $"{serverUrl}/Images/UserProfiles/{connection.RelatedUserImagePath}";
+                        notification.RelatedUserImagePath = $"{serverUrl}/Images/UserProfiles/{connectedUser.RelatedUserImagePath}";
                     }
                 }
                 else if (notification.Type == NotificationType.EventApplication.ToString())

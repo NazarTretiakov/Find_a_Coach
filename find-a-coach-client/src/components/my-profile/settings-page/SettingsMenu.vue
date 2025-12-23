@@ -58,7 +58,6 @@ export default defineComponent({
         profileImagePath.value = result as string
         const elapsed = performance.now() - startTime
         const remaining = 500 - elapsed
-        console.log(result)
 
         if (remaining > 0) {
           setTimeout(() => {

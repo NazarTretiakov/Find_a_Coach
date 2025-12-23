@@ -97,7 +97,6 @@ export default defineComponent({
         if (authenticationStore.userId != qa.value.userId) {
           router.push(`/forum/qa/${qa.value.id}`)
         }
-        console.log(answers.value)
       }
 
       const elapsed = performance.now() - startTime

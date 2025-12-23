@@ -204,27 +204,65 @@ namespace FindACoach.Infrastructure.Repositories
 
         public async Task DeleteActivity(string activityId, string userId)
         {
-            var informationToDeleteActivity = await _db.Activities
-                .Where(c => c.Id == Guid.Parse(activityId))
-                .Select(c => new 
-                {
-                    Activity = c,
-                    UserId = c.User.Id
-                })
-                .FirstOrDefaultAsync(c => c.Activity.Id == Guid.Parse(activityId));
+            if (!Guid.TryParse(activityId, out var activityGuid))
+            {
+                throw new ArgumentException("Invalid activity id.");
+            }
+
+            if (!Guid.TryParse(userId, out var userGuid))
+            {
+                throw new ArgumentException("Invalid user id.");
+            }
+
+            var activity = await _db.Activities
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.Id == activityGuid);
+
+            if (activity == null)
+            {
+                throw new ArgumentNullException("Activity not found.");
+            }
 
             var admins = await _userManager.GetUsersInRoleAsync(UserRoleOptions.Admin.ToString());
 
-            if (informationToDeleteActivity == null)
+            var isAdmin = admins.Any(a => a.Id == userGuid);
+
+            if (activity.User.Id != userGuid && !isAdmin)
             {
-                throw new ArgumentNullException("Activity id is incorrect.");
-            }
-            if (informationToDeleteActivity.UserId != Guid.Parse(userId) && !admins.Any(a => a.Id == Guid.Parse(userId)))
-            {
-                throw new ArgumentException("Only creator of the activity can delete it.");
+                throw new ArgumentException("Only creator or admin can delete this activity.");
             }
 
-            _db.Activities.Remove(informationToDeleteActivity.Activity);
+            if (activity is Event eventActivity)
+            {
+                await _db.Entry(eventActivity)
+                    .Collection(e => e.SearchPersonPanels)
+                    .LoadAsync();
+
+                var eventApplications = await _db.EventApplications
+                   .Where(a => eventActivity.SearchPersonPanels.Contains(a.SearchPersonPanel))
+                   .ToListAsync(); 
+
+                var notificationsRelatedToActivity = await _db.Notifications
+                   .Where(n => eventApplications.Select(a => a.Id).Contains(n.NotifiedObjectId))
+                   .ToListAsync();
+
+                _db.Notifications.RemoveRange(notificationsRelatedToActivity);
+
+            } else if (activity is QA qaActivity)
+            {
+                await _db.Entry(qaActivity)
+                    .Collection(qa => qa.Answers)
+                    .LoadAsync();
+
+                var notificationsRelatedToActivity = await _db.Notifications
+                   .Where(n => qaActivity.Answers.Select(a => a.Id).Contains(n.NotifiedObjectId))
+                   .ToListAsync();
+
+                _db.Notifications.RemoveRange(notificationsRelatedToActivity);
+            }
+
+            _db.Activities.Remove(activity);
+
             await _db.SaveChangesAsync();
         }
 

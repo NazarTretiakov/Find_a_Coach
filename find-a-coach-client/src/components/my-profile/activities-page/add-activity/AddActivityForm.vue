@@ -209,8 +209,6 @@ export default defineComponent({
 
     const onSave = async () => {
       formErrors.value = useFormValidation(formData.value)
-      console.log(formErrors.value)
-      console.log(formData.value)
 
       if (formErrors.value.length === 0) {
         let response = await useAddActivity(formData.value)

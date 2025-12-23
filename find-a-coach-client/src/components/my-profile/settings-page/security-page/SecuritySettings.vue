@@ -116,7 +116,6 @@ export default defineComponent({
             router.push('/error-page')
           }
         } else {
-          console.log(result)
           securitySettings.value.isLoginNotificationEnabled = result as boolean
           const elapsed = performance.now() - startTime
           const remaining = 500 - elapsed

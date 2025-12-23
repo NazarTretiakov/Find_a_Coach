@@ -77,7 +77,6 @@ export default defineComponent({
       }
 
       result = result as Notification[]
-      console.log(result)
 
       if (result.length < pageSize) {
         isMoreNotificationsLeft.value = false

@@ -449,7 +449,7 @@ namespace FindACoach.Infrastructure.Repositories
             var locationPart = activeUser.Location.Split(',')[0].Trim().ToLower();
             var skillTitles = activeUser.Skills.Select(s => s.Title.ToLower()).ToList();
 
-            var recommendedUsers = await _userManager.Users
+            var candidates = await _userManager.Users
                 .Where(u => (EF.Functions.Like(u.Location.ToLower(), $"%{locationPart}%") ||
                             u.Skills.Any(s => skillTitles.Contains(s.Title.ToLower()))) &&
                             u.Id != activeUser.Id && 
@@ -459,6 +459,18 @@ namespace FindACoach.Infrastructure.Repositories
                 .Take(pageSize)
                 .ToListAsync();
 
+            var recommendedUsers = new List<User>();
+
+            foreach (var user in candidates)
+            {
+                var isUserConnectedInfo = await _isUsersConnectedService.IsUsersConnected(userId, user.Id.ToString());
+
+                if (!isUserConnectedInfo.IsUsersConnected)
+                {
+                    recommendedUsers.Add(user);
+                }
+            }
+
             if (recommendedUsers.Count < 6)
             {
                 var admins = await _userManager.GetUsersInRoleAsync(UserRoleOptions.Admin.ToString());
@@ -466,11 +478,23 @@ namespace FindACoach.Infrastructure.Repositories
                 var recommendedIds = recommendedUsers.Select(u => u.Id).ToList();
                 var adminIds = admins.Select(a => a.Id).ToList();
 
-                var users = await _userManager.Users
+                candidates = await _userManager.Users
                     .Where(u => !recommendedIds.Contains(u.Id) && !adminIds.Contains(u.Id) && !u.IsBlocked && u.Id != activeUser.Id)
                     .OrderByDescending(u => u.FirstName)
                     .Take(6 - recommendedUsers.Count)
                     .ToListAsync();
+
+                var users = new List<User>();
+
+                foreach (var user in candidates)
+                {
+                    var isUserConnectedInfo = await _isUsersConnectedService.IsUsersConnected(userId, user.Id.ToString());
+
+                    if (!isUserConnectedInfo.IsUsersConnected)
+                    {
+                        users.Add(user);
+                    }
+                }
 
                 recommendedUsers.AddRange(users);
             }

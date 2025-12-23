@@ -36,10 +36,6 @@ export default defineComponent({
     TheEvent,
     RecommendedPeople,
     TheFooter
-  },
-  setup(props) {
-    console.log("id:" +props.id)
-    return {}
   }
 })
 </script>

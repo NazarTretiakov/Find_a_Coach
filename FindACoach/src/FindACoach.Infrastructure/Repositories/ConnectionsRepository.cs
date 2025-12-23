@@ -43,7 +43,7 @@ namespace FindACoach.Infrastructure.Repositories
 
             await _notificationsAdderService.AddNotification(connection.UserId.ToString(),
                 $"Your connection request to {connection.ConnectedUser.FirstName} has been accepted.",
-                connection.Id.ToString(),
+                connection.ConnectedUser.Id.ToString(),
                 NotificationType.ConnectionRequestAcceptance);
         }
 

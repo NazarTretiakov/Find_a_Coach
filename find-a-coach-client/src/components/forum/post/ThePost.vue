@@ -135,7 +135,6 @@ export default defineComponent({
           router.push(`/my-profile/activities/post/${post.value.id}`)
         }
         isLoadMoreCommentsButtonVisible.value = post.value.isMoreCommentsLeft
-        console.log("Loaded post: ", post.value)
       }
 
       const elapsed = performance.now() - startTime
@@ -155,7 +154,6 @@ export default defineComponent({
       const result = await useToggleLikeOfActivity(post.value.id, authenticationStore.userId)
 
       if ("isSuccessful" in result && !result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 
@@ -170,7 +168,6 @@ export default defineComponent({
       const result = await useToggleSaveOfActivity(post.value.id, authenticationStore.userId)
 
       if ("isSuccessful" in result && !result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 
@@ -183,12 +180,10 @@ export default defineComponent({
       const result = await useCreateComment(post.value.id, authenticationStore.userId, inputFieldAddCommentContent.value)
     
       if ("isSuccessful" in result && !result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 
       if ("commentId" in result) {
-        console.log("Created comment: ", result)
         inputFieldAddCommentContent.value = ''
 
         post.value.comments.unshift({
@@ -209,7 +204,6 @@ export default defineComponent({
       const result = await useDeleteComment(commentId, authenticationStore.userId)
     
       if (!result.isSuccessful) {
-        console.error(result.errorMessage)
         return
       }
 
@@ -249,7 +243,7 @@ export default defineComponent({
 
   @media (max-width: $breakpoint) {
     margin: 50px 10px 100px 10px;
-    padding: 0 30px;
+    padding: 0 30px 30px 30px;
   }
 
   &-header {

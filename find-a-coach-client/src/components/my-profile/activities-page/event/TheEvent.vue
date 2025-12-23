@@ -180,7 +180,6 @@ export default defineComponent({
           router.push(`/forum/event/${event.value.id}`)
         }
         isLoadMoreCommentsButtonVisible.value = event.value.isMoreCommentsLeft
-        console.log(event.value)
       }
 
       const elapsed = performance.now() - startTime
@@ -193,7 +192,6 @@ export default defineComponent({
     })
 
     const formatRelativeDate = (date: string) => {
-      console.log(`relative date input: ${date}`)
       return useRelativeDate(date)
     }
 
@@ -247,7 +245,6 @@ export default defineComponent({
       }
 
       if ("commentId" in result) {
-        console.log("Created comment: ", result)
         inputFieldAddCommentContent.value = ''
 
         event.value.comments.unshift({
