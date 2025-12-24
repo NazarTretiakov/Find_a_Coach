@@ -1,5 +1,5 @@
 interface Notification {
-  notificationId: boolean;
+  notificationId: string;
   content: string;
   dateOfCreation: string;
   type: string;

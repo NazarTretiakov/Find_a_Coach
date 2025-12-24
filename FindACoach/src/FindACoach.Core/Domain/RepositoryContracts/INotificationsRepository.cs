@@ -13,7 +13,7 @@ namespace FindACoach.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="userId">User id which notifications will be retrieved.</param>
         /// <returns></returns>
-        Task<List<NotificationToResponse>> GetAllUserNotifications(string userId, int page, int pageSize);
+        Task<NotificationsPagedToResponse> GetAllUserNotifications(string userId, int page, int pageSize);
 
         /// <summary>
         /// Adds a notification for a user.

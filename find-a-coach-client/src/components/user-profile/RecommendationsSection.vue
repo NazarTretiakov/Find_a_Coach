@@ -1,5 +1,5 @@
 <template>
-  <div class="recommendations-section" v-if="receivedRecommendations.length > 0 || givenRecommendations.length > 0">
+  <div class="recommendations-section">
     <ul class="recommendations-section-items">
       <li class="recommendations-section-items_header">
         <h1 class="recommendations-section-items_header-element">Recommendations</h1>

@@ -41,7 +41,7 @@ namespace FindACoach.Infrastructure.Repositories
             return user.HasUnreadNotifications;
         }
 
-        public async Task<List<NotificationToResponse>> GetAllUserNotifications(string userId, int page, int pageSize)
+        public async Task<NotificationsPagedToResponse> GetAllUserNotifications(string userId, int page, int pageSize)
         {
             List<NotificationToResponse> notifications = await _db.Notifications
                 .Where(n => n.UserId == Guid.Parse(userId))
@@ -172,7 +172,17 @@ namespace FindACoach.Infrastructure.Repositories
 
             await _db.SaveChangesAsync();
 
-            return notifications;
+            NotificationsPagedToResponse notificationsPagedToResponse = new NotificationsPagedToResponse()
+            {
+                Notifications = notifications,
+                IsMoreNotificationsLeft = _db.Notifications
+                    .Where(n => n.UserId == Guid.Parse(userId))
+                    .OrderByDescending(n => n.DateOfCreation)
+                    .Skip((page) * pageSize)
+                    .Any()
+            };
+
+            return notificationsPagedToResponse;
         }
     }
 }

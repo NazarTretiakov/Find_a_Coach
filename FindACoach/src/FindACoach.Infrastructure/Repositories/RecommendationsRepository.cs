@@ -73,7 +73,12 @@ namespace FindACoach.Infrastructure.Repositories
                 throw new UnauthorizedAccessException("Only creator of recommendation delete it.");
             }
 
-             _db.Recommendations.Remove(recommendation);
+            var relatedNotifications = await _db.Notifications
+                .Where(n => n.NotifiedObjectId == recommendation.Id)
+                .ToListAsync();
+
+            _db.Recommendations.Remove(recommendation);
+            _db.Notifications.RemoveRange(relatedNotifications);
 
             await _db.SaveChangesAsync();
         }

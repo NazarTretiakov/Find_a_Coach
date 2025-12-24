@@ -1,11 +1,11 @@
 import { Result } from "@/types/Result"
 import useEnsureValidToken from '../authentication/useEnsureValidToken'
 import { config } from '@/config'
-import type { Notification } from '@/types/network/Notification'
+import { NotificationsPaged } from "@/types/network/NotificationsPaged"
 
 const API_URL = config.apiBaseUrl + '/Network'
 
-export default async function useGetNotifications(userId: string, page: number, pageSize: number): Promise<Result | Notification[]> {
+export default async function useGetNotifications(userId: string, page: number, pageSize: number): Promise<Result | NotificationsPaged> {
   try {
     const token = await useEnsureValidToken()
 
@@ -24,7 +24,7 @@ export default async function useGetNotifications(userId: string, page: number, 
       }
     }
 
-    const data: Notification[] = await response.json()
+    const data: NotificationsPaged = await response.json()
     return data
   } catch (error) {
     return {

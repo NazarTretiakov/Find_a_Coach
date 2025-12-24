@@ -39,6 +39,7 @@ import { useRouter } from "vue-router"
 import useGetNotifications from "@/composables/network/useGetNotifications"
 import { useAuthenticationStore } from "@/stores/authentication"
 import type { Notification } from "@/types/network/Notification"
+import { NotificationsPaged } from "@/types/network/NotificationsPaged"
 
 export default defineComponent({
   setup() {
@@ -76,12 +77,12 @@ export default defineComponent({
         return
       }
 
-      result = result as Notification[]
-      if (result.length < pageSize) {
+      result = result as NotificationsPaged
+      if (result.isMoreNotificationsLeft === false) {
         isMoreNotificationsLeft.value = false
       }
 
-      notifications.value.push(...result)
+      notifications.value.push(...result.notifications)
       page.value++
       isLoading.value = false
     }

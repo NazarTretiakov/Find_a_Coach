@@ -13,7 +13,7 @@ namespace FindACoach.Core.Services.Network
             _notificationsRepository = notificationsRepository;
         }
 
-        public async Task<List<NotificationToResponse>> GetAllUserNotifications(string userId, int page, int pageSize)
+        public async Task<NotificationsPagedToResponse> GetAllUserNotifications(string userId, int page, int pageSize)
         {
             return await _notificationsRepository.GetAllUserNotifications(userId, page, pageSize);
         }

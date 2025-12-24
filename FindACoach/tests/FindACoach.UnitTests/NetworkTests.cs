@@ -75,19 +75,25 @@ namespace FindACoach.UnitTests
                 }
             };
 
+            var expectedNotificationsInfo = new NotificationsPagedToResponse()
+            {
+                Notifications = expectedNotifications,
+                IsMoreNotificationsLeft = false
+            };
+
             var repositoryMock = new Mock<INotificationsRepository>();
 
             repositoryMock
                 .Setup(r => r.GetAllUserNotifications(userId, page, pageSize))
-                .ReturnsAsync(expectedNotifications);
+                .ReturnsAsync(expectedNotificationsInfo);
 
             var notificationsGetterService = new NotificationsGetterService(repositoryMock.Object);
 
             var result = await notificationsGetterService.GetAllUserNotifications(userId, page, pageSize);
 
             Assert.NotNull(result);
-            Assert.Equal(expectedNotifications.Count, result.Count);
-            Assert.Equal(expectedNotifications, result);
+            Assert.Equal(expectedNotifications.Count, result.Notifications.Count);
+            Assert.Equal(expectedNotifications, result.Notifications);
         }
 
         [Fact]

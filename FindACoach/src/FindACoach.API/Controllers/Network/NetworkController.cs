@@ -71,11 +71,11 @@ namespace FindACoach.API.Controllers.Network
         }
 
         [HttpGet("get-notifications")]
-        public async Task<ActionResult<List<NotificationToResponse>>> GetNotifications(string userId, int page, int pageSize)
+        public async Task<ActionResult<NotificationsPagedToResponse>> GetNotifications(string userId, int page, int pageSize)
         {
-            var notifications = await _notificationsGetterService.GetAllUserNotifications(userId, page, pageSize);
+            var notificationsInfo = await _notificationsGetterService.GetAllUserNotifications(userId, page, pageSize);
 
-            return Ok(notifications);
+            return Ok(notificationsInfo);
         }
 
         [HttpPost("remove-connection")]
